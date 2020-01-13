@@ -1,6 +1,7 @@
 package me.mattstudios.mfgui.gui;
 
 import me.mattstudios.mfgui.gui.components.GuiClickResolver;
+import me.mattstudios.mfgui.gui.components.GuiException;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
@@ -32,9 +33,10 @@ public final class GUI implements InventoryHolder {
      * @param title  The GUI's title
      */
     public GUI(final Plugin plugin, int rows, final String title) {
-        if (!(rows >= 1 && rows <= 6)) rows = 1;
+        int finalRows = rows;
+        if (!(rows >= 1 && rows <= 6)) finalRows = 1;
 
-        this.rows = rows;
+        this.rows = finalRows;
         this.title = title;
         this.guiItems = new HashMap<>();
 
@@ -73,9 +75,10 @@ public final class GUI implements InventoryHolder {
      *
      * @param rows The number of rows to set
      */
-    public GUI setRows(int rows) {
-        if (!(rows >= 1 && rows <= 6)) rows = 1;
-        this.rows = rows;
+    public GUI setRows(final int rows) {
+        int finalRows = rows;
+        if (!(rows >= 1 && rows <= 6)) finalRows = 1;
+        this.rows = finalRows;
 
         return this;
     }
@@ -87,7 +90,7 @@ public final class GUI implements InventoryHolder {
      * @param guiItem The GUI item to add
      */
     public GUI addItem(final int slot, final GuiItem guiItem) {
-        if (!isValidSlot(slot)) throw new RuntimeException("shit");
+        if (!isValidSlot(slot)) throw new GuiException("shit");
 
         guiItems.put(slot, guiItem);
 
@@ -103,6 +106,14 @@ public final class GUI implements InventoryHolder {
      */
     public GUI addItem(final int row, final int col, final GuiItem guiItem) {
         return addItem((col + (row - 1) * 9) - 1, guiItem);
+    }
+
+    public GUI setFillItem(final GuiItem guiItem) {
+        for (int i = 0; i < rows * 9; i++){
+
+        }
+
+        return this;
     }
 
     /**
