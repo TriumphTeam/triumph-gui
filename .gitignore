@@ -1,6 +1,8 @@
 
 .idea/
 
-src/main/java/me/mattstudios/mfg/TestMain.java
+\target/
+
+src/main/java/me/mattstudios/mfgui/TestMain.java
 
 src/main/resources/
