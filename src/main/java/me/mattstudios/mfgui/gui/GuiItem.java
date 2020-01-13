@@ -1,6 +1,7 @@
 package me.mattstudios.mfgui.gui;
 
-import me.mattstudios.mfgui.gui.components.GuiClickResolver;
+import me.mattstudios.mfgui.gui.components.GuiAction;
+import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.UUID;
@@ -10,7 +11,7 @@ import static me.mattstudios.mfgui.gui.components.ItemNBT.setNBTTag;
 public final class GuiItem {
 
     // Action to do when clicking on the item
-    private GuiClickResolver action;
+    private GuiAction<InventoryClickEvent> action;
 
     // The ItemStack of the GuiItem
     private final ItemStack itemStack;
@@ -22,7 +23,7 @@ public final class GuiItem {
      * @param itemStack The ItemStack to be used
      * @param action The action to do when clicking on the Item
      */
-    public GuiItem(final ItemStack itemStack, final GuiClickResolver action) {
+    public GuiItem(final ItemStack itemStack, final GuiAction<InventoryClickEvent> action) {
         if (action == null) this.action = event -> {};
         else this.action = action;
 
@@ -58,7 +59,7 @@ public final class GuiItem {
      * Gets the action to do when the player clicks on it
      * @return The action
      */
-    GuiClickResolver getAction() {
+    GuiAction<InventoryClickEvent> getAction() {
         return action;
     }
 
