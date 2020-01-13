@@ -3,7 +3,7 @@ package me.mattstudios.mfgui.gui;
 import me.mattstudios.mfgui.gui.components.GuiClickResolver;
 import me.mattstudios.mfgui.gui.components.GuiException;
 import org.bukkit.Bukkit;
-import org.bukkit.entity.Player;
+import org.bukkit.entity.HumanEntity;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.plugin.Plugin;
@@ -89,8 +89,8 @@ public final class GUI implements InventoryHolder {
      * @param slot    The GUI slot
      * @param guiItem The GUI item to add
      */
-    public GUI addItem(final int slot, final GuiItem guiItem) {
-        if (!isValidSlot(slot)) throw new GuiException("shit");
+    public GUI setItem(final int slot, final GuiItem guiItem) {
+        if (!isValidSlot(slot)) throw new GuiException("Invalid item slot!");
 
         guiItems.put(slot, guiItem);
 
@@ -104,12 +104,12 @@ public final class GUI implements InventoryHolder {
      * @param col     The GUI col number
      * @param guiItem The GUI item to add
      */
-    public GUI addItem(final int row, final int col, final GuiItem guiItem) {
-        return addItem((col + (row - 1) * 9) - 1, guiItem);
+    public GUI setItem(final int row, final int col, final GuiItem guiItem) {
+        return setItem((col + (row - 1) * 9) - 1, guiItem);
     }
 
     public GUI setFillItem(final GuiItem guiItem) {
-        for (int i = 0; i < rows * 9; i++){
+        for (int i = 0; i < rows * 9; i++) {
             if (guiItems.containsKey(i)) continue;
             guiItems.put(i, guiItem);
         }
@@ -131,11 +131,11 @@ public final class GUI implements InventoryHolder {
      *
      * @param player The player to open it to
      */
-    public void open(final Player player) {
+    public void open(final HumanEntity player) {
         inventory.clear();
 
         for (final int slot : guiItems.keySet()) {
-            inventory.setItem(slot, guiItems.get(slot));
+            inventory.setItem(slot, guiItems.get(slot).getItemStack());
         }
 
         player.openInventory(inventory);
@@ -155,6 +155,14 @@ public final class GUI implements InventoryHolder {
         return defaultClick;
     }
 
+    GuiItem getGuiItem(final int slot) {
+        return guiItems.get(slot);
+    }
+
+    boolean hasGuiItem(final int slot) {
+        return guiItems.get(slot) != null;
+    }
+
     /**
      * Checks if the slot introduces is a valid slot
      *
@@ -162,6 +170,6 @@ public final class GUI implements InventoryHolder {
      * @return If it is valid or not
      */
     private boolean isValidSlot(final int slot) {
-        return slot >= 0;
+        return slot >= 0 && slot <= rows * 9;
     }
 }
