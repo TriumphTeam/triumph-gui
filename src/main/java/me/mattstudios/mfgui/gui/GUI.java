@@ -110,7 +110,8 @@ public final class GUI implements InventoryHolder {
 
     public GUI setFillItem(final GuiItem guiItem) {
         for (int i = 0; i < rows * 9; i++){
-
+            if (guiItems.containsKey(i)) continue;
+            guiItems.put(i, guiItem);
         }
 
         return this;
@@ -134,7 +135,7 @@ public final class GUI implements InventoryHolder {
         inventory.clear();
 
         for (final int slot : guiItems.keySet()) {
-            inventory.setItem(slot, guiItems.get(slot).getItemStack());
+            inventory.setItem(slot, guiItems.get(slot));
         }
 
         player.openInventory(inventory);

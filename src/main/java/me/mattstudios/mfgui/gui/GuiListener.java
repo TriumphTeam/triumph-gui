@@ -19,6 +19,8 @@ public final class GuiListener implements Listener {
             defaultClick.resolve(event);
         }
 
+        System.out.println(event.getCurrentItem() instanceof GuiItem);
+
     }
 
 }
