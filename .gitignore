@@ -1,7 +1,9 @@
 
 .idea/
 
-\target/
+.gradle/
+
+build/
 
 src/main/java/me/mattstudios/mfgui/TestMain.java
 
