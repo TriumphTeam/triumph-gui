@@ -164,6 +164,16 @@ public final class GUI implements InventoryHolder {
     }
 
     /**
+     * Gets a specific GuiItem on the slot
+     *
+     * @param slot The slot to get
+     * @return The GuiItem in the slot
+     */
+    public GuiItem getGuiItem(final int slot) {
+        return guiItems.get(slot);
+    }
+
+    /**
      * Checks weather or not the GUI is updating
      *
      * @return The updating status
@@ -233,16 +243,6 @@ public final class GUI implements InventoryHolder {
     }
 
     /**
-     * Gets a specific GuiItem on the slot
-     *
-     * @param slot The slot to get
-     * @return The GuiItem in the slot
-     */
-    GuiItem getGuiItem(final int slot) {
-        return guiItems.get(slot);
-    }
-
-    /**
      * Checks whether or not there is an GuiItem in the slot
      *
      * @param slot The slot to check
@@ -261,5 +261,5 @@ public final class GUI implements InventoryHolder {
     private boolean isValidSlot(final int slot) {
         return slot >= 0 && slot <= rows * 9;
     }
-    
+
 }

@@ -50,11 +50,13 @@ public final class GuiListener implements Listener {
     public void onGuiClose(InventoryCloseEvent event) {
         if (!(event.getInventory().getHolder() instanceof GUI)) return;
 
+        final GUI gui = (GUI) event.getInventory().getHolder();
+
         // The GUI action for closing
-        final GuiAction<InventoryCloseEvent> closeAction = ((GUI) event.getInventory().getHolder()).getCloseGuiAction();
+        final GuiAction<InventoryCloseEvent> closeAction = gui.getCloseGuiAction();
 
         // Checks if there is or not an action set and executes it
-        if (closeAction != null) closeAction.execute(event);
+        if (closeAction != null && !gui.isUpdating()) closeAction.execute(event);
     }
 
     /**
@@ -66,11 +68,13 @@ public final class GuiListener implements Listener {
     public void onGuiOpen(InventoryOpenEvent event) {
         if (!(event.getInventory().getHolder() instanceof GUI)) return;
 
+        final GUI gui = (GUI) event.getInventory().getHolder();
+
         // The GUI action for opening
-        final GuiAction<InventoryOpenEvent> openAction = ((GUI) event.getInventory().getHolder()).getOpenGuiAction();
+        final GuiAction<InventoryOpenEvent> openAction = gui.getOpenGuiAction();
 
         // Checks if there is or not an action set and executes it
-        if (openAction != null) openAction.execute(event);
+        if (openAction != null && !gui.isUpdating()) openAction.execute(event);
     }
 
 }
