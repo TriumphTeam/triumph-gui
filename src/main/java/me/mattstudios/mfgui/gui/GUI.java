@@ -201,13 +201,11 @@ public final class GUI implements InventoryHolder {
      * Method to update the current opened GUI
      */
     public void update() {
-        updating = true;
+        inventory.clear();
 
-        for (HumanEntity player : inventory.getViewers()) {
-            open(player);
+        for (final int slot : guiItems.keySet()) {
+            inventory.setItem(slot, guiItems.get(slot).getItemStack());
         }
-
-        updating = false;
     }
 
     @Override
