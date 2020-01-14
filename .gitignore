@@ -8,3 +8,5 @@ build/
 src/main/java/me/mattstudios/mfgui/TestMain.java
 
 src/main/resources/
+
+*.iml
