@@ -36,6 +36,9 @@ public final class GUI implements InventoryHolder {
     // Makes sure GUI listener is not registered more than once
     private static boolean registeredListener;
 
+    // Whether or not the GUI is updating
+    private boolean updating;
+
     /**
      * Main GUI constructor
      *
@@ -161,6 +164,15 @@ public final class GUI implements InventoryHolder {
     }
 
     /**
+     * Checks weather or not the GUI is updating
+     *
+     * @return The updating status
+     */
+    public boolean isUpdating() {
+        return updating;
+    }
+
+    /**
      * Opens the GUI for a player
      *
      * @param player The player to open it to
@@ -173,6 +185,19 @@ public final class GUI implements InventoryHolder {
         }
 
         player.openInventory(inventory);
+    }
+
+    /**
+     * Method to update the current opened GUI
+     */
+    public void update() {
+        updating = true;
+
+        for (HumanEntity player : inventory.getViewers()) {
+            open(player);
+        }
+
+        updating = false;
     }
 
     @Override
@@ -236,4 +261,5 @@ public final class GUI implements InventoryHolder {
     private boolean isValidSlot(final int slot) {
         return slot >= 0 && slot <= rows * 9;
     }
+    
 }
