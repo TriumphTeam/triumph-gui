@@ -20,18 +20,22 @@ public final class GuiListener implements Listener {
     public void onGuiCLick(final InventoryClickEvent event) {
         if (!(event.getInventory().getHolder() instanceof GUI)) return;
 
-        // Gui components
+        // Gui
         final GUI gui = (GUI) event.getInventory().getHolder();
-        final GuiAction<InventoryClickEvent> defaultClick = gui.getDefaultClickAction();
 
-        // Checks weather or not there is a default action and executes it
+        // Default click action and checks weather or not there is a default action and executes it
+        final GuiAction<InventoryClickEvent> defaultClick = gui.getDefaultClickAction();
         if (defaultClick != null) defaultClick.execute(event);
 
-        // Checks if the player is clicking on a non GUI Item
-        if (!gui.hasGuiItem(event.getSlot())) return;
+        // Slot action and checks weather or not there is a slot action and executes it
+        final GuiAction<InventoryClickEvent> slotAction = gui.getSlotAction(event.getSlot());
+        if (slotAction != null) slotAction.execute(event);
 
         // The clicked GUI Item
         final GuiItem guiItem = gui.getGuiItem(event.getSlot());
+
+        // Returns if there is no gui item
+        if (guiItem == null) return;
 
         // Checks whether or not the Item is truly a GUI Item
         if (!getNBTTag(event.getCurrentItem(), "mf-gui").equalsIgnoreCase(guiItem.getUuid().toString())) return;
@@ -50,6 +54,7 @@ public final class GuiListener implements Listener {
     public void onGuiClose(InventoryCloseEvent event) {
         if (!(event.getInventory().getHolder() instanceof GUI)) return;
 
+        // GUI
         final GUI gui = (GUI) event.getInventory().getHolder();
 
         // The GUI action for closing
@@ -68,6 +73,7 @@ public final class GuiListener implements Listener {
     public void onGuiOpen(InventoryOpenEvent event) {
         if (!(event.getInventory().getHolder() instanceof GUI)) return;
 
+        // GUI
         final GUI gui = (GUI) event.getInventory().getHolder();
 
         // The GUI action for opening

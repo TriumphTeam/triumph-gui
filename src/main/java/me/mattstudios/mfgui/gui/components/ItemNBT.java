@@ -121,8 +121,8 @@ public final class ItemNBT {
      */
     private static Object newNBTTagCompound() {
         try {
-            return Objects.requireNonNull(getNMSClass("NBTTagCompound")).newInstance();
-        } catch (IllegalAccessException | InstantiationException e) {
+            return Objects.requireNonNull(getNMSClass("NBTTagCompound")).getDeclaredConstructor().newInstance();
+        } catch (IllegalAccessException | InstantiationException | NoSuchMethodException | InvocationTargetException e) {
             return null;
         }
     }

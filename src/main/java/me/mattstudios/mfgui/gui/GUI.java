@@ -1,5 +1,6 @@
 package me.mattstudios.mfgui.gui;
 
+import com.google.common.annotations.Beta;
 import me.mattstudios.mfgui.gui.components.GuiAction;
 import me.mattstudios.mfgui.gui.components.GuiException;
 import org.bukkit.Bukkit;
@@ -9,11 +10,15 @@ import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.inventory.InventoryOpenEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
+@SuppressWarnings({"UnusedReturnValue", "unused"})
 public final class GUI implements InventoryHolder {
 
     private Inventory inventory;
@@ -22,7 +27,9 @@ public final class GUI implements InventoryHolder {
     private int rows;
 
     // Contains all items the GUI will have
-    private Map<Integer, GuiItem> guiItems;
+    private final Map<Integer, GuiItem> guiItems;
+
+    private final Map<Integer, GuiAction<InventoryClickEvent>> slotActions;
 
     // Action to execute when clicking on any item
     private GuiAction<InventoryClickEvent> defaultClickAction;
@@ -51,9 +58,11 @@ public final class GUI implements InventoryHolder {
 
         this.rows = finalRows;
         this.title = title;
-        this.guiItems = new HashMap<>();
 
-        this.inventory = Bukkit.createInventory(this, rows * 9, title);
+        guiItems = new HashMap<>();
+        slotActions = new HashMap<>();
+
+        inventory = Bukkit.createInventory(this, rows * 9, title);
 
         // Registers the event handler once
         if (!registeredListener) {
@@ -70,18 +79,6 @@ public final class GUI implements InventoryHolder {
      */
     public GUI(final Plugin plugin, final String title) {
         this(plugin, 1, title);
-    }
-
-
-    /**
-     * Sets the title of the GUI
-     *
-     * @param title The title to set
-     */
-    public GUI setTitle(final String title) {
-        this.title = title;
-
-        return this;
     }
 
     /**
@@ -141,8 +138,10 @@ public final class GUI implements InventoryHolder {
      *
      * @param defaultClickAction Action to resolve
      */
-    public void setDefaultClickAction(final GuiAction<InventoryClickEvent> defaultClickAction) {
+    public GUI setDefaultClickAction(final GuiAction<InventoryClickEvent> defaultClickAction) {
         this.defaultClickAction = defaultClickAction;
+
+        return this;
     }
 
     /**
@@ -150,8 +149,10 @@ public final class GUI implements InventoryHolder {
      *
      * @param closeGuiAction Action to resolve
      */
-    public void setCloseGuiAction(final GuiAction<InventoryCloseEvent> closeGuiAction) {
+    public GUI setCloseGuiAction(final GuiAction<InventoryCloseEvent> closeGuiAction) {
         this.closeGuiAction = closeGuiAction;
+
+        return this;
     }
 
     /**
@@ -159,24 +160,36 @@ public final class GUI implements InventoryHolder {
      *
      * @param openGuiAction Action to resolve
      */
-    public void setOpenGuiAction(final GuiAction<InventoryOpenEvent> openGuiAction) {
+    public GUI setOpenGuiAction(final GuiAction<InventoryOpenEvent> openGuiAction) {
         this.openGuiAction = openGuiAction;
+
+        return this;
+    }
+
+    /**
+     * Adds a Gui Action for when clicking on a specific slot
+     *
+     * @param slot       The slot to add
+     * @param slotAction The gui action
+     */
+    public GUI addSlotAction(final int slot, final GuiAction<InventoryClickEvent> slotAction) {
+        if (!isValidSlot(slot)) return this;
+        slotActions.put(slot, slotAction);
+
+        return this;
     }
 
     /**
      * Gets a specific GuiItem on the slot
      *
      * @param slot The slot to get
-     * @return The GuiItem in the slot
      */
     public GuiItem getGuiItem(final int slot) {
-        return guiItems.get(slot);
+        return isValidSlot(slot) ? guiItems.get(slot) : null;
     }
 
     /**
      * Checks weather or not the GUI is updating
-     *
-     * @return The updating status
      */
     public boolean isUpdating() {
         return updating;
@@ -201,13 +214,53 @@ public final class GUI implements InventoryHolder {
      * Method to update the current opened GUI
      */
     public void update() {
-        inventory.clear();
+        updating = true;
 
-        for (final int slot : guiItems.keySet()) {
-            inventory.setItem(slot, guiItems.get(slot).getItemStack());
+        for (HumanEntity player : inventory.getViewers()) {
+            open(player);
         }
+
+        updating = false;
     }
 
+    /**
+     * Used for updating the current item in the GUI at runtime
+     *
+     * @param slot      The slot of the item to update
+     * @param itemStack The new ItemStack
+     */
+    public void updateItem(final int slot, final ItemStack itemStack) {
+        if (!guiItems.containsKey(slot)) return;
+        guiItems.get(slot).setItemStack(itemStack);
+        inventory.setItem(slot, guiItems.get(slot).getItemStack());
+    }
+
+    /**
+     * Updates the title of the GUI
+     * This method may cause LAG if used on a loop
+     *
+     * @param title The title to set
+     */
+    @Beta
+    public void updateTitle(final String title) {
+        this.title = title;
+
+        updating = true;
+
+        final List<HumanEntity> viewers = new ArrayList<>(inventory.getViewers());
+
+        inventory = Bukkit.createInventory(this, inventory.getSize(), this.title);
+
+        for (HumanEntity player : viewers) {
+            open(player);
+        }
+
+        updating = false;
+    }
+
+    /**
+     * Gets the main inventory holder
+     */
     @Override
     public Inventory getInventory() {
         return inventory;
@@ -215,8 +268,6 @@ public final class GUI implements InventoryHolder {
 
     /**
      * Gets the default click resolver
-     *
-     * @return The click resolver
      */
     GuiAction<InventoryClickEvent> getDefaultClickAction() {
         return defaultClickAction;
@@ -224,8 +275,6 @@ public final class GUI implements InventoryHolder {
 
     /**
      * Gets the close gui resolver
-     *
-     * @return The close gui resolver
      */
     GuiAction<InventoryCloseEvent> getCloseGuiAction() {
         return closeGuiAction;
@@ -233,31 +282,27 @@ public final class GUI implements InventoryHolder {
 
     /**
      * Gets the open gui resolver
-     *
-     * @return The open gui resolver
      */
     GuiAction<InventoryOpenEvent> getOpenGuiAction() {
         return openGuiAction;
     }
 
     /**
-     * Checks whether or not there is an GuiItem in the slot
+     * Gets the action for the specified slot
      *
-     * @param slot The slot to check
-     * @return True if there is an item or false if there isn't
+     * @param slot The slot clicked
      */
-    boolean hasGuiItem(final int slot) {
-        return guiItems.get(slot) != null;
+    GuiAction<InventoryClickEvent> getSlotAction(final int slot) {
+        return isValidSlot(slot) ? slotActions.get(slot) : null;
     }
 
     /**
      * Checks if the slot introduces is a valid slot
      *
      * @param slot The slot to check
-     * @return If it is valid or not
      */
     private boolean isValidSlot(final int slot) {
-        return slot >= 0 && slot <= rows * 9;
+        return slot >= 0 && slot < rows * 9;
     }
 
 }
