@@ -62,6 +62,7 @@ public final class GuiItem {
 
     /**
      * Gets the GuiItem's ItemStack
+     * @return The ItemStack
      */
     public ItemStack getItemStack() {
         return itemStack;

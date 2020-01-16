@@ -4,7 +4,7 @@ apply plugin: 'signing'
 
 group = 'me.mattstudios.utils'
 archivesBaseName = "matt-framework-gui"
-version = '1.0.0-BETA'
+version = '1.0.1-BETA'
 
 sourceCompatibility = JavaVersion.VERSION_1_8
 targetCompatibility = JavaVersion.VERSION_1_8
@@ -47,10 +47,14 @@ artifacts {
     archives javadocJar, sourcesJar
 }
 
-// General testing only
-jar {
-    destinationDir = file("C:/Users/xpsyk/Documents/MattServers/MT-15-1/plugins")
+signing {
+    sign configurations.archives
 }
+
+// General testing only
+/*jar {
+    destinationDir = file("C:/Users/xpsyk/Documents/MattServers/MT-15-1/plugins")
+}*/
 
 uploadArchives {
     repositories {
@@ -66,29 +70,29 @@ uploadArchives {
             }
 
             pom.project {
-                name 'Matt Framework GUI'
-                packaging 'jar'
-                description 'Lib for easier creation of GUIs in Spigot'
-                url 'https://github.com/ipsk/MF-GUI'
+                name = 'Matt Framework GUI'
+                packaging = 'jar'
+                description = 'Lib for easier creation of GUIs in Spigot'
+                url = 'https://github.com/ipsk/MF-GUI'
 
                 scm {
-                    connection 'scm:git:git://github.com/ipsk/MF-GUI.git'
-                    developerConnection 'scm:git:ssh://github.com:ipsk/MF-GUI.git'
-                    url 'http://github.com/ipsk/MF-GUI'
+                    connection = 'scm:git:git://github.com/ipsk/MF-GUI.git'
+                    developerConnection = 'scm:git:ssh://github.com:ipsk/MF-GUI.git'
+                    url = 'http://github.com/ipsk/MF-GUI'
                 }
 
                 licenses {
                     license {
-                        name 'MIT License'
-                        url 'http://www.opensource.org/licenses/mit-license.php'
+                        name = 'MIT License'
+                        url = 'http://www.opensource.org/licenses/mit-license.php'
                     }
                 }
 
                 developers {
                     developer {
-                        id 'matt-studios'
-                        name 'Mateus Moreira'
-                        email 'xpsykogfx@gmail.com'
+                        id = 'matt-studios'
+                        name = 'Mateus Moreira'
+                        email = 'xpsykogfx@gmail.com'
                     }
                 }
             }
