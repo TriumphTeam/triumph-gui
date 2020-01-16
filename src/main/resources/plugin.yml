@@ -1,0 +1,7 @@
+name: MattFrameworkGui
+version: ${project.version}
+main: me.mattstudios.mfgui.TestMain
+api-version: 1.13
+
+commands:
+  gui:
