@@ -21,8 +21,10 @@ import java.util.Map;
 @SuppressWarnings({"UnusedReturnValue", "unused"})
 public final class GUI implements InventoryHolder {
 
+    // Main inventory
     private Inventory inventory;
 
+    // Inventory attributes
     private String title;
     private int rows;
 

@@ -62,8 +62,6 @@ public final class GuiItem {
 
     /**
      * Gets the GuiItem's ItemStack
-     *
-     * @return the ItemStack
      */
     public ItemStack getItemStack() {
         return itemStack;
@@ -71,8 +69,6 @@ public final class GuiItem {
 
     /**
      * Gets the random UUID that was generated when the GuiItem was made
-     *
-     * @return The UUID
      */
     UUID getUuid() {
         return uuid;
@@ -80,8 +76,6 @@ public final class GuiItem {
 
     /**
      * Gets the action to do when the player clicks on it
-     *
-     * @return The action
      */
     GuiAction<InventoryClickEvent> getAction() {
         return action;

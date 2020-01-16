@@ -1,6 +1,9 @@
 apply plugin: 'java'
+apply plugin: 'maven'
+apply plugin: 'signing'
 
-group = 'me.mattstudios'
+group = 'me.mattstudios.utils'
+archivesBaseName = "matt-framework-gui"
 version = '1.0.0-BETA'
 
 sourceCompatibility = JavaVersion.VERSION_1_8
@@ -30,11 +33,65 @@ processResources {
     }
 }
 
+task javadocJar(type: Jar) {
+    classifier = 'javadoc'
+    from javadoc
+}
+
+task sourcesJar(type: Jar) {
+    classifier = 'sources'
+    from sourceSets.main.allSource
+}
+
+artifacts {
+    archives javadocJar, sourcesJar
+}
+
 // General testing only
 jar {
     destinationDir = file("C:/Users/xpsyk/Documents/MattServers/MT-15-1/plugins")
+}
 
-    doLast {
-        exclude("src/main/resources/plugin.yml")
+uploadArchives {
+    repositories {
+        mavenDeployer {
+            beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
+
+            repository(url: "https://oss.sonatype.org/service/local/staging/deploy/maven2/") {
+                authentication(userName: ossrhUsername, password: ossrhPassword)
+            }
+
+            snapshotRepository(url: "https://oss.sonatype.org/content/repositories/snapshots/") {
+                authentication(userName: ossrhUsername, password: ossrhPassword)
+            }
+
+            pom.project {
+                name 'Matt Framework GUI'
+                packaging 'jar'
+                description 'Lib for easier creation of GUIs in Spigot'
+                url 'https://github.com/ipsk/MF-GUI'
+
+                scm {
+                    connection 'scm:git:git://github.com/ipsk/MF-GUI.git'
+                    developerConnection 'scm:git:ssh://github.com:ipsk/MF-GUI.git'
+                    url 'http://github.com/ipsk/MF-GUI'
+                }
+
+                licenses {
+                    license {
+                        name 'MIT License'
+                        url 'http://www.opensource.org/licenses/mit-license.php'
+                    }
+                }
+
+                developers {
+                    developer {
+                        id 'matt-studios'
+                        name 'Mateus Moreira'
+                        email 'xpsykogfx@gmail.com'
+                    }
+                }
+            }
+        }
     }
 }
