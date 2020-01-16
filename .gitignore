@@ -6,3 +6,9 @@
 build/
 
 *.iml
+
+gradle.properties
+
+temp.java.asc
+
+temp.java

@@ -21,8 +21,10 @@ import java.util.Map;
 @SuppressWarnings({"UnusedReturnValue", "unused"})
 public final class GUI implements InventoryHolder {
 
+    // Main inventory
     private Inventory inventory;
 
+    // Inventory attributes
     private String title;
     private int rows;
 
@@ -50,6 +52,7 @@ public final class GUI implements InventoryHolder {
      * Main GUI constructor
      *
      * @param plugin The plugin
+     * @param rows   How many rows you want
      * @param title  The GUI's title
      */
     public GUI(final Plugin plugin, int rows, final String title) {
@@ -85,6 +88,7 @@ public final class GUI implements InventoryHolder {
      * Sets the number of rows the GUI should have
      *
      * @param rows The number of rows to set
+     * @return The GUI
      */
     public GUI setRows(final int rows) {
         int finalRows = rows;
@@ -99,6 +103,7 @@ public final class GUI implements InventoryHolder {
      *
      * @param slot    The GUI slot
      * @param guiItem The GUI item to add
+     * @return The GUI
      */
     public GUI setItem(final int slot, final GuiItem guiItem) {
         if (!isValidSlot(slot)) throw new GuiException("Invalid item slot!");
@@ -114,6 +119,7 @@ public final class GUI implements InventoryHolder {
      * @param row     The GUI row number
      * @param col     The GUI col number
      * @param guiItem The GUI item to add
+     * @return The GUI
      */
     public GUI setItem(final int row, final int col, final GuiItem guiItem) {
         return setItem((col + (row - 1) * 9) - 1, guiItem);
@@ -123,6 +129,7 @@ public final class GUI implements InventoryHolder {
      * Sets an GuiItem to fill up the entire inventory where there is no other item
      *
      * @param guiItem The item to use as fill
+     * @return The GUI
      */
     public GUI setFillItem(final GuiItem guiItem) {
         for (int i = 0; i < rows * 9; i++) {
@@ -137,6 +144,7 @@ public final class GUI implements InventoryHolder {
      * Sets the action of a default click on any item
      *
      * @param defaultClickAction Action to resolve
+     * @return The GUI
      */
     public GUI setDefaultClickAction(final GuiAction<InventoryClickEvent> defaultClickAction) {
         this.defaultClickAction = defaultClickAction;
@@ -148,6 +156,7 @@ public final class GUI implements InventoryHolder {
      * Sets the action of what to do when GUI closes
      *
      * @param closeGuiAction Action to resolve
+     * @return The GUI
      */
     public GUI setCloseGuiAction(final GuiAction<InventoryCloseEvent> closeGuiAction) {
         this.closeGuiAction = closeGuiAction;
@@ -159,6 +168,7 @@ public final class GUI implements InventoryHolder {
      * Sets the action of what to do when GUI opens
      *
      * @param openGuiAction Action to resolve
+     * @return The GUI
      */
     public GUI setOpenGuiAction(final GuiAction<InventoryOpenEvent> openGuiAction) {
         this.openGuiAction = openGuiAction;
@@ -171,6 +181,7 @@ public final class GUI implements InventoryHolder {
      *
      * @param slot       The slot to add
      * @param slotAction The gui action
+     * @return The GUI
      */
     public GUI addSlotAction(final int slot, final GuiAction<InventoryClickEvent> slotAction) {
         if (!isValidSlot(slot)) return this;
@@ -183,6 +194,7 @@ public final class GUI implements InventoryHolder {
      * Gets a specific GuiItem on the slot
      *
      * @param slot The slot to get
+     * @return The GUI
      */
     public GuiItem getGuiItem(final int slot) {
         return isValidSlot(slot) ? guiItems.get(slot) : null;
@@ -190,6 +202,7 @@ public final class GUI implements InventoryHolder {
 
     /**
      * Checks weather or not the GUI is updating
+     * @return If it's updating or not
      */
     public boolean isUpdating() {
         return updating;
