@@ -122,7 +122,7 @@ public final class GUI implements InventoryHolder {
      * @return The GUI
      */
     public GUI setItem(final int row, final int col, final GuiItem guiItem) {
-        return setItem((col + (row - 1) * 9) - 1, guiItem);
+        return setItem(getSlotFromRowCol(row, col), guiItem);
     }
 
     /**
@@ -191,6 +191,18 @@ public final class GUI implements InventoryHolder {
     }
 
     /**
+     * Adds a Gui Action for when clicking on a specific slot with row and col instead
+     *
+     * @param row        The row of the slot
+     * @param col        The col of the slot
+     * @param slotAction The gui action
+     * @return The GUI
+     */
+    public GUI addSlotAction(final int row, final int col, final GuiAction<InventoryClickEvent> slotAction) {
+        return addSlotAction(getSlotFromRowCol(row, col), slotAction);
+    }
+
+    /**
      * Gets a specific GuiItem on the slot
      *
      * @param slot The slot to get
@@ -202,6 +214,7 @@ public final class GUI implements InventoryHolder {
 
     /**
      * Checks weather or not the GUI is updating
+     *
      * @return If it's updating or not
      */
     public boolean isUpdating() {
@@ -246,6 +259,17 @@ public final class GUI implements InventoryHolder {
         if (!guiItems.containsKey(slot)) return;
         guiItems.get(slot).setItemStack(itemStack);
         inventory.setItem(slot, guiItems.get(slot).getItemStack());
+    }
+
+    /**
+     * Used for updating the current item in the GUI at runtime
+     *
+     * @param row        The row of the slot
+     * @param col        The col of the slot
+     * @param itemStack The new ItemStack
+     */
+    public void updateItem(final int row, final int col, final ItemStack itemStack) {
+        updateItem(getSlotFromRowCol(row, col), itemStack);
     }
 
     /**
@@ -316,6 +340,16 @@ public final class GUI implements InventoryHolder {
      */
     private boolean isValidSlot(final int slot) {
         return slot >= 0 && slot < rows * 9;
+    }
+
+    /**
+     * Gets the slot from the row and col passed
+     * @param row The row
+     * @param col The col
+     * @return The new slot
+     */
+    private int getSlotFromRowCol(final int row, final int col) {
+        return (col + (row - 1) * 9) - 1;
     }
 
 }
