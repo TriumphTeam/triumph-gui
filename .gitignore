@@ -1,13 +1,9 @@
 
 .idea/
 
-.gradle/
-
-build/
+target/
 
 *.iml
-
-gradle.properties
 
 temp.java.asc
 
