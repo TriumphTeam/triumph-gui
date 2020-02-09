@@ -23,14 +23,24 @@ public final class GuiItem {
      *
      * @param itemStack The ItemStack to be used
      * @param action    The action to do when clicking on the Item
+     * @param nbt if should or not add nbt tag
      */
-    public GuiItem(final ItemStack itemStack, final GuiAction<InventoryClickEvent> action) {
+    public GuiItem(final ItemStack itemStack, final GuiAction<InventoryClickEvent> action, final boolean nbt) {
         if (action == null) this.action = event -> {
         };
         else this.action = action;
 
         // Sets the UUID to an NBT tag to be identifiable later
-        this.itemStack = setNBTTag(itemStack, "mf-gui", uuid.toString());
+        if (nbt) this.itemStack = setNBTTag(itemStack, "mf-gui", uuid.toString());
+    }
+
+    /**
+     * Constructor for default nbt as true
+     * @param itemStack The ItemStack to be used
+     * @param action    The action to do when clicking on the Item
+     */
+    public GuiItem(final ItemStack itemStack, final GuiAction<InventoryClickEvent> action) {
+        this(itemStack, action, true);
     }
 
     /**

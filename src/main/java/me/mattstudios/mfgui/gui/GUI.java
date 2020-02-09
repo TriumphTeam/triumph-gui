@@ -14,11 +14,12 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-@SuppressWarnings({"UnusedReturnValue", "unused"})
+@SuppressWarnings({"UnusedReturnValue", "unused", "BooleanMethodIsAlwaysInverted"})
 public final class GUI implements InventoryHolder {
 
     // Main inventory
@@ -29,9 +30,10 @@ public final class GUI implements InventoryHolder {
     private int rows;
 
     // Contains all items the GUI will have
-    private final Map<Integer, GuiItem> guiItems;
+    private final Map<Integer, GuiItem> guiItems = new HashMap<>();
+    private final List<GuiItem> fillItems = new ArrayList<>();
 
-    private final Map<Integer, GuiAction<InventoryClickEvent>> slotActions;
+    private final Map<Integer, GuiAction<InventoryClickEvent>> slotActions = new HashMap<>();
 
     // Action to execute when clicking on any item
     private GuiAction<InventoryClickEvent> defaultClickAction;
@@ -61,9 +63,6 @@ public final class GUI implements InventoryHolder {
 
         this.rows = finalRows;
         this.title = title;
-
-        guiItems = new HashMap<>();
-        slotActions = new HashMap<>();
 
         inventory = Bukkit.createInventory(this, rows * 9, title);
 
@@ -123,6 +122,17 @@ public final class GUI implements InventoryHolder {
      */
     public GUI setItem(final int row, final int col, final GuiItem guiItem) {
         return setItem(getSlotFromRowCol(row, col), guiItem);
+    }
+
+    /**
+     * Adds items to the GUI without specific slot
+     *
+     * @param guiItems The Gui Items
+     * @return The GUI
+     */
+    public GUI addItem(final GuiItem... guiItems) {
+        fillItems.addAll(Arrays.asList(guiItems));
+        return this;
     }
 
     /**
@@ -233,6 +243,10 @@ public final class GUI implements InventoryHolder {
             inventory.setItem(slot, guiItems.get(slot).getItemStack());
         }
 
+        for (final GuiItem guiItem : fillItems) {
+            inventory.addItem(guiItem.getItemStack());
+        }
+
         player.openInventory(inventory);
     }
 
@@ -264,8 +278,8 @@ public final class GUI implements InventoryHolder {
     /**
      * Used for updating the current item in the GUI at runtime
      *
-     * @param row        The row of the slot
-     * @param col        The col of the slot
+     * @param row       The row of the slot
+     * @param col       The col of the slot
      * @param itemStack The new ItemStack
      */
     public void updateItem(final int row, final int col, final ItemStack itemStack) {
@@ -344,6 +358,7 @@ public final class GUI implements InventoryHolder {
 
     /**
      * Gets the slot from the row and col passed
+     *
      * @param row The row
      * @param col The col
      * @return The new slot
