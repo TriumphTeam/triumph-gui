@@ -13,10 +13,7 @@ import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @SuppressWarnings({"UnusedReturnValue", "unused"})
 public final class GUI implements InventoryHolder {
@@ -132,11 +129,25 @@ public final class GUI implements InventoryHolder {
      * @return The GUI
      */
     public GUI setFillItem(final GuiItem guiItem) {
-        for (int i = 0; i < rows * 9; i++) {
-            if (guiItems.containsKey(i)) continue;
-            guiItems.put(i, guiItem);
-        }
+        setFillItems(Collections.singletonList(guiItem));
+        return this;
+    }
 
+    /**
+     * Fill empty slots with Multiple GuiItems, goes through list and starts again
+     *
+     * @param guiItemList GuiItem
+     */
+    public GUI setFillItems(List<GuiItem> guiItemList) {
+        GuiItem[] items = {guiItemList.get(0), guiItemList.get(1)};
+        items = repeatArray(items, rows * 9);
+        int i = 0;
+        for (GuiItem item : items) {
+            i++;
+            if (i > rows * 9) break;
+            if (guiItems.containsKey(i) || !isValidSlot(i)) continue;
+            setItem(i, items[i]);
+        }
         return this;
     }
 
@@ -200,6 +211,34 @@ public final class GUI implements InventoryHolder {
      */
     public GUI addSlotAction(final int row, final int col, final GuiAction<InventoryClickEvent> slotAction) {
         return addSlotAction(getSlotFromRowCol(row, col), slotAction);
+    }
+
+    /**
+     * Fills the outside section of the GUI with an ItemStack
+     *
+     * @param stack ItemStack
+     */
+    public void fillBorder(ItemStack stack) {
+        fillBorder(new GuiItem(stack));
+    }
+
+    /**
+     * Fills the outside section of the GUI with a GuiItem
+     *
+     * @param guiItem GuiItem
+     */
+    public void fillBorder(GuiItem guiItem) {
+        if (rows == 1 || rows == 2) return;
+        for (int i = 0; i <= rows * 9; i++) {
+            if ((i >= 0 && i <= 8) || (i >= (rows * 9) - 9 && i <= (rows * 9))
+                    || i == 9 || i == 18
+                    || i == 27|| i == 36
+                    || i == 17 || i == 26
+                    || i == 35 || i == 45) {
+                if (isValidSlot(i))
+                    setItem(i, guiItem);
+            }
+        }
     }
 
     /**
@@ -350,6 +389,22 @@ public final class GUI implements InventoryHolder {
      */
     private int getSlotFromRowCol(final int row, final int col) {
         return (col + (row - 1) * 9) - 1;
+    }
+
+    /**
+     * Repeats any type of Array. Allows for alternating items
+     * Stores references to existing Objects -> Does not create new objects
+     *
+     * @param arr       Array Type
+     * @param newLength Length of array
+     * @return          New array
+     */
+    private static <T> T[] repeatArray(T[] arr, int newLength) {
+        T[] dup = Arrays.copyOf(arr, newLength);
+        for (int last = arr.length; last != 0 && last < newLength; last <<= 1) {
+            System.arraycopy(dup, 0, dup, last, Math.min(last << 1, newLength) - last);
+        }
+        return dup;
     }
 
 }
