@@ -291,14 +291,13 @@ public final class GUI implements InventoryHolder {
         items = repeatArray(items, rows * 9);
         if (rows == 1 || rows == 2) return this;
         for (int i = 0; i <= rows * 9; i++) {
-            if ((i >= 0 && i <= 8) || (i >= (rows * 9) - 9 && i <= (rows * 9))
+            if (((i >= 0 && i <= 8) || (i >= (rows * 9) - 9 && i <= (rows * 9))
                     || i == 9 || i == 18
                     || i == 27|| i == 36
                     || i == 17 || i == 26
-                    || i == 35 || i == 45) {
-                if (isValidSlot(i))
-                    setItem(i, items[i]);
-            }
+                    || i == 35 || i == 45) && isValidSlot(i))
+                        setItem(i, items[i]);
+
         }
 
         return this;
