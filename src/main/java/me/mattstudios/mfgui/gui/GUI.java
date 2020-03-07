@@ -10,7 +10,6 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.inventory.InventoryDragEvent;
 import org.bukkit.event.inventory.InventoryOpenEvent;
-import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
@@ -41,7 +40,7 @@ public final class GUI implements InventoryHolder {
     // Action to execute when clicking on the top part of the GUI only
     private GuiAction<InventoryClickEvent> defaultTopClickAction;
 
-    // Action to execute when clicking on the top part of the GUI only
+    // Action to execute when dragging the item on the GUI
     private GuiAction<InventoryDragEvent> dragAction;
 
     // Action to execute when GUI closes
@@ -184,7 +183,7 @@ public final class GUI implements InventoryHolder {
      * Fills top portion of the GUI
      *
      * @param guiItem GuiItem
-     * @return        The GUI
+     * @return The GUI
      */
     public GUI fillTop(final GuiItem guiItem) {
         fillTop(Collections.singletonList(guiItem));
@@ -195,30 +194,45 @@ public final class GUI implements InventoryHolder {
      * Fills top portion of the GUI with alternation
      *
      * @param guiItems List of GuiItems
-     * @return         The GUI
+     * @return The GUI
      */
     public GUI fillTop(final List<GuiItem> guiItems) {
-        GuiItem[] items = guiItems.toArray(new GuiItem[0]);
-        items = repeatArray(items, rows * 9);
-        for (int i = 0; i >= 0 && i <= 8; i++) {
-            if (!this.guiItems.containsKey(i))
-                setItem(i, items[i]);
+        final List<GuiItem> items = repeatList(guiItems, rows * 9);
+        for (int i = 0; i < 9; i++) {
+            if (!this.guiItems.containsKey(i)) setItem(i, items.get(i));
         }
 
         return this;
     }
-  
+
     /**
      * Fills bottom portion of the GUI
      *
      * @param guiItem GuiItem
-     * @return        The GUI
+     * @return The GUI
      */
     public GUI fillBottom(final GuiItem guiItem) {
-        fillTop(Collections.singletonList(guiItem));
+        fillBottom(Collections.singletonList(guiItem));
+
+        return this;
     }
 
-     /**
+    /**
+     * Fills bottom portion of the GUI with alternation
+     *
+     * @param guiItems GuiItem
+     * @return The GUI
+     */
+    public GUI fillBottom(final List<GuiItem> guiItems) {
+        final List<GuiItem> items = repeatList(guiItems, rows * 9);
+        for (int i = 9; i > 0; i--) {
+            if (!this.guiItems.containsKey(i)) setItem((rows * 9) - i, items.get(i));
+        }
+
+        return this;
+    }
+
+    /**
      * Adds items to the GUI without specific slot
      *
      * @param items The Gui Items
@@ -235,36 +249,17 @@ public final class GUI implements InventoryHolder {
                 break;
             }
         }
-      
+
         return this;
     }
 
     /**
-     * Fills bottom portion of the GUI with alternation
-     *
-     * @param guiItems GuiItem
-     * @return         The GUI
-     */
-    public GUI fillBottom(final List<GuiItem> guiItems) {
-        GuiItem[] items = guiItems.toArray(new GuiItem[0]);
-        items = repeatArray(items, rows * 9);
-        for (int i = 0; i < 53; i++) {
-            if (i >= (rows * 9) - 9 && i <= (rows * 9)) {
-                if (this.guiItems.containsKey(i) || !isValidSlot(i)) continue;
-                    setItem(i, items[i]);
-            }
-        }
-
-        return this;
-     }
-  
-     /**
      * Adds ItemStacks to the inventory straight, not GUI
      *
      * @param items The items
      * @return The GUI
      */
-    public HashMap<Integer, ItemStack> addItem(final ItemStack... items) {
+    public Map<Integer, ItemStack> addItem(final ItemStack... items) {
         Validate.noNullElements(items, "Item cannot be null");
         if (!persist) return new HashMap<>();
         return inventory.addItem(items);
@@ -276,25 +271,24 @@ public final class GUI implements InventoryHolder {
      * @param guiItem The item to use as fill
      * @return The GUI
      */
-    public GUI setFillItem(final GuiItem guiItem) {
-        setFillItems(Collections.singletonList(guiItem));
+    public GUI fill(final GuiItem guiItem) {
+        fill(Collections.singletonList(guiItem));
         return this;
     }
 
     /**
      * Fill empty slots with Multiple GuiItems, goes through list and starts again
      *
-     * @param guiItemList GuiItem
+     * @param guiItems GuiItem
      */
-    public GUI setFillItems(final List<GuiItem> guiItemList) {
-        GuiItem[] items = guiItemList.toArray(new GuiItem[0]);
-        items = repeatArray(items, rows * 9);
+    public GUI fill(final List<GuiItem> guiItems) {
+        final List<GuiItem> items = repeatList(guiItems, rows * 9);
         int i = -1;
         for (GuiItem item : items) {
             i++;
             if (i > rows * 9) break;
             if (this.guiItems.containsKey(i) || !isValidSlot(i)) continue;
-            setItem(i, items[i]);
+            setItem(i, items.get(i));
         }
         return this;
     }
@@ -398,19 +392,18 @@ public final class GUI implements InventoryHolder {
     /**
      * Fill empty slots with Multiple GuiItems, goes through list and starts again
      *
-     * @param guiItemList GuiItem
+     * @param guiItems GuiItem
      */
-    public GUI fillBorder(final List<GuiItem> guiItemList) {
-        GuiItem[] items = guiItemList.toArray(new GuiItem[0]);
-        items = repeatArray(items, rows * 9);
+    public GUI fillBorder(final List<GuiItem> guiItems) {
+        final List<GuiItem> items = repeatList(guiItems, rows * 9);
         if (rows == 1 || rows == 2) return this;
         for (int i = 0; i <= rows * 9; i++) {
             if (((i >= 0 && i <= 8) || (i >= (rows * 9) - 9 && i <= (rows * 9))
                     || i == 9 || i == 18
-                    || i == 27|| i == 36
+                    || i == 27 || i == 36
                     || i == 17 || i == 26
                     || i == 35 || i == 45) && isValidSlot(i))
-                        setItem(i, items[i]);
+                setItem(i, items.get(i));
 
         }
 
@@ -596,16 +589,14 @@ public final class GUI implements InventoryHolder {
      * Repeats any type of Array. Allows for alternating items
      * Stores references to existing Objects -> Does not create new objects
      *
-     * @param arr       Array Type
+     * @param guiItems  Array Type
      * @param newLength Length of array
-     * @return          New array
+     * @return New array
      */
-    private static <T> T[] repeatArray(T[] arr, int newLength) {
-        T[] dup = Arrays.copyOf(arr, newLength);
-        for (int last = arr.length; last != 0 && last < newLength; last <<= 1) {
-            System.arraycopy(dup, 0, dup, last, Math.min(last << 1, newLength) - last);
-        }
-        return dup;
+    private List<GuiItem> repeatList(final List<GuiItem> guiItems, final int newLength) {
+        final List<GuiItem> repeated = new ArrayList<>();
+        Collections.nCopies(rows * 9, guiItems).forEach(repeated::addAll);
+        return repeated;
     }
 
 }
