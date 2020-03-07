@@ -3,19 +3,23 @@ package me.mattstudios.mfgui.gui;
 import com.google.common.annotations.Beta;
 import me.mattstudios.mfgui.gui.components.GuiAction;
 import me.mattstudios.mfgui.gui.components.GuiException;
+import org.apache.commons.lang.Validate;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
+import org.bukkit.event.inventory.InventoryDragEvent;
 import org.bukkit.event.inventory.InventoryOpenEvent;
+import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
 
-@SuppressWarnings({"UnusedReturnValue", "unused"})
+@SuppressWarnings({"UnusedReturnValue", "unused", "BooleanMethodIsAlwaysInverted"})
 public final class GUI implements InventoryHolder {
 
     // Main inventory
@@ -24,14 +28,21 @@ public final class GUI implements InventoryHolder {
     // Inventory attributes
     private String title;
     private int rows;
+    private boolean persist;
 
     // Contains all items the GUI will have
-    private final Map<Integer, GuiItem> guiItems;
+    private final Map<Integer, GuiItem> guiItems = new HashMap<>();
 
-    private final Map<Integer, GuiAction<InventoryClickEvent>> slotActions;
+    private final Map<Integer, GuiAction<InventoryClickEvent>> slotActions = new HashMap<>();
 
     // Action to execute when clicking on any item
     private GuiAction<InventoryClickEvent> defaultClickAction;
+
+    // Action to execute when clicking on the top part of the GUI only
+    private GuiAction<InventoryClickEvent> defaultTopClickAction;
+
+    // Action to execute when clicking on the top part of the GUI only
+    private GuiAction<InventoryDragEvent> dragAction;
 
     // Action to execute when GUI closes
     private GuiAction<InventoryCloseEvent> closeGuiAction;
@@ -52,17 +63,15 @@ public final class GUI implements InventoryHolder {
      * @param rows   How many rows you want
      * @param title  The GUI's title
      */
-    public GUI(final Plugin plugin, int rows, final String title) {
+    public GUI(final Plugin plugin, final int rows, final String title, final boolean persist) {
         int finalRows = rows;
         if (!(rows >= 1 && rows <= 6)) finalRows = 1;
 
         this.rows = finalRows;
         this.title = title;
+        this.persist = persist;
 
-        guiItems = new HashMap<>();
-        slotActions = new HashMap<>();
-
-        inventory = Bukkit.createInventory(this, rows * 9, title);
+        inventory = Bukkit.createInventory(this, this.rows * 9, title);
 
         // Registers the event handler once
         if (!registeredListener) {
@@ -74,11 +83,33 @@ public final class GUI implements InventoryHolder {
     /**
      * GUI constructor with only title for easier 1 row GUIs
      *
+     * @param plugin  The plugin
+     * @param title   The GUI's title
+     * @param persist If should persist or not
+     */
+    public GUI(final Plugin plugin, final String title, final boolean persist) {
+        this(plugin, 1, title, persist);
+    }
+
+    /**
+     * GUI constructor with only title for easier 1 row GUIs
+     *
+     * @param plugin The plugin
+     * @param rows   The rows
+     * @param title  The GUI's title
+     */
+    public GUI(final Plugin plugin, final int rows, final String title) {
+        this(plugin, rows, title, false);
+    }
+
+    /**
+     * GUI constructor with only title for easier 1 row GUIs
+     *
      * @param plugin The plugin
      * @param title  The GUI's title
      */
     public GUI(final Plugin plugin, final String title) {
-        this(plugin, 1, title);
+        this(plugin, 1, title, false);
     }
 
     /**
@@ -91,6 +122,18 @@ public final class GUI implements InventoryHolder {
         int finalRows = rows;
         if (!(rows >= 1 && rows <= 6)) finalRows = 1;
         this.rows = finalRows;
+
+        updating = true;
+
+        final List<HumanEntity> viewers = new ArrayList<>(inventory.getViewers());
+
+        inventory = Bukkit.createInventory(this, this.rows * 9, this.title);
+
+        for (HumanEntity player : viewers) {
+            open(player);
+        }
+
+        updating = false;
 
         return this;
     }
@@ -106,6 +149,21 @@ public final class GUI implements InventoryHolder {
         if (!isValidSlot(slot)) throw new GuiException("Invalid item slot!");
 
         guiItems.put(slot, guiItem);
+
+        return this;
+    }
+
+    /**
+     * Sets a GUI item to many slots
+     *
+     * @param slots   The slots in which the item should go
+     * @param guiItem The Gui Item to add
+     * @return The GUI
+     */
+    public GUI setItem(final List<Integer> slots, final GuiItem guiItem) {
+        for (final int slot : slots) {
+            setItem(slot, guiItem);
+        }
 
         return this;
     }
@@ -149,7 +207,7 @@ public final class GUI implements InventoryHolder {
 
         return this;
     }
-
+  
     /**
      * Fills bottom portion of the GUI
      *
@@ -158,6 +216,26 @@ public final class GUI implements InventoryHolder {
      */
     public GUI fillBottom(final GuiItem guiItem) {
         fillTop(Collections.singletonList(guiItem));
+    }
+
+     /**
+     * Adds items to the GUI without specific slot
+     *
+     * @param items The Gui Items
+     * @return The GUI
+     */
+    public GUI addItem(final GuiItem... items) {
+        Validate.noNullElements(items, "Item cannot be null");
+
+        for (final GuiItem guiItem : items) {
+            for (int slot = 0; slot < rows * 9; slot++) {
+                if (guiItems.get(slot) != null) continue;
+
+                guiItems.put(slot, guiItem);
+                break;
+            }
+        }
+      
         return this;
     }
 
@@ -178,6 +256,18 @@ public final class GUI implements InventoryHolder {
         }
 
         return this;
+     }
+  
+     /**
+     * Adds ItemStacks to the inventory straight, not GUI
+     *
+     * @param items The items
+     * @return The GUI
+     */
+    public HashMap<Integer, ItemStack> addItem(final ItemStack... items) {
+        Validate.noNullElements(items, "Item cannot be null");
+        if (!persist) return new HashMap<>();
+        return inventory.addItem(items);
     }
 
     /**
@@ -217,6 +307,30 @@ public final class GUI implements InventoryHolder {
      */
     public GUI setDefaultClickAction(final GuiAction<InventoryClickEvent> defaultClickAction) {
         this.defaultClickAction = defaultClickAction;
+
+        return this;
+    }
+
+    /**
+     * Sets the action of a default click on any item on the top part of the GUI
+     *
+     * @param defaultTopClickAction Action to resolve
+     * @return The GUI
+     */
+    public GUI setDefaultTopClickAction(final GuiAction<InventoryClickEvent> defaultTopClickAction) {
+        this.defaultTopClickAction = defaultTopClickAction;
+
+        return this;
+    }
+
+    /**
+     * Sets the action of a default drag action
+     *
+     * @param dragAction Action to resolve
+     * @return The GUI
+     */
+    public GUI setDragAction(final GuiAction<InventoryDragEvent> dragAction) {
+        this.dragAction = dragAction;
 
         return this;
     }
@@ -328,7 +442,7 @@ public final class GUI implements InventoryHolder {
      * @param player The player to open it to
      */
     public void open(final HumanEntity player) {
-        inventory.clear();
+        if (!persist) inventory.clear();
 
         for (final int slot : guiItems.keySet()) {
             inventory.setItem(slot, guiItems.get(slot).getItemStack());
@@ -365,8 +479,8 @@ public final class GUI implements InventoryHolder {
     /**
      * Used for updating the current item in the GUI at runtime
      *
-     * @param row        The row of the slot
-     * @param col        The col of the slot
+     * @param row       The row of the slot
+     * @param col       The col of the slot
      * @param itemStack The new ItemStack
      */
     public void updateItem(final int row, final int col, final ItemStack itemStack) {
@@ -397,8 +511,18 @@ public final class GUI implements InventoryHolder {
     }
 
     /**
+     * Gets map with all the GUI items
+     *
+     * @return The map with all the items
+     */
+    public Map<Integer, GuiItem> getGuiItems() {
+        return guiItems;
+    }
+
+    /**
      * Gets the main inventory holder
      */
+    @NotNull
     @Override
     public Inventory getInventory() {
         return inventory;
@@ -409,6 +533,20 @@ public final class GUI implements InventoryHolder {
      */
     GuiAction<InventoryClickEvent> getDefaultClickAction() {
         return defaultClickAction;
+    }
+
+    /**
+     * Gets the default top click resolver
+     */
+    GuiAction<InventoryClickEvent> getDefaultTopClickAction() {
+        return defaultTopClickAction;
+    }
+
+    /**
+     * Gets the default drag action
+     */
+    GuiAction<InventoryDragEvent> getDragAction() {
+        return dragAction;
     }
 
     /**
@@ -445,6 +583,7 @@ public final class GUI implements InventoryHolder {
 
     /**
      * Gets the slot from the row and col passed
+     *
      * @param row The row
      * @param col The col
      * @return The new slot
