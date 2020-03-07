@@ -30,7 +30,7 @@
 
     <groupId>me.mattstudios.utils</groupId>
     <artifactId>matt-framework-gui</artifactId>
-    <version>1.1.1-BETA</version>
+    <version>1.2.0-BETA</version>
     <packaging>jar</packaging>
 
     <name>Matt's Framework</name>
@@ -65,6 +65,12 @@
         <developer>
             <name>Mateus Moreira</name>
             <email>xpsykogfx@gmail.com</email>
+            <organization>MattStudios</organization>
+            <organizationUrl>https://mattstudios.me/</organizationUrl>
+        </developer>
+        <developer>
+            <name>Harry Drummond</name>
+            <email>harrydrum0198@gmail.com</email>
             <organization>MattStudios</organization>
             <organizationUrl>https://mattstudios.me/</organizationUrl>
         </developer>
