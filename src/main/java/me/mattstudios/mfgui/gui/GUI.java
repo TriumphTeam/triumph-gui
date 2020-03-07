@@ -123,6 +123,64 @@ public final class GUI implements InventoryHolder {
     }
 
     /**
+     * Fills top portion of the GUI
+     *
+     * @param guiItem GuiItem
+     * @return        The GUI
+     */
+    public GUI fillTop(final GuiItem guiItem) {
+        fillTop(Collections.singletonList(guiItem));
+        return this;
+    }
+
+    /**
+     * Fills top portion of the GUI with alternation
+     *
+     * @param guiItems List of GuiItems
+     * @return         The GUI
+     */
+    public GUI fillTop(final List<GuiItem> guiItems) {
+        GuiItem[] items = guiItems.toArray(new GuiItem[0]);
+        items = repeatArray(items, rows * 9);
+        for (int i = 0; i >= 0 && i <= 8; i++) {
+            if (!this.guiItems.containsKey(i))
+                setItem(i, items[i]);
+        }
+
+        return this;
+    }
+
+    /**
+     * Fills bottom portion of the GUI
+     *
+     * @param guiItem GuiItem
+     * @return        The GUI
+     */
+    public GUI fillBottom(final GuiItem guiItem) {
+        fillTop(Collections.singletonList(guiItem));
+        return this;
+    }
+
+    /**
+     * Fills bottom portion of the GUI with alternation
+     *
+     * @param guiItems GuiItem
+     * @return         The GUI
+     */
+    public GUI fillBottom(final List<GuiItem> guiItems) {
+        GuiItem[] items = guiItems.toArray(new GuiItem[0]);
+        items = repeatArray(items, rows * 9);
+        for (int i = 0; i < 53; i++) {
+            if (i >= (rows * 9) - 9 && i <= (rows * 9)) {
+                if (this.guiItems.containsKey(i) || !isValidSlot(i)) continue;
+                    setItem(i, items[i]);
+            }
+        }
+
+        return this;
+    }
+
+    /**
      * Sets an GuiItem to fill up the entire inventory where there is no other item
      *
      * @param guiItem The item to use as fill
@@ -138,14 +196,14 @@ public final class GUI implements InventoryHolder {
      *
      * @param guiItemList GuiItem
      */
-    public GUI setFillItems(List<GuiItem> guiItemList) {
-        GuiItem[] items = {guiItemList.get(0), guiItemList.get(1)};
+    public GUI setFillItems(final List<GuiItem> guiItemList) {
+        GuiItem[] items = guiItemList.toArray(new GuiItem[0]);
         items = repeatArray(items, rows * 9);
-        int i = 0;
+        int i = -1;
         for (GuiItem item : items) {
             i++;
             if (i > rows * 9) break;
-            if (guiItems.containsKey(i) || !isValidSlot(i)) continue;
+            if (this.guiItems.containsKey(i) || !isValidSlot(i)) continue;
             setItem(i, items[i]);
         }
         return this;
@@ -214,21 +272,24 @@ public final class GUI implements InventoryHolder {
     }
 
     /**
-     * Fills the outside section of the GUI with an ItemStack
-     *
-     * @param stack ItemStack
-     */
-    public void fillBorder(ItemStack stack) {
-        fillBorder(new GuiItem(stack));
-    }
-
-    /**
      * Fills the outside section of the GUI with a GuiItem
      *
      * @param guiItem GuiItem
      */
-    public void fillBorder(GuiItem guiItem) {
-        if (rows == 1 || rows == 2) return;
+    public GUI fillBorder(final GuiItem guiItem) {
+        fillBorder(Collections.singletonList(guiItem));
+        return this;
+    }
+
+    /**
+     * Fill empty slots with Multiple GuiItems, goes through list and starts again
+     *
+     * @param guiItemList GuiItem
+     */
+    public GUI fillBorder(final List<GuiItem> guiItemList) {
+        GuiItem[] items = guiItemList.toArray(new GuiItem[0]);
+        items = repeatArray(items, rows * 9);
+        if (rows == 1 || rows == 2) return this;
         for (int i = 0; i <= rows * 9; i++) {
             if ((i >= 0 && i <= 8) || (i >= (rows * 9) - 9 && i <= (rows * 9))
                     || i == 9 || i == 18
@@ -236,9 +297,11 @@ public final class GUI implements InventoryHolder {
                     || i == 17 || i == 26
                     || i == 35 || i == 45) {
                 if (isValidSlot(i))
-                    setItem(i, guiItem);
+                    setItem(i, items[i]);
             }
         }
+
+        return this;
     }
 
     /**
