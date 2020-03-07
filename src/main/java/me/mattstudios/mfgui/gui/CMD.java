@@ -14,9 +14,9 @@ public final class CMD extends CommandBase {
 
     @Default
     public void open(Player player) {
-        GUI gui = new GUI(Main.fuck, 4, "");
+        GUI gui = new GUI(Main.fuck, 5, "");
 
-        gui.fillBottom(Arrays.asList(new GuiItem(new ItemStack(Material.BLACK_STAINED_GLASS_PANE)), new GuiItem(new ItemStack(Material.WHITE_STAINED_GLASS_PANE))));
+        gui.fillBorder(Arrays.asList(new GuiItem(new ItemStack(Material.BLACK_STAINED_GLASS_PANE)), new GuiItem(new ItemStack(Material.WHITE_STAINED_GLASS_PANE))));
 
         gui.open(player);
     }
