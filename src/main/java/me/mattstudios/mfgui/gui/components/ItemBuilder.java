@@ -185,4 +185,21 @@ public final class ItemBuilder {
         return this;
     }
 
+    /**
+     * Sets skull owner via bukkit methods
+     *
+     * @param player OfflinePlayer to set skull of
+     * @return The ItemBuilder
+     */
+    public ItemBuilder setSkullOwner(final OfflinePlayer player) {
+        if (itemStack.getType() != Material.PLAYER_HEAD) return this;
+
+        SkullMeta skullMeta = (SkullMeta) meta;
+        ((SkullMeta) meta).setOwningPlayer(player);
+
+        meta = skullMeta;
+
+        return this;
+    }
+
 }
