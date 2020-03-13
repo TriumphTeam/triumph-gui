@@ -8,3 +8,7 @@ target/
 temp.java.asc
 
 temp.java
+
+src/main/java/me/mattstudios/mfgui/CMD.java
+src/main/java/me/mattstudios/mfgui/Main.java
+src/main/resources/
