@@ -1,4 +1,4 @@
-package me.mattstudios.mfgui.gui;
+package me.mattstudios.mfgui.gui.guis;
 
 import com.google.common.annotations.Beta;
 import me.mattstudios.mfgui.gui.components.GuiAction;
@@ -19,7 +19,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.*;
 
 @SuppressWarnings({"UnusedReturnValue", "unused", "BooleanMethodIsAlwaysInverted"})
-public final class GUI implements InventoryHolder {
+public abstract class BaseGui implements InventoryHolder {
 
     // Main inventory
     private Inventory inventory;
@@ -27,7 +27,6 @@ public final class GUI implements InventoryHolder {
     // Inventory attributes
     private String title;
     private int rows;
-    private boolean persist;
 
     // Contains all items the GUI will have
     private final Map<Integer, GuiItem> guiItems = new HashMap<>();
@@ -61,15 +60,13 @@ public final class GUI implements InventoryHolder {
      * @param plugin  The plugin
      * @param rows    How many rows you want
      * @param title   The GUI's title
-     * @param persist Makes the items inside persist on reopen
      */
-    public GUI(final Plugin plugin, final int rows, final String title, final boolean persist) {
+    public BaseGui(final Plugin plugin, final int rows, final String title) {
         int finalRows = rows;
         if (!(rows >= 1 && rows <= 6)) finalRows = 1;
 
         this.rows = finalRows;
         this.title = title;
-        this.persist = persist;
 
         inventory = Bukkit.createInventory(this, this.rows * 9, title);
 
@@ -85,31 +82,9 @@ public final class GUI implements InventoryHolder {
      *
      * @param plugin  The plugin
      * @param title   The GUI's title
-     * @param persist If should persist or not
      */
-    public GUI(final Plugin plugin, final String title, final boolean persist) {
-        this(plugin, 1, title, persist);
-    }
-
-    /**
-     * GUI constructor with only title for easier 1 row GUIs
-     *
-     * @param plugin The plugin
-     * @param rows   The rows
-     * @param title  The GUI's title
-     */
-    public GUI(final Plugin plugin, final int rows, final String title) {
-        this(plugin, rows, title, false);
-    }
-
-    /**
-     * GUI constructor with only title for easier 1 row GUIs
-     *
-     * @param plugin The plugin
-     * @param title  The GUI's title
-     */
-    public GUI(final Plugin plugin, final String title) {
-        this(plugin, 1, title, false);
+    public BaseGui(final Plugin plugin, final String title) {
+        this(plugin, 1, title);
     }
 
     /**
@@ -118,7 +93,7 @@ public final class GUI implements InventoryHolder {
      * @param rows The number of rows to set
      * @return The GUI
      */
-    public GUI setRows(final int rows) {
+    public BaseGui setRows(final int rows) {
         int finalRows = rows;
         if (!(rows >= 1 && rows <= 6)) finalRows = 1;
         this.rows = finalRows;
@@ -145,7 +120,7 @@ public final class GUI implements InventoryHolder {
      * @param guiItem The GUI item to add
      * @return The GUI
      */
-    public GUI setItem(final int slot, final GuiItem guiItem) {
+    public BaseGui setItem(final int slot, final GuiItem guiItem) {
         if (!isValidSlot(slot)) throw new GuiException("Invalid item slot!");
 
         guiItems.put(slot, guiItem);
@@ -160,7 +135,7 @@ public final class GUI implements InventoryHolder {
      * @param guiItem The Gui Item to add
      * @return The GUI
      */
-    public GUI setItem(final List<Integer> slots, final GuiItem guiItem) {
+    public BaseGui setItem(final List<Integer> slots, final GuiItem guiItem) {
         for (final int slot : slots) {
             setItem(slot, guiItem);
         }
@@ -176,7 +151,7 @@ public final class GUI implements InventoryHolder {
      * @param guiItem The GUI item to add
      * @return The GUI
      */
-    public GUI setItem(final int row, final int col, final GuiItem guiItem) {
+    public BaseGui setItem(final int row, final int col, final GuiItem guiItem) {
         return setItem(getSlotFromRowCol(row, col), guiItem);
     }
 
@@ -186,7 +161,7 @@ public final class GUI implements InventoryHolder {
      * @param guiItem GuiItem
      * @return The GUI
      */
-    public GUI fillTop(final GuiItem guiItem) {
+    public BaseGui fillTop(final GuiItem guiItem) {
         return fillTop(Collections.singletonList(guiItem));
     }
 
@@ -196,7 +171,7 @@ public final class GUI implements InventoryHolder {
      * @param guiItems List of GuiItems
      * @return The GUI
      */
-    public GUI fillTop(final List<GuiItem> guiItems) {
+    public BaseGui fillTop(final List<GuiItem> guiItems) {
         final List<GuiItem> items = repeatList(guiItems, rows * 9);
         for (int i = 0; i < 9; i++) {
             if (!this.guiItems.containsKey(i)) setItem(i, items.get(i));
@@ -211,7 +186,7 @@ public final class GUI implements InventoryHolder {
      * @param guiItem GuiItem
      * @return The GUI
      */
-    public GUI fillBottom(final GuiItem guiItem) {
+    public BaseGui fillBottom(final GuiItem guiItem) {
         return fillBottom(Collections.singletonList(guiItem));
     }
 
@@ -221,7 +196,7 @@ public final class GUI implements InventoryHolder {
      * @param guiItems GuiItem
      * @return The GUI
      */
-    public GUI fillBottom(final List<GuiItem> guiItems) {
+    public BaseGui fillBottom(final List<GuiItem> guiItems) {
         final List<GuiItem> items = repeatList(guiItems, rows * 9);
         for (int i = 9; i > 0; i--) {
             if (!this.guiItems.containsKey(i)) setItem((rows * 9) - i, items.get(i));
@@ -236,7 +211,7 @@ public final class GUI implements InventoryHolder {
      * @param guiItem GuiItem
      * @return The GUI
      */
-    public GUI fillBorder(final GuiItem guiItem) {
+    public BaseGui fillBorder(final GuiItem guiItem) {
         return fillBorder(Collections.singletonList(guiItem));
     }
 
@@ -246,7 +221,7 @@ public final class GUI implements InventoryHolder {
      * @param guiItems GuiItem
      * @return The GUI
      */
-    public GUI fillBorder(final List<GuiItem> guiItems) {
+    public BaseGui fillBorder(final List<GuiItem> guiItems) {
         if (rows <= 2) return this;
 
         final List<GuiItem> items = repeatList(guiItems, rows * 9);
@@ -270,7 +245,7 @@ public final class GUI implements InventoryHolder {
      * @param guiItem The item to use as fill
      * @return The GUI
      */
-    public GUI fill(final GuiItem guiItem) {
+    public BaseGui fill(final GuiItem guiItem) {
         return fill(Collections.singletonList(guiItem));
     }
 
@@ -280,7 +255,7 @@ public final class GUI implements InventoryHolder {
      * @param guiItems GuiItem
      * @return The GUI
      */
-    public GUI fill(final List<GuiItem> guiItems) {
+    public BaseGui fill(final List<GuiItem> guiItems) {
         final List<GuiItem> items = repeatList(guiItems, rows * 9);
         for (int i = 0; i < (rows) * 9; i++) {
             if (!this.guiItems.containsKey(i)) setItem(i, items.get(i));
@@ -295,7 +270,7 @@ public final class GUI implements InventoryHolder {
      * @param items The Gui Items
      * @return The GUI
      */
-    public GUI addItem(final GuiItem... items) {
+    public BaseGui addItem(final GuiItem... items) {
         Validate.noNullElements(items, "Item cannot be null");
 
         for (final GuiItem guiItem : items) {
@@ -311,24 +286,12 @@ public final class GUI implements InventoryHolder {
     }
 
     /**
-     * Adds ItemStacks to the inventory straight, not GUI
-     *
-     * @param items The items
-     * @return The left overs
-     */
-    public Map<Integer, ItemStack> addItem(final ItemStack... items) {
-        Validate.noNullElements(items, "Item cannot be null");
-        if (!persist) return new HashMap<>();
-        return inventory.addItem(items);
-    }
-
-    /**
      * Sets the action of a default click on any item
      *
      * @param defaultClickAction Action to resolve
      * @return The GUI
      */
-    public GUI setDefaultClickAction(final GuiAction<InventoryClickEvent> defaultClickAction) {
+    public BaseGui setDefaultClickAction(final GuiAction<InventoryClickEvent> defaultClickAction) {
         this.defaultClickAction = defaultClickAction;
 
         return this;
@@ -340,7 +303,7 @@ public final class GUI implements InventoryHolder {
      * @param defaultTopClickAction Action to resolve
      * @return The GUI
      */
-    public GUI setDefaultTopClickAction(final GuiAction<InventoryClickEvent> defaultTopClickAction) {
+    public BaseGui setDefaultTopClickAction(final GuiAction<InventoryClickEvent> defaultTopClickAction) {
         this.defaultTopClickAction = defaultTopClickAction;
 
         return this;
@@ -352,7 +315,7 @@ public final class GUI implements InventoryHolder {
      * @param dragAction Action to resolve
      * @return The GUI
      */
-    public GUI setDragAction(final GuiAction<InventoryDragEvent> dragAction) {
+    public BaseGui setDragAction(final GuiAction<InventoryDragEvent> dragAction) {
         this.dragAction = dragAction;
 
         return this;
@@ -364,7 +327,7 @@ public final class GUI implements InventoryHolder {
      * @param closeGuiAction Action to resolve
      * @return The GUI
      */
-    public GUI setCloseGuiAction(final GuiAction<InventoryCloseEvent> closeGuiAction) {
+    public BaseGui setCloseGuiAction(final GuiAction<InventoryCloseEvent> closeGuiAction) {
         this.closeGuiAction = closeGuiAction;
 
         return this;
@@ -376,7 +339,7 @@ public final class GUI implements InventoryHolder {
      * @param openGuiAction Action to resolve
      * @return The GUI
      */
-    public GUI setOpenGuiAction(final GuiAction<InventoryOpenEvent> openGuiAction) {
+    public BaseGui setOpenGuiAction(final GuiAction<InventoryOpenEvent> openGuiAction) {
         this.openGuiAction = openGuiAction;
 
         return this;
@@ -389,7 +352,7 @@ public final class GUI implements InventoryHolder {
      * @param slotAction The gui action
      * @return The GUI
      */
-    public GUI addSlotAction(final int slot, final GuiAction<InventoryClickEvent> slotAction) {
+    public BaseGui addSlotAction(final int slot, final GuiAction<InventoryClickEvent> slotAction) {
         if (!isValidSlot(slot)) return this;
         slotActions.put(slot, slotAction);
 
@@ -404,7 +367,7 @@ public final class GUI implements InventoryHolder {
      * @param slotAction The gui action
      * @return The GUI
      */
-    public GUI addSlotAction(final int row, final int col, final GuiAction<InventoryClickEvent> slotAction) {
+    public BaseGui addSlotAction(final int row, final int col, final GuiAction<InventoryClickEvent> slotAction) {
         return addSlotAction(getSlotFromRowCol(row, col), slotAction);
     }
 
@@ -433,7 +396,7 @@ public final class GUI implements InventoryHolder {
      * @param player The player to open it to
      */
     public void open(final HumanEntity player) {
-        if (!persist) inventory.clear();
+        inventory.clear();
 
         for (final int slot : guiItems.keySet()) {
             inventory.setItem(slot, guiItems.get(slot).getItemStack());

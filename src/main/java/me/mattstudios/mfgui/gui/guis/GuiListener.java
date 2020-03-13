@@ -1,4 +1,4 @@
-package me.mattstudios.mfgui.gui;
+package me.mattstudios.mfgui.gui.guis;
 
 import me.mattstudios.mfgui.gui.components.GuiAction;
 import org.bukkit.event.EventHandler;
@@ -21,11 +21,11 @@ public final class GuiListener implements Listener {
     @EventHandler(ignoreCancelled = true)
     public void onGuiCLick(final InventoryClickEvent event) {
         if (event.getClickedInventory() == null) return;
-        System.out.println(event.getInventory().getHolder() instanceof GUI);
-        if (!(event.getInventory().getHolder() instanceof GUI)) return;
+
+        if (!(event.getInventory().getHolder() instanceof BaseGui)) return;
 
         // Gui
-        final GUI gui = (GUI) event.getInventory().getHolder();
+        final BaseGui gui = (BaseGui) event.getInventory().getHolder();
 
         // Default click action and checks weather or not there is a default action and executes it
         final GuiAction<InventoryClickEvent> defaultTopClick = gui.getDefaultTopClickAction();
@@ -60,10 +60,10 @@ public final class GuiListener implements Listener {
      */
     @EventHandler(ignoreCancelled = true)
     public void onGuiDrag(final InventoryDragEvent event) {
-        if (!(event.getInventory().getHolder() instanceof GUI)) return;
+        if (!(event.getInventory().getHolder() instanceof BaseGui)) return;
 
         // Gui
-        final GUI gui = (GUI) event.getInventory().getHolder();
+        final BaseGui gui = (BaseGui) event.getInventory().getHolder();
 
         // Default click action and checks weather or not there is a default action and executes it
         final GuiAction<InventoryDragEvent> dragAction = gui.getDragAction();
@@ -77,10 +77,10 @@ public final class GuiListener implements Listener {
      */
     @EventHandler(ignoreCancelled = true)
     public void onGuiClose(InventoryCloseEvent event) {
-        if (!(event.getInventory().getHolder() instanceof GUI)) return;
+        if (!(event.getInventory().getHolder() instanceof BaseGui)) return;
 
         // GUI
-        final GUI gui = (GUI) event.getInventory().getHolder();
+        final BaseGui gui = (BaseGui) event.getInventory().getHolder();
 
         // The GUI action for closing
         final GuiAction<InventoryCloseEvent> closeAction = gui.getCloseGuiAction();
@@ -96,10 +96,10 @@ public final class GuiListener implements Listener {
      */
     @EventHandler(ignoreCancelled = true)
     public void onGuiOpen(InventoryOpenEvent event) {
-        if (!(event.getInventory().getHolder() instanceof GUI)) return;
+        if (!(event.getInventory().getHolder() instanceof BaseGui)) return;
 
         // GUI
-        final GUI gui = (GUI) event.getInventory().getHolder();
+        final BaseGui gui = (BaseGui) event.getInventory().getHolder();
 
         // The GUI action for opening
         final GuiAction<InventoryOpenEvent> openAction = gui.getOpenGuiAction();

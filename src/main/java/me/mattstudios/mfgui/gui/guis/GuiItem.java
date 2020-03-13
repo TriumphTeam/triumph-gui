@@ -1,4 +1,4 @@
-package me.mattstudios.mfgui.gui;
+package me.mattstudios.mfgui.gui.guis;
 
 import me.mattstudios.mfgui.gui.components.GuiAction;
 import org.bukkit.event.inventory.InventoryClickEvent;

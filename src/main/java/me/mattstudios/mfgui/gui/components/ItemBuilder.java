@@ -5,6 +5,7 @@ import com.mojang.authlib.properties.Property;
 import org.apache.commons.lang.Validate;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
@@ -12,6 +13,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.SkullMeta;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
 import java.util.Arrays;
 import java.util.UUID;
 
@@ -194,8 +196,8 @@ public final class ItemBuilder {
     public ItemBuilder setSkullOwner(final OfflinePlayer player) {
         if (itemStack.getType() != Material.PLAYER_HEAD) return this;
 
-        SkullMeta skullMeta = (SkullMeta) meta;
-        ((SkullMeta) meta).setOwningPlayer(player);
+        final SkullMeta skullMeta = (SkullMeta) meta;
+        skullMeta.setOwningPlayer(player);
 
         meta = skullMeta;
 

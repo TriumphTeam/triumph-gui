@@ -30,7 +30,7 @@
 
     <groupId>me.mattstudios.utils</groupId>
     <artifactId>matt-framework-gui</artifactId>
-    <version>1.0</version>
+    <version>1.0.3</version>
     <packaging>jar</packaging>
 
     <name>Matt's Framework</name>
@@ -71,8 +71,6 @@
         <developer>
             <name>Harry Drummond</name>
             <email>harrydrum0198@gmail.com</email>
-            <organization>MattStudios</organization>
-            <organizationUrl>https://mattstudios.me/</organizationUrl>
         </developer>
     </developers>
 
@@ -86,6 +84,11 @@
             <id>spigotmc-repo</id>
             <url>https://hub.spigotmc.org/nexus/content/groups/public/</url>
         </repository>
+        <repository>
+            <id>mojang</id>
+            <name>Mojang's Repository</name>
+            <url>https://libraries.minecraft.net/</url>
+        </repository>
     </repositories>
 
     <dependencies>
@@ -97,17 +100,9 @@
         </dependency>
 
         <dependency>
-            <groupId>me.mattstudios.utils</groupId>
-            <artifactId>matt-framework</artifactId>
-            <version>LATEST</version>
-            <scope>compile</scope>
-        </dependency>
-
-        <dependency>
-            <groupId>org.spigotmc</groupId>
-            <artifactId>spigot</artifactId>
-            <version>LATEST</version>
-            <scope>provided</scope>
+            <groupId>com.mojang</groupId>
+            <artifactId>authlib</artifactId>
+            <version>1.5.21</version>
         </dependency>
 
         <dependency>
@@ -115,6 +110,14 @@
             <artifactId>annotations</artifactId>
             <version>17.0.0</version>
             <scope>provided</scope>
+        </dependency>
+
+        <!-- Only for easier testing -->
+        <dependency>
+            <groupId>me.mattstudios.utils</groupId>
+            <artifactId>matt-framework</artifactId>
+            <version>LATEST</version>
+            <scope>compile</scope>
         </dependency>
     </dependencies>
 
