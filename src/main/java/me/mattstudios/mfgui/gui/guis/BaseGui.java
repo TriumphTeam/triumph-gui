@@ -3,7 +3,6 @@ package me.mattstudios.mfgui.gui.guis;
 import com.google.common.annotations.Beta;
 import me.mattstudios.mfgui.gui.components.GuiAction;
 import me.mattstudios.mfgui.gui.components.GuiException;
-import org.apache.commons.lang.Validate;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
@@ -17,7 +16,11 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @SuppressWarnings({"UnusedReturnValue", "unused", "BooleanMethodIsAlwaysInverted"})
 public abstract class BaseGui implements InventoryHolder {
@@ -64,7 +67,7 @@ public abstract class BaseGui implements InventoryHolder {
      * @param rows   How many rows you want
      * @param title  The GUI's title
      */
-    public BaseGui(final Plugin plugin, final int rows, final String title) {
+    public BaseGui(@NotNull final Plugin plugin, final int rows, @NotNull final String title) {
         int finalRows = rows;
         if (!(rows >= 1 && rows <= 6)) finalRows = 1;
 
@@ -87,7 +90,7 @@ public abstract class BaseGui implements InventoryHolder {
      * @param plugin The plugin
      * @param title  The GUI's title
      */
-    public BaseGui(final Plugin plugin, final String title) {
+    public BaseGui(@NotNull final Plugin plugin, @NotNull final String title) {
         this(plugin, 1, title);
     }
 
@@ -124,7 +127,7 @@ public abstract class BaseGui implements InventoryHolder {
      * @param guiItem The GUI item to add
      * @return The GUI
      */
-    public BaseGui setItem(final int slot, final GuiItem guiItem) {
+    public BaseGui setItem(final int slot, @NotNull final GuiItem guiItem) {
         if (!isValidSlot(slot)) throw new GuiException("Invalid item slot!");
 
         guiItems.put(slot, guiItem);
@@ -139,7 +142,7 @@ public abstract class BaseGui implements InventoryHolder {
      * @param guiItem The Gui Item to add
      * @return The GUI
      */
-    public BaseGui setItem(final List<Integer> slots, final GuiItem guiItem) {
+    public BaseGui setItem(@NotNull final List<Integer> slots, @NotNull final GuiItem guiItem) {
         for (final int slot : slots) {
             setItem(slot, guiItem);
         }
@@ -155,7 +158,7 @@ public abstract class BaseGui implements InventoryHolder {
      * @param guiItem The GUI item to add
      * @return The GUI
      */
-    public BaseGui setItem(final int row, final int col, final GuiItem guiItem) {
+    public BaseGui setItem(final int row, final int col, @NotNull final GuiItem guiItem) {
         return setItem(getSlotFromRowCol(row, col), guiItem);
     }
 
@@ -165,7 +168,7 @@ public abstract class BaseGui implements InventoryHolder {
      * @param guiItem GuiItem
      * @return The GUI
      */
-    public BaseGui fillTop(final GuiItem guiItem) {
+    public BaseGui fillTop(@NotNull final GuiItem guiItem) {
         return fillTop(Collections.singletonList(guiItem));
     }
 
@@ -175,7 +178,7 @@ public abstract class BaseGui implements InventoryHolder {
      * @param guiItems List of GuiItems
      * @return The GUI
      */
-    public BaseGui fillTop(final List<GuiItem> guiItems) {
+    public BaseGui fillTop(@NotNull final List<GuiItem> guiItems) {
         final List<GuiItem> items = repeatList(guiItems, rows * 9);
         for (int i = 0; i < 9; i++) {
             if (!this.guiItems.containsKey(i)) setItem(i, items.get(i));
@@ -190,7 +193,7 @@ public abstract class BaseGui implements InventoryHolder {
      * @param guiItem GuiItem
      * @return The GUI
      */
-    public BaseGui fillBottom(final GuiItem guiItem) {
+    public BaseGui fillBottom(@NotNull final GuiItem guiItem) {
         return fillBottom(Collections.singletonList(guiItem));
     }
 
@@ -200,7 +203,7 @@ public abstract class BaseGui implements InventoryHolder {
      * @param guiItems GuiItem
      * @return The GUI
      */
-    public BaseGui fillBottom(final List<GuiItem> guiItems) {
+    public BaseGui fillBottom(@NotNull final List<GuiItem> guiItems) {
         final List<GuiItem> items = repeatList(guiItems, rows * 9);
         for (int i = 9; i > 0; i--) {
             if (!this.guiItems.containsKey(i)) setItem((rows * 9) - i, items.get(i));
@@ -215,7 +218,7 @@ public abstract class BaseGui implements InventoryHolder {
      * @param guiItem GuiItem
      * @return The GUI
      */
-    public BaseGui fillBorder(final GuiItem guiItem) {
+    public BaseGui fillBorder(@NotNull final GuiItem guiItem) {
         return fillBorder(Collections.singletonList(guiItem));
     }
 
@@ -225,7 +228,7 @@ public abstract class BaseGui implements InventoryHolder {
      * @param guiItems GuiItem
      * @return The GUI
      */
-    public BaseGui fillBorder(final List<GuiItem> guiItems) {
+    public BaseGui fillBorder(@NotNull final List<GuiItem> guiItems) {
         if (rows <= 2) return this;
 
         final List<GuiItem> items = repeatList(guiItems, rows * 9);
@@ -254,7 +257,7 @@ public abstract class BaseGui implements InventoryHolder {
      * @return The Gui
      * @author Harolds
      */
-    public BaseGui fillBetweenPoints(int rowFrom, int colFrom, int rowTo, int colTo, GuiItem guiItem) {
+    public BaseGui fillBetweenPoints(final int rowFrom, final int colFrom, final int rowTo, final int colTo, @NotNull final GuiItem guiItem) {
         return fillBetweenPoints(rowFrom, colFrom, rowTo, colTo, Collections.singletonList(guiItem));
     }
 
@@ -269,7 +272,7 @@ public abstract class BaseGui implements InventoryHolder {
      * @return The Gui
      * @author Harolds
      */
-    public BaseGui fillBetweenPoints(int rowFrom, int colFrom, int rowTo, int colTo, List<GuiItem> guiItems) {
+    public BaseGui fillBetweenPoints(final int rowFrom, final int colFrom, final int rowTo, final int colTo, @NotNull final List<GuiItem> guiItems) {
         int minRow = Math.min(rowFrom, rowTo);
         int maxRow = Math.max(rowFrom, rowTo);
         int minCol = Math.min(colFrom, colTo);
@@ -296,7 +299,7 @@ public abstract class BaseGui implements InventoryHolder {
      * @param guiItem The item to use as fill
      * @return The GUI
      */
-    public BaseGui fill(final GuiItem guiItem) {
+    public BaseGui fill(@NotNull final GuiItem guiItem) {
         return fill(Collections.singletonList(guiItem));
     }
 
@@ -306,7 +309,7 @@ public abstract class BaseGui implements InventoryHolder {
      * @param guiItems GuiItem
      * @return The GUI
      */
-    public BaseGui fill(final List<GuiItem> guiItems) {
+    public BaseGui fill(@NotNull final List<GuiItem> guiItems) {
         final List<GuiItem> items = repeatList(guiItems, rows * 9);
         for (int i = 0; i < (rows) * 9; i++) {
             if (!this.guiItems.containsKey(i)) setItem(i, items.get(i));
@@ -321,9 +324,7 @@ public abstract class BaseGui implements InventoryHolder {
      * @param items The Gui Items
      * @return The GUI
      */
-    public BaseGui addItem(final GuiItem... items) {
-        Validate.noNullElements(items, "Item cannot be null");
-
+    public BaseGui addItem(@NotNull final GuiItem... items) {
         for (final GuiItem guiItem : items) {
             for (int slot = 0; slot < rows * 9; slot++) {
                 if (guiItems.get(slot) != null) continue;
@@ -446,7 +447,7 @@ public abstract class BaseGui implements InventoryHolder {
      *
      * @param player The player to open it to
      */
-    public void open(final HumanEntity player) {
+    public void open(@NotNull final HumanEntity player) {
         inventory.clear();
 
         for (final int slot : guiItems.keySet()) {
@@ -461,7 +462,7 @@ public abstract class BaseGui implements InventoryHolder {
      *
      * @param player The player to close the GUI to
      */
-    public void close(final Player player) {
+    public void close(@NotNull final Player player) {
         Bukkit.getScheduler().runTaskLater(plugin, player::closeInventory, 2L);
     }
 
@@ -484,7 +485,7 @@ public abstract class BaseGui implements InventoryHolder {
      * @param slot      The slot of the item to update
      * @param itemStack The new ItemStack
      */
-    public void updateItem(final int slot, final ItemStack itemStack) {
+    public void updateItem(final int slot, @NotNull final ItemStack itemStack) {
         if (!guiItems.containsKey(slot)) return;
         guiItems.get(slot).setItemStack(itemStack);
         inventory.setItem(slot, guiItems.get(slot).getItemStack());
@@ -497,7 +498,7 @@ public abstract class BaseGui implements InventoryHolder {
      * @param col       The col of the slot
      * @param itemStack The new ItemStack
      */
-    public void updateItem(final int row, final int col, final ItemStack itemStack) {
+    public void updateItem(final int row, final int col, @NotNull final ItemStack itemStack) {
         updateItem(getSlotFromRowCol(row, col), itemStack);
     }
 
@@ -508,7 +509,7 @@ public abstract class BaseGui implements InventoryHolder {
      * @param title The title to set
      */
     @Beta
-    public void updateTitle(final String title) {
+    public void updateTitle(@NotNull final String title) {
         this.title = title;
 
         updating = true;
@@ -614,7 +615,7 @@ public abstract class BaseGui implements InventoryHolder {
      * @param newLength Length of array
      * @return New array
      */
-    private List<GuiItem> repeatList(final List<GuiItem> guiItems, final int newLength) {
+    private List<GuiItem> repeatList(@NotNull final List<GuiItem> guiItems, final int newLength) {
         final List<GuiItem> repeated = new ArrayList<>();
         Collections.nCopies(rows * 9, guiItems).forEach(repeated::addAll);
         return repeated;

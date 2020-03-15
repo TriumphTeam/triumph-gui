@@ -1,20 +1,20 @@
 package me.mattstudios.mfgui.gui.guis;
 
-import org.apache.commons.lang.Validate;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Map;
 
 @SuppressWarnings("unused")
 public final class PersistentBaseGui extends BaseGui {
 
-    public PersistentBaseGui(final Plugin plugin, final int rows, final String title) {
+    public PersistentBaseGui(@NotNull final Plugin plugin, final int rows, @NotNull final String title) {
         super(plugin, rows, title);
     }
 
-    public PersistentBaseGui(final Plugin plugin, final String title) {
+    public PersistentBaseGui(@NotNull final Plugin plugin, @NotNull final String title) {
         super(plugin, title);
     }
 
@@ -24,8 +24,7 @@ public final class PersistentBaseGui extends BaseGui {
      * @param items The items
      * @return The left overs
      */
-    public Map<Integer, ItemStack> addItem(final ItemStack... items) {
-        Validate.noNullElements(items, "Item cannot be null");
+    public Map<Integer, ItemStack> addItem(@NotNull final ItemStack... items) {
         return getInventory().addItem(items);
     }
 
@@ -35,7 +34,7 @@ public final class PersistentBaseGui extends BaseGui {
      * @param player The player to open it to
      */
     @Override
-    public void open(final HumanEntity player) {
+    public void open(@NotNull final HumanEntity player) {
         final Map<Integer, GuiItem> guiItems = getGuiItems();
         for (final int slot : guiItems.keySet()) {
             getInventory().setItem(slot, guiItems.get(slot).getItemStack());
