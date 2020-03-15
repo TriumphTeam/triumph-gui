@@ -244,6 +244,53 @@ public abstract class BaseGui implements InventoryHolder {
     }
 
     /**
+     * Fills rectangle from points within the GUI
+     *
+     * @param rowFrom Row point 1
+     * @param colFrom Col point 1
+     * @param rowTo   Row point 2
+     * @param colTo   Col point 2
+     * @param guiItem Item to fill with
+     * @return The Gui
+     * @author Harolds
+     */
+    public BaseGui fillBetweenPoints(int rowFrom, int colFrom, int rowTo, int colTo, GuiItem guiItem) {
+        return fillBetweenPoints(rowFrom, colFrom, rowTo, colTo, Collections.singletonList(guiItem));
+    }
+
+    /**
+     * Fills rectangle from points within the GUI
+     *
+     * @param rowFrom  Row point 1
+     * @param colFrom  Col point 1
+     * @param rowTo    Row point 2
+     * @param colTo    Col point 2
+     * @param guiItems Item to fill with
+     * @return The Gui
+     * @author Harolds
+     */
+    public BaseGui fillBetweenPoints(int rowFrom, int colFrom, int rowTo, int colTo, List<GuiItem> guiItems) {
+        int minRow = Math.min(rowFrom, rowTo);
+        int maxRow = Math.max(rowFrom, rowTo);
+        int minCol = Math.min(colFrom, colTo);
+        int maxCol = Math.max(colFrom, colTo);
+
+        final List<GuiItem> items = repeatList(guiItems, rows * 9);
+
+        for (int row = 1; row <= rows; row++) {
+            for (int col = 1; col <= 9; col++) {
+                int slot = getSlotFromRowCol(row, col);
+                if (!((row >= minRow && row <= maxRow) && (col >= minCol && col <= maxCol)))
+                    continue;
+
+                setItem(slot, items.get(slot));
+            }
+        }
+
+        return this;
+    }
+
+    /**
      * Sets an GuiItem to fill up the entire inventory where there is no other item
      *
      * @param guiItem The item to use as fill
