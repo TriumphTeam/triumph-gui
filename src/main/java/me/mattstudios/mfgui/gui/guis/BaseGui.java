@@ -6,6 +6,7 @@ import me.mattstudios.mfgui.gui.components.GuiException;
 import org.apache.commons.lang.Validate;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.HumanEntity;
+import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.inventory.InventoryDragEvent;
@@ -20,6 +21,8 @@ import java.util.*;
 
 @SuppressWarnings({"UnusedReturnValue", "unused", "BooleanMethodIsAlwaysInverted"})
 public abstract class BaseGui implements InventoryHolder {
+
+    private final Plugin plugin;
 
     // Main inventory
     private Inventory inventory;
@@ -57,14 +60,15 @@ public abstract class BaseGui implements InventoryHolder {
     /**
      * Main GUI constructor
      *
-     * @param plugin  The plugin
-     * @param rows    How many rows you want
-     * @param title   The GUI's title
+     * @param plugin The plugin
+     * @param rows   How many rows you want
+     * @param title  The GUI's title
      */
     public BaseGui(final Plugin plugin, final int rows, final String title) {
         int finalRows = rows;
         if (!(rows >= 1 && rows <= 6)) finalRows = 1;
 
+        this.plugin = plugin;
         this.rows = finalRows;
         this.title = title;
 
@@ -72,7 +76,7 @@ public abstract class BaseGui implements InventoryHolder {
 
         // Registers the event handler once
         if (!registeredListener) {
-            Bukkit.getPluginManager().registerEvents(new GuiListener(), plugin);
+            Bukkit.getPluginManager().registerEvents(new GuiListener(plugin), plugin);
             registeredListener = true;
         }
     }
@@ -80,8 +84,8 @@ public abstract class BaseGui implements InventoryHolder {
     /**
      * GUI constructor with only title for easier 1 row GUIs
      *
-     * @param plugin  The plugin
-     * @param title   The GUI's title
+     * @param plugin The plugin
+     * @param title  The GUI's title
      */
     public BaseGui(final Plugin plugin, final String title) {
         this(plugin, 1, title);
@@ -406,12 +410,21 @@ public abstract class BaseGui implements InventoryHolder {
     }
 
     /**
+     * Closes the gui
+     *
+     * @param player The player to close the GUI to
+     */
+    public void close(final Player player) {
+        Bukkit.getScheduler().runTaskLater(plugin, player::closeInventory, 2L);
+    }
+
+    /**
      * Method to update the current opened GUI
      */
     public void update() {
         updating = true;
 
-        for (HumanEntity player : inventory.getViewers()) {
+        for (final HumanEntity player : inventory.getViewers()) {
             open(player);
         }
 
@@ -457,7 +470,7 @@ public abstract class BaseGui implements InventoryHolder {
 
         inventory = Bukkit.createInventory(this, inventory.getSize(), this.title);
 
-        for (HumanEntity player : viewers) {
+        for (final HumanEntity player : viewers) {
             open(player);
         }
 

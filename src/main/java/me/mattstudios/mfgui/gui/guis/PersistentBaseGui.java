@@ -14,6 +14,10 @@ public final class PersistentBaseGui extends BaseGui {
         super(plugin, rows, title);
     }
 
+    public PersistentBaseGui(final Plugin plugin, final String title) {
+        super(plugin, title);
+    }
+
     /**
      * Adds ItemStacks to the inventory straight, not GUI
      *
