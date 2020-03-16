@@ -60,6 +60,9 @@ public abstract class BaseGui implements InventoryHolder {
     // Whether or not the GUI is updating
     private boolean updating;
 
+    // Whether or not the GUI should automatically update
+    private boolean autoUpdate = false;
+
     /**
      * Main GUI constructor
      *
@@ -92,6 +95,29 @@ public abstract class BaseGui implements InventoryHolder {
      */
     public BaseGui(@NotNull final Plugin plugin, @NotNull final String title) {
         this(plugin, 1, title);
+    }
+
+    /**
+     * Automatically updates the GUI instead of manual updates.
+     *
+     * @param autoUpdate Should the auto updater be enabled
+     * @param intervalTicks Update delay in ticks
+     * @return The GUI
+     */
+    public BaseGui setAutoUpdating(boolean autoUpdate, int intervalTicks) {
+        this.autoUpdate = autoUpdate;
+        if (!autoUpdate) return this;
+
+        plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, () -> {
+            if (!this.autoUpdate) return; // If auto update is now false, exit
+            if (!isUpdating()) { // If not already updating
+                update();
+            }
+            setAutoUpdating(true, intervalTicks);
+
+        }, intervalTicks);
+
+        return this;
     }
 
     /**
@@ -620,5 +646,4 @@ public abstract class BaseGui implements InventoryHolder {
         Collections.nCopies(rows * 9, guiItems).forEach(repeated::addAll);
         return repeated;
     }
-
 }
