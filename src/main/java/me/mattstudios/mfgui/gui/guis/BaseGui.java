@@ -14,6 +14,7 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
+import org.bukkit.scheduler.BukkitTask;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -63,6 +64,9 @@ public abstract class BaseGui implements InventoryHolder {
     // Whether or not the GUI should automatically update
     private boolean autoUpdate = false;
 
+    // BukkitTask for auto updating
+    private BukkitTask id;
+
     /**
      * Main GUI constructor
      *
@@ -106,16 +110,17 @@ public abstract class BaseGui implements InventoryHolder {
      */
     public BaseGui setAutoUpdating(boolean autoUpdate, int intervalTicks) {
         this.autoUpdate = autoUpdate;
-        if (!autoUpdate) return this;
+        if (!autoUpdate || (id != null && !id.isCancelled())) return this;
 
-        plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, () -> {
-            if (!this.autoUpdate) return; // If auto update is now false, exit
+        id = Bukkit.getScheduler().runTaskTimerAsynchronously(plugin, () -> {
+            if (!this.autoUpdate) {// If auto update is now false, exit
+                id.cancel();
+                return;
+            }
             if (!isUpdating()) { // If not already updating
                 update();
             }
-            setAutoUpdating(true, intervalTicks);
-
-        }, intervalTicks);
+        }, 0, intervalTicks);
 
         return this;
     }
@@ -646,4 +651,6 @@ public abstract class BaseGui implements InventoryHolder {
         Collections.nCopies(rows * 9, guiItems).forEach(repeated::addAll);
         return repeated;
     }
+
+
 }
