@@ -104,7 +104,7 @@ public abstract class BaseGui implements InventoryHolder {
     /**
      * Automatically updates the GUI instead of manual updates.
      *
-     * @param autoUpdate Should the auto updater be enabled
+     * @param autoUpdate    Should the auto updater be enabled
      * @param intervalTicks Update delay in ticks
      * @return The GUI
      */
@@ -481,8 +481,8 @@ public abstract class BaseGui implements InventoryHolder {
     public void open(@NotNull final HumanEntity player) {
         inventory.clear();
 
-        for (final int slot : guiItems.keySet()) {
-            inventory.setItem(slot, guiItems.get(slot).getItemStack());
+        for (final Map.Entry<Integer, GuiItem> entry : getGuiItems().entrySet()) {
+            inventory.setItem(entry.getKey(), entry.getValue().getItemStack());
         }
 
         player.openInventory(inventory);
@@ -572,6 +572,15 @@ public abstract class BaseGui implements InventoryHolder {
     @Override
     public Inventory getInventory() {
         return inventory;
+    }
+
+    /**
+     * Gets the amount of rows
+     *
+     * @return The amount of rows the GUI has
+     */
+    public int getRows() {
+        return rows;
     }
 
     /**

@@ -8,13 +8,13 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Map;
 
 @SuppressWarnings("unused")
-public final class PersistentBaseGui extends BaseGui {
+public final class PersistentGui extends BaseGui {
 
-    public PersistentBaseGui(@NotNull final Plugin plugin, final int rows, @NotNull final String title) {
+    public PersistentGui(@NotNull final Plugin plugin, final int rows, @NotNull final String title) {
         super(plugin, rows, title);
     }
 
-    public PersistentBaseGui(@NotNull final Plugin plugin, @NotNull final String title) {
+    public PersistentGui(@NotNull final Plugin plugin, @NotNull final String title) {
         super(plugin, title);
     }
 
@@ -36,8 +36,9 @@ public final class PersistentBaseGui extends BaseGui {
     @Override
     public void open(@NotNull final HumanEntity player) {
         final Map<Integer, GuiItem> guiItems = getGuiItems();
-        for (final int slot : guiItems.keySet()) {
-            getInventory().setItem(slot, guiItems.get(slot).getItemStack());
+
+        for (final Map.Entry<Integer, GuiItem> entry : guiItems.entrySet()) {
+            getInventory().setItem(entry.getKey(), entry.getValue().getItemStack());
         }
 
         player.openInventory(getInventory());
