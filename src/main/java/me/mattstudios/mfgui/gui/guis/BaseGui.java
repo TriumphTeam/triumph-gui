@@ -474,6 +474,13 @@ public abstract class BaseGui implements InventoryHolder {
     }
 
     /**
+     * Sets the updating status of the GUI
+     */
+    public void setUpdating(final boolean updating) {
+        this.updating = updating;
+    }
+
+    /**
      * Opens the GUI for a player
      *
      * @param player The player to open it to
