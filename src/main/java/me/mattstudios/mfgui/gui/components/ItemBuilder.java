@@ -172,7 +172,7 @@ public final class ItemBuilder {
      * @return The ItemBuilder
      */
     public ItemBuilder setSkullTexture(@NotNull final String texture) {
-        if (itemStack.getType() != Material.PLAYER_HEAD) return this;
+        if (itemStack.getType() != XMaterial.PLAYER_HEAD.parseMaterial()) return this;
 
         SkullMeta skullMeta = (SkullMeta) meta;
         GameProfile profile = new GameProfile(UUID.randomUUID(), null);
@@ -199,7 +199,7 @@ public final class ItemBuilder {
      * @return The ItemBuilder
      */
     public ItemBuilder setSkullOwner(@NotNull final OfflinePlayer player) {
-        if (itemStack.getType() != Material.PLAYER_HEAD) return this;
+        if (itemStack.getType() != XMaterial.PLAYER_HEAD.parseMaterial()) return this;
 
         final SkullMeta skullMeta = (SkullMeta) meta;
         skullMeta.setOwningPlayer(player);
