@@ -5,11 +5,13 @@ import com.mojang.authlib.properties.Property;
 import org.apache.commons.lang.Validate;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.SkullMeta;
+import org.jetbrains.annotations.NotNull;
 
 import java.lang.reflect.Field;
 import java.util.Arrays;
@@ -26,7 +28,7 @@ public final class ItemBuilder {
      *
      * @param itemStack The ItemStack of the item
      */
-    public ItemBuilder(final ItemStack itemStack) {
+    public ItemBuilder(@NotNull final ItemStack itemStack) {
         Validate.notNull(itemStack, "Item can't be null!");
 
         this.itemStack = itemStack;
@@ -38,7 +40,7 @@ public final class ItemBuilder {
      *
      * @param material The material of the ItemStack
      */
-    public ItemBuilder(final Material material) {
+    public ItemBuilder(@NotNull final Material material) {
         this(new ItemStack(material));
     }
 
@@ -58,7 +60,7 @@ public final class ItemBuilder {
      * @param name the display name of the item
      * @return The ItemBuilder
      */
-    public ItemBuilder setName(final String name) {
+    public ItemBuilder setName(@NotNull final String name) {
         meta.setDisplayName(name);
         return this;
     }
@@ -80,7 +82,7 @@ public final class ItemBuilder {
      * @param lore the lore lines to set
      * @return The ItemBuilder
      */
-    public ItemBuilder setLore(final String... lore) {
+    public ItemBuilder setLore(@NotNull final String... lore) {
         meta.setLore(Arrays.asList(lore));
         return this;
     }
@@ -93,7 +95,7 @@ public final class ItemBuilder {
      * @param ignoreLevelRestriction If should or not ignore it
      * @return The ItemBuilder
      */
-    public ItemBuilder addEnchantment(final Enchantment enchantment, final int level, final boolean ignoreLevelRestriction) {
+    public ItemBuilder addEnchantment(@NotNull final Enchantment enchantment, final int level, final boolean ignoreLevelRestriction) {
         meta.addEnchant(enchantment, level, ignoreLevelRestriction);
         return this;
     }
@@ -105,7 +107,7 @@ public final class ItemBuilder {
      * @param level       the level of the enchantment
      * @return The ItemBuilder
      */
-    public ItemBuilder addEnchantment(final Enchantment enchantment, final int level) {
+    public ItemBuilder addEnchantment(@NotNull final Enchantment enchantment, final int level) {
         return addEnchantment(enchantment, level, true);
     }
 
@@ -115,7 +117,7 @@ public final class ItemBuilder {
      * @param enchantment the enchantment to add
      * @return The ItemBuilder
      */
-    public ItemBuilder addEnchantment(final Enchantment enchantment) {
+    public ItemBuilder addEnchantment(@NotNull final Enchantment enchantment) {
         return addEnchantment(enchantment, 1, true);
     }
 
@@ -125,7 +127,7 @@ public final class ItemBuilder {
      * @param enchantment The enchantment to remove
      * @return The ItemBuilder
      */
-    public ItemBuilder removeEnchantment(final Enchantment enchantment) {
+    public ItemBuilder removeEnchantment(@NotNull final Enchantment enchantment) {
         itemStack.removeEnchantment(enchantment);
         return this;
     }
@@ -136,7 +138,7 @@ public final class ItemBuilder {
      * @param flags the flags to add
      * @return The ItemBuilder
      */
-    public ItemBuilder addItemFlags(final ItemFlag... flags) {
+    public ItemBuilder addItemFlags(@NotNull final ItemFlag... flags) {
         meta.addItemFlags(flags);
         return this;
     }
@@ -164,8 +166,13 @@ public final class ItemBuilder {
         return this;
     }
 
-    public ItemBuilder setSkullTexture(final String texture) {
-        if (itemStack.getType() != Material.PLAYER_HEAD) return this;
+    /**
+     * Sets the skull texture
+     * @param texture The base64 texture
+     * @return The ItemBuilder
+     */
+    public ItemBuilder setSkullTexture(@NotNull final String texture) {
+        if (itemStack.getType() != XMaterial.PLAYER_HEAD.parseMaterial()) return this;
 
         SkullMeta skullMeta = (SkullMeta) meta;
         GameProfile profile = new GameProfile(UUID.randomUUID(), null);
@@ -191,11 +198,11 @@ public final class ItemBuilder {
      * @param player OfflinePlayer to set skull of
      * @return The ItemBuilder
      */
-    public ItemBuilder setSkullOwner(final OfflinePlayer player) {
-        if (itemStack.getType() != Material.PLAYER_HEAD) return this;
+    public ItemBuilder setSkullOwner(@NotNull final OfflinePlayer player) {
+        if (itemStack.getType() != XMaterial.PLAYER_HEAD.parseMaterial()) return this;
 
-        SkullMeta skullMeta = (SkullMeta) meta;
-        ((SkullMeta) meta).setOwningPlayer(player);
+        final SkullMeta skullMeta = (SkullMeta) meta;
+        skullMeta.setOwningPlayer(player);
 
         meta = skullMeta;
 

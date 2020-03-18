@@ -30,7 +30,7 @@
 
     <groupId>me.mattstudios.utils</groupId>
     <artifactId>matt-framework-gui</artifactId>
-    <version>1.0</version>
+    <version>1.1.0</version>
     <packaging>jar</packaging>
 
     <name>Matt's Framework</name>
@@ -71,8 +71,6 @@
         <developer>
             <name>Harry Drummond</name>
             <email>harrydrum0198@gmail.com</email>
-            <organization>MattStudios</organization>
-            <organizationUrl>https://mattstudios.me/</organizationUrl>
         </developer>
     </developers>
 
@@ -86,6 +84,11 @@
             <id>spigotmc-repo</id>
             <url>https://hub.spigotmc.org/nexus/content/groups/public/</url>
         </repository>
+        <repository>
+            <id>mojang</id>
+            <name>Mojang's Repository</name>
+            <url>https://libraries.minecraft.net/</url>
+        </repository>
     </repositories>
 
     <dependencies>
@@ -97,16 +100,9 @@
         </dependency>
 
         <dependency>
-            <groupId>me.mattstudios.utils</groupId>
-            <artifactId>matt-framework</artifactId>
-            <version>LATEST</version>
-            <scope>compile</scope>
-        </dependency>
-
-        <dependency>
-            <groupId>org.spigotmc</groupId>
-            <artifactId>spigot</artifactId>
-            <version>LATEST</version>
+            <groupId>com.mojang</groupId>
+            <artifactId>authlib</artifactId>
+            <version>1.5.21</version>
             <scope>provided</scope>
         </dependency>
 
@@ -114,6 +110,14 @@
             <groupId>org.jetbrains</groupId>
             <artifactId>annotations</artifactId>
             <version>17.0.0</version>
+            <scope>compile</scope>
+        </dependency>
+
+        <!-- Only for easier testing -->
+        <dependency>
+            <groupId>me.mattstudios.utils</groupId>
+            <artifactId>matt-framework</artifactId>
+            <version>LATEST</version>
             <scope>provided</scope>
         </dependency>
     </dependencies>
@@ -208,14 +212,14 @@
                 </executions>
             </plugin>
             <!-- COMMENT BEFORE RELEASE -->
-            <plugin>
+            <!--<plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-jar-plugin</artifactId>
                 <version>2.3.1</version>
                 <configuration>
                     <outputDirectory>T:/servers/spigot-1.15/plugins</outputDirectory>
                 </configuration>
-            </plugin>
+            </plugin>-->
         </plugins>
         <resources>
             <resource>

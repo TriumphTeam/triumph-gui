@@ -3,13 +3,39 @@ package me.mattstudios.mfgui.gui.components;
 import org.bukkit.Bukkit;
 import org.bukkit.inventory.ItemStack;
 
+import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.Objects;
 
 /**
  * Class to set / get NBT tags from items
  */
 public final class ItemNBT {
+
+    private static Method getStringMethod;
+    private static Method setStringMethod;
+    private static Method hasTagMethod;
+    private static Method getTagMethod;
+    private static Method setTagMethod;
+    private static Method asNMSCopyMethod;
+    private static Method asBukkitCopyMethod;
+
+    private static Constructor<?> nbtCompoundConstructor;
+
+    static {
+        try {
+            getStringMethod = Objects.requireNonNull(getNMSClass("NBTTagCompound")).getMethod("getString", String.class);
+            setStringMethod = Objects.requireNonNull(getNMSClass("NBTTagCompound")).getMethod("setString", String.class, String.class);
+            hasTagMethod = Objects.requireNonNull(getNMSClass("ItemStack")).getMethod("hasTag");
+            getTagMethod = Objects.requireNonNull(getNMSClass("ItemStack")).getMethod("getTag");
+            setTagMethod = Objects.requireNonNull(getNMSClass("ItemStack")).getMethod("setTag", getNMSClass("NBTTagCompound"));
+            nbtCompoundConstructor = Objects.requireNonNull(getNMSClass("NBTTagCompound")).getDeclaredConstructor();
+            asNMSCopyMethod = Objects.requireNonNull(getCraftItemStackClass()).getMethod("asNMSCopy", ItemStack.class);
+            asBukkitCopyMethod = Objects.requireNonNull(getCraftItemStackClass()).getMethod("asBukkitCopy", getNMSClass("ItemStack"));
+        } catch (NoSuchMethodException ignored) {
+        }
+    }
 
     /**
      * Sets an NBT tag to the an ItemStack
@@ -20,9 +46,9 @@ public final class ItemNBT {
      * @return An ItemStack that has NBT set
      */
     public static ItemStack setNBTTag(final ItemStack itemStack, final String key, final String value) {
-        Object nmsItemStack = asNMSCopy(itemStack);
+        final Object nmsItemStack = asNMSCopy(itemStack);
 
-        Object itemCompound = hasTag(nmsItemStack) ? getTag(nmsItemStack) : newNBTTagCompound();
+        final Object itemCompound = hasTag(nmsItemStack) ? getTag(nmsItemStack) : newNBTTagCompound();
 
         setString(itemCompound, key, value);
         setTag(nmsItemStack, itemCompound);
@@ -38,8 +64,8 @@ public final class ItemNBT {
      * @return The tag that was stored in the ItemStack
      */
     public static String getNBTTag(final ItemStack itemStack, final String key) {
-        Object nmsItemStack = asNMSCopy(itemStack);
-        Object itemCompound = hasTag(nmsItemStack) ? getTag(nmsItemStack) : newNBTTagCompound();
+        final Object nmsItemStack = asNMSCopy(itemStack);
+        final Object itemCompound = hasTag(nmsItemStack) ? getTag(nmsItemStack) : newNBTTagCompound();
 
         return getString(itemCompound, key);
     }
@@ -53,8 +79,8 @@ public final class ItemNBT {
      */
     private static void setString(final Object itemCompound, final String key, final String value) {
         try {
-            Objects.requireNonNull(getNMSClass("NBTTagCompound")).getMethod("setString", String.class, String.class).invoke(itemCompound, key, value);
-        } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException ignored) {
+            setStringMethod.invoke(itemCompound, key, value);
+        } catch (IllegalAccessException | InvocationTargetException ignored) {
         }
     }
 
@@ -67,8 +93,8 @@ public final class ItemNBT {
      */
     private static String getString(final Object itemCompound, final String key) {
         try {
-            return (String) Objects.requireNonNull(getNMSClass("NBTTagCompound")).getMethod("getString", String.class).invoke(itemCompound, key);
-        } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
+            return (String) getStringMethod.invoke(itemCompound, key);
+        } catch (IllegalAccessException | InvocationTargetException e) {
             return null;
         }
     }
@@ -81,8 +107,8 @@ public final class ItemNBT {
      */
     private static boolean hasTag(final Object nmsItemStack) {
         try {
-            return (boolean) Objects.requireNonNull(getNMSClass("ItemStack")).getMethod("hasTag").invoke(nmsItemStack);
-        } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
+            return (boolean) hasTagMethod.invoke(nmsItemStack);
+        } catch (IllegalAccessException | InvocationTargetException e) {
             return false;
         }
     }
@@ -95,8 +121,8 @@ public final class ItemNBT {
      */
     private static Object getTag(final Object nmsItemStack) {
         try {
-            return Objects.requireNonNull(getNMSClass("ItemStack")).getMethod("getTag").invoke(nmsItemStack);
-        } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
+            return getTagMethod.invoke(nmsItemStack);
+        } catch (IllegalAccessException | InvocationTargetException e) {
             return null;
         }
     }
@@ -109,8 +135,8 @@ public final class ItemNBT {
      */
     private static void setTag(final Object nmsItemStack, final Object itemCompound) {
         try {
-            Objects.requireNonNull(getNMSClass("ItemStack")).getMethod("setTag", getNMSClass("NBTTagCompound")).invoke(nmsItemStack, itemCompound);
-        } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException ignored) {
+            setTagMethod.invoke(nmsItemStack, itemCompound);
+        } catch (IllegalAccessException | InvocationTargetException ignored) {
         }
     }
 
@@ -121,8 +147,8 @@ public final class ItemNBT {
      */
     private static Object newNBTTagCompound() {
         try {
-            return Objects.requireNonNull(getNMSClass("NBTTagCompound")).getDeclaredConstructor().newInstance();
-        } catch (IllegalAccessException | InstantiationException | NoSuchMethodException | InvocationTargetException e) {
+            return nbtCompoundConstructor.newInstance();
+        } catch (IllegalAccessException | InstantiationException | InvocationTargetException e) {
             return null;
         }
     }
@@ -135,8 +161,8 @@ public final class ItemNBT {
      */
     private static Object asNMSCopy(final ItemStack itemStack) {
         try {
-            return Objects.requireNonNull(getCraftItemStackClass()).getMethod("asNMSCopy", ItemStack.class).invoke(null, itemStack);
-        } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
+            return asNMSCopyMethod.invoke(null, itemStack);
+        } catch (IllegalAccessException | InvocationTargetException e) {
             return null;
         }
     }
@@ -149,8 +175,8 @@ public final class ItemNBT {
      */
     private static ItemStack asBukkitCopy(final Object nmsItemStack) {
         try {
-            return (ItemStack) Objects.requireNonNull(getCraftItemStackClass()).getMethod("asBukkitCopy", getNMSClass("ItemStack")).invoke(null, nmsItemStack);
-        } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
+            return (ItemStack) asBukkitCopyMethod.invoke(null, nmsItemStack);
+        } catch (IllegalAccessException | InvocationTargetException e) {
             return null;
         }
     }
