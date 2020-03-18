@@ -24,7 +24,7 @@ import java.util.List;
 import java.util.Map;
 
 @SuppressWarnings({"UnusedReturnValue", "unused", "BooleanMethodIsAlwaysInverted"})
-public abstract class BaseGui implements InventoryHolder {
+abstract class BaseGui implements InventoryHolder {
 
     private final Plugin plugin;
 
