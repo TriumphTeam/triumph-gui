@@ -1,7 +1,6 @@
 package me.mattstudios.mfgui.gui.guis;
 
 import me.mattstudios.mfgui.gui.components.GuiAction;
-import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
@@ -9,9 +8,6 @@ import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.inventory.InventoryDragEvent;
 import org.bukkit.event.inventory.InventoryOpenEvent;
 import org.bukkit.event.inventory.InventoryType;
-import org.bukkit.event.player.PlayerDropItemEvent;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.plugin.Plugin;
 
 import static me.mattstudios.mfgui.gui.components.ItemNBT.getNBTTag;
@@ -100,9 +96,6 @@ public final class GuiListener implements Listener {
 
         // Checks if there is or not an action set and executes it
         if (closeAction != null && !gui.isUpdating()) closeAction.execute(event);
-
-        // Checks for stolen items
-        checkItemSteal(event.getPlayer().getInventory());
     }
 
     /**
@@ -122,42 +115,6 @@ public final class GuiListener implements Listener {
 
         // Checks if there is or not an action set and executes it
         if (openAction != null && !gui.isUpdating()) openAction.execute(event);
-    }
-
-    /**
-     * Checks for potential item dropping
-     *
-     * @param event The player drop item event
-     */
-    @EventHandler
-    public void itemDrop(final PlayerDropItemEvent event) {
-        if (!isGuiItem(event.getItemDrop().getItemStack())) return;
-
-        event.setCancelled(true);
-        event.getPlayer().getInventory().remove(event.getItemDrop().getItemStack());
-    }
-
-    /**
-     * Checks for stealing items by throwing them out
-     *
-     * @param item The item thrown
-     */
-    private boolean isGuiItem(final ItemStack item) {
-        return getNBTTag(item, "mf-gui") != null;
-    }
-
-    /**
-     * Checks for stealing items from inventory on player's inventory
-     *
-     * @param inventory The player's inventory
-     */
-    private void checkItemSteal(final PlayerInventory inventory) {
-        Bukkit.getScheduler().runTaskLaterAsynchronously(plugin, () -> {
-            for (final ItemStack item : inventory.getContents()) {
-                if (getNBTTag(item, "mf-gui") == null) continue;
-                inventory.remove(item);
-            }
-        }, 2L);
     }
 
 }

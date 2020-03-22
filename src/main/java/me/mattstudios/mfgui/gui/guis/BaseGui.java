@@ -24,7 +24,7 @@ import java.util.List;
 import java.util.Map;
 
 @SuppressWarnings({"UnusedReturnValue", "unused", "BooleanMethodIsAlwaysInverted"})
-abstract class BaseGui implements InventoryHolder {
+public abstract class BaseGui implements InventoryHolder {
 
     private final Plugin plugin;
 
@@ -269,7 +269,7 @@ abstract class BaseGui implements InventoryHolder {
                     || i == 9 || i == 18
                     || i == 27 || i == 36
                     || i == 17 || i == 26
-                    || i == 35 || i == 45)
+                    || i == 35 || i == 44)
                 setItem(i, items.get(i));
 
         }

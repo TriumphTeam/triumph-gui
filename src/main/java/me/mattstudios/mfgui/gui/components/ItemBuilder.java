@@ -28,7 +28,7 @@ public final class ItemBuilder {
      *
      * @param itemStack The ItemStack of the item
      */
-    public ItemBuilder(@NotNull final ItemStack itemStack) {
+    public ItemBuilder(final ItemStack itemStack) {
         Validate.notNull(itemStack, "Item can't be null!");
 
         this.itemStack = itemStack;
@@ -40,7 +40,7 @@ public final class ItemBuilder {
      *
      * @param material The material of the ItemStack
      */
-    public ItemBuilder(@NotNull final Material material) {
+    public ItemBuilder(final Material material) {
         this(new ItemStack(material));
     }
 
