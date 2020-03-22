@@ -75,14 +75,17 @@ public final class PaginatedGui extends BaseGui {
     public void open(@NotNull final HumanEntity player) {
         getInventory().clear();
 
-        for (final Map.Entry<Integer, GuiItem> entry : getGuiItems().entrySet()) {
-            getInventory().setItem(entry.getKey(), entry.getValue().getItemStack());
+        for (final GuiItem guiItem : getPage(page)) {
+            for (int slot = 0; slot < getRows() * 9; slot++) {
+                if (getGuiItem(slot) != null) continue;
+
+                setItem(slot, guiItem);
+                break;
+            }
         }
 
-        final List<GuiItem> guiPage = getPage(page);
-
-        for (int i = 0; i < guiPage.size(); i++) {
-            getInventory().setItem(i, guiPage.get(i).getItemStack());
+        for (final Map.Entry<Integer, GuiItem> entry : getGuiItems().entrySet()) {
+            getInventory().setItem(entry.getKey(), entry.getValue().getItemStack());
         }
 
         player.openInventory(getInventory());
