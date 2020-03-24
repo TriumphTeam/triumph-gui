@@ -15,6 +15,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.lang.reflect.Field;
 import java.util.Arrays;
+import java.util.List;
 import java.util.UUID;
 
 @SuppressWarnings("unused")
@@ -84,6 +85,17 @@ public final class ItemBuilder {
      */
     public ItemBuilder setLore(@NotNull final String... lore) {
         meta.setLore(Arrays.asList(lore));
+        return this;
+    }
+
+    /**
+     * Set the lore lines of an item
+     *
+     * @param lore the lore lines to set
+     * @return The ItemBuilder
+     */
+    public ItemBuilder setLore(@NotNull final List<String> lore) {
+        meta.setLore(lore);
         return this;
     }
 
