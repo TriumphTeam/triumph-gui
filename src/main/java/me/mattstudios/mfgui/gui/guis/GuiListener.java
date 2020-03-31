@@ -8,6 +8,7 @@ import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.inventory.InventoryDragEvent;
 import org.bukkit.event.inventory.InventoryOpenEvent;
 import org.bukkit.event.inventory.InventoryType;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
 
 import static me.mattstudios.mfgui.gui.components.ItemNBT.getNBTTag;
@@ -27,17 +28,25 @@ public final class GuiListener implements Listener {
      */
     @EventHandler(ignoreCancelled = true)
     public void onGuiCLick(final InventoryClickEvent event) {
-        if (event.getClickedInventory() == null) return;
-
         if (!(event.getInventory().getHolder() instanceof BaseGui)) return;
 
         // Gui
         final BaseGui gui = (BaseGui) event.getInventory().getHolder();
 
+        // Executes the outside click action
+        final GuiAction<InventoryClickEvent> outsideClickAction = gui.getOutsideClickAction();
+        if (outsideClickAction != null && event.getClickedInventory() == null) {
+            outsideClickAction.execute(event);
+            return;
+        }
+
+        if (event.getClickedInventory() == null) return;
+
         // Default click action and checks weather or not there is a default action and executes it
         final GuiAction<InventoryClickEvent> defaultTopClick = gui.getDefaultTopClickAction();
-        if (defaultTopClick != null && event.getClickedInventory().getType() != InventoryType.PLAYER)
+        if (defaultTopClick != null && event.getClickedInventory().getType() != InventoryType.PLAYER) {
             defaultTopClick.execute(event);
+        }
 
         // Default click action and checks weather or not there is a default action and executes it
         final GuiAction<InventoryClickEvent> defaultClick = gui.getDefaultClickAction();
@@ -45,21 +54,36 @@ public final class GuiListener implements Listener {
 
         // Slot action and checks weather or not there is a slot action and executes it
         final GuiAction<InventoryClickEvent> slotAction = gui.getSlotAction(event.getSlot());
-        if (slotAction != null && event.getClickedInventory().getType() != InventoryType.PLAYER)
+        if (slotAction != null && event.getClickedInventory().getType() != InventoryType.PLAYER) {
             slotAction.execute(event);
+        }
 
-        // The clicked GUI Item
-        final GuiItem guiItem = gui.getGuiItem(event.getSlot());
+        GuiItem guiItem;
 
-        // Returns if there is no gui item
-        if (guiItem == null) return;
+        // Checks whether it's a paginated gui or not
+        if (gui instanceof PaginatedGui) {
+            final PaginatedGui paginatedGui = (PaginatedGui) gui;
 
-        // Checks whether or not the Item is truly a GUI Item
-        if (!getNBTTag(event.getCurrentItem(), "mf-gui").equalsIgnoreCase(guiItem.getUuid().toString())) return;
+            // Gets the gui item from the added items or the page items
+            guiItem = paginatedGui.getGuiItem(event.getSlot());
+            if (guiItem == null) guiItem = paginatedGui.getPageItem(event.getSlot());
+
+        } else {
+            // The clicked GUI Item
+            guiItem = gui.getGuiItem(event.getSlot());
+        }
+
+        if (isntGuiItem(event.getCurrentItem(), guiItem)) return;
 
         // Executes the action of the item
         guiItem.getAction().execute(event);
 
+    }
+
+    private boolean isntGuiItem(final ItemStack currentItem, final GuiItem guiItem) {
+        if (guiItem == null) return true;
+        // Checks whether or not the Item is truly a GUI Item
+        return !getNBTTag(currentItem, "mf-gui").equals(guiItem.getUuid().toString());
     }
 
     /**
