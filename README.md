@@ -4,13 +4,7 @@ This is an addition to my framework for inventory GUIs.
 However it does not depend on the commands part of the framework.
 This lib was made to simplify the creation of GUIs.
 
-## Features
-
-- Small, adds only 13KB to your project.
-- Simple to use.
-- Allows you to create updating titles, updating items or the whole GUI.
-- Per item action.
-- No need to set up custom event classes.
+Check out the [**wiki**](https://mf.mattstudios.me/gui) for more information!
 
 ## Contributing
 
