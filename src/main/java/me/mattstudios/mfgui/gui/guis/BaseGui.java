@@ -3,6 +3,7 @@ package me.mattstudios.mfgui.gui.guis;
 import com.google.common.annotations.Beta;
 import me.mattstudios.mfgui.gui.components.GuiAction;
 import me.mattstudios.mfgui.gui.components.GuiException;
+import me.mattstudios.mfgui.gui.components.GuiFiller;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
@@ -18,7 +19,6 @@ import org.bukkit.scheduler.BukkitTask;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -30,6 +30,9 @@ public abstract class BaseGui implements InventoryHolder {
 
     // Main inventory
     private Inventory inventory;
+
+    // Gui filler
+    private GuiFiller filler = new GuiFiller(this);
 
     // Inventory attributes
     private String title;
@@ -54,6 +57,9 @@ public abstract class BaseGui implements InventoryHolder {
 
     // Action to execute when GUI opens
     private GuiAction<InventoryOpenEvent> openGuiAction;
+
+    // Action to execute when clicked outside the GUI
+    private GuiAction<InventoryClickEvent> outsideClickAction;
 
     // Makes sure GUI listener is not registered more than once
     private static boolean registeredListener;
@@ -194,162 +200,6 @@ public abstract class BaseGui implements InventoryHolder {
     }
 
     /**
-     * Fills top portion of the GUI
-     *
-     * @param guiItem GuiItem
-     * @return The GUI
-     */
-    public BaseGui fillTop(@NotNull final GuiItem guiItem) {
-        return fillTop(Collections.singletonList(guiItem));
-    }
-
-    /**
-     * Fills top portion of the GUI with alternation
-     *
-     * @param guiItems List of GuiItems
-     * @return The GUI
-     */
-    public BaseGui fillTop(@NotNull final List<GuiItem> guiItems) {
-        final List<GuiItem> items = repeatList(guiItems, rows * 9);
-        for (int i = 0; i < 9; i++) {
-            if (!this.guiItems.containsKey(i)) setItem(i, items.get(i));
-        }
-
-        return this;
-    }
-
-    /**
-     * Fills bottom portion of the GUI
-     *
-     * @param guiItem GuiItem
-     * @return The GUI
-     */
-    public BaseGui fillBottom(@NotNull final GuiItem guiItem) {
-        return fillBottom(Collections.singletonList(guiItem));
-    }
-
-    /**
-     * Fills bottom portion of the GUI with alternation
-     *
-     * @param guiItems GuiItem
-     * @return The GUI
-     */
-    public BaseGui fillBottom(@NotNull final List<GuiItem> guiItems) {
-        final List<GuiItem> items = repeatList(guiItems, rows * 9);
-        for (int i = 9; i > 0; i--) {
-            if (!this.guiItems.containsKey(i)) setItem((rows * 9) - i, items.get(i));
-        }
-
-        return this;
-    }
-
-    /**
-     * Fills the outside section of the GUI with a GuiItem
-     *
-     * @param guiItem GuiItem
-     * @return The GUI
-     */
-    public BaseGui fillBorder(@NotNull final GuiItem guiItem) {
-        return fillBorder(Collections.singletonList(guiItem));
-    }
-
-    /**
-     * Fill empty slots with Multiple GuiItems, goes through list and starts again
-     *
-     * @param guiItems GuiItem
-     * @return The GUI
-     */
-    public BaseGui fillBorder(@NotNull final List<GuiItem> guiItems) {
-        if (rows <= 2) return this;
-
-        final List<GuiItem> items = repeatList(guiItems, rows * 9);
-
-        for (int i = 0; i < rows * 9; i++) {
-            if ((i <= 8) || (i >= (rows * 9) - 9)
-                    || i == 9 || i == 18
-                    || i == 27 || i == 36
-                    || i == 17 || i == 26
-                    || i == 35 || i == 44)
-                setItem(i, items.get(i));
-
-        }
-
-        return this;
-    }
-
-    /**
-     * Fills rectangle from points within the GUI
-     *
-     * @param rowFrom Row point 1
-     * @param colFrom Col point 1
-     * @param rowTo   Row point 2
-     * @param colTo   Col point 2
-     * @param guiItem Item to fill with
-     * @return The Gui
-     * @author Harolds
-     */
-    public BaseGui fillBetweenPoints(final int rowFrom, final int colFrom, final int rowTo, final int colTo, @NotNull final GuiItem guiItem) {
-        return fillBetweenPoints(rowFrom, colFrom, rowTo, colTo, Collections.singletonList(guiItem));
-    }
-
-    /**
-     * Fills rectangle from points within the GUI
-     *
-     * @param rowFrom  Row point 1
-     * @param colFrom  Col point 1
-     * @param rowTo    Row point 2
-     * @param colTo    Col point 2
-     * @param guiItems Item to fill with
-     * @return The Gui
-     * @author Harolds
-     */
-    public BaseGui fillBetweenPoints(final int rowFrom, final int colFrom, final int rowTo, final int colTo, @NotNull final List<GuiItem> guiItems) {
-        int minRow = Math.min(rowFrom, rowTo);
-        int maxRow = Math.max(rowFrom, rowTo);
-        int minCol = Math.min(colFrom, colTo);
-        int maxCol = Math.max(colFrom, colTo);
-
-        final List<GuiItem> items = repeatList(guiItems, rows * 9);
-
-        for (int row = 1; row <= rows; row++) {
-            for (int col = 1; col <= 9; col++) {
-                int slot = getSlotFromRowCol(row, col);
-                if (!((row >= minRow && row <= maxRow) && (col >= minCol && col <= maxCol)))
-                    continue;
-
-                setItem(slot, items.get(slot));
-            }
-        }
-
-        return this;
-    }
-
-    /**
-     * Sets an GuiItem to fill up the entire inventory where there is no other item
-     *
-     * @param guiItem The item to use as fill
-     * @return The GUI
-     */
-    public BaseGui fill(@NotNull final GuiItem guiItem) {
-        return fill(Collections.singletonList(guiItem));
-    }
-
-    /**
-     * Fill empty slots with Multiple GuiItems, goes through list and starts again
-     *
-     * @param guiItems GuiItem
-     * @return The GUI
-     */
-    public BaseGui fill(@NotNull final List<GuiItem> guiItems) {
-        final List<GuiItem> items = repeatList(guiItems, rows * 9);
-        for (int i = 0; i < (rows) * 9; i++) {
-            if (!this.guiItems.containsKey(i)) setItem(i, items.get(i));
-        }
-
-        return this;
-    }
-
-    /**
      * Adds items to the GUI without specific slot
      *
      * @param items The Gui Items
@@ -376,7 +226,6 @@ public abstract class BaseGui implements InventoryHolder {
      */
     public BaseGui setDefaultClickAction(final GuiAction<InventoryClickEvent> defaultClickAction) {
         this.defaultClickAction = defaultClickAction;
-
         return this;
     }
 
@@ -388,7 +237,6 @@ public abstract class BaseGui implements InventoryHolder {
      */
     public BaseGui setDefaultTopClickAction(final GuiAction<InventoryClickEvent> defaultTopClickAction) {
         this.defaultTopClickAction = defaultTopClickAction;
-
         return this;
     }
 
@@ -400,7 +248,6 @@ public abstract class BaseGui implements InventoryHolder {
      */
     public BaseGui setDragAction(final GuiAction<InventoryDragEvent> dragAction) {
         this.dragAction = dragAction;
-
         return this;
     }
 
@@ -412,7 +259,17 @@ public abstract class BaseGui implements InventoryHolder {
      */
     public BaseGui setCloseGuiAction(final GuiAction<InventoryCloseEvent> closeGuiAction) {
         this.closeGuiAction = closeGuiAction;
+        return this;
+    }
 
+    /**
+     * Sets the action of when clicking on the outside of the inventory
+     *
+     * @param outsideClickAction Action to resolve
+     * @return The GUI
+     */
+    public BaseGui setOutsideClickAction(final GuiAction<InventoryClickEvent> outsideClickAction) {
+        this.outsideClickAction = outsideClickAction;
         return this;
     }
 
@@ -424,7 +281,6 @@ public abstract class BaseGui implements InventoryHolder {
      */
     public BaseGui setOpenGuiAction(final GuiAction<InventoryOpenEvent> openGuiAction) {
         this.openGuiAction = openGuiAction;
-
         return this;
     }
 
@@ -438,7 +294,6 @@ public abstract class BaseGui implements InventoryHolder {
     public BaseGui addSlotAction(final int slot, final GuiAction<InventoryClickEvent> slotAction) {
         if (!isValidSlot(slot)) return this;
         slotActions.put(slot, slotAction);
-
         return this;
     }
 
@@ -487,11 +342,7 @@ public abstract class BaseGui implements InventoryHolder {
      */
     public void open(@NotNull final HumanEntity player) {
         inventory.clear();
-
-        for (final Map.Entry<Integer, GuiItem> entry : getGuiItems().entrySet()) {
-            inventory.setItem(entry.getKey(), entry.getValue().getItemStack());
-        }
-
+        populateGui();
         player.openInventory(inventory);
     }
 
@@ -564,6 +415,15 @@ public abstract class BaseGui implements InventoryHolder {
     }
 
     /**
+     * Return the GUI filler with the filling methods
+     *
+     * @return The GUI filler
+     */
+    public GuiFiller getFiller() {
+        return filler;
+    }
+
+    /**
      * Gets map with all the GUI items
      *
      * @return The map with all the items
@@ -626,12 +486,28 @@ public abstract class BaseGui implements InventoryHolder {
     }
 
     /**
+     * Gets the gui action for the outside click
+     */
+    GuiAction<InventoryClickEvent> getOutsideClickAction() {
+        return outsideClickAction;
+    }
+
+    /**
      * Gets the action for the specified slot
      *
      * @param slot The slot clicked
      */
     GuiAction<InventoryClickEvent> getSlotAction(final int slot) {
         return isValidSlot(slot) ? slotActions.get(slot) : null;
+    }
+
+    /**
+     * Populates the GUI with it's items
+     */
+    void populateGui() {
+        for (final Map.Entry<Integer, GuiItem> entry : getGuiItems().entrySet()) {
+            getInventory().setItem(entry.getKey(), entry.getValue().getItemStack());
+        }
     }
 
     /**
@@ -652,20 +528,6 @@ public abstract class BaseGui implements InventoryHolder {
      */
     private int getSlotFromRowCol(final int row, final int col) {
         return (col + (row - 1) * 9) - 1;
-    }
-
-    /**
-     * Repeats any type of Array. Allows for alternating items
-     * Stores references to existing Objects -> Does not create new objects
-     *
-     * @param guiItems  Array Type
-     * @param newLength Length of array
-     * @return New array
-     */
-    private List<GuiItem> repeatList(@NotNull final List<GuiItem> guiItems, final int newLength) {
-        final List<GuiItem> repeated = new ArrayList<>();
-        Collections.nCopies(rows * 9, guiItems).forEach(repeated::addAll);
-        return repeated;
     }
 
 

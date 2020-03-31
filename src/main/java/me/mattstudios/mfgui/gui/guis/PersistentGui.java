@@ -35,12 +35,7 @@ public final class PersistentGui extends BaseGui {
      */
     @Override
     public void open(@NotNull final HumanEntity player) {
-        final Map<Integer, GuiItem> guiItems = getGuiItems();
-
-        for (final Map.Entry<Integer, GuiItem> entry : guiItems.entrySet()) {
-            getInventory().setItem(entry.getKey(), entry.getValue().getItemStack());
-        }
-
+        populateGui();
         player.openInventory(getInventory());
     }
 

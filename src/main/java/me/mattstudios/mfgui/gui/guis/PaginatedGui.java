@@ -6,6 +6,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -13,6 +14,7 @@ import java.util.Map;
 public final class PaginatedGui extends BaseGui {
 
     private final List<GuiItem> pageItems = new ArrayList<>();
+    private final Map<Integer, GuiItem> currentPage = new HashMap<>();
 
     private int pageSize;
     private int page = 1;
@@ -60,36 +62,39 @@ public final class PaginatedGui extends BaseGui {
         setUpdating(true);
 
         for (final HumanEntity player : getInventory().getViewers()) {
-            open(player);
+            open(player, page);
         }
 
         setUpdating(false);
     }
 
     /**
-     * Overridden open method to add the gui page items
+     * Opens the GUI in the first page
      *
      * @param player The player to open it to
      */
     @Override
     public void open(@NotNull final HumanEntity player) {
+        open(player, 1);
+    }
+
+    /**
+     * Overridden open method to add the gui page items
+     *
+     * @param player   The player to open it to
+     * @param openPage The specific page to open at
+     */
+
+    public void open(@NotNull final HumanEntity player, final int openPage) {
+        if (openPage <= getPagesNum() || openPage > 0) page = openPage;
+
         getInventory().clear();
+        currentPage.clear();
 
-        for (final GuiItem guiItem : getPage(page)) {
-            for (int slot = 0; slot < getRows() * 9; slot++) {
-                if (getGuiItem(slot) != null) continue;
-
-                setItem(slot, guiItem);
-                break;
-            }
-        }
-
-        for (final Map.Entry<Integer, GuiItem> entry : getGuiItems().entrySet()) {
-            getInventory().setItem(entry.getKey(), entry.getValue().getItemStack());
-        }
+        populateGui();
+        populatePage();
 
         player.openInventory(getInventory());
-
     }
 
     /**
@@ -107,7 +112,7 @@ public final class PaginatedGui extends BaseGui {
      * @return The next page number or -1 as no next
      */
     public int getNextPageNum() {
-        if (page + 1 > getPagesNum()) return -1;
+        if (page + 1 > getPagesNum()) return page;
         return page + 1;
     }
 
@@ -117,7 +122,7 @@ public final class PaginatedGui extends BaseGui {
      * @return The previous page number or -1 as no previous
      */
     public int getPrevPageNum() {
-        if (page - 1 == 0) return -1;
+        if (page - 1 == 0) return page;
         return page - 1;
     }
 
@@ -139,6 +144,16 @@ public final class PaginatedGui extends BaseGui {
 
         page--;
         update();
+    }
+
+    /**
+     * Gets the page item for the GUI listener
+     *
+     * @param slot The slot to get
+     * @return The GuiItem on that slot
+     */
+    GuiItem getPageItem(final int slot) {
+        return currentPage.get(slot);
     }
 
     /**
@@ -169,5 +184,20 @@ public final class PaginatedGui extends BaseGui {
      */
     private int getPagesNum() {
         return (int) Math.ceil((double) pageItems.size() / pageSize);
+    }
+
+    /**
+     * Populates the inventory with the page items
+     */
+    private void populatePage() {
+        // Adds the paginated items to the page
+        for (final GuiItem guiItem : getPage(page)) {
+            for (int slot = 0; slot < getRows() * 9; slot++) {
+                if (getInventory().getItem(slot) != null) continue;
+                currentPage.put(slot, guiItem);
+                getInventory().setItem(slot, guiItem.getItemStack());
+                break;
+            }
+        }
     }
 }
