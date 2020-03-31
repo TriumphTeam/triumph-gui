@@ -2,6 +2,7 @@ package me.mattstudios.mfgui.gui.components;
 
 import me.mattstudios.mfgui.gui.guis.BaseGui;
 import me.mattstudios.mfgui.gui.guis.GuiItem;
+import me.mattstudios.mfgui.gui.guis.PaginatedGui;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -150,6 +151,8 @@ public final class GuiFiller {
      * @param guiItems GuiItem
      */
     public void fill(@NotNull final List<GuiItem> guiItems) {
+        if (gui instanceof PaginatedGui) throw new GuiException("Full filling a GUI is not supported in a Paginated GUI!");
+
         final int rows = gui.getRows();
         final List<GuiItem> items = repeatList(guiItems, rows * 9);
         for (int i = 0; i < (rows) * 9; i++) {

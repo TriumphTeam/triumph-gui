@@ -20,6 +20,8 @@ public final class ItemNBT {
      * @return An ItemStack that has NBT set
      */
     public static ItemStack setNBTTag(final ItemStack itemStack, final String key, final String value) {
+        if (itemStack == null || itemStack.getType() == XMaterial.AIR.parseMaterial()) return itemStack;
+
         Object nmsItemStack = asNMSCopy(itemStack);
 
         Object itemCompound = hasTag(nmsItemStack) ? getTag(nmsItemStack) : newNBTTagCompound();
@@ -38,6 +40,8 @@ public final class ItemNBT {
      * @return The tag that was stored in the ItemStack
      */
     public static String getNBTTag(final ItemStack itemStack, final String key) {
+        if (itemStack == null || itemStack.getType() == XMaterial.AIR.parseMaterial()) return "";
+
         Object nmsItemStack = asNMSCopy(itemStack);
         Object itemCompound = hasTag(nmsItemStack) ? getTag(nmsItemStack) : newNBTTagCompound();
 
