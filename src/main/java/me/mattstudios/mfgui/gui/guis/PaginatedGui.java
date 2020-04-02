@@ -32,6 +32,17 @@ public final class PaginatedGui extends BaseGui {
     }
 
     /**
+     * Sets the page size
+     *
+     * @param pageSize The new page size
+     * @return The GUI
+     */
+    public BaseGui setPageSize(final int pageSize) {
+        this.pageSize = pageSize;
+        return this;
+    }
+
+    /**
      * Adds an item to the next empty slot in the GUI
      *
      * @param item The GUI item
@@ -163,7 +174,7 @@ public final class PaginatedGui extends BaseGui {
      * @return A list with all the page items
      */
     private List<GuiItem> getPage(final int givenPage) {
-        int page = givenPage - 1;
+        final int page = givenPage - 1;
 
         final List<GuiItem> guiPage = new ArrayList<>();
 

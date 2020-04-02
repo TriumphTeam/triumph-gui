@@ -80,12 +80,6 @@ public final class GuiListener implements Listener {
 
     }
 
-    private boolean isntGuiItem(final ItemStack currentItem, final GuiItem guiItem) {
-        if (guiItem == null) return true;
-        // Checks whether or not the Item is truly a GUI Item
-        return !getNBTTag(currentItem, "mf-gui").equals(guiItem.getUuid().toString());
-    }
-
     /**
      * Handles what happens when a player clicks on the GUI
      *
@@ -139,6 +133,19 @@ public final class GuiListener implements Listener {
 
         // Checks if there is or not an action set and executes it
         if (openAction != null && !gui.isUpdating()) openAction.execute(event);
+    }
+
+    /**
+     * Checks if the item is or not a GUI item
+     *
+     * @param currentItem The current item clicked
+     * @param guiItem     The GUI item in the slot
+     * @return Whether it is or not a GUI item
+     */
+    private boolean isntGuiItem(final ItemStack currentItem, final GuiItem guiItem) {
+        if (guiItem == null) return true;
+        // Checks whether or not the Item is truly a GUI Item
+        return !getNBTTag(currentItem, "mf-gui").equals(guiItem.getUuid().toString());
     }
 
 }

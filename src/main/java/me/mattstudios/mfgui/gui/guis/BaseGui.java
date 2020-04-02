@@ -1,6 +1,5 @@
 package me.mattstudios.mfgui.gui.guis;
 
-import com.google.common.annotations.Beta;
 import me.mattstudios.mfgui.gui.components.GuiAction;
 import me.mattstudios.mfgui.gui.components.GuiException;
 import me.mattstudios.mfgui.gui.components.GuiFiller;
@@ -367,9 +366,9 @@ public abstract class BaseGui implements InventoryHolder {
      * This method may cause LAG if used on a loop
      *
      * @param title The title to set
+     * @return The GUI
      */
-    @Beta
-    public void updateTitle(@NotNull final String title) {
+    public BaseGui updateTitle(@NotNull final String title) {
         this.title = title;
 
         updating = true;
@@ -383,6 +382,8 @@ public abstract class BaseGui implements InventoryHolder {
         }
 
         updating = false;
+
+        return this;
     }
 
     /**
