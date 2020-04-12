@@ -178,7 +178,7 @@ public final class ItemBuilder {
             meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
            
         } else {
-            for (Enchantment enchant : stack.getEnchantments().keySet()) {
+            for (Enchantment enchant : itemStack.getEnchantments().keySet()) {
                 meta.removeEnchant(enchant);
             }
 
