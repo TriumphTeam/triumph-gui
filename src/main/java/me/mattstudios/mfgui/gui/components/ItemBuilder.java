@@ -178,12 +178,10 @@ public final class ItemBuilder {
             meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
            
         } else {
-            ItemStack stack = new ItemStack(Material.STONE);
-            ItemMeta meta = stack.getItemMeta();
             for (Enchantment enchant : stack.getEnchantments().keySet()) {
                 meta.removeEnchant(enchant);
             }
-            stack.setItemMeta(meta);
+
         }
 
         return this;
