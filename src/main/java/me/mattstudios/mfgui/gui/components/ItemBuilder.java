@@ -169,11 +169,20 @@ public final class ItemBuilder {
     /**
      * Makes the Item glow
      *
+     * @param boolean Should the item glow
      * @return The ItemBuilder
      */
-    public ItemBuilder glow() {
-        meta.addEnchant(Enchantment.LURE, 1, false);
-        meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
+    public ItemBuilder glow(boolean bool) {
+        if (bool) {
+            meta.addEnchant(Enchantment.LURE, 1, false);
+            meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
+           
+        } else {
+            for (Enchantment enchant : itemStack.getEnchantments().keySet()) {
+                meta.removeEnchant(enchant);
+            }
+
+        }
 
         return this;
     }
