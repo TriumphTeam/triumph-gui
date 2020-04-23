@@ -156,6 +156,25 @@ public final class PaginatedGui extends BaseGui {
     }
 
     /**
+     * Gets the items on the current page
+     *
+     * @return The map with the items
+     */
+    public Map<Integer, GuiItem> getCurrentPageItems() {
+        return currentPage;
+    }
+
+    /**
+     * Gets all the items added to the GUI
+     *
+     * @return The list with all the items
+     */
+    public List<GuiItem> getPageItems() {
+        return pageItems;
+    }
+
+
+    /**
      * Gets the current page number
      *
      * @return The current page number
@@ -172,24 +191,6 @@ public final class PaginatedGui extends BaseGui {
     public int getNextPageNum() {
         if (page + 1 > getPagesNum()) return page;
         return page + 1;
-    }
-
-    /**
-     * Gets the items on the current page
-     *
-     * @return The map with the items
-     */
-    public Map<Integer, GuiItem> getCurrentPageItems() {
-        return currentPage;
-    }
-
-    /**
-     * Gets all the items added to the GUI
-     *
-     * @return The list with all the items
-     */
-    public List<GuiItem> getPageItems() {
-        return pageItems;
     }
 
     /**

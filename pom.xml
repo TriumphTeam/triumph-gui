@@ -30,7 +30,7 @@
 
     <groupId>me.mattstudios.utils</groupId>
     <artifactId>matt-framework-gui</artifactId>
-    <version>1.2.3</version>
+    <version>1.2.4</version>
     <packaging>jar</packaging>
 
     <name>Matt's Framework</name>
@@ -68,11 +68,14 @@
             <organization>MattStudios</organization>
             <organizationUrl>https://mattstudios.me/</organizationUrl>
         </developer>
-        <developer>
+    </developers>
+
+    <contributors>
+        <contributor>
             <name>Harry Drummond</name>
             <email>harrydrum0198@gmail.com</email>
-        </developer>
-    </developers>
+        </contributor>
+    </contributors>
 
     <properties>
         <java.version>1.8</java.version>
@@ -118,7 +121,7 @@
             <groupId>me.mattstudios.utils</groupId>
             <artifactId>matt-framework</artifactId>
             <version>LATEST</version>
-            <scope>compile</scope>
+            <scope>provided</scope>
         </dependency>
     </dependencies>
 
