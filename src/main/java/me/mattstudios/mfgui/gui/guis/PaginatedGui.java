@@ -1,6 +1,7 @@
 package me.mattstudios.mfgui.gui.guis;
 
 import org.bukkit.entity.HumanEntity;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
 import org.jetbrains.annotations.NotNull;
 
@@ -80,6 +81,52 @@ public final class PaginatedGui extends BaseGui {
     }
 
     /**
+     * Used for updating the current item in the page at runtime
+     *
+     * @param slot      The slot of the item to update
+     * @param itemStack The new ItemStack
+     */
+    public void updatePageItem(final int slot, @NotNull final ItemStack itemStack) {
+        if (!currentPage.containsKey(slot)) return;
+        currentPage.get(slot).setItemStack(itemStack);
+        getInventory().setItem(slot, itemStack);
+    }
+
+    /**
+     * Used for updating the current item in the page at runtime
+     *
+     * @param row       The row of the slot
+     * @param col       The col of the slot
+     * @param itemStack The new ItemStack
+     */
+    public void updatePageItem(final int row, final int col, @NotNull final ItemStack itemStack) {
+        updateItem(getSlotFromRowCol(row, col), itemStack);
+    }
+
+    /**
+     * Used for updating the current item in the page at runtime
+     *
+     * @param slot The slot of the item to update
+     * @param item The new ItemStack
+     */
+    public void updatePageItem(final int slot, @NotNull final GuiItem item) {
+        if (!currentPage.containsKey(slot)) return;
+        currentPage.put(slot, item);
+        getInventory().setItem(slot, item.getItemStack());
+    }
+
+    /**
+     * Used for updating the current item in the page at runtime
+     *
+     * @param row  The row of the slot
+     * @param col  The col of the slot
+     * @param item The new ItemStack
+     */
+    public void updatePageItem(final int row, final int col, @NotNull final GuiItem item) {
+        updateItem(getSlotFromRowCol(row, col), item);
+    }
+
+    /**
      * Opens the GUI in the first page
      *
      * @param player The player to open it to
@@ -128,6 +175,24 @@ public final class PaginatedGui extends BaseGui {
     }
 
     /**
+     * Gets the items on the current page
+     *
+     * @return The map with the items
+     */
+    public Map<Integer, GuiItem> getCurrentPageItems() {
+        return currentPage;
+    }
+
+    /**
+     * Gets all the items added to the GUI
+     *
+     * @return The list with all the items
+     */
+    public List<GuiItem> getPageItems() {
+        return pageItems;
+    }
+
+    /**
      * Gets the previous page number
      *
      * @return The previous page number or -1 as no previous
@@ -140,21 +205,23 @@ public final class PaginatedGui extends BaseGui {
     /**
      * Goes to the next page
      */
-    public void nextPage() {
-        if (page + 1 > getPagesNum()) return;
+    public boolean nextPage() {
+        if (page + 1 > getPagesNum()) return false;
 
         page++;
         update();
+        return true;
     }
 
     /**
      * Goes to the previous page if possible
      */
-    public void prevPage() {
-        if (page - 1 == 0) return;
+    public boolean prevPage() {
+        if (page - 1 == 0) return false;
 
         page--;
         update();
+        return true;
     }
 
     /**

@@ -2,6 +2,7 @@ package me.mattstudios.mfgui.gui.components;
 
 import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.properties.Property;
+import me.mattstudios.mfgui.gui.components.xseries.XMaterial;
 import org.apache.commons.lang.Validate;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -169,19 +170,15 @@ public final class ItemBuilder {
     /**
      * Makes the Item glow
      *
-     * @param boolean Should the item glow
+     * @param glow Should the item glow
      * @return The ItemBuilder
      */
-    public ItemBuilder glow(boolean bool) {
-        if (bool) {
+    public ItemBuilder glow(boolean glow) {
+        if (glow) {
             meta.addEnchant(Enchantment.LURE, 1, false);
             meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
-           
-        } else {
-            for (Enchantment enchant : itemStack.getEnchantments().keySet()) {
-                meta.removeEnchant(enchant);
-            }
 
+            return this;
         }
 
         return this;
@@ -189,6 +186,7 @@ public final class ItemBuilder {
 
     /**
      * Sets the skull texture
+     *
      * @param texture The base64 texture
      * @return The ItemBuilder
      */
