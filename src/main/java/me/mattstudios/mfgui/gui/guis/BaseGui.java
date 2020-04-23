@@ -347,7 +347,7 @@ public abstract class BaseGui implements InventoryHolder {
     public void updateItem(final int slot, @NotNull final ItemStack itemStack) {
         if (!guiItems.containsKey(slot)) return;
         guiItems.get(slot).setItemStack(itemStack);
-        inventory.setItem(slot, guiItems.get(slot).getItemStack());
+        inventory.setItem(slot, itemStack);
     }
 
     /**
@@ -359,6 +359,29 @@ public abstract class BaseGui implements InventoryHolder {
      */
     public void updateItem(final int row, final int col, @NotNull final ItemStack itemStack) {
         updateItem(getSlotFromRowCol(row, col), itemStack);
+    }
+
+    /**
+     * Used for updating the current item in the GUI at runtime
+     *
+     * @param slot      The slot of the item to update
+     * @param item The new ItemStack
+     */
+    public void updateItem(final int slot, @NotNull final GuiItem item) {
+        if (!guiItems.containsKey(slot)) return;
+        guiItems.put(slot, item);
+        inventory.setItem(slot, item.getItemStack());
+    }
+
+    /**
+     * Used for updating the current item in the GUI at runtime
+     *
+     * @param row       The row of the slot
+     * @param col       The col of the slot
+     * @param item The new ItemStack
+     */
+    public void updateItem(final int row, final int col, @NotNull final GuiItem item) {
+        updateItem(getSlotFromRowCol(row, col), item);
     }
 
     /**
@@ -498,7 +521,7 @@ public abstract class BaseGui implements InventoryHolder {
      * @param col The col
      * @return The new slot
      */
-    private int getSlotFromRowCol(final int row, final int col) {
+    int getSlotFromRowCol(final int row, final int col) {
         return (col + (row - 1) * 9) - 1;
     }
 

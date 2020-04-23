@@ -1,7 +1,9 @@
 package me.mattstudios.mfgui.gui.components;
 
+import org.bukkit.event.Event;
+
 @FunctionalInterface
-public interface GuiAction<T> {
+public interface GuiAction<T extends Event> {
 
     /**
      * Executes the task passed to it

@@ -1,5 +1,6 @@
 package me.mattstudios.mfgui.gui.components;
 
+import me.mattstudios.mfgui.gui.components.xseries.XMaterial;
 import org.bukkit.Bukkit;
 import org.bukkit.inventory.ItemStack;
 
