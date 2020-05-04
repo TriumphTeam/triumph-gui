@@ -142,7 +142,6 @@ public final class PaginatedGui extends BaseGui {
      * @param player   The player to open it to
      * @param openPage The specific page to open at
      */
-
     public void open(@NotNull final HumanEntity player, final int openPage) {
         if (openPage <= getPagesNum() || openPage > 0) page = openPage;
 
@@ -210,7 +209,7 @@ public final class PaginatedGui extends BaseGui {
         if (page + 1 > getPagesNum()) return false;
 
         page++;
-        update();
+        updatePage();
         return true;
     }
 
@@ -221,7 +220,7 @@ public final class PaginatedGui extends BaseGui {
         if (page - 1 == 0) return false;
 
         page--;
-        update();
+        updatePage();
         return true;
     }
 
@@ -278,5 +277,24 @@ public final class PaginatedGui extends BaseGui {
                 break;
             }
         }
+    }
+
+    /**
+     * Clears the page content
+     * @since 2.2.5
+     */
+    private void clearPage() {
+        for (Map.Entry<Integer, GuiItem> entry : currentPage.entrySet()) {
+            getInventory().setItem(entry.getKey(), null);
+        }
+    }
+
+    /**
+     * Updates the page content
+     * @since 2.2.5
+     */
+    private void updatePage() {
+        clearPage();
+        populatePage();
     }
 }

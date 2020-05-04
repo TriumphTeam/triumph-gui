@@ -30,10 +30,10 @@
 
     <groupId>me.mattstudios.utils</groupId>
     <artifactId>matt-framework-gui</artifactId>
-    <version>1.2.4</version>
+    <version>1.2.5</version>
     <packaging>jar</packaging>
 
-    <name>Matt's Framework</name>
+    <name>Matt's GUI Framework</name>
     <url>https://github.com/ipsk/MF-GUI</url>
     <description>Inventory GUI framework for Spigot.</description>
 
@@ -218,14 +218,14 @@
                 </executions>
             </plugin>
             <!-- COMMENT BEFORE RELEASE -->
-            <plugin>
+            <!--<plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-jar-plugin</artifactId>
                 <version>2.3.1</version>
                 <configuration>
                     <outputDirectory>T:/servers/spigot-1.15/plugins</outputDirectory>
                 </configuration>
-            </plugin>
+            </plugin>-->
         </plugins>
         <resources>
             <resource>

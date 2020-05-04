@@ -346,8 +346,9 @@ public abstract class BaseGui implements InventoryHolder {
      */
     public void updateItem(final int slot, @NotNull final ItemStack itemStack) {
         if (!guiItems.containsKey(slot)) return;
-        guiItems.get(slot).setItemStack(itemStack);
-        inventory.setItem(slot, itemStack);
+        final GuiItem guiItem = guiItems.get(slot);
+        guiItem.setItemStack(itemStack);
+        inventory.setItem(slot, guiItem.getItemStack());
     }
 
     /**
@@ -364,7 +365,7 @@ public abstract class BaseGui implements InventoryHolder {
     /**
      * Used for updating the current item in the GUI at runtime
      *
-     * @param slot      The slot of the item to update
+     * @param slot The slot of the item to update
      * @param item The new ItemStack
      */
     public void updateItem(final int slot, @NotNull final GuiItem item) {
@@ -376,8 +377,8 @@ public abstract class BaseGui implements InventoryHolder {
     /**
      * Used for updating the current item in the GUI at runtime
      *
-     * @param row       The row of the slot
-     * @param col       The col of the slot
+     * @param row  The row of the slot
+     * @param col  The col of the slot
      * @param item The new ItemStack
      */
     public void updateItem(final int row, final int col, @NotNull final GuiItem item) {
