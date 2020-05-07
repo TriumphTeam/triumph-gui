@@ -1,8 +1,10 @@
 package me.mattstudios.mfgui.gui.guis;
 
 import me.mattstudios.mfgui.gui.components.GuiAction;
+import org.apache.commons.lang.Validate;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.UUID;
 
@@ -24,7 +26,9 @@ public final class GuiItem {
      * @param itemStack The ItemStack to be used
      * @param action    The action to do when clicking on the Item
      */
-    public GuiItem(final ItemStack itemStack, final GuiAction<InventoryClickEvent> action) {
+    public GuiItem(@NotNull final ItemStack itemStack, final GuiAction<InventoryClickEvent> action) {
+        Validate.notNull(itemStack, "The itemstack for the GUI Item cannot be null!");
+
         if (action == null) this.action = event -> {
         };
         else this.action = action;
@@ -38,7 +42,7 @@ public final class GuiItem {
      *
      * @param itemStack The ItemStack to be used
      */
-    public GuiItem(final ItemStack itemStack) {
+    public GuiItem(@NotNull final ItemStack itemStack) {
         this(itemStack, null);
     }
 
@@ -47,7 +51,8 @@ public final class GuiItem {
      *
      * @param itemStack The new ItemStack
      */
-    public void setItemStack(final ItemStack itemStack) {
+    public void setItemStack(@NotNull final ItemStack itemStack) {
+        Validate.notNull(itemStack, "The itemstack for the GUI Item cannot be null!");
         this.itemStack = setNBTTag(itemStack, "mf-gui", uuid.toString());
     }
 
