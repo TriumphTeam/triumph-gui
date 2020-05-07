@@ -16,6 +16,7 @@ public final class PaginatedGui extends BaseGui {
 
     private final List<GuiItem> pageItems = new ArrayList<>();
     private final Map<Integer, GuiItem> currentPage = new HashMap<>();
+    private final Map<Integer, Integer> twe = new HashMap<>();
 
     private int pageSize;
     private int page = 1;
@@ -28,8 +29,12 @@ public final class PaginatedGui extends BaseGui {
         if (rows < 2) setRows(2);
     }
 
+    public PaginatedGui(@NotNull final Plugin plugin, final int rows, @NotNull final String title) {
+        this(plugin, rows, 0, title);
+    }
+
     public PaginatedGui(@NotNull final Plugin plugin, @NotNull final String title) {
-        this(plugin, 2, 9, title);
+        this(plugin, 2, title);
     }
 
     /**
@@ -88,8 +93,9 @@ public final class PaginatedGui extends BaseGui {
      */
     public void updatePageItem(final int slot, @NotNull final ItemStack itemStack) {
         if (!currentPage.containsKey(slot)) return;
-        currentPage.get(slot).setItemStack(itemStack);
-        getInventory().setItem(slot, itemStack);
+        final GuiItem guiItem = currentPage.get(slot);
+        guiItem.setItemStack(itemStack);
+        getInventory().setItem(slot, guiItem.getItemStack());
     }
 
     /**
@@ -149,6 +155,9 @@ public final class PaginatedGui extends BaseGui {
         currentPage.clear();
 
         populateGui();
+
+        if (pageSize == 0) pageSize = calculatePageSize();
+
         populatePage();
 
         player.openInventory(getInventory());
@@ -246,10 +255,10 @@ public final class PaginatedGui extends BaseGui {
         final List<GuiItem> guiPage = new ArrayList<>();
 
         int max = ((page * pageSize) + pageSize);
-        if (max > this.pageItems.size()) max = this.pageItems.size();
+        if (max > pageItems.size()) max = pageItems.size();
 
         for (int i = page * pageSize; max > i; i++) {
-            guiPage.add(this.pageItems.get(i));
+            guiPage.add(pageItems.get(i));
         }
 
         return guiPage;
@@ -281,6 +290,7 @@ public final class PaginatedGui extends BaseGui {
 
     /**
      * Clears the page content
+     *
      * @since 2.2.5
      */
     private void clearPage() {
@@ -291,10 +301,21 @@ public final class PaginatedGui extends BaseGui {
 
     /**
      * Updates the page content
+     *
      * @since 2.2.5
      */
     private void updatePage() {
         clearPage();
         populatePage();
+    }
+
+    private int calculatePageSize() {
+        int counter = 0;
+
+        for (int slot = 0; slot < getRows() * 9; slot++) {
+            if (getInventory().getItem(slot) == null) counter++;
+        }
+
+        return counter;
     }
 }
