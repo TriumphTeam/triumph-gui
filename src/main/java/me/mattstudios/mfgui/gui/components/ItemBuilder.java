@@ -22,7 +22,7 @@ import java.util.UUID;
 @SuppressWarnings("unused")
 public final class ItemBuilder {
 
-    private final ItemStack itemStack;
+    private ItemStack itemStack;
     private ItemMeta meta;
 
     /**
@@ -225,6 +225,11 @@ public final class ItemBuilder {
 
         meta = skullMeta;
 
+        return this;
+    }
+
+    public ItemBuilder setNbt(@NotNull final String key, @NotNull final String value) {
+        itemStack = ItemNBT.setNBTTag(itemStack, key, value);
         return this;
     }
 
