@@ -168,7 +168,8 @@ public final class ItemBuilder {
     }
 
     /**
-     * Makes the Item glow
+     * Changes the glow status of the item
+     * False removes all enchantments from item.
      *
      * @param glow Should the item glow
      * @return The ItemBuilder
@@ -179,6 +180,10 @@ public final class ItemBuilder {
             meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
 
             return this;
+        }
+        
+        for (Enchantment enchantment : meta.getEnchants().keySet()) {
+            meta.removeEnchant(enchantment);
         }
 
         return this;
