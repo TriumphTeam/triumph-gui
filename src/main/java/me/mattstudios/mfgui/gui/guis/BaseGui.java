@@ -115,14 +115,22 @@ public abstract class BaseGui implements InventoryHolder {
      * @return The GUI
      */
     public BaseGui setItem(final int slot, @NotNull final GuiItem guiItem) {
-        if (!isValidSlot(slot)) {
-            throw new GuiException("Invalid item slot!");
+        if (type == null) {
+            if (!isValidSlot(slot)) {
+                throw new GuiException("Invalid item slot! (" + slot + ")");
+            }
+        } else {
+            if (!isValidSlot(slot, type)) {
+                throw new GuiException("Invalid item slot! (" + slot + ")");
+            }
         }
 
         guiItems.put(slot, guiItem);
 
         return this;
     }
+
+
 
     /**
      * Sets a GUI item to many slots
@@ -533,6 +541,10 @@ public abstract class BaseGui implements InventoryHolder {
      */
     private boolean isValidSlot(final int slot) {
         return slot >= 0 && slot < rows * 9;
+    }
+
+    private boolean isValidSlot(final int slot, final InventoryType type) {
+        return slot >= 0 && slot < type.getDefaultSize();
     }
 
     /**
