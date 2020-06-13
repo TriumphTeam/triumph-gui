@@ -530,6 +530,7 @@ public abstract class BaseGui implements InventoryHolder {
      */
     void populateGui() {
         for (final Map.Entry<Integer, GuiItem> entry : getGuiItems().entrySet()) {
+            System.out.println("Slot: " + entry.getKey() + ", ItemType: " + entry.getValue().getItemStack().getType().name());
             getInventory().setItem(entry.getKey(), entry.getValue().getItemStack());
         }
     }
