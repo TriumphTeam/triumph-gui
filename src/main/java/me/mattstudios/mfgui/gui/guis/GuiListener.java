@@ -71,6 +71,7 @@ public final class GuiListener implements Listener {
             slotAction.execute(event);
         }
 
+        System.out.println("Gui item creation");
         GuiItem guiItem;
 
         // Checks whether it's a paginated gui or not
