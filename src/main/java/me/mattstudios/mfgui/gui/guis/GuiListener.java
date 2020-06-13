@@ -72,6 +72,7 @@ public final class GuiListener implements Listener {
 
         } else {
             // The clicked GUI Item
+            System.out.println(gui.getGuiItem(event.getSlot()).getItemStack().getType().name());
             guiItem = gui.getGuiItem(event.getSlot());
         }
 
