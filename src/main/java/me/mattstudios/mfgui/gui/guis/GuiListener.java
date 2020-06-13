@@ -77,8 +77,6 @@ public final class GuiListener implements Listener {
 
         if (gui.getInventory().getType() == InventoryType.CHEST) {
             if (isntGuiItem(gui.getInventory().getItem(event.getSlot()), guiItem)) return;
-        } else {
-            if (isntGuiItem(gui.getGuiItem(event.getSlot()), guiItem)) return;
         }
 
         // Executes the action of the item
