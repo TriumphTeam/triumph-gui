@@ -45,7 +45,10 @@ public final class GuiListener implements Listener {
             return;
         }
 
-        if (event.getClickedInventory() == null) return;
+        if (event.getClickedInventory() == null) {
+            System.out.println("Clicked inv is null");
+            return;
+        }
 
         // Default click action and checks weather or not there is a default action and executes it
         final GuiAction<InventoryClickEvent> defaultTopClick = gui.getDefaultTopClickAction();
@@ -56,11 +59,15 @@ public final class GuiListener implements Listener {
 
         // Default click action and checks weather or not there is a default action and executes it
         final GuiAction<InventoryClickEvent> defaultClick = gui.getDefaultClickAction();
-        if (defaultClick != null) defaultClick.execute(event);
+        if (defaultClick != null) {
+            System.out.println("Default click execute");
+            defaultClick.execute(event);
+        }
 
         // Slot action and checks weather or not there is a slot action and executes it
         final GuiAction<InventoryClickEvent> slotAction = gui.getSlotAction(event.getSlot());
         if (slotAction != null && event.getClickedInventory().getType() != InventoryType.PLAYER) {
+            System.out.println("Slot action execute");
             slotAction.execute(event);
         }
 
@@ -83,7 +90,7 @@ public final class GuiListener implements Listener {
 
         // Executes the action of the item
         guiItem.getAction().execute(event);
-
+        System.out.println("Item Action execute");
     }
 
     /**
