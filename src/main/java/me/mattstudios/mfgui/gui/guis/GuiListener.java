@@ -155,7 +155,10 @@ public final class GuiListener implements Listener {
     }
 
     private boolean isntGuiItem(final GuiItem currentItem, final GuiItem guiItem) {
+        /*
+        Eat my ass spigot
         if (guiItem == null) return true;
+         */
 
         return !currentItem.getUuid().toString().equals(guiItem.getUuid().toString());
     }
