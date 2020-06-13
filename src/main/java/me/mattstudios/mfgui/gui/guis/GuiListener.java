@@ -75,6 +75,7 @@ public final class GuiListener implements Listener {
             guiItem = gui.getGuiItem(event.getSlot());
         }
 
+        System.out.println(gui.getInventory().getItem(1).getType().name());
         if (isntGuiItem(gui.getInventory().getItem(event.getSlot()), guiItem)) return;
 
         // Executes the action of the item
