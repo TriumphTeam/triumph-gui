@@ -12,7 +12,7 @@ import static me.mattstudios.mfgui.gui.components.ItemNBT.setNBTTag;
 
 public final class GuiItem {
 
-    // Random UUID to identify the idem when clicking
+    // Random UUID to identify the item when clicking
     private final UUID uuid = UUID.randomUUID();
     // Action to do when clicking on the item
     private GuiAction<InventoryClickEvent> action;
