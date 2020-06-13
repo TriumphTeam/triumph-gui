@@ -29,8 +29,7 @@ public final class GuiItem {
     public GuiItem(@NotNull final ItemStack itemStack, final GuiAction<InventoryClickEvent> action) {
         Validate.notNull(itemStack, "The itemstack for the GUI Item cannot be null!");
 
-        if (action == null) this.action = event -> {
-        };
+        if (action == null) this.action = event -> { };
         else this.action = action;
 
         // Sets the UUID to an NBT tag to be identifiable later
