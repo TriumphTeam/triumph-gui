@@ -75,12 +75,14 @@ public final class GuiListener implements Listener {
             guiItem = gui.getGuiItem(event.getSlot());
         }
 
-        System.out.println(gui.getInventory().getItem(1).getType().name());
-        if (isntGuiItem(gui.getInventory().getItem(event.getSlot()), guiItem)) return;
+        if (gui.getInventory().getType() == InventoryType.CHEST) {
+            if (isntGuiItem(gui.getInventory().getItem(event.getSlot()), guiItem)) return;
+        } else {
+            if (isntGuiItem(gui.getGuiItem(event.getSlot()), guiItem)) return;
+        }
 
         // Executes the action of the item
         guiItem.getAction().execute(event);
-        System.out.println("Item Action execute");
     }
 
     /**
@@ -148,9 +150,14 @@ public final class GuiListener implements Listener {
     private boolean isntGuiItem(final ItemStack currentItem, final GuiItem guiItem) {
         if (guiItem == null) return true;
 
-        System.out.println("Is item valid? " + !getNBTTag(currentItem, "mf-gui").equals(guiItem.getUuid().toString()));
         // Checks whether or not the Item is truly a GUI Item
         return !getNBTTag(currentItem, "mf-gui").equals(guiItem.getUuid().toString());
+    }
+
+    private boolean isntGuiItem(final GuiItem currentItem, final GuiItem guiItem) {
+        if (guiItem == null) return true;
+
+        return !currentItem.getUuid().toString().equals(guiItem.getUuid().toString());
     }
 
 }
