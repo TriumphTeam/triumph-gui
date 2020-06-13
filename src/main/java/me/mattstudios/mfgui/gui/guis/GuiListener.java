@@ -28,6 +28,7 @@ public final class GuiListener implements Listener {
      */
     @EventHandler(ignoreCancelled = true)
     public void onGuiCLick(final InventoryClickEvent event) {
+        System.out.println("Triggered click event");
         if (!(event.getInventory().getHolder() instanceof BaseGui)) {
             System.out.println("Not a BaseGui holder");
             return;
@@ -40,6 +41,7 @@ public final class GuiListener implements Listener {
         final GuiAction<InventoryClickEvent> outsideClickAction = gui.getOutsideClickAction();
         if (outsideClickAction != null && event.getClickedInventory() == null) {
             outsideClickAction.execute(event);
+            System.out.println("Outside action");
             return;
         }
 
@@ -48,6 +50,7 @@ public final class GuiListener implements Listener {
         // Default click action and checks weather or not there is a default action and executes it
         final GuiAction<InventoryClickEvent> defaultTopClick = gui.getDefaultTopClickAction();
         if (defaultTopClick != null && event.getClickedInventory().getType() != InventoryType.PLAYER) {
+            System.out.println("Default action");
             defaultTopClick.execute(event);
         }
 
