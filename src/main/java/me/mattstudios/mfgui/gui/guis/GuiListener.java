@@ -160,10 +160,13 @@ public final class GuiListener implements Listener {
      * @return Whether it is or not a GUI item
      */
     private boolean isntGuiItem(final ItemStack currentItem, final GuiItem guiItem) {
-        if (guiItem == null) return true;
+        if (guiItem == null) {
+            System.out.println("Item is null");
+            return true;
+        }
         // Checks whether or not the Item is truly a GUI Item
-        System.out.println(getNBTTag(currentItem, "mf-gui"));
-        System.out.println(guiItem.getUuid().toString());
+        System.out.println("Current Item" + getNBTTag(currentItem, "mf-gui"));
+        System.out.println("Gui Item" + guiItem.getUuid().toString());
         return !getNBTTag(currentItem, "mf-gui").equals(guiItem.getUuid().toString());
     }
 
