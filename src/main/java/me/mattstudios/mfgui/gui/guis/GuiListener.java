@@ -28,7 +28,10 @@ public final class GuiListener implements Listener {
      */
     @EventHandler(ignoreCancelled = true)
     public void onGuiCLick(final InventoryClickEvent event) {
-        if (!(event.getInventory().getHolder() instanceof BaseGui)) return;
+        if (!(event.getInventory().getHolder() instanceof BaseGui)) {
+            System.out.println("Not a BaseGui holder");
+            return;
+        }
 
         // Gui
         final BaseGui gui = (BaseGui) event.getInventory().getHolder();
