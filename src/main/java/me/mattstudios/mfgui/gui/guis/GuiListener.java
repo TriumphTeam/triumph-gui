@@ -3,11 +3,7 @@ package me.mattstudios.mfgui.gui.guis;
 import me.mattstudios.mfgui.gui.components.GuiAction;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.inventory.InventoryClickEvent;
-import org.bukkit.event.inventory.InventoryCloseEvent;
-import org.bukkit.event.inventory.InventoryDragEvent;
-import org.bukkit.event.inventory.InventoryOpenEvent;
-import org.bukkit.event.inventory.InventoryType;
+import org.bukkit.event.inventory.*;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
 
@@ -72,13 +68,10 @@ public final class GuiListener implements Listener {
 
         } else {
             // The clicked GUI Item
-            System.out.println(gui.getGuiItem(event.getSlot()).getItemStack().getType().name());
             guiItem = gui.getGuiItem(event.getSlot());
         }
 
-        if (gui.getInventory().getType() == InventoryType.CHEST) {
-            if (isntGuiItem(gui.getInventory().getItem(event.getSlot()), guiItem)) return;
-        }
+        if (isntGuiItem(gui.getInventory().getItem(event.getSlot()), guiItem)) return;
 
         // Executes the action of the item
         guiItem.getAction().execute(event);
@@ -151,15 +144,6 @@ public final class GuiListener implements Listener {
 
         // Checks whether or not the Item is truly a GUI Item
         return !getNBTTag(currentItem, "mf-gui").equals(guiItem.getUuid().toString());
-    }
-
-    private boolean isntGuiItem(final GuiItem currentItem, final GuiItem guiItem) {
-        /*
-        Eat my ass spigot
-        if (guiItem == null) return true;
-         */
-
-        return !currentItem.getUuid().toString().equals(guiItem.getUuid().toString());
     }
 
 }

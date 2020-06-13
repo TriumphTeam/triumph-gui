@@ -126,10 +126,8 @@ public abstract class BaseGui implements InventoryHolder {
         }
 
         guiItems.put(slot, guiItem);
-
         return this;
     }
-
 
 
     /**
@@ -214,7 +212,11 @@ public abstract class BaseGui implements InventoryHolder {
      * @return The GUI
      */
     public GuiItem getGuiItem(final int slot) {
-        return isValidSlot(slot) ? guiItems.get(slot) : null;
+        if (type == null) {
+            return isValidSlot(slot) ? guiItems.get(slot) : null;
+        } else {
+            return isValidSlot(slot, type) ? guiItems.get(slot) : null;
+        }
     }
 
     /**
