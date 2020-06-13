@@ -75,10 +75,8 @@ public final class GuiListener implements Listener {
             guiItem = gui.getGuiItem(event.getSlot());
         }
 
-        if (isntGuiItem(event.getCursor(), guiItem)) {
-            System.out.println("Not a gui item");
-            return;
-        }
+        if (isntGuiItem(event.getCurrentItem(), guiItem)) return;
+
 
         // Executes the action of the item
         guiItem.getAction().execute(event);
@@ -148,9 +146,8 @@ public final class GuiListener implements Listener {
      * @return Whether it is or not a GUI item
      */
     private boolean isntGuiItem(final ItemStack currentItem, final GuiItem guiItem) {
-        if (guiItem == null) {
-            return true;
-        }
+        if (guiItem == null) return true;
+
         // Checks whether or not the Item is truly a GUI Item
         return !getNBTTag(currentItem, "mf-gui").equals(guiItem.getUuid().toString());
     }
