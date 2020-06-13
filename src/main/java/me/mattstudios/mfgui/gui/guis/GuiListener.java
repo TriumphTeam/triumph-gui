@@ -28,11 +28,7 @@ public final class GuiListener implements Listener {
      */
     @EventHandler(ignoreCancelled = true)
     public void onGuiCLick(final InventoryClickEvent event) {
-        System.out.println("Triggered click event");
-        if (!(event.getInventory().getHolder() instanceof BaseGui)) {
-            System.out.println("Not a BaseGui holder");
-            return;
-        }
+        if (!(event.getInventory().getHolder() instanceof BaseGui)) return;
 
         // Gui
         final BaseGui gui = (BaseGui) event.getInventory().getHolder();
@@ -41,37 +37,29 @@ public final class GuiListener implements Listener {
         final GuiAction<InventoryClickEvent> outsideClickAction = gui.getOutsideClickAction();
         if (outsideClickAction != null && event.getClickedInventory() == null) {
             outsideClickAction.execute(event);
-            System.out.println("Outside action");
             return;
         }
 
-        if (event.getClickedInventory() == null) {
-            System.out.println("Clicked inv is null");
-            return;
-        }
+        if (event.getClickedInventory() == null) return;
 
         // Default click action and checks weather or not there is a default action and executes it
         final GuiAction<InventoryClickEvent> defaultTopClick = gui.getDefaultTopClickAction();
         if (defaultTopClick != null && event.getClickedInventory().getType() != InventoryType.PLAYER) {
-            System.out.println("Default action");
             defaultTopClick.execute(event);
         }
 
         // Default click action and checks weather or not there is a default action and executes it
         final GuiAction<InventoryClickEvent> defaultClick = gui.getDefaultClickAction();
         if (defaultClick != null) {
-            System.out.println("Default click execute");
             defaultClick.execute(event);
         }
 
         // Slot action and checks weather or not there is a slot action and executes it
         final GuiAction<InventoryClickEvent> slotAction = gui.getSlotAction(event.getSlot());
         if (slotAction != null && event.getClickedInventory().getType() != InventoryType.PLAYER) {
-            System.out.println("Slot action execute");
             slotAction.execute(event);
         }
 
-        System.out.println("Gui item creation");
         GuiItem guiItem;
 
         // Checks whether it's a paginated gui or not
@@ -87,8 +75,7 @@ public final class GuiListener implements Listener {
             guiItem = gui.getGuiItem(event.getSlot());
         }
 
-        System.out.println("slot: " + event.getSlot() + ", Item: " + gui.getGuiItem(event.getSlot()).getItemStack().getType().name());
-        if (isntGuiItem(gui.getGuiItem(event.getSlot()), guiItem)) {
+        if (isntGuiItem(event.getCursor(), guiItem)) {
             System.out.println("Not a gui item");
             return;
         }
@@ -160,15 +147,12 @@ public final class GuiListener implements Listener {
      * @param guiItem     The GUI item in the slot
      * @return Whether it is or not a GUI item
      */
-    private boolean isntGuiItem(final GuiItem currentItem, final GuiItem guiItem) {
+    private boolean isntGuiItem(final ItemStack currentItem, final GuiItem guiItem) {
         if (guiItem == null) {
-            System.out.println("Item is null");
             return true;
         }
         // Checks whether or not the Item is truly a GUI Item
-        System.out.println("Current Item" + currentItem.getUuid().toString());
-        System.out.println("Gui Item" + guiItem.getUuid().toString());
-        return !getNBTTag(currentItem.getItemStack(), "mf-gui").equals(guiItem.getUuid().toString());
+        return !getNBTTag(currentItem, "mf-gui").equals(guiItem.getUuid().toString());
     }
 
 }
