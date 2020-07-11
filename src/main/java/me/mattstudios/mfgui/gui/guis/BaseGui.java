@@ -10,6 +10,7 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.inventory.InventoryDragEvent;
 import org.bukkit.event.inventory.InventoryOpenEvent;
+import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
@@ -30,7 +31,7 @@ public abstract class BaseGui implements InventoryHolder {
     private Inventory inventory;
 
     // Gui filler
-    private GuiFiller filler = new GuiFiller(this);
+    private final GuiFiller filler = new GuiFiller(this);
 
     // Inventory attributes
     private String title;
@@ -81,6 +82,27 @@ public abstract class BaseGui implements InventoryHolder {
         this.title = title;
 
         inventory = Bukkit.createInventory(this, this.rows * 9, title);
+
+        // Registers the event handler once
+        if (!registeredListener) {
+            Bukkit.getPluginManager().registerEvents(new GuiListener(plugin), plugin);
+            registeredListener = true;
+        }
+    }
+
+    /**
+     * Main GUI constructor
+     *
+     * @param plugin The plugin
+     * @param inventoryType   How many rows you want
+     * @param title  The GUI's title
+     */
+    public BaseGui(@NotNull final Plugin plugin, @NotNull final InventoryType inventoryType, @NotNull final String title) {
+
+        this.plugin = plugin;
+        this.title = title;
+
+        inventory = Bukkit.createInventory(this, inventoryType, title);
 
         // Registers the event handler once
         if (!registeredListener) {
@@ -329,13 +351,11 @@ public abstract class BaseGui implements InventoryHolder {
      * Method to update the current opened GUI
      */
     public void update() {
-        updating = true;
+        inventory.clear();
 
-        for (final HumanEntity player : inventory.getViewers()) {
-            open(player);
-        }
+        populateGui();
 
-        updating = false;
+        for (HumanEntity viewer : new ArrayList<>(inventory.getViewers())) ((Player) viewer).updateInventory();
     }
 
     /**
@@ -526,5 +546,12 @@ public abstract class BaseGui implements InventoryHolder {
         return (col + (row - 1) * 9) - 1;
     }
 
+    void setTitle(@NotNull final String title) {
+        this.title = title;
+    }
+
+    void setInventory(@NotNull final Inventory inventory) {
+        this.inventory = inventory;
+    }
 
 }
