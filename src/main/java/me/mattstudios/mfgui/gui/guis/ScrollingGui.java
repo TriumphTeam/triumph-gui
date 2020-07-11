@@ -1,7 +1,6 @@
 package me.mattstudios.mfgui.gui.guis;
 
 import me.mattstudios.mfgui.gui.components.ScrollType;
-import org.bukkit.Bukkit;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.plugin.Plugin;
 import org.jetbrains.annotations.NotNull;
@@ -9,6 +8,10 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * GUI that allows you to scroll through items
+ */
+@SuppressWarnings({"unused", "UnusedReturnValue"})
 public final class ScrollingGui extends PaginatedGui {
 
     private final ScrollType scrollType;
@@ -45,9 +48,9 @@ public final class ScrollingGui extends PaginatedGui {
      */
     @Override
     public boolean next() {
-        if (getPage() * scrollSize + getPageSize() > getPageItems().size() + scrollSize) return false;
+        if (getPageNum() * scrollSize + getPageSize() > getPageItems().size() + scrollSize) return false;
 
-        setPage(getPage() + 1);
+        setPageNum(getPageNum() + 1);
         updatePage();
         return true;
     }
@@ -57,9 +60,9 @@ public final class ScrollingGui extends PaginatedGui {
      */
     @Override
     public boolean previous() {
-        if (getPage() - 1 == 0) return false;
+        if (getPageNum() - 1 == 0) return false;
 
-        setPage(getPage() - 1);
+        setPageNum(getPageNum() - 1);
         updatePage();
         return true;
     }
@@ -76,8 +79,6 @@ public final class ScrollingGui extends PaginatedGui {
      * @param openPage The specific page to open at
      */
     public void open(@NotNull final HumanEntity player, final int openPage) {
-        if (openPage <= getMaximumScrolls() || openPage > 0) setPage(openPage);
-
         getInventory().clear();
         getCurrentPageItems().clear();
 
@@ -85,7 +86,7 @@ public final class ScrollingGui extends PaginatedGui {
 
         if (getPageSize() == 0) setPageSize(calculatePageSize());
         if (scrollSize == 0) scrollSize = calculateScrollSize();
-        Bukkit.broadcastMessage(String.valueOf(scrollSize));
+        if (openPage > 0 && (openPage * scrollSize + getPageSize() <= getPageItems().size() + scrollSize)) setPageNum(openPage);
 
         populatePage();
 
@@ -108,7 +109,7 @@ public final class ScrollingGui extends PaginatedGui {
      */
     private void populatePage() {
         // Adds the paginated items to the page
-        for (final GuiItem guiItem : getPage(getPage())) {
+        for (final GuiItem guiItem : getPage(getPageNum())) {
             if (scrollType == ScrollType.HORIZONTAL) {
                 putItemHorizontally(guiItem);
                 continue;
@@ -118,13 +119,18 @@ public final class ScrollingGui extends PaginatedGui {
         }
     }
 
+    /**
+     * Calculates the size of each scroll
+     *
+     * @return The size of he scroll
+     */
     private int calculateScrollSize() {
+        int counter = 0;
+
         if (scrollType == ScrollType.VERTICAL) {
-            int counter = 0;
             boolean foundCol = false;
 
             for (int row = 1; row <= getRows(); row++) {
-
                 for (int col = 1; col <= 9; col++) {
                     final int slot = getSlotFromRowCol(row, col);
                     if (getInventory().getItem(slot) == null) {
@@ -139,7 +145,21 @@ public final class ScrollingGui extends PaginatedGui {
             return counter;
         }
 
-        return 0;
+        boolean foundRow = false;
+
+        for (int col = 1; col <= 9; col++) {
+            for (int row = 1; row <= getRows(); row++) {
+                final int slot = getSlotFromRowCol(row, col);
+                if (getInventory().getItem(slot) == null) {
+                    if (!foundRow) foundRow = true;
+                    counter++;
+                }
+            }
+
+            if (foundRow) return counter;
+        }
+
+        return counter;
     }
 
     /**
@@ -172,15 +192,6 @@ public final class ScrollingGui extends PaginatedGui {
                 return;
             }
         }
-    }
-
-    /**
-     * Gets the maximum amount of scrolls possible in the GUI
-     *
-     * @return The maximum amount of scrolls
-     */
-    private int getMaximumScrolls() {
-        return 0;
     }
 
     /**

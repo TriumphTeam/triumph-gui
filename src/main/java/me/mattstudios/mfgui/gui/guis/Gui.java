@@ -3,6 +3,9 @@ package me.mattstudios.mfgui.gui.guis;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.plugin.Plugin;
 
+/**
+ * Standard GUI with different types
+ */
 public final class Gui extends BaseGui {
 
     public Gui(final Plugin plugin, final int rows, final String title) {

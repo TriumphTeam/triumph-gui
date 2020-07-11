@@ -12,6 +12,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * GUI that does not clear items after reopening
+ */
 @SuppressWarnings({"unused", "UnusedReturnValue"})
 public class PaginatedGui extends BaseGui {
 
@@ -19,7 +22,7 @@ public class PaginatedGui extends BaseGui {
     private final Map<Integer, GuiItem> currentPage = new HashMap<>();
 
     private int pageSize;
-    private int page = 1;
+    private int pageNum = 1;
 
     public PaginatedGui(@NotNull final Plugin plugin, final int rows, final int pageSize, @NotNull final String title) {
         super(plugin, rows, title);
@@ -146,7 +149,7 @@ public class PaginatedGui extends BaseGui {
      * @param openPage The specific page to open at
      */
     public void open(@NotNull final HumanEntity player, final int openPage) {
-        if (openPage <= getPagesNum() || openPage > 0) page = openPage;
+        if (openPage <= getPagesNum() || openPage > 0) pageNum = openPage;
 
         getInventory().clear();
         currentPage.clear();
@@ -212,7 +215,7 @@ public class PaginatedGui extends BaseGui {
      * @return The current page number
      */
     public int getCurrentPageNum() {
-        return page;
+        return pageNum;
     }
 
     /**
@@ -221,8 +224,8 @@ public class PaginatedGui extends BaseGui {
      * @return The next page number or -1 as no next
      */
     public int getNextPageNum() {
-        if (page + 1 > getPagesNum()) return page;
-        return page + 1;
+        if (pageNum + 1 > getPagesNum()) return pageNum;
+        return pageNum + 1;
     }
 
     /**
@@ -231,17 +234,17 @@ public class PaginatedGui extends BaseGui {
      * @return The previous page number or -1 as no previous
      */
     public int getPrevPageNum() {
-        if (page - 1 == 0) return page;
-        return page - 1;
+        if (pageNum - 1 == 0) return pageNum;
+        return pageNum - 1;
     }
 
     /**
      * Goes to the next page
      */
     public boolean next() {
-        if (page + 1 > getPagesNum()) return false;
+        if (pageNum + 1 > getPagesNum()) return false;
 
-        page++;
+        pageNum++;
         updatePage();
         return true;
     }
@@ -260,9 +263,9 @@ public class PaginatedGui extends BaseGui {
      * Goes to the previous page if possible
      */
     public boolean previous() {
-        if (page - 1 == 0) return false;
+        if (pageNum - 1 == 0) return false;
 
-        page--;
+        pageNum--;
         updatePage();
         return true;
     }
@@ -293,7 +296,7 @@ public class PaginatedGui extends BaseGui {
      * @param givenPage The page to get
      * @return A list with all the page items
      */
-    private List<GuiItem> getPage(final int givenPage) {
+    private List<GuiItem> getPageNum(final int givenPage) {
         final int page = givenPage - 1;
 
         final List<GuiItem> guiPage = new ArrayList<>();
@@ -322,7 +325,7 @@ public class PaginatedGui extends BaseGui {
      */
     private void populatePage() {
         // Adds the paginated items to the page
-        for (final GuiItem guiItem : getPage(page)) {
+        for (final GuiItem guiItem : getPageNum(pageNum)) {
             for (int slot = 0; slot < getRows() * 9; slot++) {
                 if (getInventory().getItem(slot) != null) continue;
                 currentPage.put(slot, guiItem);
@@ -343,16 +346,31 @@ public class PaginatedGui extends BaseGui {
         }
     }
 
+    /**
+     * Gets the page size
+     *
+     * @return The page size
+     */
     int getPageSize() {
         return pageSize;
     }
 
-    int getPage() {
-        return page;
+    /**
+     * Gets the page number
+     *
+     * @return The current page number
+     */
+    int getPageNum() {
+        return pageNum;
     }
 
-    void setPage(final int page) {
-        this.page = page;
+    /**
+     * Sets the page number
+     *
+     * @param pageNum Sets the current page to be the specified number
+     */
+    void setPageNum(final int pageNum) {
+        this.pageNum = pageNum;
     }
 
     /**
@@ -365,6 +383,11 @@ public class PaginatedGui extends BaseGui {
         populatePage();
     }
 
+    /**
+     * Calculates the size of the give page
+     *
+     * @return The page size
+     */
     int calculatePageSize() {
         int counter = 0;
 

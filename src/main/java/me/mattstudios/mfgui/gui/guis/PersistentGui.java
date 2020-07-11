@@ -7,6 +7,9 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Map;
 
+/**
+ * GUI that allows you to have multiple pages of items
+ */
 @SuppressWarnings("unused")
 public final class PersistentGui extends BaseGui {
 
