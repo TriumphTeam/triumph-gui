@@ -57,7 +57,9 @@ public final class GuiFiller {
         final int rows = gui.getRows();
         final List<GuiItem> items = repeatList(guiItems, rows * 9);
         for (int i = 9; i > 0; i--) {
-            if (gui.getGuiItems().get(i) == null) gui.setItem((rows * 9) - i, items.get(i));
+            if (gui.getGuiItems().get((rows * 9) - i) == null) {
+                gui.setItem((rows * 9) - i, items.get(i));
+            }
         }
     }
 
@@ -83,10 +85,10 @@ public final class GuiFiller {
 
         for (int i = 0; i < rows * 9; i++) {
             if ((i <= 8) || (i >= (rows * 9) - 9)
-                    || i == 9 || i == 18
-                    || i == 27 || i == 36
-                    || i == 17 || i == 26
-                    || i == 35 || i == 44)
+                || i == 9 || i == 18
+                || i == 27 || i == 36
+                || i == 17 || i == 26
+                || i == 35 || i == 44)
                 gui.setItem(i, items.get(i));
 
         }
@@ -151,7 +153,8 @@ public final class GuiFiller {
      * @param guiItems GuiItem
      */
     public void fill(@NotNull final List<GuiItem> guiItems) {
-        if (gui instanceof PaginatedGui) throw new GuiException("Full filling a GUI is not supported in a Paginated GUI!");
+        if (gui instanceof PaginatedGui)
+            throw new GuiException("Full filling a GUI is not supported in a Paginated GUI!");
 
         final int rows = gui.getRows();
         final List<GuiItem> items = repeatList(guiItems, rows * 9);

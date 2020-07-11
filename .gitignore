@@ -12,3 +12,7 @@ temp.java
 src/main/java/me/mattstudios/mfgui/CMD.java
 src/main/java/me/mattstudios/mfgui/Main.java
 src/main/resources/
+
+src/main/java/me/mattstudios/mfgui/gui/Cmd.java
+
+src/main/java/me/mattstudios/mfgui/gui/Main.java

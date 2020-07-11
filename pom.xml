@@ -30,7 +30,7 @@
 
     <groupId>me.mattstudios.utils</groupId>
     <artifactId>matt-framework-gui</artifactId>
-    <version>1.2.8</version>
+    <version>1.2.10</version>
     <packaging>jar</packaging>
 
     <name>Matt's GUI Framework</name>
@@ -121,7 +121,7 @@
             <groupId>me.mattstudios.utils</groupId>
             <artifactId>matt-framework</artifactId>
             <version>LATEST</version>
-            <scope>provided</scope>
+            <scope>compile</scope>
         </dependency>
     </dependencies>
 
@@ -218,14 +218,14 @@
                 </executions>
             </plugin>
             <!-- COMMENT BEFORE RELEASE -->
-            <!--<plugin>
+            <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-jar-plugin</artifactId>
                 <version>2.3.1</version>
                 <configuration>
-                    <outputDirectory>T:/servers/spigot-1.15/plugins</outputDirectory>
+                    <outputDirectory>C:/Users/xpsyk/Desktop/servers/paper-1.16/plugins</outputDirectory>
                 </configuration>
-            </plugin>-->
+            </plugin>
         </plugins>
         <resources>
             <resource>

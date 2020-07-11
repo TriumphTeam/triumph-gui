@@ -1,5 +1,6 @@
 package me.mattstudios.mfgui.gui.guis;
 
+import org.bukkit.Bukkit;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
@@ -12,11 +13,10 @@ import java.util.List;
 import java.util.Map;
 
 @SuppressWarnings({"unused", "UnusedReturnValue"})
-public final class PaginatedGui extends BaseGui {
+public class PaginatedGui extends BaseGui {
 
     private final List<GuiItem> pageItems = new ArrayList<>();
     private final Map<Integer, GuiItem> currentPage = new HashMap<>();
-    private final Map<Integer, Integer> twe = new HashMap<>();
 
     private int pageSize;
     private int page = 1;
@@ -76,13 +76,10 @@ public final class PaginatedGui extends BaseGui {
      */
     @Override
     public void update() {
-        setUpdating(true);
+        getInventory().clear();
+        populateGui();
 
-        for (final HumanEntity player : getInventory().getViewers()) {
-            open(player, page);
-        }
-
-        setUpdating(false);
+        updatePage();
     }
 
     /**
@@ -164,6 +161,33 @@ public final class PaginatedGui extends BaseGui {
     }
 
     /**
+     * Updates the title of the GUI
+     * This method may cause LAG if used on a loop
+     *
+     * @param title The title to set
+     * @return The GUI
+     */
+    @Override
+    public BaseGui updateTitle(@NotNull final String title) {
+        Bukkit.broadcastMessage("Updating");
+        setTitle(title);
+
+        setUpdating(true);
+
+        final List<HumanEntity> viewers = new ArrayList<>(getInventory().getViewers());
+
+        setInventory(Bukkit.createInventory(this, getInventory().getSize(), title));
+
+        for (final HumanEntity player : viewers) {
+            open(player, getCurrentPageNum());
+        }
+
+        setUpdating(false);
+
+        return this;
+    }
+
+    /**
      * Gets the items on the current page
      *
      * @return The map with the items
@@ -214,7 +238,7 @@ public final class PaginatedGui extends BaseGui {
     /**
      * Goes to the next page
      */
-    public boolean nextPage() {
+    public boolean next() {
         if (page + 1 > getPagesNum()) return false;
 
         page++;
@@ -223,14 +247,34 @@ public final class PaginatedGui extends BaseGui {
     }
 
     /**
+     * Goes to the next page
+     *
+     * @deprecated Use {@link #next()} instead
+     */
+    @Deprecated
+    public boolean nextPage() {
+        return next();
+    }
+
+    /**
      * Goes to the previous page if possible
      */
-    public boolean prevPage() {
+    public boolean previous() {
         if (page - 1 == 0) return false;
 
         page--;
         updatePage();
         return true;
+    }
+
+    /**
+     * Goes to the previous page if possible
+     *
+     * @deprecated Use {@link #previous()} instead
+     */
+    @Deprecated
+    public boolean prevPage() {
+        return previous();
     }
 
     /**
@@ -257,7 +301,7 @@ public final class PaginatedGui extends BaseGui {
         int max = ((page * pageSize) + pageSize);
         if (max > pageItems.size()) max = pageItems.size();
 
-        for (int i = page * pageSize; max > i; i++) {
+        for (int i = page * pageSize; i < max; i++) {
             guiPage.add(pageItems.get(i));
         }
 
@@ -293,10 +337,22 @@ public final class PaginatedGui extends BaseGui {
      *
      * @since 2.2.5
      */
-    private void clearPage() {
+    void clearPage() {
         for (Map.Entry<Integer, GuiItem> entry : currentPage.entrySet()) {
             getInventory().setItem(entry.getKey(), null);
         }
+    }
+
+    int getPageSize() {
+        return pageSize;
+    }
+
+    int getPage() {
+        return page;
+    }
+
+    void setPage(final int page) {
+        this.page = page;
     }
 
     /**
@@ -304,12 +360,12 @@ public final class PaginatedGui extends BaseGui {
      *
      * @since 2.2.5
      */
-    private void updatePage() {
+    void updatePage() {
         clearPage();
         populatePage();
     }
 
-    private int calculatePageSize() {
+    int calculatePageSize() {
         int counter = 0;
 
         for (int slot = 0; slot < getRows() * 9; slot++) {
@@ -318,4 +374,5 @@ public final class PaginatedGui extends BaseGui {
 
         return counter;
     }
+
 }
