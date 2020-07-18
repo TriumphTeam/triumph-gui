@@ -2,9 +2,11 @@ package me.mattstudios.mfgui.gui.guis;
 
 import me.mattstudios.mfgui.gui.components.GuiAction;
 import org.apache.commons.lang.Validate;
+import org.bukkit.Material;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.UUID;
 
@@ -44,6 +46,29 @@ public final class GuiItem {
      */
     public GuiItem(@NotNull final ItemStack itemStack) {
         this(itemStack, null);
+    }
+
+    /**
+     * Alternate constructor that takes {@code Material}
+     * instead of an {@code ItemStack} with no {@code GuiAction}.
+     *
+     * @param material The {@code Material} to be used when invoking class.
+     */
+    public GuiItem(@NotNull final Material material) {
+        this(new ItemStack(material), null);
+    }
+
+    /**
+     * Alternate constructor that takes {@code Material}
+     * instead of an {@code ItemStack} which takes a {@code GuiAction}.
+     *
+     * @param material The {@code Material} to be used when invoking class.
+     *
+     * @param action The action representing a {@code Consumer} that
+     *               should be passed on {@code InventoryClickEvent}.
+     */
+    public GuiItem(@NotNull final Material material, @Nullable final GuiAction<InventoryClickEvent> action) {
+        this(new ItemStack(material), action);
     }
 
     /**
