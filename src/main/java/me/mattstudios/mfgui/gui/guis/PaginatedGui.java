@@ -25,7 +25,7 @@ public class PaginatedGui extends BaseGui {
     private int pageNum = 1;
 
     public PaginatedGui(@NotNull final Plugin plugin, final int rows, final int pageSize, @NotNull final String title) {
-        super(plugin, rows, title);
+        super(rows, title);
 
         this.pageSize = pageSize;
 

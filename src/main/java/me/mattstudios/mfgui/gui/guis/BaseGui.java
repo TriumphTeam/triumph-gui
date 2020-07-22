@@ -3,6 +3,7 @@ package me.mattstudios.mfgui.gui.guis;
 import me.mattstudios.mfgui.gui.components.GuiAction;
 import me.mattstudios.mfgui.gui.components.GuiException;
 import me.mattstudios.mfgui.gui.components.GuiFiller;
+import me.mattstudios.mfgui.gui.components.GuiType;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
@@ -10,22 +11,29 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.inventory.InventoryDragEvent;
 import org.bukkit.event.inventory.InventoryOpenEvent;
-import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
+import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.Collections;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
 @SuppressWarnings({"UnusedReturnValue", "unused", "BooleanMethodIsAlwaysInverted"})
 public abstract class BaseGui implements InventoryHolder {
 
-    private final Plugin plugin;
+    // The plugin instance for registering the event and for the close delay
+    private static final Plugin plugin = JavaPlugin.getProvidingPlugin(BaseGui.class);
+
+    // Registering the listener class
+    static {
+        Bukkit.getPluginManager().registerEvents(new GuiListener(plugin), plugin);
+    }
 
     // Main inventory
     private Inventory inventory;
@@ -36,32 +44,25 @@ public abstract class BaseGui implements InventoryHolder {
     // Inventory attributes
     private String title;
     private int rows;
+    private GuiType guiType;
 
     // Contains all items the GUI will have
-    private final Map<Integer, GuiItem> guiItems = new HashMap<>();
+    private final Map<Integer, GuiItem> guiItems = new LinkedHashMap<>();
 
-    private final Map<Integer, GuiAction<InventoryClickEvent>> slotActions = new HashMap<>();
-
+    // Actions for specific slots
+    private final Map<Integer, GuiAction<InventoryClickEvent>> slotActions = new LinkedHashMap<>();
     // Action to execute when clicking on any item
     private GuiAction<InventoryClickEvent> defaultClickAction;
-
     // Action to execute when clicking on the top part of the GUI only
     private GuiAction<InventoryClickEvent> defaultTopClickAction;
-
     // Action to execute when dragging the item on the GUI
     private GuiAction<InventoryDragEvent> dragAction;
-
     // Action to execute when GUI closes
     private GuiAction<InventoryCloseEvent> closeGuiAction;
-
     // Action to execute when GUI opens
     private GuiAction<InventoryOpenEvent> openGuiAction;
-
     // Action to execute when clicked outside the GUI
     private GuiAction<InventoryClickEvent> outsideClickAction;
-
-    // Makes sure GUI listener is not registered more than once
-    private static boolean registeredListener;
 
     // Whether or not the GUI is updating
     private boolean updating;
@@ -69,56 +70,39 @@ public abstract class BaseGui implements InventoryHolder {
     /**
      * Main GUI constructor
      *
-     * @param plugin The plugin
-     * @param rows   How many rows you want
-     * @param title  The GUI's title
+     * @param rows  How many rows you want
+     * @param title The GUI's title
      */
-    public BaseGui(@NotNull final Plugin plugin, final int rows, @NotNull final String title) {
+    public BaseGui(final int rows, @NotNull final String title) {
         int finalRows = rows;
         if (!(rows >= 1 && rows <= 6)) finalRows = 1;
 
-        this.plugin = plugin;
         this.rows = finalRows;
         this.title = title;
 
         inventory = Bukkit.createInventory(this, this.rows * 9, title);
-
-        // Registers the event handler once
-        if (!registeredListener) {
-            Bukkit.getPluginManager().registerEvents(new GuiListener(plugin), plugin);
-            registeredListener = true;
-        }
     }
 
     /**
      * Main GUI constructor
      *
-     * @param plugin The plugin
-     * @param inventoryType   How many rows you want
-     * @param title  The GUI's title
+     * @param guiType How many rows you want
+     * @param title         The GUI's title
      */
-    public BaseGui(@NotNull final Plugin plugin, @NotNull final InventoryType inventoryType, @NotNull final String title) {
-
-        this.plugin = plugin;
+    public BaseGui(@NotNull final GuiType guiType, @NotNull final String title) {
         this.title = title;
+        this.guiType = guiType;
 
-        inventory = Bukkit.createInventory(this, inventoryType, title);
-
-        // Registers the event handler once
-        if (!registeredListener) {
-            Bukkit.getPluginManager().registerEvents(new GuiListener(plugin), plugin);
-            registeredListener = true;
-        }
+        inventory = Bukkit.createInventory(this, guiType.getInventoryType(), title);
     }
 
     /**
      * GUI constructor with only title for easier 1 row GUIs
      *
-     * @param plugin The plugin
      * @param title  The GUI's title
      */
-    public BaseGui(@NotNull final Plugin plugin, @NotNull final String title) {
-        this(plugin, 1, title);
+    public BaseGui(@NotNull final String title) {
+        this(1, title);
     }
 
     /**
@@ -155,7 +139,7 @@ public abstract class BaseGui implements InventoryHolder {
      * @return The GUI
      */
     public BaseGui setItem(final int slot, @NotNull final GuiItem guiItem) {
-        if (!isValidSlot(slot)) throw new GuiException("Invalid item slot!");
+        validateSlot(slot);
 
         guiItems.put(slot, guiItem);
 
@@ -279,12 +263,10 @@ public abstract class BaseGui implements InventoryHolder {
      *
      * @param slot       The slot to add
      * @param slotAction The gui action
-     * @return The GUI
      */
-    public BaseGui addSlotAction(final int slot, final GuiAction<InventoryClickEvent> slotAction) {
-        if (!isValidSlot(slot)) return this;
+    public void addSlotAction(final int slot, final GuiAction<InventoryClickEvent> slotAction) {
+        validateSlot(slot);
         slotActions.put(slot, slotAction);
-        return this;
     }
 
     /**
@@ -293,10 +275,9 @@ public abstract class BaseGui implements InventoryHolder {
      * @param row        The row of the slot
      * @param col        The col of the slot
      * @param slotAction The gui action
-     * @return The GUI
      */
-    public BaseGui addSlotAction(final int row, final int col, final GuiAction<InventoryClickEvent> slotAction) {
-        return addSlotAction(getSlotFromRowCol(row, col), slotAction);
+    public void addSlotAction(final int row, final int col, final GuiAction<InventoryClickEvent> slotAction) {
+        addSlotAction(getSlotFromRowCol(row, col), slotAction);
     }
 
     /**
@@ -306,7 +287,7 @@ public abstract class BaseGui implements InventoryHolder {
      * @return The GUI
      */
     public GuiItem getGuiItem(final int slot) {
-        return isValidSlot(slot) ? guiItems.get(slot) : null;
+        return guiItems.get(slot);
     }
 
     /**
@@ -445,7 +426,7 @@ public abstract class BaseGui implements InventoryHolder {
      * @return The map with all the items
      */
     public Map<Integer, GuiItem> getGuiItems() {
-        return guiItems;
+        return Collections.unmodifiableMap(guiItems);
     }
 
     /**
@@ -514,7 +495,7 @@ public abstract class BaseGui implements InventoryHolder {
      * @param slot The slot clicked
      */
     GuiAction<InventoryClickEvent> getSlotAction(final int slot) {
-        return isValidSlot(slot) ? slotActions.get(slot) : null;
+        return slotActions.get(slot);
     }
 
     /**
@@ -524,15 +505,6 @@ public abstract class BaseGui implements InventoryHolder {
         for (final Map.Entry<Integer, GuiItem> entry : getGuiItems().entrySet()) {
             getInventory().setItem(entry.getKey(), entry.getValue().getItemStack());
         }
-    }
-
-    /**
-     * Checks if the slot introduces is a valid slot
-     *
-     * @param slot The slot to check
-     */
-    private boolean isValidSlot(final int slot) {
-        return slot >= 0 && slot < rows * 9;
     }
 
     /**
@@ -552,6 +524,30 @@ public abstract class BaseGui implements InventoryHolder {
 
     void setInventory(@NotNull final Inventory inventory) {
         this.inventory = inventory;
+    }
+
+    /**
+     * Checks if the slot introduces is a valid slot
+     *
+     * @param slot The slot to check
+     */
+    private void validateSlot(final int slot) {
+        switch (guiType) {
+            case CHEST:
+                if (slot < 0 || slot >= rows * 9) throwInvalidSlot(slot);
+                break;
+
+            case WORKBENCH:
+                if (slot < 0 || slot > 9) throwInvalidSlot(slot);
+                break;
+
+            case ANVIL:
+                break;
+        }
+    }
+
+    private void throwInvalidSlot(final int slot) {
+        throw new GuiException("Slot " + slot + " is not valid for the gui type - " + guiType.name() + "!");
     }
 
 }

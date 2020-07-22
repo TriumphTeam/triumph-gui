@@ -1,6 +1,7 @@
 package me.mattstudios.mfgui.gui.guis;
 
 import me.mattstudios.mfgui.gui.components.GuiAction;
+import me.mattstudios.mfgui.gui.components.ItemNBT;
 import org.bukkit.ChatColor;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -15,8 +16,6 @@ import org.bukkit.plugin.Plugin;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
-
-import static me.mattstudios.mfgui.gui.components.ItemNBT.getNBTTag;
 
 public final class GuiListener implements Listener {
 
@@ -153,7 +152,7 @@ public final class GuiListener implements Listener {
     private boolean isntGuiItem(final ItemStack currentItem, final GuiItem guiItem) {
         if (guiItem == null) return true;
         // Checks whether or not the Item is truly a GUI Item
-        return !getNBTTag(currentItem, "mf-gui").equals(guiItem.getUuid().toString());
+        return !ItemNBT.getNBTTag(currentItem, "mf-gui").equals(guiItem.getUuid().toString());
     }
     
 }

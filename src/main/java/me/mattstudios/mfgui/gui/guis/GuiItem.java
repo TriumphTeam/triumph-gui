@@ -1,6 +1,7 @@
 package me.mattstudios.mfgui.gui.guis;
 
 import me.mattstudios.mfgui.gui.components.GuiAction;
+import me.mattstudios.mfgui.gui.components.ItemNBT;
 import org.apache.commons.lang.Validate;
 import org.bukkit.Material;
 import org.bukkit.event.inventory.InventoryClickEvent;
@@ -10,8 +11,6 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.UUID;
 
-import static me.mattstudios.mfgui.gui.components.ItemNBT.setNBTTag;
-
 public final class GuiItem {
 
     // Action to do when clicking on the item
@@ -19,7 +18,8 @@ public final class GuiItem {
 
     // The ItemStack of the GuiItem
     private ItemStack itemStack;
-    // Random UUID to identify the idem when clicking
+
+    // Random UUID to identify the item when clicking
     private final UUID uuid = UUID.randomUUID();
 
     /**
@@ -29,14 +29,14 @@ public final class GuiItem {
      * @param action    The action to do when clicking on the Item
      */
     public GuiItem(@NotNull final ItemStack itemStack, final GuiAction<InventoryClickEvent> action) {
-        Validate.notNull(itemStack, "The itemstack for the GUI Item cannot be null!");
+        Validate.notNull(itemStack, "The ItemStack for the GUI Item cannot be null!");
 
         if (action == null) this.action = event -> {
         };
         else this.action = action;
 
         // Sets the UUID to an NBT tag to be identifiable later
-        this.itemStack = setNBTTag(itemStack, "mf-gui", uuid.toString());
+        this.itemStack = ItemNBT.setNBTTag(itemStack, "mf-gui", uuid.toString());
     }
 
     /**
@@ -63,9 +63,8 @@ public final class GuiItem {
      * instead of an {@code ItemStack} which takes a {@code GuiAction}.
      *
      * @param material The {@code Material} to be used when invoking class.
-     *
-     * @param action The action representing a {@code Consumer} that
-     *               should be passed on {@code InventoryClickEvent}.
+     * @param action   The action representing a {@code Consumer} that
+     *                 should be passed on {@code InventoryClickEvent}.
      */
     public GuiItem(@NotNull final Material material, @Nullable final GuiAction<InventoryClickEvent> action) {
         this(new ItemStack(material), action);
@@ -78,7 +77,7 @@ public final class GuiItem {
      */
     public void setItemStack(@NotNull final ItemStack itemStack) {
         Validate.notNull(itemStack, "The itemstack for the GUI Item cannot be null!");
-        this.itemStack = setNBTTag(itemStack, "mf-gui", uuid.toString());
+        this.itemStack = ItemNBT.setNBTTag(itemStack, "mf-gui", uuid.toString());
     }
 
     /**

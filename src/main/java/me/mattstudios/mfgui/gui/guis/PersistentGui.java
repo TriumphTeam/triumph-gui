@@ -14,11 +14,11 @@ import java.util.Map;
 public final class PersistentGui extends BaseGui {
 
     public PersistentGui(@NotNull final Plugin plugin, final int rows, @NotNull final String title) {
-        super(plugin, rows, title);
+        super(rows, title);
     }
 
     public PersistentGui(@NotNull final Plugin plugin, @NotNull final String title) {
-        super(plugin, title);
+        super(title);
     }
 
     /**
