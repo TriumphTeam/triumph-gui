@@ -2,7 +2,6 @@ package me.mattstudios.mfgui.gui.guis;
 
 import me.mattstudios.mfgui.gui.components.GuiAction;
 import me.mattstudios.mfgui.gui.components.ItemNBT;
-import org.bukkit.ChatColor;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
@@ -11,31 +10,19 @@ import org.bukkit.event.inventory.InventoryDragEvent;
 import org.bukkit.event.inventory.InventoryOpenEvent;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.plugin.Plugin;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Collectors;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 public final class GuiListener implements Listener {
-
-    private final Plugin plugin;
-
-    public GuiListener(final Plugin plugin) {
-        this.plugin = plugin;
-    }
 
     /**
      * Handles what happens when a player clicks on the GUI
      *
      * @param event The InventoryClickEvent
      */
-    @EventHandler(ignoreCancelled = true)
+    @EventHandler
     public void onGuiCLick(final InventoryClickEvent event) {
         if (!(event.getInventory().getHolder() instanceof BaseGui)) return;
-
-        List<String> lores = new ArrayList<>();
-        List<String> colorizedLore = lores.stream().map(line -> ChatColor.translateAlternateColorCodes('&', line)).collect(Collectors.toList());
 
         // Gui
         final BaseGui gui = (BaseGui) event.getInventory().getHolder();
@@ -80,10 +67,11 @@ public final class GuiListener implements Listener {
             guiItem = gui.getGuiItem(event.getSlot());
         }
 
-        if (isntGuiItem(event.getCurrentItem(), guiItem)) return;
+        if (!isGuiItem(event.getCurrentItem(), guiItem)) return;
 
         // Executes the action of the item
-        guiItem.getAction().execute(event);
+        final GuiAction<InventoryClickEvent> itemAction = guiItem.getAction();
+        if (itemAction != null) itemAction.execute(event);
 
     }
 
@@ -92,7 +80,7 @@ public final class GuiListener implements Listener {
      *
      * @param event The InventoryClickEvent
      */
-    @EventHandler(ignoreCancelled = true)
+    @EventHandler
     public void onGuiDrag(final InventoryDragEvent event) {
         if (!(event.getInventory().getHolder() instanceof BaseGui)) return;
 
@@ -109,7 +97,7 @@ public final class GuiListener implements Listener {
      *
      * @param event The InventoryCloseEvent
      */
-    @EventHandler(ignoreCancelled = true)
+    @EventHandler
     public void onGuiClose(InventoryCloseEvent event) {
         if (!(event.getInventory().getHolder() instanceof BaseGui)) return;
 
@@ -128,7 +116,7 @@ public final class GuiListener implements Listener {
      *
      * @param event The InventoryOpenEvent
      */
-    @EventHandler(ignoreCancelled = true)
+    @EventHandler
     public void onGuiOpen(InventoryOpenEvent event) {
         if (!(event.getInventory().getHolder() instanceof BaseGui)) return;
 
@@ -149,10 +137,10 @@ public final class GuiListener implements Listener {
      * @param guiItem     The GUI item in the slot
      * @return Whether it is or not a GUI item
      */
-    private boolean isntGuiItem(final ItemStack currentItem, final GuiItem guiItem) {
-        if (guiItem == null) return true;
+    private boolean isGuiItem(@NotNull final ItemStack currentItem, @Nullable final GuiItem guiItem) {
+        if (guiItem == null) return false;
         // Checks whether or not the Item is truly a GUI Item
-        return !ItemNBT.getNBTTag(currentItem, "mf-gui").equals(guiItem.getUuid().toString());
+        return ItemNBT.getNBTTag(currentItem, "mf-gui").equals(guiItem.getUuid().toString());
     }
-    
+
 }

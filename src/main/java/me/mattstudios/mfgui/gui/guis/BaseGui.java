@@ -39,7 +39,7 @@ public abstract class BaseGui implements InventoryHolder {
 
     // Registering the listener class
     static {
-        Bukkit.getPluginManager().registerEvents(new GuiListener(plugin), plugin);
+        Bukkit.getPluginManager().registerEvents(new GuiListener(), plugin);
     }
 
     // Main inventory
