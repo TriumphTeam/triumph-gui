@@ -1,7 +1,7 @@
 package me.mattstudios.mfgui.gui.components;
 
-import me.mattstudios.mfgui.gui.components.xseries.XMaterial;
 import org.bukkit.Bukkit;
+import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 
 import java.lang.reflect.InvocationTargetException;
@@ -13,18 +13,17 @@ import java.util.Objects;
 public final class ItemNBT {
 
     /**
-     * Sets an NBT tag to the an ItemStack
+     * Sets an NBT tag to the an {@link ItemStack}
      *
-     * @param itemStack The current ItemStack to be set
+     * @param itemStack The current {@link ItemStack} to be set
      * @param key       The NBT key to use
      * @param value     The tag value to set
-     * @return An ItemStack that has NBT set
+     * @return An {@link ItemStack} that has NBT set
      */
     public static ItemStack setNBTTag(final ItemStack itemStack, final String key, final String value) {
-        if (itemStack == null || itemStack.getType() == XMaterial.AIR.parseMaterial()) return itemStack;
+        if (itemStack == null || itemStack.getType() == Material.AIR) return itemStack;
 
         Object nmsItemStack = asNMSCopy(itemStack);
-
         Object itemCompound = hasTag(nmsItemStack) ? getTag(nmsItemStack) : newNBTTagCompound();
 
         setString(itemCompound, key, value);
@@ -36,12 +35,12 @@ public final class ItemNBT {
     /**
      * Gets the NBT tag based on a given key
      *
-     * @param itemStack The ItemStack to get from
+     * @param itemStack The {@link ItemStack} to get from
      * @param key       The key to look for
-     * @return The tag that was stored in the ItemStack
+     * @return The tag that was stored in the {@link ItemStack}
      */
     public static String getNBTTag(final ItemStack itemStack, final String key) {
-        if (itemStack == null || itemStack.getType() == XMaterial.AIR.parseMaterial()) return "";
+        if (itemStack == null || itemStack.getType() == Material.AIR) return "";
 
         Object nmsItemStack = asNMSCopy(itemStack);
         Object itemCompound = hasTag(nmsItemStack) ? getTag(nmsItemStack) : newNBTTagCompound();
@@ -149,8 +148,8 @@ public final class ItemNBT {
     /**
      * Mimics the CraftItemStack#asBukkitCopy method
      *
-     * @param nmsItemStack the NMS ItemStack to turn into ItemStack
-     * @return The new ItemStack
+     * @param nmsItemStack The NMS ItemStack to turn into {@link ItemStack}
+     * @return The new {@link ItemStack}
      */
     private static ItemStack asBukkitCopy(final Object nmsItemStack) {
         try {
@@ -161,18 +160,18 @@ public final class ItemNBT {
     }
 
     /**
-     * Gets the server version.
+     * Gets the server version
      *
-     * @return The string with the server version.
+     * @return The string with the server version
      */
     private static String getServerVersion() {
         return Bukkit.getServer().getClass().getPackage().getName().substring(Bukkit.getServer().getClass().getPackage().getName().lastIndexOf('.') + 1);
     }
 
     /**
-     * Gets the NMS class from class name.
+     * Gets the NMS class from class name
      *
-     * @return The NMS class.
+     * @return The NMS class
      */
     private static Class<?> getNMSClass(final String className) {
         try {
@@ -183,9 +182,9 @@ public final class ItemNBT {
     }
 
     /**
-     * Gets the NMS craft ItemStack class from class name.
+     * Gets the NMS craft {@link ItemStack} class from class name
      *
-     * @return The NMS craft ItemStack class.
+     * @return The NMS craft {@link ItemStack} class
      */
     private static Class<?> getCraftItemStackClass() {
         try {

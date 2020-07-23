@@ -30,7 +30,7 @@ public final class ItemBuilder {
      *
      * @param itemStack The ItemStack of the item
      */
-    public ItemBuilder(final ItemStack itemStack) {
+    public ItemBuilder(@NotNull final ItemStack itemStack) {
         Validate.notNull(itemStack, "Item can't be null!");
 
         this.itemStack = itemStack;
@@ -163,7 +163,15 @@ public final class ItemBuilder {
      * @return The ItemBuilder
      */
     public ItemBuilder setUnbreakable(boolean unbreakable) {
-        meta.setUnbreakable(unbreakable);
+        /*if (ServerVersion.CURRENT.isOlderThan(ServerVersion.V1_15)) {
+            try {
+                meta.getClass().getMethod("spigot").getReturnType().getMethod("setUnbreakable").invoke(true);
+            } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
+                e.printStackTrace();
+            }
+        } else {
+            meta.setUnbreakable(true);
+        }*/
         return this;
     }
 

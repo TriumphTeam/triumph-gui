@@ -10,7 +10,6 @@ import org.bukkit.event.inventory.InventoryDragEvent;
 import org.bukkit.event.inventory.InventoryOpenEvent;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.ItemStack;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public final class GuiListener implements Listener {
@@ -137,7 +136,7 @@ public final class GuiListener implements Listener {
      * @param guiItem     The GUI item in the slot
      * @return Whether it is or not a GUI item
      */
-    private boolean isGuiItem(@NotNull final ItemStack currentItem, @Nullable final GuiItem guiItem) {
+    private boolean isGuiItem(@Nullable final ItemStack currentItem, @Nullable final GuiItem guiItem) {
         if (guiItem == null) return false;
         // Checks whether or not the Item is truly a GUI Item
         return ItemNBT.getNBTTag(currentItem, "mf-gui").equals(guiItem.getUuid().toString());

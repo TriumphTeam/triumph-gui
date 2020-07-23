@@ -2,7 +2,6 @@ package me.mattstudios.mfgui.gui.guis;
 
 import me.mattstudios.mfgui.gui.components.ScrollType;
 import org.bukkit.entity.HumanEntity;
-import org.bukkit.plugin.Plugin;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -11,40 +10,79 @@ import java.util.List;
 /**
  * GUI that allows you to scroll through items
  */
-@SuppressWarnings({"unused", "UnusedReturnValue"})
+@SuppressWarnings("unused")
 public final class ScrollingGui extends PaginatedGui {
 
     private final ScrollType scrollType;
     private int scrollSize = 0;
 
-    public ScrollingGui(@NotNull final Plugin plugin, final int rows, final int pageSize, @NotNull final String title, @NotNull final ScrollType scrollType) {
-        super(plugin, rows, pageSize, title);
+    /**
+     * Main constructor of the Scrolling GUI
+     *
+     * @param rows       The rows the GUI should have
+     * @param pageSize   The Page size
+     * @param title      The GUI's title
+     * @param scrollType The {@link ScrollType}
+     */
+    public ScrollingGui(final int rows, final int pageSize, @NotNull final String title, @NotNull final ScrollType scrollType) {
+        super(rows, pageSize, title);
 
         this.scrollType = scrollType;
     }
 
-    public ScrollingGui(@NotNull final Plugin plugin, final int rows, final int pageSize, @NotNull final String title) {
-        this(plugin, rows, pageSize, title, ScrollType.VERTICAL);
-    }
-
-    public ScrollingGui(@NotNull final Plugin plugin, final int rows, @NotNull final String title) {
-        this(plugin, rows, 0, title, ScrollType.VERTICAL);
-    }
-
-    public ScrollingGui(@NotNull final Plugin plugin, final int rows, @NotNull final String title, @NotNull final ScrollType scrollType) {
-        this(plugin, rows, 0, title, scrollType);
-    }
-
-    public ScrollingGui(@NotNull final Plugin plugin, @NotNull final String title) {
-        this(plugin, 2, title);
-    }
-
-    public ScrollingGui(@NotNull final Plugin plugin, @NotNull final String title, @NotNull final ScrollType scrollType) {
-        this(plugin, 2, title, scrollType);
+    /**
+     * Alternative constructor that doesn't require the {@link ScrollType}
+     *
+     * @param rows     The rows the GUI should have
+     * @param pageSize The Page size
+     * @param title    The GUI's title
+     */
+    public ScrollingGui(final int rows, final int pageSize, @NotNull final String title) {
+        this(rows, pageSize, title, ScrollType.VERTICAL);
     }
 
     /**
-     * Goes to the next page
+     * Alternative constructor that doesn't require the {@link ScrollType} or page size
+     *
+     * @param rows  The rows the GUI should have
+     * @param title The GUI's title
+     */
+    public ScrollingGui(final int rows, @NotNull final String title) {
+        this(rows, 0, title, ScrollType.VERTICAL);
+    }
+
+    /**
+     * Alternative constructor that doesn't require the page size
+     *
+     * @param rows       The rows the GUI should have
+     * @param title      The GUI's title
+     * @param scrollType The {@link ScrollType}
+     */
+    public ScrollingGui(final int rows, @NotNull final String title, @NotNull final ScrollType scrollType) {
+        this(rows, 0, title, scrollType);
+    }
+
+    /**
+     * Alternative constructor that only requires title
+     *
+     * @param title The GUI's title
+     */
+    public ScrollingGui(@NotNull final String title) {
+        this(2, title);
+    }
+
+    /**
+     * Alternative constructor that doesn't require the rows or page size
+     *
+     * @param title      The GUI's title
+     * @param scrollType The {@link ScrollType}
+     */
+    public ScrollingGui(@NotNull final String title, @NotNull final ScrollType scrollType) {
+        this(2, title, scrollType);
+    }
+
+    /**
+     * Overrides {@link PaginatedGui#next()} to make it work with the specific scrolls
      */
     @Override
     public boolean next() {
@@ -56,7 +94,7 @@ public final class ScrollingGui extends PaginatedGui {
     }
 
     /**
-     * Goes to the previous page if possible
+     * Overrides {@link PaginatedGui#previous()} to make it work with the specific scrolls
      */
     @Override
     public boolean previous() {
@@ -67,17 +105,23 @@ public final class ScrollingGui extends PaginatedGui {
         return true;
     }
 
+    /**
+     * Overrides {@link PaginatedGui#open(HumanEntity)} to make it work with the specific scrolls
+     *
+     * @param player The {@link HumanEntity} to open the GUI to
+     */
     @Override
     public void open(@NotNull final HumanEntity player) {
         open(player, 1);
     }
 
     /**
-     * Overridden open method to add the gui page items
+     * Overrides {@link PaginatedGui#open(HumanEntity, int)} to make it work with the specific scrolls
      *
-     * @param player   The player to open it to
-     * @param openPage The specific page to open at
+     * @param player   The {@link HumanEntity} to open the GUI to
+     * @param openPage The page to open on
      */
+    @Override
     public void open(@NotNull final HumanEntity player, final int openPage) {
         getInventory().clear();
         getCurrentPageItems().clear();
@@ -86,7 +130,8 @@ public final class ScrollingGui extends PaginatedGui {
 
         if (getPageSize() == 0) setPageSize(calculatePageSize());
         if (scrollSize == 0) scrollSize = calculateScrollSize();
-        if (openPage > 0 && (openPage * scrollSize + getPageSize() <= getPageItems().size() + scrollSize)) setPageNum(openPage);
+        if (openPage > 0 && (openPage * scrollSize + getPageSize() <= getPageItems().size() + scrollSize))
+            setPageNum(openPage);
 
         populatePage();
 
@@ -94,9 +139,7 @@ public final class ScrollingGui extends PaginatedGui {
     }
 
     /**
-     * Updates the page content
-     *
-     * @since 2.2.5
+     * Overrides {@link PaginatedGui#updatePage()} to make it work with the specific scrolls
      */
     @Override
     void updatePage() {

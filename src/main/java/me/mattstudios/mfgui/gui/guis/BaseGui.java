@@ -31,7 +31,7 @@ import java.util.Map;
  * Contains all the basics for the GUI to work
  * Main and simplest implementation of this is {@link Gui}
  */
-@SuppressWarnings({"unused"})
+@SuppressWarnings("unused")
 public abstract class BaseGui implements InventoryHolder {
 
     // The plugin instance for registering the event and for the close delay

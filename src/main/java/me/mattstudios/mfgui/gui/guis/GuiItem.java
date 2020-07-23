@@ -15,6 +15,7 @@ import java.util.UUID;
 /**
  * GuiItem represents the {@link ItemStack} on the {@link Inventory}
  */
+@SuppressWarnings("unused")
 public final class GuiItem {
 
     // Action to do when clicking on the item

@@ -41,8 +41,9 @@ public final class Gui extends BaseGui {
     /**
      * Old constructor
      *
-     * @param rows  The amount of rows the GUI should have
-     * @param title The GUI's title
+     * @param plugin The plugin's instance
+     * @param rows   The amount of rows the GUI should have
+     * @param title  The GUI's title
      * @deprecated No longer requires the plugin's instance to be passed use {@link #Gui(int, String)} instead
      */
     @Deprecated
@@ -53,7 +54,8 @@ public final class Gui extends BaseGui {
     /**
      * Old constructor
      *
-     * @param title The GUI's title
+     * @param plugin The plugin's instances
+     * @param title  The GUI's title
      * @deprecated No longer requires the plugin's instance to be passed use {@link #Gui(String)} instead
      */
     @Deprecated
@@ -64,6 +66,7 @@ public final class Gui extends BaseGui {
     /**
      * Old constructor
      *
+     * @param plugin  The plugin's Instances
      * @param guiType The amount of rows the GUI should have
      * @param title   The GUI's title
      * @deprecated No longer requires the plugin's instance to be passed use {@link #Gui(GuiType, String)} instead
