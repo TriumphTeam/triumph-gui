@@ -26,10 +26,32 @@ public final class ItemBuilder {
     private ItemMeta meta;
 
     /**
+     * Main method to create the ItemBuilder
+     *
+     * @param itemStack The {@link ItemStack} you want to edit
+     * @return A new {@link ItemBuilder}
+     */
+    public static ItemBuilder from(@NotNull final ItemStack itemStack) {
+        return new ItemBuilder(itemStack);
+    }
+
+    /**
+     * Alternative method to create the ItemBuilder
+     *
+     * @param material The {@link Material} you want to create an item from
+     * @return A new {@link ItemBuilder}
+     */
+    public static ItemBuilder from(@NotNull final Material material) {
+        return new ItemBuilder(material);
+    }
+
+    /**
      * Constructor of the item builder
      *
-     * @param itemStack The ItemStack of the item
+     * @param itemStack The {@link ItemStack} of the item
+     * @deprecated Use {@link ItemBuilder#from(ItemStack)} instead, it's more idiomatic for a builder
      */
+    @Deprecated
     public ItemBuilder(@NotNull final ItemStack itemStack) {
         Validate.notNull(itemStack, "Item can't be null!");
 
@@ -42,14 +64,15 @@ public final class ItemBuilder {
      *
      * @param material The material of the ItemStack
      */
+    @Deprecated
     public ItemBuilder(final Material material) {
         this(new ItemStack(material));
     }
 
     /**
-     * Builds the item into ItemStack
+     * Builds the item into {@link ItemStack}
      *
-     * @return The fully built item
+     * @return The fully built {@link ItemStack}
      */
     public ItemStack build() {
         itemStack.setItemMeta(meta);
@@ -163,15 +186,11 @@ public final class ItemBuilder {
      * @return The ItemBuilder
      */
     public ItemBuilder setUnbreakable(boolean unbreakable) {
-        /*if (ServerVersion.CURRENT.isOlderThan(ServerVersion.V1_15)) {
-            try {
-                meta.getClass().getMethod("spigot").getReturnType().getMethod("setUnbreakable").invoke(true);
-            } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
-                e.printStackTrace();
-            }
-        } else {
-            meta.setUnbreakable(true);
-        }*/
+        if (ServerVersion.CURRENT_VERSION.isOlderThan(ServerVersion.V1_12_R1)) {
+            throw new GuiException("setUnbreakable is not supported on versions below 1.12!");
+        }
+
+        meta.setUnbreakable(true);
         return this;
     }
 
