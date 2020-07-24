@@ -2,37 +2,102 @@ package me.mattstudios.mfgui.gui.guis;
 
 import org.bukkit.Bukkit;
 import org.bukkit.entity.HumanEntity;
+import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
+import java.util.Collections;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-@SuppressWarnings({"unused", "UnusedReturnValue"})
+/**
+ * GUI that allows you to have multiple pages
+ */
+@SuppressWarnings("unused")
 public class PaginatedGui extends BaseGui {
 
+    // List with all the page items
     private final List<GuiItem> pageItems = new ArrayList<>();
-    private final Map<Integer, GuiItem> currentPage = new HashMap<>();
+    // Saves the current page items and it's slot
+    private final Map<Integer, GuiItem> currentPage = new LinkedHashMap<>();
 
     private int pageSize;
-    private int page = 1;
+    private int pageNum = 1;
 
+    /**
+     * Main constructor of the PaginatedGui
+     *
+     * @param rows     The rows the GUI should have
+     * @param pageSize The pageSize
+     * @param title    The GUI's title
+     */
+    public PaginatedGui(final int rows, final int pageSize, @NotNull final String title) {
+        super(rows, title);
+        this.pageSize = pageSize;
+    }
+
+    /**
+     * Alternative constructor that doesn't require the {@link #pageSize} to be defined
+     *
+     * @param rows  The rows the GUI should have
+     * @param title The GUI's title
+     */
+    public PaginatedGui(final int rows, @NotNull final String title) {
+        this(rows, 0, title);
+    }
+
+    /**
+     * Alternative constructor that only requires title
+     *
+     * @param title The GUI's title
+     */
+    public PaginatedGui(@NotNull final String title) {
+        this(2, title);
+    }
+
+    /**
+     * Old constructor
+     *
+     * @param plugin   The plugin's instance
+     * @param rows     The rows the GUI should have
+     * @param pageSize The pageSize
+     * @param title    The GUI's title
+     * @deprecated No longer requires the plugin's instance to be passed use {@link #PaginatedGui(int, int, String)} instead
+     */
+    @Deprecated
     public PaginatedGui(@NotNull final Plugin plugin, final int rows, final int pageSize, @NotNull final String title) {
-        super(plugin, rows, title);
+        super(rows, title);
 
         this.pageSize = pageSize;
 
         if (rows < 2) setRows(2);
     }
 
+    /**
+     * Old constructor
+     *
+     * @param plugin The plugin's instance
+     * @param rows   The rows the GUI should have
+     * @param title  The GUI's title
+     * @deprecated No longer requires the plugin's instance to be passed use {@link #PaginatedGui(int, String)} instead
+     */
+    @Deprecated
     public PaginatedGui(@NotNull final Plugin plugin, final int rows, @NotNull final String title) {
         this(plugin, rows, 0, title);
     }
 
+    /**
+     * Old constructor
+     *
+     * @param plugin The plugin's instance
+     * @param title  The GUI's title
+     * @deprecated No longer requires the plugin's instance to be passed use {@link #PaginatedGui(String)} instead
+     */
+    @Deprecated
     public PaginatedGui(@NotNull final Plugin plugin, @NotNull final String title) {
         this(plugin, 2, title);
     }
@@ -41,38 +106,35 @@ public class PaginatedGui extends BaseGui {
      * Sets the page size
      *
      * @param pageSize The new page size
-     * @return The GUI
+     * @return The GUI for easier use when declaring, works like a builder
      */
+    @SuppressWarnings("UnusedReturnValue")
     public BaseGui setPageSize(final int pageSize) {
         this.pageSize = pageSize;
         return this;
     }
 
     /**
-     * Adds an item to the next empty slot in the GUI
+     * Adds an {@link GuiItem} to the next available slot in the page area
      *
-     * @param item The GUI item
-     * @return The GUI
+     * @param item The {@link GuiItem} to add to the page
      */
-    public BaseGui addItem(@NotNull final GuiItem item) {
+    public void addItem(@NotNull final GuiItem item) {
         pageItems.add(item);
-        return this;
     }
 
     /**
-     * Overridden method to add the items to the page instead
+     * Overridden {@link BaseGui#addItem(GuiItem...)} to add the items to the page instead
      *
-     * @param items The Gui Items
-     * @return The GUI
+     * @param items Varargs for specifying the {@link GuiItem}s
      */
     @Override
-    public BaseGui addItem(@NotNull final GuiItem... items) {
+    public void addItem(@NotNull final GuiItem... items) {
         pageItems.addAll(Arrays.asList(items));
-        return this;
     }
 
     /**
-     * Overridden update method to use the paginated open
+     * Overridden {@link BaseGui#update()} to use the paginated open
      */
     @Override
     public void update() {
@@ -83,10 +145,11 @@ public class PaginatedGui extends BaseGui {
     }
 
     /**
-     * Used for updating the current item in the page at runtime
+     * Updates the page {@link GuiItem} on the slot in the page
+     * Can get the slot from {@link InventoryClickEvent#getSlot()}
      *
      * @param slot      The slot of the item to update
-     * @param itemStack The new ItemStack
+     * @param itemStack The new {@link ItemStack}
      */
     public void updatePageItem(final int slot, @NotNull final ItemStack itemStack) {
         if (!currentPage.containsKey(slot)) return;
@@ -96,18 +159,18 @@ public class PaginatedGui extends BaseGui {
     }
 
     /**
-     * Used for updating the current item in the page at runtime
+     * Alternative {@link #updatePageItem(int, ItemStack)} that uses <i>ROWS</i> and <i>COLUMNS</i> instead
      *
      * @param row       The row of the slot
-     * @param col       The col of the slot
-     * @param itemStack The new ItemStack
+     * @param col       The columns of the slot
+     * @param itemStack The new {@link ItemStack}
      */
     public void updatePageItem(final int row, final int col, @NotNull final ItemStack itemStack) {
         updateItem(getSlotFromRowCol(row, col), itemStack);
     }
 
     /**
-     * Used for updating the current item in the page at runtime
+     * Alternative {@link #updatePageItem(int, ItemStack)} that uses {@link GuiItem} instead
      *
      * @param slot The slot of the item to update
      * @param item The new ItemStack
@@ -119,20 +182,20 @@ public class PaginatedGui extends BaseGui {
     }
 
     /**
-     * Used for updating the current item in the page at runtime
+     * Alternative {@link #updatePageItem(int, GuiItem)} that uses <i>ROWS</i> and <i>COLUMNS</i> instead
      *
      * @param row  The row of the slot
-     * @param col  The col of the slot
-     * @param item The new ItemStack
+     * @param col  The columns of the slot
+     * @param item The new {@link GuiItem}
      */
     public void updatePageItem(final int row, final int col, @NotNull final GuiItem item) {
         updateItem(getSlotFromRowCol(row, col), item);
     }
 
     /**
-     * Opens the GUI in the first page
+     * Overrides {@link BaseGui#open(HumanEntity)} to use the paginated populator instead
      *
-     * @param player The player to open it to
+     * @param player The {@link HumanEntity} to open the GUI to
      */
     @Override
     public void open(@NotNull final HumanEntity player) {
@@ -140,13 +203,14 @@ public class PaginatedGui extends BaseGui {
     }
 
     /**
-     * Overridden open method to add the gui page items
+     * Specific open method for the Paginated GUI
+     * Uses {@link #populatePage()}
      *
-     * @param player   The player to open it to
+     * @param player   The {@link HumanEntity} to open it to
      * @param openPage The specific page to open at
      */
     public void open(@NotNull final HumanEntity player, final int openPage) {
-        if (openPage <= getPagesNum() || openPage > 0) page = openPage;
+        if (openPage <= getPagesNum() || openPage > 0) pageNum = openPage;
 
         getInventory().clear();
         currentPage.clear();
@@ -161,15 +225,15 @@ public class PaginatedGui extends BaseGui {
     }
 
     /**
+     * Overrides {@link BaseGui#updateTitle(String)} to use the paginated populator instead
      * Updates the title of the GUI
-     * This method may cause LAG if used on a loop
+     * <i>This method may cause LAG if used on a loop</i>
      *
      * @param title The title to set
-     * @return The GUI
+     * @return The GUI for easier use when declaring, works like a builder
      */
     @Override
     public BaseGui updateTitle(@NotNull final String title) {
-        Bukkit.broadcastMessage("Updating");
         setTitle(title);
 
         setUpdating(true);
@@ -188,21 +252,21 @@ public class PaginatedGui extends BaseGui {
     }
 
     /**
-     * Gets the items on the current page
+     * Gets an immutable {@link Map} with all the current pages items
      *
-     * @return The map with the items
+     * @return The {@link Map} with all the {@link #currentPage}
      */
     public Map<Integer, GuiItem> getCurrentPageItems() {
-        return currentPage;
+        return Collections.unmodifiableMap(currentPage);
     }
 
     /**
-     * Gets all the items added to the GUI
+     * Gets an immutable {@link List} with all the page items added to the GUI
      *
-     * @return The list with all the items
+     * @return The  {@link List} with all the {@link #pageItems}
      */
     public List<GuiItem> getPageItems() {
-        return pageItems;
+        return Collections.unmodifiableList(pageItems);
     }
 
 
@@ -212,36 +276,36 @@ public class PaginatedGui extends BaseGui {
      * @return The current page number
      */
     public int getCurrentPageNum() {
-        return page;
+        return pageNum;
     }
 
     /**
      * Gets the next page number
      *
-     * @return The next page number or -1 as no next
+     * @return The next page number or {@link #pageNum} if no next is present
      */
     public int getNextPageNum() {
-        if (page + 1 > getPagesNum()) return page;
-        return page + 1;
+        if (pageNum + 1 > getPagesNum()) return pageNum;
+        return pageNum + 1;
     }
 
     /**
      * Gets the previous page number
      *
-     * @return The previous page number or -1 as no previous
+     * @return The previous page number or {@link #pageNum} if no previous is present
      */
     public int getPrevPageNum() {
-        if (page - 1 == 0) return page;
-        return page - 1;
+        if (pageNum - 1 == 0) return pageNum;
+        return pageNum - 1;
     }
 
     /**
      * Goes to the next page
      */
     public boolean next() {
-        if (page + 1 > getPagesNum()) return false;
+        if (pageNum + 1 > getPagesNum()) return false;
 
-        page++;
+        pageNum++;
         updatePage();
         return true;
     }
@@ -260,9 +324,9 @@ public class PaginatedGui extends BaseGui {
      * Goes to the previous page if possible
      */
     public boolean previous() {
-        if (page - 1 == 0) return false;
+        if (pageNum - 1 == 0) return false;
 
-        page--;
+        pageNum--;
         updatePage();
         return true;
     }
@@ -293,7 +357,7 @@ public class PaginatedGui extends BaseGui {
      * @param givenPage The page to get
      * @return A list with all the page items
      */
-    private List<GuiItem> getPage(final int givenPage) {
+    private List<GuiItem> getPageNum(final int givenPage) {
         final int page = givenPage - 1;
 
         final List<GuiItem> guiPage = new ArrayList<>();
@@ -322,7 +386,7 @@ public class PaginatedGui extends BaseGui {
      */
     private void populatePage() {
         // Adds the paginated items to the page
-        for (final GuiItem guiItem : getPage(page)) {
+        for (final GuiItem guiItem : getPageNum(pageNum)) {
             for (int slot = 0; slot < getRows() * 9; slot++) {
                 if (getInventory().getItem(slot) != null) continue;
                 currentPage.put(slot, guiItem);
@@ -334,8 +398,6 @@ public class PaginatedGui extends BaseGui {
 
     /**
      * Clears the page content
-     *
-     * @since 2.2.5
      */
     void clearPage() {
         for (Map.Entry<Integer, GuiItem> entry : currentPage.entrySet()) {
@@ -343,16 +405,31 @@ public class PaginatedGui extends BaseGui {
         }
     }
 
+    /**
+     * Gets the page size
+     *
+     * @return The page size
+     */
     int getPageSize() {
         return pageSize;
     }
 
-    int getPage() {
-        return page;
+    /**
+     * Gets the page number
+     *
+     * @return The current page number
+     */
+    int getPageNum() {
+        return pageNum;
     }
 
-    void setPage(final int page) {
-        this.page = page;
+    /**
+     * Sets the page number
+     *
+     * @param pageNum Sets the current page to be the specified number
+     */
+    void setPageNum(final int pageNum) {
+        this.pageNum = pageNum;
     }
 
     /**
@@ -365,6 +442,11 @@ public class PaginatedGui extends BaseGui {
         populatePage();
     }
 
+    /**
+     * Calculates the size of the give page
+     *
+     * @return The page size
+     */
     int calculatePageSize() {
         int counter = 0;
 

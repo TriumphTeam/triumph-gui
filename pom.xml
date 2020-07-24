@@ -30,7 +30,7 @@
 
     <groupId>me.mattstudios.utils</groupId>
     <artifactId>matt-framework-gui</artifactId>
-    <version>1.2.10</version>
+    <version>2.0</version>
     <packaging>jar</packaging>
 
     <name>Matt's GUI Framework</name>
@@ -67,15 +67,18 @@
             <email>xpsykogfx@gmail.com</email>
             <organization>MattStudios</organization>
             <organizationUrl>https://mattstudios.me/</organizationUrl>
+            <roles>
+                <role>Developer</role>
+            </roles>
         </developer>
-    </developers>
-
-    <contributors>
-        <contributor>
+        <developer>
             <name>Harry Drummond</name>
             <email>harrydrum0198@gmail.com</email>
-        </contributor>
-    </contributors>
+            <roles>
+                <role>Contributor</role>
+            </roles>
+        </developer>
+    </developers>
 
     <properties>
         <java.version>1.8</java.version>
@@ -98,7 +101,7 @@
         <dependency>
             <groupId>org.spigotmc</groupId>
             <artifactId>spigot-api</artifactId>
-            <version>LATEST</version>
+            <version>1.16.1-R0.1-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
 
@@ -117,12 +120,12 @@
         </dependency>
 
         <!-- Only for easier testing -->
-        <dependency>
+        <!--<dependency>
             <groupId>me.mattstudios.utils</groupId>
             <artifactId>matt-framework</artifactId>
             <version>LATEST</version>
             <scope>compile</scope>
-        </dependency>
+        </dependency>-->
     </dependencies>
 
     <build>
@@ -218,14 +221,14 @@
                 </executions>
             </plugin>
             <!-- COMMENT BEFORE RELEASE -->
-            <plugin>
+            <!--<plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-jar-plugin</artifactId>
                 <version>2.3.1</version>
                 <configuration>
                     <outputDirectory>C:/Users/xpsyk/Desktop/servers/paper-1.16/plugins</outputDirectory>
                 </configuration>
-            </plugin>
+            </plugin>-->
         </plugins>
         <resources>
             <resource>

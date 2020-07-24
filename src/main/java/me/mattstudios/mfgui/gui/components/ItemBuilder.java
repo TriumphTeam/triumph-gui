@@ -26,11 +26,33 @@ public final class ItemBuilder {
     private ItemMeta meta;
 
     /**
+     * Main method to create {@link ItemBuilder}
+     *
+     * @param itemStack The {@link ItemStack} you want to edit
+     * @return A new {@link ItemBuilder}
+     */
+    public static ItemBuilder from(@NotNull final ItemStack itemStack) {
+        return new ItemBuilder(itemStack);
+    }
+
+    /**
+     * Alternative method to create {@link ItemBuilder}
+     *
+     * @param material The {@link Material} you want to create an item from
+     * @return A new {@link ItemBuilder}
+     */
+    public static ItemBuilder from(@NotNull final Material material) {
+        return new ItemBuilder(material);
+    }
+
+    /**
      * Constructor of the item builder
      *
-     * @param itemStack The ItemStack of the item
+     * @param itemStack The {@link ItemStack} of the item
+     * @deprecated Use {@link ItemBuilder#from(ItemStack)} instead, it's more idiomatic for a builder
      */
-    public ItemBuilder(final ItemStack itemStack) {
+    @Deprecated
+    public ItemBuilder(@NotNull final ItemStack itemStack) {
         Validate.notNull(itemStack, "Item can't be null!");
 
         this.itemStack = itemStack;
@@ -38,18 +60,20 @@ public final class ItemBuilder {
     }
 
     /**
-     * Secondary constructor with only Material
+     * Alternative constructor with {@link Material}
      *
-     * @param material The material of the ItemStack
+     * @param material The {@link Material} of the {@link ItemStack}
+     * @deprecated Use {@link ItemBuilder#from(Material)} instead, it's more idiomatic for a builder
      */
+    @Deprecated
     public ItemBuilder(final Material material) {
         this(new ItemStack(material));
     }
 
     /**
-     * Builds the item into ItemStack
+     * Builds the item into {@link ItemStack}
      *
-     * @return The fully built item
+     * @return The fully built {@link ItemStack}
      */
     public ItemStack build() {
         itemStack.setItemMeta(meta);
@@ -60,7 +84,7 @@ public final class ItemBuilder {
      * Set display name of the item
      *
      * @param name the display name of the item
-     * @return The ItemBuilder
+     * @return {@link ItemBuilder}
      */
     public ItemBuilder setName(@NotNull final String name) {
         meta.setDisplayName(name);
@@ -71,7 +95,7 @@ public final class ItemBuilder {
      * Sets the amount of items
      *
      * @param amount the amount of items
-     * @return The ItemBuilder
+     * @return {@link ItemBuilder}
      */
     public ItemBuilder setAmount(final int amount) {
         itemStack.setAmount(amount);
@@ -82,7 +106,7 @@ public final class ItemBuilder {
      * Set the lore lines of an item
      *
      * @param lore the lore lines to set
-     * @return The ItemBuilder
+     * @return {@link ItemBuilder}
      */
     public ItemBuilder setLore(@NotNull final String... lore) {
         meta.setLore(Arrays.asList(lore));
@@ -92,8 +116,8 @@ public final class ItemBuilder {
     /**
      * Set the lore lines of an item
      *
-     * @param lore the lore lines to set
-     * @return The ItemBuilder
+     * @param lore A {@link List} with the lore lines
+     * @return {@link ItemBuilder}
      */
     public ItemBuilder setLore(@NotNull final List<String> lore) {
         meta.setLore(lore);
@@ -101,12 +125,12 @@ public final class ItemBuilder {
     }
 
     /**
-     * Add enchantments to an item
+     * Add enchantment to an item
      *
-     * @param enchantment            the enchantment to add
-     * @param level                  the level of the enchantment
+     * @param enchantment            the {@link Enchantment} to add
+     * @param level                  the level of the {@link Enchantment}
      * @param ignoreLevelRestriction If should or not ignore it
-     * @return The ItemBuilder
+     * @return {@link ItemBuilder}
      */
     public ItemBuilder addEnchantment(@NotNull final Enchantment enchantment, final int level, final boolean ignoreLevelRestriction) {
         meta.addEnchant(enchantment, level, ignoreLevelRestriction);
@@ -114,31 +138,31 @@ public final class ItemBuilder {
     }
 
     /**
-     * Add enchantments to an item
+     * Add enchantment to an item
      *
-     * @param enchantment the enchantment to add
-     * @param level       the level of the enchantment
-     * @return The ItemBuilder
+     * @param enchantment the {@link Enchantment} to add
+     * @param level       the level of the {@link Enchantment}
+     * @return {@link ItemBuilder}
      */
     public ItemBuilder addEnchantment(@NotNull final Enchantment enchantment, final int level) {
         return addEnchantment(enchantment, level, true);
     }
 
     /**
-     * Add enchantments to an item
+     * Add enchantment to an item
      *
-     * @param enchantment the enchantment to add
-     * @return The ItemBuilder
+     * @param enchantment the {@link Enchantment} to add
+     * @return {@link ItemBuilder}
      */
     public ItemBuilder addEnchantment(@NotNull final Enchantment enchantment) {
         return addEnchantment(enchantment, 1, true);
     }
 
     /**
-     * Removes a certain enchantment from the item
+     * Removes a certain {@link Enchantment} from the item
      *
-     * @param enchantment The enchantment to remove
-     * @return The ItemBuilder
+     * @param enchantment The {@link Enchantment} to remove
+     * @return {@link ItemBuilder}
      */
     public ItemBuilder removeEnchantment(@NotNull final Enchantment enchantment) {
         itemStack.removeEnchantment(enchantment);
@@ -146,10 +170,10 @@ public final class ItemBuilder {
     }
 
     /**
-     * Add a custom item flag to the item
+     * Add a custom {@link ItemFlag} to the item
      *
-     * @param flags the flags to add
-     * @return The ItemBuilder
+     * @param flags the {@link ItemFlag} to add
+     * @return {@link ItemBuilder}
      */
     public ItemBuilder addItemFlags(@NotNull final ItemFlag... flags) {
         meta.addItemFlags(flags);
@@ -160,10 +184,14 @@ public final class ItemBuilder {
      * Sets the item as unbreakable
      *
      * @param unbreakable If should or not be unbreakable
-     * @return The ItemBuilder
+     * @return {@link ItemBuilder}
      */
     public ItemBuilder setUnbreakable(boolean unbreakable) {
-        meta.setUnbreakable(unbreakable);
+        if (ServerVersion.CURRENT_VERSION.isOlderThan(ServerVersion.V1_12_R1)) {
+            throw new GuiException("setUnbreakable is not supported on versions below 1.12!");
+        }
+
+        meta.setUnbreakable(true);
         return this;
     }
 
@@ -171,7 +199,7 @@ public final class ItemBuilder {
      * Makes the Item glow
      *
      * @param glow Should the item glow
-     * @return The ItemBuilder
+     * @return {@link ItemBuilder}
      */
     public ItemBuilder glow(boolean glow) {
         if (glow) {
@@ -181,6 +209,10 @@ public final class ItemBuilder {
             return this;
         }
 
+        for (final Enchantment enchantment : meta.getEnchants().keySet()) {
+            meta.removeEnchant(enchantment);
+        }
+
         return this;
     }
 
@@ -188,7 +220,7 @@ public final class ItemBuilder {
      * Sets the skull texture
      *
      * @param texture The base64 texture
-     * @return The ItemBuilder
+     * @return {@link ItemBuilder}
      */
     public ItemBuilder setSkullTexture(@NotNull final String texture) {
         if (itemStack.getType() != XMaterial.PLAYER_HEAD.parseMaterial()) return this;
@@ -214,8 +246,8 @@ public final class ItemBuilder {
     /**
      * Sets skull owner via bukkit methods
      *
-     * @param player OfflinePlayer to set skull of
-     * @return The ItemBuilder
+     * @param player {@link OfflinePlayer} to set skull of
+     * @return {@link ItemBuilder}
      */
     public ItemBuilder setSkullOwner(@NotNull final OfflinePlayer player) {
         if (itemStack.getType() != XMaterial.PLAYER_HEAD.parseMaterial()) return this;
@@ -228,6 +260,13 @@ public final class ItemBuilder {
         return this;
     }
 
+    /**
+     * Sets NBT tag to the {@link ItemStack}
+     *
+     * @param key   The NBT key
+     * @param value The NBT value
+     * @return {@link ItemBuilder}
+     */
     public ItemBuilder setNbt(@NotNull final String key, @NotNull final String value) {
         itemStack = ItemNBT.setNBTTag(itemStack, key, value);
         return this;

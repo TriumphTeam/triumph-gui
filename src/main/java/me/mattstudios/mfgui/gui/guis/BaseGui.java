@@ -3,6 +3,8 @@ package me.mattstudios.mfgui.gui.guis;
 import me.mattstudios.mfgui.gui.components.GuiAction;
 import me.mattstudios.mfgui.gui.components.GuiException;
 import me.mattstudios.mfgui.gui.components.GuiFiller;
+import me.mattstudios.mfgui.gui.components.GuiType;
+import org.apache.commons.lang.Validate;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
@@ -10,22 +12,35 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.inventory.InventoryDragEvent;
 import org.bukkit.event.inventory.InventoryOpenEvent;
-import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
+import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.Collections;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-@SuppressWarnings({"UnusedReturnValue", "unused", "BooleanMethodIsAlwaysInverted"})
+/**
+ * Base class that every GUI extends
+ * Contains all the basics for the GUI to work
+ * Main and simplest implementation of this is {@link Gui}
+ */
+@SuppressWarnings("unused")
 public abstract class BaseGui implements InventoryHolder {
 
-    private final Plugin plugin;
+    // The plugin instance for registering the event and for the close delay
+    private static final Plugin plugin = JavaPlugin.getProvidingPlugin(BaseGui.class);
+
+    // Registering the listener class
+    static {
+        Bukkit.getPluginManager().registerEvents(new GuiListener(), plugin);
+    }
 
     // Main inventory
     private Inventory inventory;
@@ -37,97 +52,69 @@ public abstract class BaseGui implements InventoryHolder {
     private String title;
     private int rows;
 
+    // Gui type, defaults to chest
+    private GuiType guiType = GuiType.CHEST;
+
     // Contains all items the GUI will have
-    private final Map<Integer, GuiItem> guiItems = new HashMap<>();
+    private final Map<Integer, GuiItem> guiItems = new LinkedHashMap<>();
 
-    private final Map<Integer, GuiAction<InventoryClickEvent>> slotActions = new HashMap<>();
-
+    // Actions for specific slots
+    private final Map<Integer, GuiAction<InventoryClickEvent>> slotActions = new LinkedHashMap<>();
     // Action to execute when clicking on any item
     private GuiAction<InventoryClickEvent> defaultClickAction;
-
     // Action to execute when clicking on the top part of the GUI only
     private GuiAction<InventoryClickEvent> defaultTopClickAction;
-
     // Action to execute when dragging the item on the GUI
     private GuiAction<InventoryDragEvent> dragAction;
-
     // Action to execute when GUI closes
     private GuiAction<InventoryCloseEvent> closeGuiAction;
-
     // Action to execute when GUI opens
     private GuiAction<InventoryOpenEvent> openGuiAction;
-
     // Action to execute when clicked outside the GUI
     private GuiAction<InventoryClickEvent> outsideClickAction;
-
-    // Makes sure GUI listener is not registered more than once
-    private static boolean registeredListener;
 
     // Whether or not the GUI is updating
     private boolean updating;
 
     /**
-     * Main GUI constructor
+     * Main constructor that takes rows
      *
-     * @param plugin The plugin
-     * @param rows   How many rows you want
-     * @param title  The GUI's title
+     * @param rows  The amount of rows the GUI should have
+     * @param title The GUI title
      */
-    public BaseGui(@NotNull final Plugin plugin, final int rows, @NotNull final String title) {
+    public BaseGui(final int rows, @NotNull final String title) {
         int finalRows = rows;
         if (!(rows >= 1 && rows <= 6)) finalRows = 1;
 
-        this.plugin = plugin;
         this.rows = finalRows;
         this.title = title;
 
         inventory = Bukkit.createInventory(this, this.rows * 9, title);
-
-        // Registers the event handler once
-        if (!registeredListener) {
-            Bukkit.getPluginManager().registerEvents(new GuiListener(plugin), plugin);
-            registeredListener = true;
-        }
     }
 
     /**
-     * Main GUI constructor
+     * Alternative constructor that takes {@link GuiType} instead of rows number
      *
-     * @param plugin The plugin
-     * @param inventoryType   How many rows you want
-     * @param title  The GUI's title
+     * @param guiType The {@link GuiType} to use
+     * @param title   The GUI title
      */
-    public BaseGui(@NotNull final Plugin plugin, @NotNull final InventoryType inventoryType, @NotNull final String title) {
-
-        this.plugin = plugin;
+    public BaseGui(@NotNull final GuiType guiType, @NotNull final String title) {
         this.title = title;
+        this.guiType = guiType;
 
-        inventory = Bukkit.createInventory(this, inventoryType, title);
-
-        // Registers the event handler once
-        if (!registeredListener) {
-            Bukkit.getPluginManager().registerEvents(new GuiListener(plugin), plugin);
-            registeredListener = true;
-        }
-    }
-
-    /**
-     * GUI constructor with only title for easier 1 row GUIs
-     *
-     * @param plugin The plugin
-     * @param title  The GUI's title
-     */
-    public BaseGui(@NotNull final Plugin plugin, @NotNull final String title) {
-        this(plugin, 1, title);
+        inventory = Bukkit.createInventory(this, guiType.getInventoryType(), title);
     }
 
     /**
      * Sets the number of rows the GUI should have
      *
      * @param rows The number of rows to set
-     * @return The GUI
+     * @return The GUI for easier use when declaring, works like a builder
      */
+    @SuppressWarnings("UnusedReturnValue")
     public BaseGui setRows(final int rows) {
+        if (guiType != GuiType.CHEST) throw new GuiException("Cannot set rows of non chest GUI!");
+
         int finalRows = rows;
         if (!(rows >= 1 && rows <= 6)) finalRows = 1;
         this.rows = finalRows;
@@ -148,54 +135,46 @@ public abstract class BaseGui implements InventoryHolder {
     }
 
     /**
-     * Add an item to the GUI
+     * Sets the {@link GuiItem} to a specific slot on the GUI
      *
      * @param slot    The GUI slot
-     * @param guiItem The GUI item to add
-     * @return The GUI
+     * @param guiItem The {@link GuiItem} to add to the slot
      */
-    public BaseGui setItem(final int slot, @NotNull final GuiItem guiItem) {
-        if (!isValidSlot(slot)) throw new GuiException("Invalid item slot!");
-
+    public void setItem(final int slot, @NotNull final GuiItem guiItem) {
+        validateSlot(slot);
         guiItems.put(slot, guiItem);
-
-        return this;
     }
 
     /**
-     * Sets a GUI item to many slots
+     * Alternative {@link #setItem(int, GuiItem)} to set item that takes a {@link List} of slots instead
      *
      * @param slots   The slots in which the item should go
-     * @param guiItem The Gui Item to add
-     * @return The GUI
+     * @param guiItem The {@link GuiItem} to add to the slots
      */
-    public BaseGui setItem(@NotNull final List<Integer> slots, @NotNull final GuiItem guiItem) {
+    public void setItem(@NotNull final List<Integer> slots, @NotNull final GuiItem guiItem) {
         for (final int slot : slots) {
             setItem(slot, guiItem);
         }
-
-        return this;
     }
 
     /**
-     * Add an item to the GUI
+     * Alternative {@link #setItem(int, GuiItem)} to set item that uses <i>ROWS</i> and <i>COLUMNS</i> instead of slots
      *
      * @param row     The GUI row number
-     * @param col     The GUI col number
-     * @param guiItem The GUI item to add
-     * @return The GUI
+     * @param col     The GUI column number
+     * @param guiItem The {@link GuiItem} to add to the slot
      */
-    public BaseGui setItem(final int row, final int col, @NotNull final GuiItem guiItem) {
-        return setItem(getSlotFromRowCol(row, col), guiItem);
+    public void setItem(final int row, final int col, @NotNull final GuiItem guiItem) {
+        setItem(getSlotFromRowCol(row, col), guiItem);
     }
 
     /**
-     * Adds items to the GUI without specific slot
+     * Adds {@link GuiItem}s to the GUI without specific slot
+     * It'll set the item to the next empty slot available
      *
-     * @param items The Gui Items
-     * @return The GUI
+     * @param items Varargs for specifying the {@link GuiItem}s
      */
-    public BaseGui addItem(@NotNull final GuiItem... items) {
+    public void addItem(@NotNull final GuiItem... items) {
         for (final GuiItem guiItem : items) {
             for (int slot = 0; slot < rows * 9; slot++) {
                 if (guiItems.get(slot) != null) continue;
@@ -204,116 +183,110 @@ public abstract class BaseGui implements InventoryHolder {
                 break;
             }
         }
-
-        return this;
     }
 
     /**
-     * Sets the action of a default click on any item
+     * Sets the {@link GuiAction} of a default click on any item
+     * See {@link InventoryClickEvent}
      *
-     * @param defaultClickAction Action to resolve
-     * @return The GUI
+     * @param defaultClickAction {@link GuiAction} to resolve when any item is clicked
      */
-    public BaseGui setDefaultClickAction(final GuiAction<InventoryClickEvent> defaultClickAction) {
+    public void setDefaultClickAction(@Nullable final GuiAction<InventoryClickEvent> defaultClickAction) {
         this.defaultClickAction = defaultClickAction;
-        return this;
     }
 
     /**
-     * Sets the action of a default click on any item on the top part of the GUI
+     * Sets the {@link GuiAction} of a default click on any item on the top part of the GUI
+     * Top inventory being for example chests etc, instead of the {@link Player} inventory
+     * See {@link InventoryClickEvent}
      *
-     * @param defaultTopClickAction Action to resolve
-     * @return The GUI
+     * @param defaultTopClickAction {@link GuiAction} to resolve when clicking on the top inventory
      */
-    public BaseGui setDefaultTopClickAction(final GuiAction<InventoryClickEvent> defaultTopClickAction) {
+    public void setDefaultTopClickAction(@Nullable final GuiAction<InventoryClickEvent> defaultTopClickAction) {
         this.defaultTopClickAction = defaultTopClickAction;
-        return this;
     }
 
     /**
-     * Sets the action of a default drag action
+     * Sets the {@link GuiAction} to run when clicking on the outside of the inventory
+     * See {@link InventoryClickEvent}
      *
-     * @param dragAction Action to resolve
-     * @return The GUI
+     * @param outsideClickAction {@link GuiAction} to resolve when clicking outside of the inventory
      */
-    public BaseGui setDragAction(final GuiAction<InventoryDragEvent> dragAction) {
-        this.dragAction = dragAction;
-        return this;
-    }
-
-    /**
-     * Sets the action of what to do when GUI closes
-     *
-     * @param closeGuiAction Action to resolve
-     * @return The GUI
-     */
-    public BaseGui setCloseGuiAction(final GuiAction<InventoryCloseEvent> closeGuiAction) {
-        this.closeGuiAction = closeGuiAction;
-        return this;
-    }
-
-    /**
-     * Sets the action of when clicking on the outside of the inventory
-     *
-     * @param outsideClickAction Action to resolve
-     * @return The GUI
-     */
-    public BaseGui setOutsideClickAction(final GuiAction<InventoryClickEvent> outsideClickAction) {
+    public void setOutsideClickAction(@Nullable final GuiAction<InventoryClickEvent> outsideClickAction) {
         this.outsideClickAction = outsideClickAction;
-        return this;
     }
 
     /**
-     * Sets the action of what to do when GUI opens
+     * Sets the {@link GuiAction} of a default drag action
+     * See {@link InventoryDragEvent}
      *
-     * @param openGuiAction Action to resolve
-     * @return The GUI
+     * @param dragAction {@link GuiAction} to resolve
      */
-    public BaseGui setOpenGuiAction(final GuiAction<InventoryOpenEvent> openGuiAction) {
+    public void setDragAction(@Nullable final GuiAction<InventoryDragEvent> dragAction) {
+        this.dragAction = dragAction;
+    }
+
+    /**
+     * Sets the {@link GuiAction} to run once the inventory is closed
+     * See {@link InventoryCloseEvent}
+     *
+     * @param closeGuiAction {@link GuiAction} to resolve when the inventory is closed
+     */
+    public void setCloseGuiAction(@Nullable final GuiAction<InventoryCloseEvent> closeGuiAction) {
+        this.closeGuiAction = closeGuiAction;
+    }
+
+    /**
+     * Sets the {@link GuiAction} to run when the GUI opens
+     * See {@link InventoryOpenEvent}
+     *
+     * @param openGuiAction {@link GuiAction} to resolve when opening the inventory
+     */
+    public void setOpenGuiAction(@Nullable final GuiAction<InventoryOpenEvent> openGuiAction) {
         this.openGuiAction = openGuiAction;
-        return this;
     }
 
     /**
-     * Adds a Gui Action for when clicking on a specific slot
+     * Adds a {@link GuiAction} for when clicking on a specific slot
+     * See {@link InventoryClickEvent}
      *
-     * @param slot       The slot to add
-     * @param slotAction The gui action
-     * @return The GUI
+     * @param slot       The slot that will trigger the {@link GuiAction}
+     * @param slotAction {@link GuiAction} to resolve when clicking on specific slots
      */
-    public BaseGui addSlotAction(final int slot, final GuiAction<InventoryClickEvent> slotAction) {
-        if (!isValidSlot(slot)) return this;
+    public void addSlotAction(final int slot, @Nullable final GuiAction<InventoryClickEvent> slotAction) {
+        validateSlot(slot);
         slotActions.put(slot, slotAction);
-        return this;
     }
 
     /**
-     * Adds a Gui Action for when clicking on a specific slot with row and col instead
+     * Alternative method for {@link #addSlotAction(int, GuiAction)} to add a {@link GuiAction} to a specific slot using <i>ROWS</i> and <i>COLUMNS</i> instead of slots
+     * See {@link InventoryClickEvent}
      *
      * @param row        The row of the slot
-     * @param col        The col of the slot
-     * @param slotAction The gui action
-     * @return The GUI
+     * @param col        The column of the slot
+     * @param slotAction {@link GuiAction} to resolve when clicking on the slot
      */
-    public BaseGui addSlotAction(final int row, final int col, final GuiAction<InventoryClickEvent> slotAction) {
-        return addSlotAction(getSlotFromRowCol(row, col), slotAction);
+    public void addSlotAction(final int row, final int col, @Nullable final GuiAction<InventoryClickEvent> slotAction) {
+        addSlotAction(getSlotFromRowCol(row, col), slotAction);
     }
 
     /**
-     * Gets a specific GuiItem on the slot
+     * Gets a specific {@link GuiItem} on the slot
      *
-     * @param slot The slot to get
-     * @return The GUI
+     * @param slot The slot of the item
+     * @return The {@link GuiItem} on the introduced slot or {@code null} if doesn't exist
      */
+    @Nullable
     public GuiItem getGuiItem(final int slot) {
-        return isValidSlot(slot) ? guiItems.get(slot) : null;
+        return guiItems.get(slot);
     }
 
     /**
-     * Checks weather or not the GUI is updating
+     * Checks whether or not the GUI is updating
      *
-     * @return If it's updating or not
+     * @return Whether the GUI is updating or not
      */
+    @SuppressWarnings("BooleanMethodIsAlwaysInverted")
     public boolean isUpdating() {
         return updating;
     }
@@ -321,48 +294,48 @@ public abstract class BaseGui implements InventoryHolder {
     /**
      * Sets the updating status of the GUI
      *
-     * @param updating Sets updating
+     * @param updating Sets the GUI to the updating status
      */
     public void setUpdating(final boolean updating) {
         this.updating = updating;
     }
 
     /**
-     * Opens the GUI for a player
+     * Opens the GUI for a {@link HumanEntity}
      *
-     * @param player The player to open it to
+     * @param player The {@link HumanEntity} to open the GUI to
      */
     public void open(@NotNull final HumanEntity player) {
+        Validate.notNull(player, "Player cannot be null when opening the GUI!");
         inventory.clear();
         populateGui();
         player.openInventory(inventory);
     }
 
     /**
-     * Closes the gui
+     * Closes the GUI with a {@code 2s} delay (to prevent items from being taken from the {@link Inventory})
      *
-     * @param player The player to close the GUI to
+     * @param player The {@link HumanEntity} to close the GUI to
      */
-    public void close(@NotNull final Player player) {
+    public void close(@NotNull final HumanEntity player) {
+        Validate.notNull(player, "Player cannot be null when closing the GUI!");
         Bukkit.getScheduler().runTaskLater(plugin, player::closeInventory, 2L);
     }
 
     /**
-     * Method to update the current opened GUI
+     * Updates the GUI for all the {@link Inventory} views
      */
     public void update() {
         inventory.clear();
-
         populateGui();
-
         for (HumanEntity viewer : new ArrayList<>(inventory.getViewers())) ((Player) viewer).updateInventory();
     }
 
     /**
-     * Used for updating the current item in the GUI at runtime
+     * Updates the specified item in the GUI at runtime, without creating a new {@link GuiItem}
      *
      * @param slot      The slot of the item to update
-     * @param itemStack The new ItemStack
+     * @param itemStack The {@link ItemStack} to replace in the original one in the {@link GuiItem}
      */
     public void updateItem(final int slot, @NotNull final ItemStack itemStack) {
         if (!guiItems.containsKey(slot)) return;
@@ -372,21 +345,21 @@ public abstract class BaseGui implements InventoryHolder {
     }
 
     /**
-     * Used for updating the current item in the GUI at runtime
+     * Alternative {@link #updateItem(int, ItemStack)} that takes <i>ROWS</i> and <i>COLUMNS</i> instead of slots
      *
      * @param row       The row of the slot
-     * @param col       The col of the slot
-     * @param itemStack The new ItemStack
+     * @param col       The columns of the slot
+     * @param itemStack The {@link ItemStack} to replace in the original one in the {@link GuiItem}
      */
     public void updateItem(final int row, final int col, @NotNull final ItemStack itemStack) {
         updateItem(getSlotFromRowCol(row, col), itemStack);
     }
 
     /**
-     * Used for updating the current item in the GUI at runtime
+     * Alternative {@link #updateItem(int, ItemStack)} but creates a new {@link GuiItem}
      *
      * @param slot The slot of the item to update
-     * @param item The new ItemStack
+     * @param item The {@link GuiItem} to replace in the original
      */
     public void updateItem(final int slot, @NotNull final GuiItem item) {
         if (!guiItems.containsKey(slot)) return;
@@ -395,11 +368,11 @@ public abstract class BaseGui implements InventoryHolder {
     }
 
     /**
-     * Used for updating the current item in the GUI at runtime
+     * Alternative {@link #updateItem(int, GuiItem)} that takes <i>ROWS</i> and <i>COLUMNS</i> instead of slots
      *
      * @param row  The row of the slot
-     * @param col  The col of the slot
-     * @param item The new ItemStack
+     * @param col  The columns of the slot
+     * @param item The {@link GuiItem} to replace in the original
      */
     public void updateItem(final int row, final int col, @NotNull final GuiItem item) {
         updateItem(getSlotFromRowCol(row, col), item);
@@ -407,10 +380,10 @@ public abstract class BaseGui implements InventoryHolder {
 
     /**
      * Updates the title of the GUI
-     * This method may cause LAG if used on a loop
+     * <i>This method may cause LAG if used on a loop</i>
      *
      * @param title The title to set
-     * @return The GUI
+     * @return The GUI for easier use when declaring, works like a builder
      */
     public BaseGui updateTitle(@NotNull final String title) {
         this.title = title;
@@ -431,25 +404,26 @@ public abstract class BaseGui implements InventoryHolder {
     }
 
     /**
-     * Return the GUI filler with the filling methods
+     * Gets the {@link GuiFiller} that it's used for filling up the GUI in specific ways
      *
-     * @return The GUI filler
+     * @return The {@link GuiFiller}
      */
+    @NotNull
     public GuiFiller getFiller() {
         return filler;
     }
 
     /**
-     * Gets map with all the GUI items
+     * Gets an immutable {@link Map} with all the GUI items
      *
-     * @return The map with all the items
+     * @return The {@link Map} with all the {@link #guiItems}
      */
     public Map<Integer, GuiItem> getGuiItems() {
-        return guiItems;
+        return Collections.unmodifiableMap(guiItems);
     }
 
     /**
-     * Gets the main inventory holder
+     * Gets the main {@link Inventory} of this GUI
      */
     @NotNull
     @Override
@@ -458,9 +432,9 @@ public abstract class BaseGui implements InventoryHolder {
     }
 
     /**
-     * Gets the amount of rows
+     * Gets the amount of {@link #rows}
      *
-     * @return The amount of rows the GUI has
+     * @return The {@link #rows} of the GUI
      */
     public int getRows() {
         return rows;
@@ -469,6 +443,7 @@ public abstract class BaseGui implements InventoryHolder {
     /**
      * Gets the default click resolver
      */
+    @Nullable
     GuiAction<InventoryClickEvent> getDefaultClickAction() {
         return defaultClickAction;
     }
@@ -476,13 +451,15 @@ public abstract class BaseGui implements InventoryHolder {
     /**
      * Gets the default top click resolver
      */
+    @Nullable
     GuiAction<InventoryClickEvent> getDefaultTopClickAction() {
         return defaultTopClickAction;
     }
 
     /**
-     * Gets the default drag action
+     * Gets the default drag resolver
      */
+    @Nullable
     GuiAction<InventoryDragEvent> getDragAction() {
         return dragAction;
     }
@@ -490,6 +467,7 @@ public abstract class BaseGui implements InventoryHolder {
     /**
      * Gets the close gui resolver
      */
+    @Nullable
     GuiAction<InventoryCloseEvent> getCloseGuiAction() {
         return closeGuiAction;
     }
@@ -497,13 +475,15 @@ public abstract class BaseGui implements InventoryHolder {
     /**
      * Gets the open gui resolver
      */
+    @Nullable
     GuiAction<InventoryOpenEvent> getOpenGuiAction() {
         return openGuiAction;
     }
 
     /**
-     * Gets the gui action for the outside click
+     * Gets the resolver for the outside click
      */
+    @Nullable
     GuiAction<InventoryClickEvent> getOutsideClickAction() {
         return outsideClickAction;
     }
@@ -513,8 +493,9 @@ public abstract class BaseGui implements InventoryHolder {
      *
      * @param slot The slot clicked
      */
+    @Nullable
     GuiAction<InventoryClickEvent> getSlotAction(final int slot) {
-        return isValidSlot(slot) ? slotActions.get(slot) : null;
+        return slotActions.get(slot);
     }
 
     /**
@@ -527,31 +508,57 @@ public abstract class BaseGui implements InventoryHolder {
     }
 
     /**
-     * Checks if the slot introduces is a valid slot
-     *
-     * @param slot The slot to check
-     */
-    private boolean isValidSlot(final int slot) {
-        return slot >= 0 && slot < rows * 9;
-    }
-
-    /**
-     * Gets the slot from the row and col passed
+     * Gets the slot from the row and column passed
      *
      * @param row The row
-     * @param col The col
-     * @return The new slot
+     * @param col The column
+     * @return The slot needed
      */
     int getSlotFromRowCol(final int row, final int col) {
         return (col + (row - 1) * 9) - 1;
     }
 
+    /**
+     * Sets the new title of the inventory
+     *
+     * @param title The new title
+     */
     void setTitle(@NotNull final String title) {
         this.title = title;
     }
 
+    /**
+     * Sets the new inventory of the GUI
+     *
+     * @param inventory The new inventory
+     */
     void setInventory(@NotNull final Inventory inventory) {
         this.inventory = inventory;
+    }
+
+    /**
+     * Checks if the slot introduces is a valid slot
+     *
+     * @param slot The slot to check
+     */
+    private void validateSlot(final int slot) {
+        final int limit = guiType.getLimit();
+
+        if (guiType == GuiType.CHEST) {
+            if (slot < 0 || slot >= rows * limit) throwInvalidSlot(slot);
+            return;
+        }
+
+        if (slot < 0 || slot > limit) throwInvalidSlot(slot);
+    }
+
+    /**
+     * Throws an exception if the slot is invalid
+     *
+     * @param slot The specific slot to display in the error message
+     */
+    private void throwInvalidSlot(final int slot) {
+        throw new GuiException("Slot " + slot + " is not valid for the gui type - " + guiType.name() + "!");
     }
 
 }
