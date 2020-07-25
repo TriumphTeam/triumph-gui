@@ -558,6 +558,10 @@ public abstract class BaseGui implements InventoryHolder {
      * @param slot The specific slot to display in the error message
      */
     private void throwInvalidSlot(final int slot) {
+        if (guiType == GuiType.CHEST) {
+            throw new GuiException("Slot " + slot + " is not valid for the gui type - " + guiType.name() + " and rows - " + rows + "!");
+        }
+
         throw new GuiException("Slot " + slot + " is not valid for the gui type - " + guiType.name() + "!");
     }
 

@@ -396,6 +396,15 @@ public class PaginatedGui extends BaseGui {
         }
     }
 
+   /**
+     * Gets the current page items to be used on other gui types
+     *
+     * @return The {@link Map} with all the {@link #currentPage}
+     */
+    Map<Integer, GuiItem> getMutableCurrentPageItems() {
+        return currentPage;
+    }
+
     /**
      * Clears the page content
      */

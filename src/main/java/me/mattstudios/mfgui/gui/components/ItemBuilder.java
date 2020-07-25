@@ -3,11 +3,13 @@ package me.mattstudios.mfgui.gui.components;
 import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.properties.Property;
 import me.mattstudios.mfgui.gui.components.xseries.XMaterial;
+import me.mattstudios.mfgui.gui.guis.GuiItem;
 import org.apache.commons.lang.Validate;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.enchantments.Enchantment;
+import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -78,6 +80,14 @@ public final class ItemBuilder {
     public ItemStack build() {
         itemStack.setItemMeta(meta);
         return itemStack;
+    }
+
+    public GuiItem asGuiItem() {
+        return new GuiItem(build());
+    }
+
+    public GuiItem asGuiItem(@NotNull final GuiAction<InventoryClickEvent> action) {
+        return new GuiItem(build(), action);
     }
 
     /**

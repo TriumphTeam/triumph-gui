@@ -124,7 +124,7 @@ public final class ScrollingGui extends PaginatedGui {
     @Override
     public void open(@NotNull final HumanEntity player, final int openPage) {
         getInventory().clear();
-        getCurrentPageItems().clear();
+        getMutableCurrentPageItems().clear();
 
         populateGui();
 
@@ -213,7 +213,7 @@ public final class ScrollingGui extends PaginatedGui {
     private void putItemVertically(final GuiItem guiItem) {
         for (int slot = 0; slot < getRows() * 9; slot++) {
             if (getInventory().getItem(slot) != null) continue;
-            getCurrentPageItems().put(slot, guiItem);
+            getMutableCurrentPageItems().put(slot, guiItem);
             getInventory().setItem(slot, guiItem.getItemStack());
             break;
         }
@@ -230,7 +230,7 @@ public final class ScrollingGui extends PaginatedGui {
                 final int slot = getSlotFromRowCol(row, col);
                 if (getInventory().getItem(slot) != null) continue;
 
-                getCurrentPageItems().put(slot, guiItem);
+                getMutableCurrentPageItems().put(slot, guiItem);
                 getInventory().setItem(slot, guiItem.getItemStack());
                 return;
             }
