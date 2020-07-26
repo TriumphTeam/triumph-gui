@@ -210,6 +210,7 @@ public class PaginatedGui extends BaseGui {
      * @param openPage The specific page to open at
      */
     public void open(@NotNull final HumanEntity player, final int openPage) {
+        if (player.isSleeping()) return;
         if (openPage <= getPagesNum() || openPage > 0) pageNum = openPage;
 
         getInventory().clear();

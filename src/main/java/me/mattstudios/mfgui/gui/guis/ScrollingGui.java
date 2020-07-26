@@ -123,6 +123,7 @@ public final class ScrollingGui extends PaginatedGui {
      */
     @Override
     public void open(@NotNull final HumanEntity player, final int openPage) {
+        if (player.isSleeping()) return;
         getInventory().clear();
         getMutableCurrentPageItems().clear();
 

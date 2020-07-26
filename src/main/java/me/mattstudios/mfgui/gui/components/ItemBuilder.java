@@ -19,6 +19,7 @@ import org.jetbrains.annotations.NotNull;
 import java.lang.reflect.Field;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @SuppressWarnings("unused")
@@ -233,7 +234,10 @@ public final class ItemBuilder {
      * @return {@link ItemBuilder}
      */
     public ItemBuilder setSkullTexture(@NotNull final String texture) {
-        if (itemStack.getType() != XMaterial.PLAYER_HEAD.parseMaterial()) return this;
+        final Optional<Material> playerHead = XMaterial.PLAYER_HEAD.parseMaterial();
+        if (!playerHead.isPresent()) return this;
+
+        if (itemStack.getType() != playerHead.get()) return this;
 
         SkullMeta skullMeta = (SkullMeta) meta;
         GameProfile profile = new GameProfile(UUID.randomUUID(), null);
@@ -260,7 +264,10 @@ public final class ItemBuilder {
      * @return {@link ItemBuilder}
      */
     public ItemBuilder setSkullOwner(@NotNull final OfflinePlayer player) {
-        if (itemStack.getType() != XMaterial.PLAYER_HEAD.parseMaterial()) return this;
+        final Optional<Material> playerHead = XMaterial.PLAYER_HEAD.parseMaterial();
+        if (!playerHead.isPresent()) return this;
+
+        if (itemStack.getType() != playerHead.get()) return this;
 
         final SkullMeta skullMeta = (SkullMeta) meta;
         skullMeta.setOwningPlayer(player);

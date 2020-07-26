@@ -307,6 +307,8 @@ public abstract class BaseGui implements InventoryHolder {
      */
     public void open(@NotNull final HumanEntity player) {
         Validate.notNull(player, "Player cannot be null when opening the GUI!");
+        if (player.isSleeping()) return;
+
         inventory.clear();
         populateGui();
         player.openInventory(inventory);
