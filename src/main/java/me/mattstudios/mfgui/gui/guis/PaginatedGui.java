@@ -210,6 +210,7 @@ public class PaginatedGui extends BaseGui {
      * @param openPage The specific page to open at
      */
     public void open(@NotNull final HumanEntity player, final int openPage) {
+        if (player.isSleeping()) return;
         if (openPage <= getPagesNum() || openPage > 0) pageNum = openPage;
 
         getInventory().clear();
@@ -394,6 +395,15 @@ public class PaginatedGui extends BaseGui {
                 break;
             }
         }
+    }
+
+   /**
+     * Gets the current page items to be used on other gui types
+     *
+     * @return The {@link Map} with all the {@link #currentPage}
+     */
+    Map<Integer, GuiItem> getMutableCurrentPageItems() {
+        return currentPage;
     }
 
     /**

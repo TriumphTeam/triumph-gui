@@ -3,11 +3,13 @@ package me.mattstudios.mfgui.gui.components;
 import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.properties.Property;
 import me.mattstudios.mfgui.gui.components.xseries.XMaterial;
+import me.mattstudios.mfgui.gui.guis.GuiItem;
 import org.apache.commons.lang.Validate;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.enchantments.Enchantment;
+import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -17,6 +19,7 @@ import org.jetbrains.annotations.NotNull;
 import java.lang.reflect.Field;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @SuppressWarnings("unused")
@@ -78,6 +81,14 @@ public final class ItemBuilder {
     public ItemStack build() {
         itemStack.setItemMeta(meta);
         return itemStack;
+    }
+
+    public GuiItem asGuiItem() {
+        return new GuiItem(build());
+    }
+
+    public GuiItem asGuiItem(@NotNull final GuiAction<InventoryClickEvent> action) {
+        return new GuiItem(build(), action);
     }
 
     /**
@@ -223,7 +234,10 @@ public final class ItemBuilder {
      * @return {@link ItemBuilder}
      */
     public ItemBuilder setSkullTexture(@NotNull final String texture) {
-        if (itemStack.getType() != XMaterial.PLAYER_HEAD.parseMaterial()) return this;
+        final Optional<Material> playerHead = XMaterial.PLAYER_HEAD.parseMaterial();
+        if (!playerHead.isPresent()) return this;
+
+        if (itemStack.getType() != playerHead.get()) return this;
 
         SkullMeta skullMeta = (SkullMeta) meta;
         GameProfile profile = new GameProfile(UUID.randomUUID(), null);
@@ -250,7 +264,10 @@ public final class ItemBuilder {
      * @return {@link ItemBuilder}
      */
     public ItemBuilder setSkullOwner(@NotNull final OfflinePlayer player) {
-        if (itemStack.getType() != XMaterial.PLAYER_HEAD.parseMaterial()) return this;
+        final Optional<Material> playerHead = XMaterial.PLAYER_HEAD.parseMaterial();
+        if (!playerHead.isPresent()) return this;
+
+        if (itemStack.getType() != playerHead.get()) return this;
 
         final SkullMeta skullMeta = (SkullMeta) meta;
         skullMeta.setOwningPlayer(player);

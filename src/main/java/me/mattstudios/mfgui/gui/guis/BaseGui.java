@@ -307,6 +307,8 @@ public abstract class BaseGui implements InventoryHolder {
      */
     public void open(@NotNull final HumanEntity player) {
         Validate.notNull(player, "Player cannot be null when opening the GUI!");
+        if (player.isSleeping()) return;
+
         inventory.clear();
         populateGui();
         player.openInventory(inventory);
@@ -558,6 +560,10 @@ public abstract class BaseGui implements InventoryHolder {
      * @param slot The specific slot to display in the error message
      */
     private void throwInvalidSlot(final int slot) {
+        if (guiType == GuiType.CHEST) {
+            throw new GuiException("Slot " + slot + " is not valid for the gui type - " + guiType.name() + " and rows - " + rows + "!");
+        }
+
         throw new GuiException("Slot " + slot + " is not valid for the gui type - " + guiType.name() + "!");
     }
 

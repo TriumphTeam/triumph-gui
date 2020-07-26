@@ -75,6 +75,7 @@ public final class PersistentGui extends BaseGui {
      */
     @Override
     public void open(@NotNull final HumanEntity player) {
+        if (player.isSleeping()) return;
         populateGui();
         player.openInventory(getInventory());
     }
