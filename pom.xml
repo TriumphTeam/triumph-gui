@@ -120,12 +120,12 @@
         </dependency>
 
         <!-- Only for easier testing -->
-        <!--<dependency>
+        <dependency>
             <groupId>me.mattstudios.utils</groupId>
             <artifactId>matt-framework</artifactId>
             <version>LATEST</version>
             <scope>compile</scope>
-        </dependency>-->
+        </dependency>
     </dependencies>
 
     <build>
