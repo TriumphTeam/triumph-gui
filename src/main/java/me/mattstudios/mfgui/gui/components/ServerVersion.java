@@ -78,7 +78,7 @@ public enum ServerVersion {
      * @return Whether or not the server is running on a version before 1.13
      */
     public boolean isLegacy() {
-        return ordinal() < V1_13_R1.ordinal();
+        return versionNumber < V1_13_R1.versionNumber;
     }
 
     /**
