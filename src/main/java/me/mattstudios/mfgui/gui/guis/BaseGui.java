@@ -146,6 +146,26 @@ public abstract class BaseGui implements InventoryHolder {
     }
 
     /**
+     * Removes the {@link GuiItem} in the specific slot
+     *
+     * @param slot The GUI slot
+     */
+    public void removeItem(final int slot) {
+        validateSlot(slot);
+        guiItems.remove(slot);
+    }
+
+    /**
+     * Alternative {@link #removeItem(int)} with cols and rows
+     *
+     * @param row The row
+     * @param col The column
+     */
+    public void removeItem(final int row, final int col) {
+        removeItem(getSlotFromRowCol(row, col));
+    }
+
+    /**
      * Alternative {@link #setItem(int, GuiItem)} to set item that takes a {@link List} of slots instead
      *
      * @param slots   The slots in which the item should go
