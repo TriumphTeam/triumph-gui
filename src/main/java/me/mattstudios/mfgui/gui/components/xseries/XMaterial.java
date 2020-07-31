@@ -3,8 +3,8 @@ package me.mattstudios.mfgui.gui.components.xseries;
 import com.google.common.base.Enums;
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
-import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.ImmutableSet;
+import com.google.common.cache.CacheLoader;
+import com.google.common.cache.LoadingCache;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.Validate;
 import org.apache.commons.lang.WordUtils;
@@ -15,18 +15,24 @@ import org.bukkit.inventory.ItemStack;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.EnumMap;
 import java.util.EnumSet;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.Set;
 import java.util.concurrent.TimeUnit;
 import java.util.regex.Pattern;
+import java.util.regex.PatternSyntaxException;
 
 /**
- * Taken f
+ * Taken from: https://github.com/CryptoMorin/XSeries/blob/master/src/main/java/com/cryptomorin/xseries/XMaterial.java
  *
  * <b>XMaterial</b> - Data Values/Pre-flattening<br>
  * 1.13 and above as priority.
@@ -40,9 +46,13 @@ import java.util.regex.Pattern;
  * Material IDs: https://minecraft-ids.grahamedgecombe.com/
  * Material Source Code: https://hub.spigotmc.org/stash/projects/SPIGOT/repos/bukkit/browse/src/main/java/org/bukkit/Material.java
  * XMaterial v1: https://www.spigotmc.org/threads/329630/
+ * <p>
+ * This class will throw a "unsupported material" error if someone tries to use an item with an invalid data value which can only happen in 1.12 servers and below.
+ * To get an invalid item, (aka <a href="https://minecraft.fandom.com/wiki/Missing_Texture_Block">Missing Texture Block</a>) you can use the command
+ * <b>/give @p minecraft:dirt 1 10</b> where 1 is the item amount, and 10 is the data value. The material {@link #DIRT} with a data value of {@code 10} doesn't exist.
  *
  * @author Crypto Morin
- * @version 5.2.1
+ * @version 6.0.0
  * @see Material
  * @see ItemStack
  */
@@ -57,11 +67,11 @@ public enum XMaterial {
     ACACIA_PLANKS(4, "WOOD"),
     ACACIA_PRESSURE_PLATE("WOOD_PLATE"),
     ACACIA_SAPLING(4, "SAPLING"),
-    ACACIA_SIGN("SIGN"),
+    ACACIA_SIGN("SIGN_POST", "SIGN"),
     ACACIA_SLAB(4, "WOOD_STEP", "WOODEN_SLAB", "WOOD_DOUBLE_STEP"),
     ACACIA_STAIRS,
     ACACIA_TRAPDOOR("TRAP_DOOR"),
-    ACACIA_WALL_SIGN("SIGN_POST", "WALL_SIGN"),
+    ACACIA_WALL_SIGN("WALL_SIGN"),
     ACACIA_WOOD("LOG_2"),
     ACTIVATOR_RAIL,
     /**
@@ -117,11 +127,11 @@ public enum XMaterial {
     BIRCH_PLANKS(2, "WOOD"),
     BIRCH_PRESSURE_PLATE("WOOD_PLATE"),
     BIRCH_SAPLING(2, "SAPLING"),
-    BIRCH_SIGN("SIGN"),
+    BIRCH_SIGN("SIGN_POST", "SIGN"),
     BIRCH_SLAB(2, "WOOD_STEP", "WOODEN_SLAB", "WOOD_DOUBLE_STEP"),
     BIRCH_STAIRS("BIRCH_WOOD_STAIRS"),
     BIRCH_TRAPDOOR("TRAP_DOOR"),
-    BIRCH_WALL_SIGN("SIGN_POST", "WALL_SIGN"),
+    BIRCH_WALL_SIGN("WALL_SIGN"),
     BIRCH_WOOD(2, "LOG"),
     BLACKSTONE("1.16"),
     BLACKSTONE_SLAB("1.16"),
@@ -294,12 +304,12 @@ public enum XMaterial {
     CRIMSON_PLANKS("1.16"),
     CRIMSON_PRESSURE_PLATE("1.16"),
     CRIMSON_ROOTS("1.16"),
-    CRIMSON_SIGN("1.16"),
+    CRIMSON_SIGN("1.16", "SIGN_POST"),
     CRIMSON_SLAB("1.16"),
     CRIMSON_STAIRS("1.16"),
     CRIMSON_STEM("1.16"),
     CRIMSON_TRAPDOOR("1.16"),
-    CRIMSON_WALL_SIGN("1.16"),
+    CRIMSON_WALL_SIGN("1.16", "WALL_SIGN"),
     CROSSBOW,
     CRYING_OBSIDIAN("1.16"),
     CUT_RED_SANDSTONE("1.13"),
@@ -331,11 +341,11 @@ public enum XMaterial {
     DARK_OAK_PLANKS(5, "WOOD"),
     DARK_OAK_PRESSURE_PLATE("WOOD_PLATE"),
     DARK_OAK_SAPLING(5, "SAPLING"),
-    DARK_OAK_SIGN("SIGN"),
+    DARK_OAK_SIGN("SIGN_POST", "SIGN"),
     DARK_OAK_SLAB(5, "WOOD_STEP", "WOODEN_SLAB", "WOOD_DOUBLE_STEP"),
     DARK_OAK_STAIRS,
     DARK_OAK_TRAPDOOR("TRAP_DOOR"),
-    DARK_OAK_WALL_SIGN("SIGN_POST", "WALL_SIGN"),
+    DARK_OAK_WALL_SIGN("WALL_SIGN"),
     DARK_OAK_WOOD(1, "LOG", "LOG_2"),
     DARK_PRISMARINE(1, "PRISMARINE"),
     DARK_PRISMARINE_SLAB("1.13"),
@@ -576,11 +586,11 @@ public enum XMaterial {
     JUNGLE_PLANKS(3, "WOOD"),
     JUNGLE_PRESSURE_PLATE("WOOD_PLATE"),
     JUNGLE_SAPLING(3, "SAPLING"),
-    JUNGLE_SIGN("SIGN"),
+    JUNGLE_SIGN("SIGN_POST", "SIGN"),
     JUNGLE_SLAB(3, "WOOD_STEP", "WOODEN_SLAB", "WOOD_DOUBLE_STEP"),
     JUNGLE_STAIRS("JUNGLE_WOOD_STAIRS"),
     JUNGLE_TRAPDOOR("TRAP_DOOR"),
-    JUNGLE_WALL_SIGN("SIGN_POST", "WALL_SIGN"),
+    JUNGLE_WALL_SIGN("WALL_SIGN"),
     JUNGLE_WOOD(3, "LOG"),
     KELP("1.13"),
     KELP_PLANT("1.13"),
@@ -756,11 +766,11 @@ public enum XMaterial {
     OAK_PLANKS("WOOD"),
     OAK_PRESSURE_PLATE("WOOD_PLATE"),
     OAK_SAPLING("SAPLING"),
-    OAK_SIGN("SIGN"),
+    OAK_SIGN("SIGN_POST", "SIGN"),
     OAK_SLAB("WOOD_STEP", "WOODEN_SLAB", "WOOD_DOUBLE_STEP"),
     OAK_STAIRS("WOOD_STAIRS"),
     OAK_TRAPDOOR("TRAP_DOOR"),
-    OAK_WALL_SIGN("SIGN_POST", "WALL_SIGN"),
+    OAK_WALL_SIGN("WALL_SIGN"),
     OAK_WOOD("LOG"),
     OBSERVER,
     OBSIDIAN,
@@ -959,7 +969,7 @@ public enum XMaterial {
     RED_TULIP(4, "RED_ROSE"),
     RED_WALL_BANNER(1, "WALL_BANNER"),
     RED_WOOL(14, "WOOL"),
-    REPEATER("DIODE", "DIODE_BLOCK_ON", "DIODE_BLOCK_OFF"),
+    REPEATER("DIODE_BLOCK_ON", "DIODE_BLOCK_OFF", "DIODE"),
     REPEATING_COMMAND_BLOCK("COMMAND", "COMMAND_REPEATING"),
     RESPAWN_ANCHOR("1.16"),
     ROSE_BUSH(4, "DOUBLE_PLANT"),
@@ -1028,16 +1038,16 @@ public enum XMaterial {
     SPRUCE_DOOR("SPRUCE_DOOR_ITEM", "SPRUCE_DOOR"),
     SPRUCE_FENCE,
     SPRUCE_FENCE_GATE,
-    SPRUCE_LEAVES(1, "LEAVES"),
+    SPRUCE_LEAVES(1, "LEAVES", "LEAVES_2"),
     SPRUCE_LOG(1, "LOG"),
     SPRUCE_PLANKS(1, "WOOD"),
     SPRUCE_PRESSURE_PLATE("WOOD_PLATE"),
     SPRUCE_SAPLING(1, "SAPLING"),
-    SPRUCE_SIGN("SIGN"),
+    SPRUCE_SIGN("SIGN_POST", "SIGN"),
     SPRUCE_SLAB(1, "WOOD_STEP", "WOODEN_SLAB", "WOOD_DOUBLE_STEP"),
     SPRUCE_STAIRS("SPRUCE_WOOD_STAIRS"),
     SPRUCE_TRAPDOOR("TRAP_DOOR"),
-    SPRUCE_WALL_SIGN("SIGN_POST", "WALL_SIGN"),
+    SPRUCE_WALL_SIGN("WALL_SIGN"),
     SPRUCE_WOOD(1, "LOG"),
     SQUID_SPAWN_EGG(94, "MONSTER_EGG"),
     STICK,
@@ -1141,12 +1151,12 @@ public enum XMaterial {
     WARPED_PLANKS("1.16"),
     WARPED_PRESSURE_PLATE("1.16"),
     WARPED_ROOTS("1.16"),
-    WARPED_SIGN("1.16"),
+    WARPED_SIGN("1.16", "SIGN_POST"),
     WARPED_SLAB("1.16"),
     WARPED_STAIRS("1.16"),
     WARPED_STEM("1.16"),
     WARPED_TRAPDOOR("1.16"),
-    WARPED_WALL_SIGN("1.16"),
+    WARPED_WALL_SIGN("1.16", "WALL_SIGN"),
     WARPED_WART_BLOCK("1.16"),
     /**
      * This is used for blocks only.
@@ -1216,8 +1226,9 @@ public enum XMaterial {
 
 
     /**
-     * An immutable cached set of {@link XMaterial#values()} to avoid allocating memory for
+     * Cached set of {@link XMaterial#values()} to avoid allocating memory for
      * calling the method every time.
+     * This set is mutable for performance, but do not change the elements.
      *
      * @since 2.0.0
      */
@@ -1228,7 +1239,7 @@ public enum XMaterial {
      *
      * @since 5.1.0
      */
-    private static final Map<String, XMaterial> NAMES;
+    private static final Map<String, XMaterial> NAMES = new HashMap<>();
 
     /**
      * A set of material names that can be damaged.
@@ -1238,13 +1249,13 @@ public enum XMaterial {
      *
      * @since 1.0.0
      */
-    private static final ImmutableSet<String> DAMAGEABLE = ImmutableSet.of(
+    private static final Set<String> DAMAGEABLE = new HashSet<>(Arrays.asList(
             "HELMET", "CHESTPLATE", "LEGGINGS", "BOOTS",
             "SWORD", "AXE", "PICKAXE", "SHOVEL", "HOE",
             "ELYTRA", "TRIDENT", "HORSE_ARMOR", "BARDING",
             "SHEARS", "FLINT_AND_STEEL", "BOW", "FISHING_ROD",
             "CARROT_ON_A_STICK", "CARROT_STICK", "SPADE", "SHIELD"
-    );
+    ));
     /**
      * <b>XMaterial Paradox (Duplication Check)</b>
      * <p>
@@ -1269,13 +1280,14 @@ public enum XMaterial {
         // for 1.12 to parse the material, but it needs <type>_DOOR_ITEM.
         // We'll trick XMaterial into thinking this needs to be parsed
         // using the old methods.
-        // These materials have their enum name added to the legacy list as well.
+        // Some of these materials have their enum name added to the legacy list as well.
         put(DARK_OAK_DOOR, DARK_OAK_DOOR);
         put(ACACIA_DOOR, ACACIA_DOOR);
         put(BIRCH_DOOR, BIRCH_DOOR);
         put(JUNGLE_DOOR, JUNGLE_DOOR);
         put(SPRUCE_DOOR, SPRUCE_DOOR);
         put(CAULDRON, CAULDRON);
+        put(BREWING_STAND, BREWING_STAND);
     }};
 
     /**
@@ -1285,7 +1297,6 @@ public enum XMaterial {
      * @since 1.0.0
      */
     private static final Cache<String, XMaterial> NAME_CACHE = CacheBuilder.newBuilder()
-                                                                           .softValues()
                                                                            .expireAfterAccess(15, TimeUnit.MINUTES)
                                                                            .build();
     /*
@@ -1309,16 +1320,26 @@ public enum XMaterial {
      * @since 3.0.0
      */
     private static final Cache<XMaterial, Optional<Material>> PARSED_CACHE = CacheBuilder.newBuilder()
-                                                                                         .softValues()
                                                                                          .expireAfterAccess(10, TimeUnit.MINUTES)
                                                                                          .build();
     /**
-     * Pre-compiled RegEx pattern.
-     * Include both replacements to avoid recreating string multiple times with multiple RegEx checks.
+     * This is used for {@link #isOneOf(Collection)}
      *
-     * @since 3.0.0
+     * @since 3.4.0
      */
-    private static final Pattern FORMAT_PATTERN = Pattern.compile("\\W+");
+    private static final LoadingCache<String, Pattern> CACHED_REGEX = CacheBuilder.newBuilder()
+                                                                                  .expireAfterAccess(1, TimeUnit.HOURS)
+                                                                                  .build(new CacheLoader<String, Pattern>() {
+                                                                                      @Override
+                                                                                      public Pattern load(@Nonnull String str) {
+                                                                                          try {
+                                                                                              return Pattern.compile(str);
+                                                                                          } catch (PatternSyntaxException ex) {
+                                                                                              ex.printStackTrace();
+                                                                                              return null;
+                                                                                          }
+                                                                                      }
+                                                                                  });
     /**
      * The current version of the server in the a form of a major version.
      *
@@ -1334,9 +1355,7 @@ public enum XMaterial {
     private static final boolean ISFLAT = supports(13);
 
     static {
-        ImmutableMap.Builder<String, XMaterial> builder = ImmutableMap.builder();
-        for (XMaterial material : VALUES) builder.put(material.name(), material);
-        NAMES = builder.build();
+        for (XMaterial material : VALUES) NAMES.put(material.name(), material);
     }
 
     /**
@@ -1463,8 +1482,9 @@ public enum XMaterial {
         Validate.notEmpty(name, "Cannot check for null or empty material name");
         name = format(name);
 
-        for (XMaterial materials : VALUES)
+        for (XMaterial materials : VALUES) {
             if (materials.name().equals(name)) return true;
+        }
         return false;
     }
 
@@ -1484,13 +1504,13 @@ public enum XMaterial {
 
     /**
      * Parses material name and data value from the specified string.
-     * The seperators are: <b>, or :</b>
+     * The separator for the material name and its data value is {@code :}
      * Spaces are allowed. Mostly used when getting materials from config for old school minecrafters.
      * <p>
      * <b>Examples</b>
      * <p><pre>
      *     {@code INK_SACK:1 -> RED_DYE}
-     *     {@code WOOL, 14  -> RED_WOOL}
+     *     {@code WOOL: 14  -> RED_WOOL}
      * </pre>
      *
      * @param name the material string that consists of the material name, data and separator character.
@@ -1500,13 +1520,15 @@ public enum XMaterial {
      */
     @Nonnull
     private static Optional<XMaterial> matchXMaterialWithData(String name) {
-        for (char separator : new char[]{',', ':'}) {
-            int index = name.indexOf(separator);
-            if (index == -1) continue;
-
+        int index = name.indexOf(':');
+        if (index != -1) {
             String mat = format(name.substring(0, index));
-            byte data = Byte.parseByte(StringUtils.deleteWhitespace(name.substring(index + 1)));
-            return matchDefinedXMaterial(mat, data);
+
+            try {
+                byte data = (byte) Integer.parseInt(StringUtils.deleteWhitespace(name.substring(index + 1)));
+                return matchDefinedXMaterial(mat, data);
+            } catch (NumberFormatException ignored) {
+            }
         }
 
         return Optional.empty();
@@ -1524,7 +1546,7 @@ public enum XMaterial {
     public static XMaterial matchXMaterial(@Nonnull Material material) {
         Objects.requireNonNull(material, "Cannot match null material");
         return matchDefinedXMaterial(material.name(), (byte) -1)
-                .orElseThrow(() -> new IllegalArgumentException("Unsupported Material With No Bytes: " + material.name()));
+                .orElseThrow(() -> new IllegalArgumentException("Unsupported material with no data value: " + material.name()));
     }
 
     /**
@@ -1544,7 +1566,7 @@ public enum XMaterial {
         byte data = (byte) (ISFLAT || isDamageable(material) ? 0 : item.getDurability());
 
         return matchDefinedXMaterial(material, data)
-                .orElseThrow(() -> new IllegalArgumentException("Unsupported Material: " + material + " (" + data + ')'));
+                .orElseThrow(() -> new IllegalArgumentException("Unsupported material: " + material + " (" + data + ')'));
     }
 
     /**
@@ -1638,16 +1660,41 @@ public enum XMaterial {
 
     /**
      * Attempts to build the string like an enum name.
-     * Removes all the spaces, numbers and extra non-English characters. Also removes some config/in-game based strings.
+     * Removes all the spaces, and extra non-English characters. Also removes some config/in-game based strings.
+     * While this method is hard to maintain, it's extremely efficient. It's approximately more than x5 times faster than
+     * the normal RegEx + String Methods approach for both formatted and unformatted material names.
      *
      * @param name the material name to modify.
      * @return a Material enum name.
      * @since 2.0.0
      */
     @Nonnull
-    private static String format(@Nonnull String name) {
-        return FORMAT_PATTERN.matcher(
-                name.trim().replace('-', '_').replace(' ', '_')).replaceAll("").toUpperCase(Locale.ENGLISH);
+    protected static String format(@Nonnull String name) {
+        int len = name.length();
+        char[] chs = new char[len];
+        int count = 0;
+        boolean appendUnderline = false;
+
+        for (int i = 0; i < len; ++i) {
+            char ch = name.charAt(i);
+
+            if (!appendUnderline && count != 0 && (ch == '-' || ch == ' ' || ch == '_') && chs[count] != '_') appendUnderline = true;
+            else {
+                boolean number = false;
+                // Old materials have numbers in them.
+                if ((ch >= 'A' && ch <= 'Z') || (ch >= 'a' && ch <= 'z') || (number = (ch >= '0' && ch <= '9'))) {
+                    if (appendUnderline) {
+                        chs[count++] = '_';
+                        appendUnderline = false;
+                    }
+
+                    if (number) chs[count++] = ch;
+                    else chs[count++] = (char) (ch & 0x5f);
+                }
+            }
+        }
+
+        return new String(chs, 0, count);
     }
 
     /**
@@ -1733,8 +1780,9 @@ public enum XMaterial {
      */
     public static boolean isDamageable(@Nonnull String name) {
         Objects.requireNonNull(name, "Material name cannot be null");
-        for (String damageable : DAMAGEABLE)
+        for (String damageable : DAMAGEABLE) {
             if (name.contains(damageable)) return true;
+        }
         return false;
     }
 
@@ -1774,35 +1822,31 @@ public enum XMaterial {
      * <p>
      * Want to learn RegEx? You can mess around in <a href="https://regexr.com/">RegExr</a> website.
      *
-     * @param material  the base material to match other materials with.
      * @param materials the material names to check base material on.
      * @return true if one of the given material names is similar to the base material.
      * @since 3.1.1
      */
-    public static boolean isOneOf(@Nonnull Material material, @Nullable List<String> materials) {
+    public boolean isOneOf(@Nullable Collection<String> materials) {
         if (materials == null || materials.isEmpty()) return false;
-        Objects.requireNonNull(material, "Cannot match materials with a null material");
-        String name = material.name();
+        String name = this.name();
 
         for (String comp : materials) {
-            comp = comp.toUpperCase();
-            if (comp.startsWith("CONTAINS:")) {
-                comp = format(comp.substring(9));
+            String checker = comp.toUpperCase(Locale.ENGLISH);
+            if (checker.startsWith("CONTAINS:")) {
+                comp = format(checker.substring(9));
                 if (name.contains(comp)) return true;
                 continue;
             }
-            if (comp.startsWith("REGEX:")) {
+            if (checker.startsWith("REGEX:")) {
                 comp = comp.substring(6);
-                if (name.matches(comp)) return true;
+                Pattern pattern = CACHED_REGEX.getUnchecked(comp);
+                if (pattern != null && pattern.matcher(name).matches()) return true;
                 continue;
             }
 
             // Direct Object Equals
-            Optional<XMaterial> mat = matchXMaterial(comp);
-            if (mat.isPresent()) {
-                Optional<Material> xmat = mat.get().parseMaterial();
-                if (xmat.isPresent() && xmat.get() == material) return true;
-            }
+            Optional<XMaterial> xMat = matchXMaterial(comp);
+            if (xMat.isPresent() && xMat.get() == this) return true;
         }
         return false;
     }
@@ -1836,26 +1880,12 @@ public enum XMaterial {
     @SuppressWarnings("deprecation")
     public ItemStack setType(@Nonnull ItemStack item) {
         Objects.requireNonNull(item, "Cannot set material for null ItemStack");
-        Optional<Material> opt = this.parseMaterial();
-        Validate.isTrue(opt.isPresent(), "Unsupported material: " + this.name());
+        Material material = this.parseMaterial();
+        Validate.isTrue(material != null, "Unsupported material: " + this.name());
 
-        item.setType(opt.get());
+        item.setType(material);
         if (!ISFLAT && !this.isDamageable()) item.setDurability(this.data);
         return item;
-    }
-
-    /**
-     * Checks if the list of given material names matches the given base material.
-     * Mostly used for configs.
-     *
-     * @param materials the material names to check base material on.
-     * @return true if one of the given material names is similar to the base material.
-     * @see #isOneOf(Material, List)
-     * @since 3.0.0
-     */
-    public boolean isOneOf(@Nullable List<String> materials) {
-        Optional<Material> material = this.parseMaterial();
-        return material.filter(value -> isOneOf(value, materials)).isPresent();
     }
 
     /**
@@ -1897,8 +1927,8 @@ public enum XMaterial {
     @SuppressWarnings("deprecation")
     public int getId() {
         if (this.data != 0 || (this.legacy.length != 0 && Integer.parseInt(this.legacy[0].substring(2)) >= 13)) return -1;
-        Optional<Material> opt = this.parseMaterial();
-        return opt.map(Material::getId).orElse(-1);
+        Material material = this.parseMaterial();
+        return material.getId();
     }
 
     /**
@@ -1977,9 +2007,8 @@ public enum XMaterial {
     @Nullable
     @SuppressWarnings("deprecation")
     public ItemStack parseItem(boolean suggest) {
-        Optional<Material> opt = this.parseMaterial(suggest);
-        if (!opt.isPresent()) return null;
-        Material material = opt.get();
+        Material material = this.parseMaterial(suggest);
+        Objects.requireNonNull(material, "Unsupported material: " + this.name() + " (" + data + '\'');
         return ISFLAT ? new ItemStack(material) : new ItemStack(material, 1, this.data);
     }
 
@@ -1990,8 +2019,8 @@ public enum XMaterial {
      * @see #parseMaterial(boolean)
      * @since 1.0.0
      */
-    @Nonnull
-    public Optional<Material> parseMaterial() {
+    @Nullable
+    public Material parseMaterial() {
         return parseMaterial(false);
     }
 
@@ -2003,10 +2032,10 @@ public enum XMaterial {
      * @since 2.0.0
      */
     @SuppressWarnings("OptionalAssignedToNull")
-    @Nonnull
-    public Optional<Material> parseMaterial(boolean suggest) {
+    @Nullable
+    public Material parseMaterial(boolean suggest) {
         Optional<Material> cache = PARSED_CACHE.getIfPresent(this);
-        if (cache != null) return cache;
+        if (cache != null) return cache.orElse(null);
         Material mat;
 
         if (!ISFLAT && this.isDuplicated()) mat = requestOldMaterial(suggest);
@@ -2017,7 +2046,7 @@ public enum XMaterial {
 
         Optional<Material> opt = Optional.ofNullable(mat);
         PARSED_CACHE.put(this, opt);
-        return opt;
+        return mat;
     }
 
     /**
@@ -2062,7 +2091,7 @@ public enum XMaterial {
     @SuppressWarnings("deprecation")
     public boolean isSimilar(@Nonnull ItemStack item) {
         Objects.requireNonNull(item, "Cannot compare with null ItemStack");
-        if (item.getType() != this.parseMaterial().orElse(null)) return false;
+        if (item.getType() != this.parseMaterial()) return false;
         return ISFLAT || this.isDamageable() || item.getDurability() == this.data;
     }
 
