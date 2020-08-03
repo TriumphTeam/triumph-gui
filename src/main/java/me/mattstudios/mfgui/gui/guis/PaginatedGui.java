@@ -1,6 +1,10 @@
 package me.mattstudios.mfgui.gui.guis;
 
-import org.bukkit.Bukkit;
+import net.minecraft.server.v1_16_R1.ChatMessage;
+import net.minecraft.server.v1_16_R1.Containers;
+import net.minecraft.server.v1_16_R1.EntityPlayer;
+import net.minecraft.server.v1_16_R1.PacketPlayOutOpenWindow;
+import org.bukkit.craftbukkit.v1_16_R1.entity.CraftPlayer;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
@@ -237,17 +241,25 @@ public class PaginatedGui extends BaseGui {
     public BaseGui updateTitle(@NotNull final String title) {
         setTitle(title);
 
-        setUpdating(true);
+        final List<HumanEntity> viewers = new ArrayList<>(getInventory().getViewers());
+        for (final HumanEntity player : viewers) {
+            EntityPlayer ep = ((CraftPlayer) player).getHandle();
+            PacketPlayOutOpenWindow packet = new PacketPlayOutOpenWindow(ep.activeContainer.windowId, Containers.GENERIC_9X6, new ChatMessage(title));
+            ep.playerConnection.sendPacket(packet);
+            ep.updateInventory(ep.activeContainer);
+        }
+
+        /*setUpdating(true);
 
         final List<HumanEntity> viewers = new ArrayList<>(getInventory().getViewers());
 
         setInventory(Bukkit.createInventory(this, getInventory().getSize(), title));
 
         for (final HumanEntity player : viewers) {
-            open(player, getCurrentPageNum());
+            open(player, getPageNum());
         }
 
-        setUpdating(false);
+        setUpdating(false);*/
 
         return this;
     }
@@ -444,8 +456,6 @@ public class PaginatedGui extends BaseGui {
 
     /**
      * Updates the page content
-     *
-     * @since 2.2.5
      */
     void updatePage() {
         clearPage();
