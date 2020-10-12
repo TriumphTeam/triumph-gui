@@ -1,5 +1,6 @@
-package me.mattstudios.mfgui.gui.components;
+package me.mattstudios.mfgui.gui.components.util;
 
+import me.mattstudios.mfgui.gui.components.exception.GuiException;
 import me.mattstudios.mfgui.gui.guis.BaseGui;
 import me.mattstudios.mfgui.gui.guis.GuiItem;
 import me.mattstudios.mfgui.gui.guis.PaginatedGui;

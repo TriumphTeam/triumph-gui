@@ -1,7 +1,7 @@
 package me.mattstudios.mfgui.gui.guis;
 
 import me.mattstudios.mfgui.gui.components.GuiAction;
-import me.mattstudios.mfgui.gui.components.ItemNBT;
+import me.mattstudios.mfgui.gui.components.util.ItemNBT;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
@@ -39,6 +39,12 @@ public final class GuiListener implements Listener {
         final GuiAction<InventoryClickEvent> defaultTopClick = gui.getDefaultTopClickAction();
         if (defaultTopClick != null && event.getClickedInventory().getType() != InventoryType.PLAYER) {
             defaultTopClick.execute(event);
+        }
+
+        // Default click action and checks weather or not there is a default action and executes it
+        final GuiAction<InventoryClickEvent> playerInventoryClick = gui.getPlayerInventoryAction();
+        if (playerInventoryClick != null && event.getClickedInventory().getType() == InventoryType.PLAYER) {
+            playerInventoryClick.execute(event);
         }
 
         // Default click action and checks weather or not there is a default action and executes it

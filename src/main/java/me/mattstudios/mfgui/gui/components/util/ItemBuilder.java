@@ -1,8 +1,11 @@
-package me.mattstudios.mfgui.gui.components;
+package me.mattstudios.mfgui.gui.components.util;
 
 import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.properties.Property;
+import me.mattstudios.mfgui.gui.components.GuiAction;
+import me.mattstudios.mfgui.gui.components.ServerVersion;
 import me.mattstudios.mfgui.gui.components.xseries.XMaterial;
+import me.mattstudios.mfgui.gui.components.exception.GuiException;
 import me.mattstudios.mfgui.gui.guis.GuiItem;
 import org.apache.commons.lang.Validate;
 import org.bukkit.Bukkit;

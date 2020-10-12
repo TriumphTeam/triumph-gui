@@ -1,7 +1,7 @@
 package me.mattstudios.mfgui.gui.guis;
 
 import me.mattstudios.mfgui.gui.components.GuiAction;
-import me.mattstudios.mfgui.gui.components.ItemNBT;
+import me.mattstudios.mfgui.gui.components.util.ItemNBT;
 import org.apache.commons.lang.Validate;
 import org.bukkit.Material;
 import org.bukkit.event.inventory.InventoryClickEvent;

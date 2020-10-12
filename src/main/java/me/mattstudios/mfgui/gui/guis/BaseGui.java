@@ -1,9 +1,9 @@
 package me.mattstudios.mfgui.gui.guis;
 
 import me.mattstudios.mfgui.gui.components.GuiAction;
-import me.mattstudios.mfgui.gui.components.GuiException;
-import me.mattstudios.mfgui.gui.components.GuiFiller;
 import me.mattstudios.mfgui.gui.components.GuiType;
+import me.mattstudios.mfgui.gui.components.exception.GuiException;
+import me.mattstudios.mfgui.gui.components.util.GuiFiller;
 import org.apache.commons.lang.Validate;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.HumanEntity;
@@ -21,7 +21,6 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -64,6 +63,8 @@ public abstract class BaseGui implements InventoryHolder {
     private GuiAction<InventoryClickEvent> defaultClickAction;
     // Action to execute when clicking on the top part of the GUI only
     private GuiAction<InventoryClickEvent> defaultTopClickAction;
+    // Action to execute when clicking on the player Inventory
+    private GuiAction<InventoryClickEvent> playerInventoryAction;
     // Action to execute when dragging the item on the GUI
     private GuiAction<InventoryDragEvent> dragAction;
     // Action to execute when GUI closes
@@ -224,6 +225,10 @@ public abstract class BaseGui implements InventoryHolder {
      */
     public void setDefaultTopClickAction(@Nullable final GuiAction<InventoryClickEvent> defaultTopClickAction) {
         this.defaultTopClickAction = defaultTopClickAction;
+    }
+
+    public void setPlayerInventoryAction(@Nullable final GuiAction<InventoryClickEvent> playerInventoryAction) {
+        this.playerInventoryAction = playerInventoryAction;
     }
 
     /**
@@ -441,7 +446,7 @@ public abstract class BaseGui implements InventoryHolder {
      * @return The {@link Map} with all the {@link #guiItems}
      */
     public Map<Integer, GuiItem> getGuiItems() {
-        return Collections.unmodifiableMap(guiItems);
+        return guiItems;
     }
 
     /**
@@ -476,6 +481,14 @@ public abstract class BaseGui implements InventoryHolder {
     @Nullable
     GuiAction<InventoryClickEvent> getDefaultTopClickAction() {
         return defaultTopClickAction;
+    }
+
+    /**
+     * Gets the player inventory action
+     */
+    @Nullable
+    GuiAction<InventoryClickEvent> getPlayerInventoryAction() {
+        return playerInventoryAction;
     }
 
     /**
@@ -524,8 +537,8 @@ public abstract class BaseGui implements InventoryHolder {
      * Populates the GUI with it's items
      */
     void populateGui() {
-        for (final Map.Entry<Integer, GuiItem> entry : getGuiItems().entrySet()) {
-            getInventory().setItem(entry.getKey(), entry.getValue().getItemStack());
+        for (final Map.Entry<Integer, GuiItem> entry : guiItems.entrySet()) {
+            inventory.setItem(entry.getKey(), entry.getValue().getItemStack());
         }
     }
 

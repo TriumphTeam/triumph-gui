@@ -1,10 +1,6 @@
 package me.mattstudios.mfgui.gui.guis;
 
-import net.minecraft.server.v1_16_R1.ChatMessage;
-import net.minecraft.server.v1_16_R1.Containers;
-import net.minecraft.server.v1_16_R1.EntityPlayer;
-import net.minecraft.server.v1_16_R1.PacketPlayOutOpenWindow;
-import org.bukkit.craftbukkit.v1_16_R1.entity.CraftPlayer;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
@@ -241,15 +237,15 @@ public class PaginatedGui extends BaseGui {
     public BaseGui updateTitle(@NotNull final String title) {
         setTitle(title);
 
-        final List<HumanEntity> viewers = new ArrayList<>(getInventory().getViewers());
+        /*final List<HumanEntity> viewers = new ArrayList<>(getInventory().getViewers());
         for (final HumanEntity player : viewers) {
-            EntityPlayer ep = ((CraftPlayer) player).getHandle();
+            /*EntityPlayer ep = ((CraftPlayer) player).getHandle();
             PacketPlayOutOpenWindow packet = new PacketPlayOutOpenWindow(ep.activeContainer.windowId, Containers.GENERIC_9X6, new ChatMessage(title));
             ep.playerConnection.sendPacket(packet);
             ep.updateInventory(ep.activeContainer);
-        }
+        }*/
 
-        /*setUpdating(true);
+        setUpdating(true);
 
         final List<HumanEntity> viewers = new ArrayList<>(getInventory().getViewers());
 
@@ -259,7 +255,7 @@ public class PaginatedGui extends BaseGui {
             open(player, getPageNum());
         }
 
-        setUpdating(false);*/
+        setUpdating(false);
 
         return this;
     }
