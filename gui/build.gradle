@@ -1,0 +1,78 @@
+plugins {
+    id "maven-publish"
+}
+
+group = "me.mattstudios"
+version = parent.version
+
+repositories {
+    maven { url = "https://repo.mattstudios.me/artifactory/public/" }
+    maven { url = "https://libraries.minecraft.net/" }
+}
+
+dependencies {
+    implementation "me.mattstudios:server-version-util:1.0.1"
+
+    compileOnly "org.jetbrains:annotations:20.0.0"
+    compileOnly "com.mojang:authlib:1.5.21"
+}
+
+tasks.withType(JavaCompile) {
+    options.encoding = 'UTF-8'
+}
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+
+            from components.java
+            versionMapping {
+                usage("java-api") {
+                    fromResolutionOf("runtimeClasspath")
+                }
+                usage("java-runtime") {
+                    fromResolutionResult()
+                }
+            }
+            pom {
+                name = "Triumph GUI"
+                description = "Lib for easy creation of GUIs for Bukkit plugins."
+                url = "https://github.com/TriumphDev/triumph-gui"
+
+                licenses {
+                    license {
+                        name = "MIT License"
+                        url = "http://www.opensource.org/licenses/mit-license.php"
+                    }
+                }
+
+                developers {
+                    developer {
+                        id = "matt"
+                        name = "Mateus Moreira"
+                    }
+                }
+
+                scm {
+                    connection = "scm:git:git://github.com/TriumphDev/triumph-gui.git"
+                    developerConnection = "scm:git:ssh://github.com:TriumphDev/triumph-gui.git"
+                    url = "http://github.com/TriumphDev/triumph-gui"
+                }
+            }
+        }
+    }
+
+    repositories {
+        maven {
+            credentials {
+                username repoUsername
+                password repoPassword
+            }
+
+            url = repoUrl
+        }
+    }
+
+}
+
+
