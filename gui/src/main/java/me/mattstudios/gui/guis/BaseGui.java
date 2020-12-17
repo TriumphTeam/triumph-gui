@@ -2,9 +2,8 @@ package me.mattstudios.gui.guis;
 
 import me.mattstudios.gui.components.GuiAction;
 import me.mattstudios.gui.components.GuiType;
-import me.mattstudios.gui.components.util.GuiFiller;
 import me.mattstudios.gui.components.exception.GuiException;
-import org.apache.commons.lang.Validate;
+import me.mattstudios.gui.components.util.GuiFiller;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
@@ -76,6 +75,10 @@ public abstract class BaseGui implements InventoryHolder {
 
     // Whether or not the GUI is updating
     private boolean updating;
+
+    // Whether or not should run the actions from the close and open methods
+    private boolean runCloseAction = true;
+    private boolean runOpenAction = true;
 
     /**
      * Main constructor that takes rows
@@ -331,7 +334,6 @@ public abstract class BaseGui implements InventoryHolder {
      * @param player The {@link HumanEntity} to open the GUI to
      */
     public void open(@NotNull final HumanEntity player) {
-        Validate.notNull(player, "Player cannot be null when opening the GUI!");
         if (player.isSleeping()) return;
 
         inventory.clear();
@@ -340,13 +342,26 @@ public abstract class BaseGui implements InventoryHolder {
     }
 
     /**
-     * Closes the GUI with a {@code 2s} delay (to prevent items from being taken from the {@link Inventory})
+     * Closes the GUI with a {@code 2 tick} delay (to prevent items from being taken from the {@link Inventory})
      *
      * @param player The {@link HumanEntity} to close the GUI to
      */
     public void close(@NotNull final HumanEntity player) {
-        Validate.notNull(player, "Player cannot be null when closing the GUI!");
-        Bukkit.getScheduler().runTaskLater(plugin, player::closeInventory, 2L);
+        close(player, true);
+    }
+
+    /**
+     * Closes the GUI with a {@code 2 tick} delay (to prevent items from being taken from the {@link Inventory})
+     *
+     * @param player         The {@link HumanEntity} to close the GUI to
+     * @param runCloseAction If should or not run the close action
+     */
+    public void close(@NotNull final HumanEntity player, final boolean runCloseAction) {
+        Bukkit.getScheduler().runTaskLater(plugin, () -> {
+            this.runCloseAction = runCloseAction;
+            player.closeInventory();
+            this.runCloseAction = true;
+        }, 2L);
     }
 
     /**
@@ -540,6 +555,14 @@ public abstract class BaseGui implements InventoryHolder {
         for (final Map.Entry<Integer, GuiItem> entry : guiItems.entrySet()) {
             inventory.setItem(entry.getKey(), entry.getValue().getItemStack());
         }
+    }
+
+    boolean shouldRunCloseAction() {
+        return runCloseAction;
+    }
+
+    boolean shouldRunOpenAction() {
+        return runOpenAction;
     }
 
     /**
