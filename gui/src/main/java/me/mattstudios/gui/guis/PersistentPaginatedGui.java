@@ -19,7 +19,7 @@ import java.util.Map;
  * GUI that does not clear it's items once it's closed
  */
 @SuppressWarnings("unused")
-public final class PersistentPaginatedGui extends PaginatedGui implements Serializable {
+public class PersistentPaginatedGui extends PaginatedGui implements Serializable {
 
     // Contains all the pages
     private final List<Page> pages = new ArrayList<>();

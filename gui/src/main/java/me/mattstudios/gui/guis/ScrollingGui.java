@@ -11,7 +11,7 @@ import java.util.List;
  * GUI that allows you to scroll through items
  */
 @SuppressWarnings("unused")
-public final class ScrollingGui extends PaginatedGui {
+public class ScrollingGui extends PaginatedGui {
 
     private final ScrollType scrollType;
     private int scrollSize = 0;

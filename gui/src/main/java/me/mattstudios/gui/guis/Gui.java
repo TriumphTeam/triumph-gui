@@ -7,7 +7,7 @@ import org.jetbrains.annotations.NotNull;
 /**
  * Standard GUI implementation of {@link BaseGui}
  */
-public final class Gui extends BaseGui {
+public class Gui extends BaseGui {
 
     /**
      * Main constructor for the GUI

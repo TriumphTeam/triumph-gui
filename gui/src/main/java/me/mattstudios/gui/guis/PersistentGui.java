@@ -12,7 +12,7 @@ import java.util.Map;
  * GUI that does not clear it's items once it's closed
  */
 @SuppressWarnings("unused")
-public final class PersistentGui extends BaseGui {
+public class PersistentGui extends BaseGui {
 
     /**
      * Main constructor of the Persistent GUI
