@@ -7,6 +7,7 @@ import me.mattstudios.gui.guis.BaseGui
 import me.mattstudios.gui.guis.Gui
 import me.mattstudios.gui.guis.GuiItem
 import me.mattstudios.gui.guis.PaginatedGui
+import me.mattstudios.gui.guis.PersistentGui
 import me.mattstudios.mf.annotations.Command
 import me.mattstudios.mf.annotations.Default
 import me.mattstudios.mf.base.CommandBase
@@ -42,12 +43,14 @@ class GuiCommand : CommandBase() {
 
     @Default
     fun gui(player: Player) {
-        val gui = Gui("Hello")
+        val gui: PersistentGui = PersistentGui("Hello")
         gui.setDefaultClickAction { it.isCancelled = true }
 
         gui.setCloseGuiAction { event ->
             player.sendMessage("closing")
         }
+
+        gui.addItem(listOf(ItemStack(Material.DIAMOND), ItemStack(Material.DIRT)))
 
         // Creates the item builder like you do
         val itemBuilder = ItemBuilder.from(XMaterial.PAPER.parseMaterial()!!)

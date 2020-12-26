@@ -6,6 +6,7 @@ import org.bukkit.plugin.Plugin;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Collections;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -66,6 +67,16 @@ public class PersistentGui extends BaseGui {
      */
     public Map<Integer, ItemStack> addItem(@NotNull final ItemStack... items) {
         return Collections.unmodifiableMap(getInventory().addItem(items));
+    }
+
+    /**
+     * Adds {@link ItemStack} to the inventory straight, not the GUI
+     *
+     * @param items Varargs with {@link ItemStack}s
+     * @return An immutable {@link Map} with the left overs
+     */
+    public Map<Integer, ItemStack> addItem(@NotNull final List<ItemStack> items) {
+        return addItem(items.toArray(new ItemStack[0]));
     }
 
     /**
