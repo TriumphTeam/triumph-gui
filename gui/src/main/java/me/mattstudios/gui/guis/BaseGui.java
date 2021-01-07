@@ -93,6 +93,7 @@ public abstract class BaseGui implements InventoryHolder {
         this.rows = finalRows;
         this.title = title;
 
+        // TODO remove some of this inventory creations
         inventory = Bukkit.createInventory(this, this.rows * 9, title);
     }
 
@@ -590,7 +591,7 @@ public abstract class BaseGui implements InventoryHolder {
      *
      * @param inventory The new inventory
      */
-    void setInventory(@NotNull final Inventory inventory) {
+    public void setInventory(@NotNull final Inventory inventory) {
         this.inventory = inventory;
     }
 

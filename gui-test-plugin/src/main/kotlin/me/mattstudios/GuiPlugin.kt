@@ -8,6 +8,8 @@ import me.mattstudios.gui.guis.Gui
 import me.mattstudios.gui.guis.GuiItem
 import me.mattstudios.gui.guis.PaginatedGui
 import me.mattstudios.gui.guis.PersistentGui
+import me.mattstudios.gui.guis.ScrollingGui
+import me.mattstudios.mf.annotations.Alias
 import me.mattstudios.mf.annotations.Command
 import me.mattstudios.mf.annotations.Default
 import me.mattstudios.mf.base.CommandBase
@@ -16,6 +18,13 @@ import org.bukkit.Material
 import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
 import org.bukkit.plugin.java.JavaPlugin
+import org.bukkit.command.CommandSender
+
+import me.mattstudios.mf.annotations.SubCommand
+import org.bukkit.Bukkit
+import org.bukkit.block.Block
+import org.bukkit.event.inventory.InventoryType
+
 
 /**
  * @author Matt
@@ -43,28 +52,24 @@ class GuiCommand : CommandBase() {
 
     @Default
     fun gui(player: Player) {
-        val gui: PersistentGui = PersistentGui("Hello")
+        val gui = ScrollingGui(6, "Hello")
         gui.setDefaultClickAction { it.isCancelled = true }
+        gui.filler.fillBorder(ItemBuilder.from(Material.BLACK_STAINED_GLASS_PANE).asGuiItem())
 
-        gui.setCloseGuiAction { event ->
-            player.sendMessage("closing")
+        val materials = Material.values().filter { it.isItem }
+
+        gui.setItem(6, 3, ItemBuilder.from(Material.PAPER).asGuiItem { gui.previous() })
+        gui.setItem(6, 7, ItemBuilder.from(Material.PAPER).asGuiItem { gui.next() })
+
+        repeat(500) {
+            val item = ItemBuilder.from(materials.random()).asGuiItem { event ->
+                player.sendMessage("changing")
+                gui.updatePageItem(event.slot, ItemBuilder.from(Material.LIME_CONCRETE).asGuiItem {
+                    player.sendMessage("Confirming!!")
+                })
+            }
+            gui.addItem(item)
         }
-
-        gui.addItem(listOf(ItemStack(Material.DIAMOND), ItemStack(Material.DIRT)))
-
-        // Creates the item builder like you do
-        val itemBuilder = ItemBuilder.from(XMaterial.PAPER.parseMaterial()!!)
-        // Name like you do
-        itemBuilder.setName("&a&lStaff Chat")
-        // The lore, but unlike you it doesn't add each line it's just the main one
-        itemBuilder.setLore("&7when you type in chat it automaticly goes to staffchat.")
-
-        // Just for testing if it'll update or not
-        var i = 0
-        // The main item
-        gui.setItem(1, itemBuilder.asGuiItem() {
-            gui.close(player, false)
-        })
 
         gui.open(player)
     }

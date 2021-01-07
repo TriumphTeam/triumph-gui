@@ -177,7 +177,13 @@ public class PaginatedGui extends BaseGui {
      */
     public void updatePageItem(final int slot, @NotNull final GuiItem item) {
         if (!currentPage.containsKey(slot)) return;
+        // Gets the old item and it's index on the main items list
+        final GuiItem oldItem = currentPage.get(slot);
+        final int index = pageItems.indexOf(currentPage.get(slot));
+
+        // Updates both lists and inventory
         currentPage.put(slot, item);
+        pageItems.set(index, item);
         getInventory().setItem(slot, item.getItemStack());
     }
 
