@@ -119,10 +119,10 @@ public final class GuiFiller {
      * @author Harolds
      */
     public void fillBetweenPoints(final int rowFrom, final int colFrom, final int rowTo, final int colTo, @NotNull final List<GuiItem> guiItems) {
-        int minRow = Math.min(rowFrom, rowTo);
-        int maxRow = Math.max(rowFrom, rowTo);
-        int minCol = Math.min(colFrom, colTo);
-        int maxCol = Math.max(colFrom, colTo);
+        final int minRow = Math.min(rowFrom, rowTo);
+        final int maxRow = Math.max(rowFrom, rowTo);
+        final int minCol = Math.min(colFrom, colTo);
+        final int maxCol = Math.max(colFrom, colTo);
 
         final int rows = gui.getRows();
         final List<GuiItem> items = repeatList(guiItems, rows * 9);

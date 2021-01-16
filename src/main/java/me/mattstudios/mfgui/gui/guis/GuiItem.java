@@ -1,15 +1,21 @@
 package me.mattstudios.mfgui.gui.guis;
 
 import me.mattstudios.mfgui.gui.components.GuiAction;
+import me.mattstudios.mfgui.gui.components.ItemNBT;
 import org.apache.commons.lang.Validate;
+import org.bukkit.Material;
 import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.UUID;
 
-import static me.mattstudios.mfgui.gui.components.ItemNBT.setNBTTag;
-
+/**
+ * GuiItem represents the {@link ItemStack} on the {@link Inventory}
+ */
+@SuppressWarnings("unused")
 public final class GuiItem {
 
     // Action to do when clicking on the item
@@ -17,24 +23,23 @@ public final class GuiItem {
 
     // The ItemStack of the GuiItem
     private ItemStack itemStack;
-    // Random UUID to identify the idem when clicking
+
+    // Random UUID to identify the item when clicking
     private final UUID uuid = UUID.randomUUID();
 
     /**
      * Main constructor of the GuiItem
      *
-     * @param itemStack The ItemStack to be used
-     * @param action    The action to do when clicking on the Item
+     * @param itemStack The {@link ItemStack} to be used
+     * @param action    The {@link GuiAction} to run when clicking on the Item
      */
     public GuiItem(@NotNull final ItemStack itemStack, final GuiAction<InventoryClickEvent> action) {
-        Validate.notNull(itemStack, "The itemstack for the GUI Item cannot be null!");
+        Validate.notNull(itemStack, "The ItemStack for the GUI Item cannot be null!");
 
-        if (action == null) this.action = event -> {
-        };
-        else this.action = action;
+        this.action = action;
 
         // Sets the UUID to an NBT tag to be identifiable later
-        this.itemStack = setNBTTag(itemStack, "mf-gui", uuid.toString());
+        this.itemStack = ItemNBT.setNBTTag(itemStack, "mf-gui", uuid.toString());
     }
 
     /**
@@ -47,43 +52,63 @@ public final class GuiItem {
     }
 
     /**
-     * Replaces the ItemStack of the GUI Item
+     * Alternate constructor that takes {@link Material} instead of an {@link ItemStack} but without a {@link GuiAction}
      *
-     * @param itemStack The new ItemStack
+     * @param material The {@link Material} to be used when invoking class
      */
-    public void setItemStack(@NotNull final ItemStack itemStack) {
-        Validate.notNull(itemStack, "The itemstack for the GUI Item cannot be null!");
-        this.itemStack = setNBTTag(itemStack, "mf-gui", uuid.toString());
+    public GuiItem(@NotNull final Material material) {
+        this(new ItemStack(material), null);
     }
 
     /**
-     * Replaces the action of the current GUI Item
+     * Alternate constructor that takes {@link Material} instead of an {@link ItemStack}
      *
-     * @param action The new action to set
+     * @param material The {@code Material} to be used when invoking class
+     * @param action   The {@link GuiAction} should be passed on {@link InventoryClickEvent}
+     */
+    public GuiItem(@NotNull final Material material, @Nullable final GuiAction<InventoryClickEvent> action) {
+        this(new ItemStack(material), action);
+    }
+
+    /**
+     * Replaces the {@link ItemStack} of the GUI Item
+     *
+     * @param itemStack The new {@link ItemStack}
+     */
+    public void setItemStack(@NotNull final ItemStack itemStack) {
+        Validate.notNull(itemStack, "The ItemStack for the GUI Item cannot be null!");
+        this.itemStack = ItemNBT.setNBTTag(itemStack, "mf-gui", uuid.toString());
+    }
+
+    /**
+     * Replaces the {@link GuiAction} of the current GUI Item
+     *
+     * @param action The new {@link GuiAction} to set
      */
     public void setAction(final GuiAction<InventoryClickEvent> action) {
         this.action = action;
     }
 
     /**
-     * Gets the GuiItem's ItemStack
+     * Gets the GuiItem's {@link ItemStack}
      *
-     * @return The ItemStack
+     * @return The {@link ItemStack}
      */
     public ItemStack getItemStack() {
         return itemStack;
     }
 
     /**
-     * Gets the random UUID that was generated when the GuiItem was made
+     * Gets the random {@link UUID} that was generated when the GuiItem was made
      */
     UUID getUuid() {
         return uuid;
     }
 
     /**
-     * Gets the action to do when the player clicks on it
+     * Gets the {@link GuiAction} to do when the player clicks on it
      */
+    @Nullable
     GuiAction<InventoryClickEvent> getAction() {
         return action;
     }
