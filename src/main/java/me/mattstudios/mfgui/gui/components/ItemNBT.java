@@ -57,6 +57,24 @@ public final class ItemNBT {
 
         return asBukkitCopy(nmsItemStack);
     }
+    
+    /**
+     * Removes given NBT Tag key from the {@link ItemStack}
+     *
+     * @param itemStack The current {@link ItemStack} to be set
+     * @param key       The NBT key to use
+     * @return An {@link ItemStack} that has had the NBT removed
+     */
+    public static ItemStack clearNBTTag(final ItemStack itemStack, final String key) {
+        if (itemStack == null || itemStack.getType() == Material.AIR) return itemStack;
+
+        Object nmsItemStack = asNMSCopy(itemStack);
+        Object itemCompound = hasTag(nmsItemStack) ? getTag(nmsItemStack) : newNBTTagCompound();
+
+        setTag(nmsItemStack, null);
+
+        return asBukkitCopy(nmsItemStack);
+    }
 
     /**
      * Gets the NBT tag based on a given key
