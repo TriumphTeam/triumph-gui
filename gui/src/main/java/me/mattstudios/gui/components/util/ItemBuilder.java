@@ -18,6 +18,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.SkullMeta;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.lang.reflect.Field;
 import java.util.Arrays;
@@ -204,7 +205,7 @@ public final class ItemBuilder {
             throw new GuiException("setUnbreakable is not supported on versions below 1.12!");
         }
 
-        meta.setUnbreakable(true);
+        meta.setUnbreakable(unbreakable);
         return this;
     }
 
@@ -280,8 +281,23 @@ public final class ItemBuilder {
      * @param value The NBT value
      * @return {@link ItemBuilder}
      */
-    public ItemBuilder setNbt(@NotNull final String key, @NotNull final String value) {
+    public ItemBuilder setNbt(@NotNull final String key, @Nullable final String value) {
+        itemStack.setItemMeta(meta);
         itemStack = ItemNBT.setNBTTag(itemStack, key, value);
+        meta = itemStack.getItemMeta();
+        return this;
+    }
+
+    /**
+     * Removes NBT tag from the {@link ItemStack}
+     *
+     * @param key   The NBT key
+     * @return {@link ItemBuilder}
+     */
+    public ItemBuilder removeNbt(@NotNull final String key) {
+        itemStack.setItemMeta(meta);
+        itemStack = ItemNBT.removeNBTTag(itemStack, key);
+        meta = itemStack.getItemMeta();
         return this;
     }
 

@@ -11,6 +11,7 @@ import java.util.Objects;
 
 /**
  * Class to set / get NBT tags from items
+ * TODO rework this class a little
  */
 public final class ItemNBT {
 
@@ -19,6 +20,7 @@ public final class ItemNBT {
     private static Method hasTagMethod;
     private static Method getTagMethod;
     private static Method setTagMethod;
+    private static Method removeTagMethod;
     private static Method asNMSCopyMethod;
     private static Method asBukkitCopyMethod;
 
@@ -27,6 +29,7 @@ public final class ItemNBT {
     static {
         try {
             getStringMethod = Objects.requireNonNull(getNMSClass("NBTTagCompound")).getMethod("getString", String.class);
+            removeTagMethod = Objects.requireNonNull(getNMSClass("NBTTagCompound")).getMethod("remove", String.class);
             setStringMethod = Objects.requireNonNull(getNMSClass("NBTTagCompound")).getMethod("setString", String.class, String.class);
             hasTagMethod = Objects.requireNonNull(getNMSClass("ItemStack")).getMethod("hasTag");
             getTagMethod = Objects.requireNonNull(getNMSClass("ItemStack")).getMethod("getTag");
@@ -60,6 +63,29 @@ public final class ItemNBT {
     }
 
     /**
+     * Sets an NBT tag to the an {@link ItemStack}
+     *
+     * @param itemStack The current {@link ItemStack} to be set
+     * @param key       The NBT key to remove
+     * @return An {@link ItemStack} that has NBT set
+     */
+    public static ItemStack removeNBTTag(final ItemStack itemStack, final String key) {
+        if (itemStack == null || itemStack.getType() == Material.AIR) return itemStack;
+
+        Object nmsItemStack = asNMSCopy(itemStack);
+        Object itemCompound = hasTag(nmsItemStack) ? getTag(nmsItemStack) : newNBTTagCompound();
+
+        System.out.println("Before");
+        System.out.println(itemCompound);
+        remove(itemCompound, key);
+        setTag(nmsItemStack, itemCompound);
+        System.out.println("After");
+        System.out.println(itemCompound);
+
+        return asBukkitCopy(nmsItemStack);
+    }
+
+    /**
      * Gets the NBT tag based on a given key
      *
      * @param itemStack The {@link ItemStack} to get from
@@ -85,6 +111,19 @@ public final class ItemNBT {
     private static void setString(final Object itemCompound, final String key, final String value) {
         try {
             setStringMethod.invoke(itemCompound, key, value);
+        } catch (IllegalAccessException | InvocationTargetException ignored) {
+        }
+    }
+
+    /**
+     * Mimics the itemCompound#remove method
+     *
+     * @param itemCompound The ItemCompound
+     * @param key          The key to remove
+     */
+    private static void remove(final Object itemCompound, final String key) {
+        try {
+            removeTagMethod.invoke(itemCompound, key);
         } catch (IllegalAccessException | InvocationTargetException ignored) {
         }
     }
@@ -124,7 +163,7 @@ public final class ItemNBT {
      * @param nmsItemStack The NMS ItemStack to get from
      * @return The tag compound
      */
-    private static Object getTag(final Object nmsItemStack) {
+    public static Object getTag(final Object nmsItemStack) {
         try {
             return getTagMethod.invoke(nmsItemStack);
         } catch (IllegalAccessException | InvocationTargetException e) {
@@ -164,7 +203,7 @@ public final class ItemNBT {
      * @param itemStack The ItemStack to make NMS copy
      * @return An NMS copy of the ItemStack
      */
-    private static Object asNMSCopy(final ItemStack itemStack) {
+    public static Object asNMSCopy(final ItemStack itemStack) {
         try {
             return asNMSCopyMethod.invoke(null, itemStack);
         } catch (IllegalAccessException | InvocationTargetException e) {
@@ -178,7 +217,7 @@ public final class ItemNBT {
      * @param nmsItemStack The NMS ItemStack to turn into {@link ItemStack}
      * @return The new {@link ItemStack}
      */
-    private static ItemStack asBukkitCopy(final Object nmsItemStack) {
+    public static ItemStack asBukkitCopy(final Object nmsItemStack) {
         try {
             return (ItemStack) asBukkitCopyMethod.invoke(null, nmsItemStack);
         } catch (IllegalAccessException | InvocationTargetException e) {

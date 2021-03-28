@@ -1,12 +1,14 @@
 
+gui/build/
+
+gui-test-plugin/build/
+
 .idea/
 
 .gradle/
-build/
 
-*.iml
+temp.java
 
 temp.java.asc
 
-temp.java
 gradle.properties
