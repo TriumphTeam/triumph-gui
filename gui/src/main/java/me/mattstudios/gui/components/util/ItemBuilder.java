@@ -120,7 +120,7 @@ public final class ItemBuilder {
     /**
      * Add lore lines of an item
      *
-     * @param lore the lore lines to set
+     * @param lore the lore lines to add
      * @return {@link ItemBuilder}
      */
     public ItemBuilder addLore(@NotNull final String... lore) {
@@ -135,7 +135,7 @@ public final class ItemBuilder {
     /**
      * Set lore lines of an item
      *
-     * @param lore A {@link List} with the lore lines
+     * @param lore A {@link List} with the lore lines to add
      * @return {@link ItemBuilder}
      */
     public ItemBuilder addLore(@NotNull final List<String> lore) {
