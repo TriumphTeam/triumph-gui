@@ -151,8 +151,7 @@ public final class ItemBuilder {
      * @return {@link ItemBuilder}
      */
     public ItemBuilder setLore(@NotNull final String... lore) {
-        meta.setLore(Arrays.asList(lore));
-        return this;
+        return setLore(Arrays.asList(lore));
     }
 
     /**
