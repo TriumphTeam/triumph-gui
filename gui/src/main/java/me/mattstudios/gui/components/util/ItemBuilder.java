@@ -21,6 +21,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.lang.reflect.Field;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
@@ -30,26 +31,6 @@ public final class ItemBuilder {
 
     private ItemStack itemStack;
     private ItemMeta meta;
-
-    /**
-     * Main method to create {@link ItemBuilder}
-     *
-     * @param itemStack The {@link ItemStack} you want to edit
-     * @return A new {@link ItemBuilder}
-     */
-    public static ItemBuilder from(@NotNull final ItemStack itemStack) {
-        return new ItemBuilder(itemStack);
-    }
-
-    /**
-     * Alternative method to create {@link ItemBuilder}
-     *
-     * @param material The {@link Material} you want to create an item from
-     * @return A new {@link ItemBuilder}
-     */
-    public static ItemBuilder from(@NotNull final Material material) {
-        return new ItemBuilder(material);
-    }
 
     /**
      * Constructor of the item builder
@@ -74,6 +55,26 @@ public final class ItemBuilder {
     @Deprecated
     public ItemBuilder(final Material material) {
         this(new ItemStack(material));
+    }
+
+    /**
+     * Main method to create {@link ItemBuilder}
+     *
+     * @param itemStack The {@link ItemStack} you want to edit
+     * @return A new {@link ItemBuilder}
+     */
+    public static ItemBuilder from(@NotNull final ItemStack itemStack) {
+        return new ItemBuilder(itemStack);
+    }
+
+    /**
+     * Alternative method to create {@link ItemBuilder}
+     *
+     * @param material The {@link Material} you want to create an item from
+     * @return A new {@link ItemBuilder}
+     */
+    public static ItemBuilder from(@NotNull final Material material) {
+        return new ItemBuilder(material);
     }
 
     /**
@@ -113,6 +114,36 @@ public final class ItemBuilder {
      */
     public ItemBuilder setAmount(final int amount) {
         itemStack.setAmount(amount);
+        return this;
+    }
+
+    /**
+     * Add lore lines of an item
+     *
+     * @param lore the lore lines to set
+     * @return {@link ItemBuilder}
+     */
+    public ItemBuilder addLore(@NotNull final String... lore) {
+        final List<String> newLore;
+        if (meta.getLore() == null) newLore = new ArrayList<>();
+        else newLore = new ArrayList<>(meta.getLore());
+        newLore.addAll(Arrays.asList(lore));
+        meta.setLore(newLore);
+        return this;
+    }
+
+    /**
+     * Set lore lines of an item
+     *
+     * @param lore A {@link List} with the lore lines
+     * @return {@link ItemBuilder}
+     */
+    public ItemBuilder addLore(@NotNull final List<String> lore) {
+        final List<String> newLore;
+        if (meta.getLore() == null) newLore = new ArrayList<>();
+        else newLore = new ArrayList<>(meta.getLore());
+        newLore.addAll(lore);
+        meta.setLore(newLore);
         return this;
     }
 
@@ -291,7 +322,7 @@ public final class ItemBuilder {
     /**
      * Removes NBT tag from the {@link ItemStack}
      *
-     * @param key   The NBT key
+     * @param key The NBT key
      * @return {@link ItemBuilder}
      */
     public ItemBuilder removeNbt(@NotNull final String key) {
