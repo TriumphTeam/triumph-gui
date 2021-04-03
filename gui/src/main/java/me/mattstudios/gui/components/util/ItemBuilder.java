@@ -124,12 +124,7 @@ public final class ItemBuilder {
      * @return {@link ItemBuilder}
      */
     public ItemBuilder addLore(@NotNull final String... lore) {
-        final List<String> newLore;
-        if (meta.getLore() == null) newLore = new ArrayList<>();
-        else newLore = new ArrayList<>(meta.getLore());
-        newLore.addAll(Arrays.asList(lore));
-        meta.setLore(newLore);
-        return this;
+        return addLore(Arrays.asList(lore));
     }
 
     /**
