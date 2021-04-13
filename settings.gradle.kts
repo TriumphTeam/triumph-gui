@@ -1,8 +1,8 @@
 rootProject.name = "triumph-gui"
 
-["gui"].each {
-    include "$it"
+listOf("gui").forEach {
+    include(it)
     findProject(":$it")?.name = "triumph-$it"
 }
 
-include "gui-test-plugin"
+include("gui-test-plugin")
