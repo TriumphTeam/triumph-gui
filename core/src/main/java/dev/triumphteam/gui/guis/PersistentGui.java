@@ -80,13 +80,12 @@ public class PersistentGui extends BaseGui {
     }
 
     /**
-     * Overridden {@link BaseGui#open(HumanEntity)} to prevent
+     * Persistent GUI open, doesn't clear the inventory like the other ones
      *
      * @param player The {@link HumanEntity} to open the GUI to
      */
-    @Override
     public void open(@NotNull final HumanEntity player) {
-        if (player.isSleeping()) return;
+        if (!openCheck(player)) return;
         populateGui();
         player.openInventory(getInventory());
     }

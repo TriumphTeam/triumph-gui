@@ -116,11 +116,10 @@ public class PersistentPaginatedGui extends PaginatedGui implements Serializable
     }
 
     /**
-     * Overrides {@link BaseGui#open(HumanEntity)} to use the paginated populator instead
+     * TODO this entire class
      *
      * @param player The {@link HumanEntity} to open the GUI to
      */
-    @Override
     public void open(@NotNull final HumanEntity player) {
         open(player, 1);
     }

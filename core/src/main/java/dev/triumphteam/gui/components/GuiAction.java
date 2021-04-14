@@ -1,9 +1,9 @@
 package dev.triumphteam.gui.components;
 
-import org.bukkit.event.Event;
+import org.bukkit.event.inventory.InventoryEvent;
 
 @FunctionalInterface
-public interface GuiAction<T extends Event> {
+public interface GuiAction<T extends InventoryEvent> {
 
     /**
      * Executes the task passed to it

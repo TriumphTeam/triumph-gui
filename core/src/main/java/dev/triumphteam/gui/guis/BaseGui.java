@@ -30,15 +30,18 @@ import java.util.Map;
  * Main and simplest implementation of this is {@link Gui}
  */
 @SuppressWarnings("unused")
-public abstract class BaseGui implements InventoryHolder {
+public abstract class BaseGui {
 
     // The plugin instance for registering the event and for the close delay
-    private static final Plugin plugin = JavaPlugin.getProvidingPlugin(BaseGui.class);
+    @NotNull
+    private static final Plugin PLUGIN = JavaPlugin.getProvidingPlugin(BaseGui.class);
 
-    // Registering the listener class
-    static {
-        Bukkit.getPluginManager().registerEvents(new GuiListener(), plugin);
-    }
+    /**
+     * For managing the instances of BaseGui that are currently opened
+     * This is to change away from implementing {@link InventoryHolder}
+     */
+    @NotNull
+    private static final GuiManager GUI_MANAGER = new GuiManager(PLUGIN);
 
     // Main inventory
     private Inventory inventory;
@@ -94,7 +97,7 @@ public abstract class BaseGui implements InventoryHolder {
         this.title = title;
 
         // TODO remove some of this inventory creations
-        inventory = Bukkit.createInventory(this, this.rows * 9, title);
+        inventory = Bukkit.createInventory(null, this.rows * 9, title);
     }
 
     /**
@@ -107,7 +110,7 @@ public abstract class BaseGui implements InventoryHolder {
         this.title = title;
         this.guiType = guiType;
 
-        inventory = Bukkit.createInventory(this, guiType.getInventoryType(), title);
+        inventory = Bukkit.createInventory(null, guiType.getInventoryType(), title);
     }
 
     /**
@@ -128,10 +131,10 @@ public abstract class BaseGui implements InventoryHolder {
 
         final List<HumanEntity> viewers = new ArrayList<>(inventory.getViewers());
 
-        inventory = Bukkit.createInventory(this, this.rows * 9, this.title);
+        inventory = Bukkit.createInventory(null, this.rows * 9, this.title);
 
         for (HumanEntity player : viewers) {
-            open(player);
+            //open(player);
         }
 
         updating = false;
@@ -331,15 +334,15 @@ public abstract class BaseGui implements InventoryHolder {
 
     /**
      * Opens the GUI for a {@link HumanEntity}
+     * Should be overridden by all children
      *
      * @param player The {@link HumanEntity} to open the GUI to
+     * @return True if the inventory opened successfully and false if it doesn't, should only be false when player is sleeping
      */
-    public void open(@NotNull final HumanEntity player) {
-        if (player.isSleeping()) return;
-
-        inventory.clear();
-        populateGui();
-        player.openInventory(inventory);
+    public boolean openCheck(@NotNull final HumanEntity player) {
+        if (player.isSleeping()) return false;
+        GUI_MANAGER.addGui(inventory, this);
+        return true;
     }
 
     /**
@@ -358,7 +361,7 @@ public abstract class BaseGui implements InventoryHolder {
      * @param runCloseAction If should or not run the close action
      */
     public void close(@NotNull final HumanEntity player, final boolean runCloseAction) {
-        Bukkit.getScheduler().runTaskLater(plugin, () -> {
+        Bukkit.getScheduler().runTaskLater(PLUGIN, () -> {
             this.runCloseAction = runCloseAction;
             player.closeInventory();
             this.runCloseAction = true;
@@ -428,6 +431,7 @@ public abstract class BaseGui implements InventoryHolder {
      * @param title The title to set
      * @return The GUI for easier use when declaring, works like a builder
      */
+    @Deprecated
     public BaseGui updateTitle(@NotNull final String title) {
         this.title = title;
 
@@ -435,10 +439,10 @@ public abstract class BaseGui implements InventoryHolder {
 
         final List<HumanEntity> viewers = new ArrayList<>(inventory.getViewers());
 
-        inventory = Bukkit.createInventory(this, inventory.getSize(), this.title);
+        inventory = Bukkit.createInventory(null, inventory.getSize(), this.title);
 
         for (final HumanEntity player : viewers) {
-            open(player);
+            //open(player);
         }
 
         updating = false;
@@ -466,10 +470,9 @@ public abstract class BaseGui implements InventoryHolder {
     }
 
     /**
-     * Gets the main {@link Inventory} of this GUI
+     * Gets the {@link Inventory} of this GUI
      */
     @NotNull
-    @Override
     public Inventory getInventory() {
         return inventory;
     }

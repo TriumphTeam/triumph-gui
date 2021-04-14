@@ -1,6 +1,5 @@
 package dev.triumphteam.gui.guis;
 
-import org.bukkit.Bukkit;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
@@ -199,11 +198,10 @@ public class PaginatedGui extends BaseGui {
     }
 
     /**
-     * Overrides {@link BaseGui#open(HumanEntity)} to use the paginated populator instead
+     * Calls main paginated gui {@link #open(HumanEntity, int)}
      *
      * @param player The {@link HumanEntity} to open the GUI to
      */
-    @Override
     public void open(@NotNull final HumanEntity player) {
         open(player, 1);
     }
@@ -216,7 +214,7 @@ public class PaginatedGui extends BaseGui {
      * @param openPage The specific page to open at
      */
     public void open(@NotNull final HumanEntity player, final int openPage) {
-        if (player.isSleeping()) return;
+        if (!openCheck(player)) return;
         if (openPage <= getPagesNum() || openPage > 0) pageNum = openPage;
 
         getInventory().clear();
@@ -255,7 +253,7 @@ public class PaginatedGui extends BaseGui {
 
         final List<HumanEntity> viewers = new ArrayList<>(getInventory().getViewers());
 
-        setInventory(Bukkit.createInventory(this, getInventory().getSize(), title));
+        //setInventory(Bukkit.createInventory(this, getInventory().getSize(), title));
 
         for (final HumanEntity player : viewers) {
             open(player, getPageNum());
@@ -411,7 +409,7 @@ public class PaginatedGui extends BaseGui {
         }
     }
 
-   /**
+    /**
      * Gets the current page items to be used on other gui types
      *
      * @return The {@link Map} with all the {@link #currentPage}

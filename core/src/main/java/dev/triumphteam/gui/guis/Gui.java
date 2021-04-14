@@ -1,6 +1,7 @@
 package dev.triumphteam.gui.guis;
 
 import dev.triumphteam.gui.components.GuiType;
+import org.bukkit.entity.HumanEntity;
 import org.bukkit.plugin.Plugin;
 import org.jetbrains.annotations.NotNull;
 
@@ -74,6 +75,18 @@ public class Gui extends BaseGui {
     @Deprecated
     public Gui(@NotNull final Plugin plugin, @NotNull final GuiType guiType, @NotNull final String title) {
         super(guiType, title);
+    }
+
+    /**
+     * Opens the GUI to a player
+     *
+     * @param player The {@link HumanEntity} to open the GUI to
+     */
+    public void open(final @NotNull HumanEntity player) {
+        if (!openCheck(player)) return;
+        getInventory().clear();
+        populateGui();
+        player.openInventory(getInventory());
     }
 
 }
