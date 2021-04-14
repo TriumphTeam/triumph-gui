@@ -1,6 +1,6 @@
 rootProject.name = "triumph-gui"
 
-listOf("gui").forEach {
+listOf("core",).forEach {
     include(it)
-    findProject(":$it")?.name = "triumph-$it"
+    findProject(":$it")?.name = "triumph-gui-$it"
 }

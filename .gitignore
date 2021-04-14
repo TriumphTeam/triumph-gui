@@ -1,7 +1,7 @@
 
 gui/build/
 
-gui-test-plugin/build/
+test-plugin/build/
 
 .idea/
 
@@ -13,6 +13,6 @@ temp.java.asc
 
 gradle.properties
 
-gui-test-plugin/
+test-plugin/
 
 build/
