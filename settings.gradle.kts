@@ -4,5 +4,3 @@ listOf("gui").forEach {
     include(it)
     findProject(":$it")?.name = "triumph-$it"
 }
-
-include("gui-test-plugin")

@@ -14,3 +14,5 @@ temp.java.asc
 gradle.properties
 
 gui-test-plugin/
+
+build/
