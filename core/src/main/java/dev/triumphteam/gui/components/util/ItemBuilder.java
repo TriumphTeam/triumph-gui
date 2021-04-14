@@ -1,11 +1,11 @@
-package me.mattstudios.gui.components.util;
+package dev.triumphteam.gui.components.util;
 
 import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.properties.Property;
-import me.mattstudios.gui.components.GuiAction;
-import me.mattstudios.gui.components.exception.GuiException;
-import me.mattstudios.gui.components.xseries.XMaterial;
-import me.mattstudios.gui.guis.GuiItem;
+import dev.triumphteam.gui.components.GuiAction;
+import dev.triumphteam.gui.components.exception.GuiException;
+import dev.triumphteam.gui.components.xseries.XMaterial;
+import dev.triumphteam.gui.guis.GuiItem;
 import me.mattstudios.util.ServerVersion;
 import org.apache.commons.lang.Validate;
 import org.bukkit.Bukkit;

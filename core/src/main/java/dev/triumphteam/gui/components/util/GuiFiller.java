@@ -1,9 +1,9 @@
-package me.mattstudios.gui.components.util;
+package dev.triumphteam.gui.components.util;
 
-import me.mattstudios.gui.components.exception.GuiException;
-import me.mattstudios.gui.guis.BaseGui;
-import me.mattstudios.gui.guis.GuiItem;
-import me.mattstudios.gui.guis.PaginatedGui;
+import dev.triumphteam.gui.components.exception.GuiException;
+import dev.triumphteam.gui.guis.BaseGui;
+import dev.triumphteam.gui.guis.GuiItem;
+import dev.triumphteam.gui.guis.PaginatedGui;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;

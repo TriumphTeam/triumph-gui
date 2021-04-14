@@ -1,6 +1,6 @@
-package me.mattstudios.gui.guis;
+package dev.triumphteam.gui.guis;
 
-import me.mattstudios.gui.components.GuiType;
+import dev.triumphteam.gui.components.GuiType;
 import org.bukkit.plugin.Plugin;
 import org.jetbrains.annotations.NotNull;
 

@@ -1,6 +1,6 @@
-package me.mattstudios.gui.guis;
+package dev.triumphteam.gui.guis;
 
-import me.mattstudios.gui.components.Serializable;
+import dev.triumphteam.gui.components.Serializable;
 import org.apache.commons.codec.binary.Base64;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.YamlConfiguration;

@@ -1,4 +1,4 @@
-package me.mattstudios.gui.components.xseries;
+package dev.triumphteam.gui.components.xseries;
 
 import com.google.common.base.Enums;
 import com.google.common.cache.Cache;

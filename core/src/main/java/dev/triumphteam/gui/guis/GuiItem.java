@@ -1,7 +1,7 @@
-package me.mattstudios.gui.guis;
+package dev.triumphteam.gui.guis;
 
-import me.mattstudios.gui.components.GuiAction;
-import me.mattstudios.gui.components.util.ItemNBT;
+import dev.triumphteam.gui.components.GuiAction;
+import dev.triumphteam.gui.components.util.ItemNBT;
 import org.apache.commons.lang.Validate;
 import org.bukkit.Material;
 import org.bukkit.event.inventory.InventoryClickEvent;

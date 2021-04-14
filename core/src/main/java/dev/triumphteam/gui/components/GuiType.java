@@ -1,4 +1,4 @@
-package me.mattstudios.gui.components;
+package dev.triumphteam.gui.components;
 
 import org.bukkit.event.inventory.InventoryType;
 import org.jetbrains.annotations.NotNull;

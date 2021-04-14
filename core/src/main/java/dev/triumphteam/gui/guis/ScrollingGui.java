@@ -1,6 +1,6 @@
-package me.mattstudios.gui.guis;
+package dev.triumphteam.gui.guis;
 
-import me.mattstudios.gui.components.ScrollType;
+import dev.triumphteam.gui.components.ScrollType;
 import org.bukkit.entity.HumanEntity;
 import org.jetbrains.annotations.NotNull;
 

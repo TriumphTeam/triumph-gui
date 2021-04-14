@@ -1,9 +1,9 @@
-package me.mattstudios.gui.guis;
+package dev.triumphteam.gui.guis;
 
-import me.mattstudios.gui.components.GuiAction;
-import me.mattstudios.gui.components.GuiType;
-import me.mattstudios.gui.components.exception.GuiException;
-import me.mattstudios.gui.components.util.GuiFiller;
+import dev.triumphteam.gui.components.GuiAction;
+import dev.triumphteam.gui.components.GuiType;
+import dev.triumphteam.gui.components.exception.GuiException;
+import dev.triumphteam.gui.components.util.GuiFiller;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;

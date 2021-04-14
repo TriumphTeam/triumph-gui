@@ -1,4 +1,4 @@
-package me.mattstudios.gui.guis;
+package dev.triumphteam.gui.guis;
 
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.inventory.ItemStack;

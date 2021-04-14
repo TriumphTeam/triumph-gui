@@ -1,4 +1,4 @@
-package me.mattstudios.gui.components;
+package dev.triumphteam.gui.components;
 
 import org.jetbrains.annotations.NotNull;
 

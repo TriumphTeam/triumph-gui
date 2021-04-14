@@ -1,4 +1,4 @@
-package me.mattstudios.gui.components.util;
+package dev.triumphteam.gui.components.util;
 
 import me.mattstudios.util.ServerVersion;
 import org.bukkit.Material;

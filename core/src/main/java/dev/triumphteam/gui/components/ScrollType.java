@@ -1,6 +1,6 @@
-package me.mattstudios.gui.components;
+package dev.triumphteam.gui.components;
 
-import me.mattstudios.gui.guis.ScrollingGui;
+import dev.triumphteam.gui.guis.ScrollingGui;
 
 /**
  * Possible Scroll types for the {@link ScrollingGui}
