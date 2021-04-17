@@ -1,3 +1,7 @@
+plugins {
+    id("java-library")
+}
+
 allprojects {
 
     apply {
@@ -10,6 +14,10 @@ allprojects {
     repositories {
         mavenCentral()
         maven("https://hub.spigotmc.org/nexus/content/groups/public/")
+    }
+
+    dependencies {
+        compileOnly("org.jetbrains:annotations:20.1.0")
     }
 
     tasks {

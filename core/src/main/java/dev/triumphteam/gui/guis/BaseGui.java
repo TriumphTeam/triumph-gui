@@ -1,6 +1,7 @@
 package dev.triumphteam.gui.guis;
 
 import dev.triumphteam.gui.components.GuiAction;
+import dev.triumphteam.gui.builder.GuiOptions;
 import dev.triumphteam.gui.components.GuiType;
 import dev.triumphteam.gui.components.exception.GuiException;
 import dev.triumphteam.gui.components.util.GuiFiller;
@@ -46,6 +47,9 @@ public abstract class BaseGui implements InventoryHolder {
     // Gui filler
     private final GuiFiller filler = new GuiFiller(this);
 
+
+    private GuiOptions guiOptions;
+
     // Inventory attributes
     private String title;
     private int rows;
@@ -79,6 +83,13 @@ public abstract class BaseGui implements InventoryHolder {
     // Whether or not should run the actions from the close and open methods
     private boolean runCloseAction = true;
     private boolean runOpenAction = true;
+
+    public BaseGui(@NotNull final GuiOptions guiOptions) {
+        rows = 6;
+        title = "";
+        this.guiOptions = guiOptions;
+        inventory = guiOptions.createInventory(this);
+    }
 
     /**
      * Main constructor that takes rows

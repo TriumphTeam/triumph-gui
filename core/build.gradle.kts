@@ -15,7 +15,6 @@ dependencies {
     //compileOnly("org.spigotmc:spigot-api:1.16.4-R0.1-SNAPSHOT")
     compileOnly("com.destroystokyo.paper:paper-api:1.16.5-R0.1-SNAPSHOT")
 
-    compileOnly("org.jetbrains:annotations:20.0.0")
     compileOnly("com.mojang:authlib:1.5.21")
 }
 

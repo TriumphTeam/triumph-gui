@@ -1,5 +1,6 @@
 package dev.triumphteam.gui.guis;
 
+import dev.triumphteam.gui.builder.GuiOptions;
 import dev.triumphteam.gui.components.GuiType;
 import org.bukkit.plugin.Plugin;
 import org.jetbrains.annotations.NotNull;
@@ -74,6 +75,10 @@ public class Gui extends BaseGui {
     @Deprecated
     public Gui(@NotNull final Plugin plugin, @NotNull final GuiType guiType, @NotNull final String title) {
         super(guiType, title);
+    }
+
+    public Gui(GuiOptions guiOptions) {
+        super(guiOptions);
     }
 
 }
