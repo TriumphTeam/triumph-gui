@@ -1,5 +1,6 @@
 package dev.triumphteam.gui.guis;
 
+import dev.triumphteam.gui.builder.LegacyGuiOptions;
 import dev.triumphteam.gui.components.GuiAction;
 import dev.triumphteam.gui.builder.GuiOptions;
 import dev.triumphteam.gui.components.GuiType;
@@ -47,7 +48,6 @@ public abstract class BaseGui implements InventoryHolder {
     // Gui filler
     private final GuiFiller filler = new GuiFiller(this);
 
-
     private GuiOptions guiOptions;
 
     // Inventory attributes
@@ -84,28 +84,28 @@ public abstract class BaseGui implements InventoryHolder {
     private boolean runCloseAction = true;
     private boolean runOpenAction = true;
 
+    /**
+     * Became the main constructor, using {@link GuiOptions}
+     *
+     * @param guiOptions The options for the GUI
+     * @since 3.0.0
+     */
     public BaseGui(@NotNull final GuiOptions guiOptions) {
-        rows = 6;
-        title = "";
         this.guiOptions = guiOptions;
         inventory = guiOptions.createInventory(this);
     }
 
     /**
-     * Main constructor that takes rows
+     * Legacy constructor that takes rows and title
      *
      * @param rows  The amount of rows the GUI should have
      * @param title The GUI title
+     * @deprecated In favor of {@link BaseGui#BaseGui(GuiOptions)}
      */
+    @Deprecated
     public BaseGui(final int rows, @NotNull final String title) {
-        int finalRows = rows;
-        if (!(rows >= 1 && rows <= 6)) finalRows = 1;
-
-        this.rows = finalRows;
-        this.title = title;
-
-        // TODO remove some of this inventory creations
-        inventory = Bukkit.createInventory(this, this.rows * 9, title);
+        this.guiOptions = new LegacyGuiOptions(title, rows);
+        inventory = guiOptions.createInventory(this);
     }
 
     /**
@@ -113,12 +113,12 @@ public abstract class BaseGui implements InventoryHolder {
      *
      * @param guiType The {@link GuiType} to use
      * @param title   The GUI title
+     * @deprecated In favor of {@link BaseGui#BaseGui(GuiOptions)}
      */
+    @Deprecated
     public BaseGui(@NotNull final GuiType guiType, @NotNull final String title) {
-        this.title = title;
-        this.guiType = guiType;
-
-        inventory = Bukkit.createInventory(this, guiType.getInventoryType(), title);
+        this.guiOptions = new LegacyGuiOptions(title, guiType);
+        inventory = guiOptions.createInventory(this);
     }
 
     /**
@@ -127,6 +127,7 @@ public abstract class BaseGui implements InventoryHolder {
      * @param rows The number of rows to set
      * @return The GUI for easier use when declaring, works like a builder
      */
+    // TODO fix
     @SuppressWarnings("UnusedReturnValue")
     public BaseGui setRows(final int rows) {
         if (guiType != GuiType.CHEST) throw new GuiException("Cannot set rows of non chest GUI!");
@@ -439,6 +440,7 @@ public abstract class BaseGui implements InventoryHolder {
      * @param title The title to set
      * @return The GUI for easier use when declaring, works like a builder
      */
+    // TODO fix
     public BaseGui updateTitle(@NotNull final String title) {
         this.title = title;
 

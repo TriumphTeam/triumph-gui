@@ -131,8 +131,9 @@ public class ScrollingGui extends PaginatedGui {
 
         if (getPageSize() == 0) setPageSize(calculatePageSize());
         if (scrollSize == 0) scrollSize = calculateScrollSize();
-        if (openPage > 0 && (openPage * scrollSize + getPageSize() <= getPageItems().size() + scrollSize))
+        if (openPage > 0 && (openPage * scrollSize + getPageSize() <= getPageItems().size() + scrollSize)) {
             setPageNum(openPage);
+        }
 
         populatePage();
 

@@ -1,5 +1,6 @@
 package dev.triumphteam.gui.builder;
 
+import dev.triumphteam.gui.PaperGuiOptions;
 import dev.triumphteam.gui.guis.PaginatedGui;
 import net.kyori.adventure.text.Component;
 import org.jetbrains.annotations.Contract;
@@ -16,7 +17,7 @@ import java.util.function.Consumer;
  */
 public final class PaginatedBuilder extends BaseGuiBuilder<PaginatedGui, Component> {
 
-    private int pageSize = -1;
+    private int pageSize = 0;
 
     /**
      * Sets the rows for the GUI
@@ -74,7 +75,7 @@ public final class PaginatedBuilder extends BaseGuiBuilder<PaginatedGui, Compone
     @Contract(" -> new")
     @Override
     public PaginatedGui create() {
-        return new PaginatedGui(6, "Hello");
+        return new PaginatedGui(new PaperGuiOptions(getTitle(), getRows(), pageSize));
     }
 
 }

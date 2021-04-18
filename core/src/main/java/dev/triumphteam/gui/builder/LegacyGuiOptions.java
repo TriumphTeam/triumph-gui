@@ -1,41 +1,43 @@
-package dev.triumphteam.gui;
+package dev.triumphteam.gui.builder;
 
-import dev.triumphteam.gui.builder.GuiOptions;
 import dev.triumphteam.gui.components.GuiType;
 import dev.triumphteam.gui.components.ScrollType;
 import dev.triumphteam.gui.guis.BaseGui;
-import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.inventory.Inventory;
 import org.jetbrains.annotations.NotNull;
 
-public final class PaperGuiOptions implements GuiOptions {
+public final class LegacyGuiOptions implements GuiOptions {
 
-    private final Component title;
+    private final String title;
     private final int rows;
-    private final int pageSize;
     private final GuiType guiType;
     private final ScrollType scrollType;
 
-    public PaperGuiOptions(
-            @NotNull final Component title,
-            final int rows,
-            final int pageSize,
-            @NotNull final GuiType guiType,
-            @NotNull final ScrollType scrollType
-    ) {
+    public LegacyGuiOptions(@NotNull final String title, final int rows, @NotNull final GuiType guiType, @NotNull final ScrollType scrollType) {
         int finalRows = rows;
         if (!(rows >= 1 && rows <= 6)) finalRows = 1;
 
         this.rows = finalRows;
         this.title = title;
-        this.pageSize = pageSize;
         this.guiType = guiType;
         this.scrollType = scrollType;
     }
 
-    public PaperGuiOptions(@NotNull final Component title, final int rows, final int pageSize) {
-        this(title, rows, pageSize, GuiType.CHEST, ScrollType.HORIZONTAL);
+    public LegacyGuiOptions(@NotNull final String title, final int rows, @NotNull final GuiType guiType) {
+        this(title, rows, guiType, ScrollType.VERTICAL);
+    }
+
+    public LegacyGuiOptions(@NotNull final String title, final int rows) {
+        this(title, rows, GuiType.CHEST);
+    }
+
+    public LegacyGuiOptions(@NotNull final String title, @NotNull final GuiType guiType) {
+        this(title, 1, guiType);
+    }
+
+    public LegacyGuiOptions(@NotNull final String title, final int rows, @NotNull final ScrollType scrollType) {
+        this(title, 1, GuiType.CHEST, scrollType);
     }
 
     @NotNull
@@ -47,11 +49,6 @@ public final class PaperGuiOptions implements GuiOptions {
     @Override
     public int rows() {
         return rows;
-    }
-
-    @Override
-    public int getPageSize() {
-        return pageSize;
     }
 
     @NotNull

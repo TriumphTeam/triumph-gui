@@ -14,6 +14,8 @@ public interface GuiOptions {
 
     int rows();
 
+    int getPageSize();
+
     @NotNull
     ScrollType scrollType();
 

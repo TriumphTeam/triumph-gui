@@ -11,11 +11,23 @@ import org.jetbrains.annotations.NotNull;
 public class Gui extends BaseGui {
 
     /**
-     * Main constructor for the GUI
+     * Main constructor of the GUI
+     *
+     * @param guiOptions The {@link GuiOptions} implementation
+     * @since 3.0.0
+     */
+    public Gui(@NotNull final GuiOptions guiOptions) {
+        super(guiOptions);
+    }
+
+    /**
+     * Old main constructor for the GUI
      *
      * @param rows  The amount of rows the GUI should have
      * @param title The GUI's title
+     * @deprecated In favor of {@link Gui#Gui(GuiOptions)}
      */
+    @Deprecated
     public Gui(final int rows, @NotNull final String title) {
         super(rows, title);
     }
@@ -24,7 +36,9 @@ public class Gui extends BaseGui {
      * Alternative constructor that defaults to 1 row
      *
      * @param title The GUI's title
+     * @deprecated In favor of {@link Gui#Gui(GuiOptions)}
      */
+    @Deprecated
     public Gui(@NotNull final String title) {
         super(1, title);
     }
@@ -34,7 +48,9 @@ public class Gui extends BaseGui {
      *
      * @param guiType The {@link GuiType} to be used
      * @param title   The GUI's title
+     * @deprecated In favor of {@link Gui#Gui(GuiOptions)}
      */
+    @Deprecated
     public Gui(@NotNull final GuiType guiType, @NotNull final String title) {
         super(guiType, title);
     }
@@ -75,10 +91,6 @@ public class Gui extends BaseGui {
     @Deprecated
     public Gui(@NotNull final Plugin plugin, @NotNull final GuiType guiType, @NotNull final String title) {
         super(guiType, title);
-    }
-
-    public Gui(GuiOptions guiOptions) {
-        super(guiOptions);
     }
 
 }

@@ -1,5 +1,6 @@
 package dev.triumphteam.gui.guis;
 
+import dev.triumphteam.gui.builder.GuiOptions;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.event.inventory.InventoryClickEvent;
@@ -27,6 +28,11 @@ public class PaginatedGui extends BaseGui {
 
     private int pageSize;
     private int pageNum = 1;
+
+
+    public PaginatedGui(@NotNull final GuiOptions guiOptions) {
+        super(guiOptions);
+    }
 
     /**
      * Main constructor of the PaginatedGui
@@ -411,7 +417,7 @@ public class PaginatedGui extends BaseGui {
         }
     }
 
-   /**
+    /**
      * Gets the current page items to be used on other gui types
      *
      * @return The {@link Map} with all the {@link #currentPage}
