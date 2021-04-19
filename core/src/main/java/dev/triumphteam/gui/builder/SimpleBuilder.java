@@ -1,8 +1,6 @@
 package dev.triumphteam.gui.builder;
 
-import dev.triumphteam.gui.PaperGuiOptions;
 import dev.triumphteam.gui.components.GuiType;
-import dev.triumphteam.gui.components.ScrollType;
 import dev.triumphteam.gui.guis.Gui;
 import net.kyori.adventure.text.Component;
 import org.jetbrains.annotations.Contract;
@@ -11,15 +9,15 @@ import org.jetbrains.annotations.NotNull;
 import java.util.function.Consumer;
 
 /**
- * The simple GUI builder is used for creating a {@link Gui} that uses {@link Component} for title
+ * The simple GUI builder is used for creating a {@link Gui}
  * For now this is the system I'll use, if anyone can figure a better system PR or let me know!
  * Most of the methods have to be overridden and casted so that the builder can have differences
  * I don't really like how it is since requires a lot of repetition
  * Please send help
  */
-public final class SimpleBuilder extends BaseGuiBuilder<Gui, Component> {
+public final class SimpleBuilder extends BaseGuiBuilder<Gui> {
 
-    private GuiType guiType;
+    private GuiType guiType = null;
 
     /**
      * Main constructor
@@ -87,7 +85,11 @@ public final class SimpleBuilder extends BaseGuiBuilder<Gui, Component> {
     @Contract(" -> new")
     @Override
     public Gui create() {
-        return new Gui(new PaperGuiOptions(getTitle(), getRows(), guiType, ScrollType.HORIZONTAL));
+        if (guiType == null) {
+            return new Gui(getRows(), getTitle());
+        }
+
+        return new Gui(guiType, getTitle());
     }
 
 }

@@ -1,6 +1,8 @@
 package dev.triumphteam.gui.builder;
 
+import dev.triumphteam.gui.components.exception.GuiException;
 import dev.triumphteam.gui.guis.BaseGui;
+import net.kyori.adventure.text.Component;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -8,15 +10,14 @@ import org.jetbrains.annotations.Nullable;
 import java.util.function.Consumer;
 
 /**
- * The base for all the GUI builders, this is due to some limitations
+ * The base for all the GUI builders this is due to some limitations
  * where some builders will have unique features based on the GUI type
  *
  * @param <G> The Type of {@link BaseGui}
- * @param <T> The Type for the title, either Kyori's Components or the legacy String
  */
-public abstract class BaseGuiBuilder<G extends BaseGui, T> {
+public abstract class BaseGuiBuilder<G extends BaseGui> {
 
-    private T title = null;
+    private Component title = null;
     private int rows = 1;
 
     private Consumer<G> consumer;
@@ -29,7 +30,7 @@ public abstract class BaseGuiBuilder<G extends BaseGui, T> {
      * @return The builder
      */
     @Contract("_ -> this")
-    public BaseGuiBuilder<G, T> rows(final int rows) {
+    public BaseGuiBuilder<G> rows(final int rows) {
         this.rows = rows;
         return this;
     }
@@ -42,7 +43,7 @@ public abstract class BaseGuiBuilder<G extends BaseGui, T> {
      * @return The builder
      */
     @Contract("_ -> this")
-    public BaseGuiBuilder<G, T> title(@NotNull final T title) {
+    public BaseGuiBuilder<G> title(@NotNull final Component title) {
         this.title = title;
         return this;
     }
@@ -55,7 +56,7 @@ public abstract class BaseGuiBuilder<G extends BaseGui, T> {
      * @return The builder
      */
     @Contract("_ -> this")
-    public BaseGuiBuilder<G, T> apply(@NotNull final Consumer<G> consumer) {
+    public BaseGuiBuilder<G> apply(@NotNull final Consumer<G> consumer) {
         this.consumer = consumer;
         return this;
     }
@@ -74,8 +75,13 @@ public abstract class BaseGuiBuilder<G extends BaseGui, T> {
      *
      * @return The current title
      */
-    @Nullable
-    protected T getTitle() {
+    @NotNull
+    protected Component getTitle() {
+        if (title == null) {
+            // TODO better message
+            throw new GuiException("GUI title is missing!");
+        }
+
         return title;
     }
 

@@ -1,5 +1,6 @@
 package dev.triumphteam.gui.guis;
 
+import dev.triumphteam.gui.builder.Title;
 import dev.triumphteam.gui.components.ScrollType;
 import org.bukkit.entity.HumanEntity;
 import org.jetbrains.annotations.NotNull;
@@ -15,6 +16,16 @@ public class ScrollingGui extends PaginatedGui {
 
     private final ScrollType scrollType;
     private int scrollSize = 0;
+
+    /**
+     * Main constructor for the {@link PaginatedGui}
+     *
+     * @param guiOptions The {@link Title} implementation
+     * @since 3.0.0
+     */
+    public ScrollingGui(@NotNull final Title guiOptions) {
+        super(guiOptions);
+    }
 
     /**
      * Main constructor of the Scrolling GUI

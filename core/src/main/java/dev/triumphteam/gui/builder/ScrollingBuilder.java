@@ -1,5 +1,6 @@
 package dev.triumphteam.gui.builder;
 
+import dev.triumphteam.gui.PaperGuiOptions;
 import dev.triumphteam.gui.components.ScrollType;
 import dev.triumphteam.gui.guis.ScrollingGui;
 import net.kyori.adventure.text.Component;
@@ -15,7 +16,7 @@ import java.util.function.Consumer;
  * I don't really like how it is since requires a lot of repetition
  * Please send help
  */
-public final class ScrollingBuilder extends BaseGuiBuilder<ScrollingGui, Component> {
+public final class ScrollingBuilder extends BaseGuiBuilder<ScrollingGui> {
 
     private ScrollType scrollType;
     private int pageSize = -1;
@@ -91,13 +92,14 @@ public final class ScrollingBuilder extends BaseGuiBuilder<ScrollingGui, Compone
 
     /**
      * Creates a new {@link ScrollingGui}
+     * TODO fix this
      *
      * @return A new {@link ScrollingGui}
      */
     @Contract(" -> new")
     @Override
     public ScrollingGui create() {
-        return new ScrollingGui(6, "Hello");
+        return new ScrollingGui(getTitle(), getRows(), pageSize, scrollType));
     }
 
 }

@@ -14,10 +14,12 @@ allprojects {
     repositories {
         mavenCentral()
         maven("https://hub.spigotmc.org/nexus/content/groups/public/")
+        maven("https://papermc.io/repo/repository/maven-public/")
     }
 
     dependencies {
         compileOnly("org.jetbrains:annotations:20.1.0")
+        compileOnly("com.destroystokyo.paper:paper-api:1.16.5-R0.1-SNAPSHOT")
     }
 
     tasks {

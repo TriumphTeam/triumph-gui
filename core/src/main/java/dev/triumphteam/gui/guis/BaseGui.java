@@ -1,11 +1,10 @@
 package dev.triumphteam.gui.guis;
 
-import dev.triumphteam.gui.builder.LegacyGuiOptions;
 import dev.triumphteam.gui.components.GuiAction;
-import dev.triumphteam.gui.builder.GuiOptions;
 import dev.triumphteam.gui.components.GuiType;
 import dev.triumphteam.gui.components.exception.GuiException;
 import dev.triumphteam.gui.components.util.GuiFiller;
+import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
@@ -48,11 +47,9 @@ public abstract class BaseGui implements InventoryHolder {
     // Gui filler
     private final GuiFiller filler = new GuiFiller(this);
 
-    private GuiOptions guiOptions;
-
     // Inventory attributes
-    private String title;
-    private int rows;
+    private Component title;
+    private int rows = 1;
 
     // Gui type, defaults to chest
     private GuiType guiType = GuiType.CHEST;
@@ -85,14 +82,34 @@ public abstract class BaseGui implements InventoryHolder {
     private boolean runOpenAction = true;
 
     /**
-     * Became the main constructor, using {@link GuiOptions}
+     * The main constructor, using {@link Component}
      *
-     * @param guiOptions The options for the GUI
+     * @param rows  The amount of rows to use
+     * @param title The GUI title using {@link Component}
      * @since 3.0.0
      */
-    public BaseGui(@NotNull final GuiOptions guiOptions) {
-        this.guiOptions = guiOptions;
-        inventory = guiOptions.createInventory(this);
+    public BaseGui(final int rows, @NotNull final Component title) {
+        int finalRows = rows;
+        if (!(rows >= 1 && rows <= 6)) finalRows = 1;
+        this.rows = finalRows;
+        this.title = title;
+
+        // TODO add create inventory method
+        inventory = Bukkit.createInventory(this, rows, title);
+    }
+
+    /**
+     * Alternative constructor that takes {@link GuiType} instead of rows number
+     *
+     * @param guiType The {@link GuiType} to use
+     * @param title   The GUI title using {@link Component}
+     * @since 3.0.0
+     */
+    public BaseGui(@NotNull final GuiType guiType, @NotNull final Component title) {
+        this.guiType = guiType;
+        this.title = title;
+
+        inventory = Bukkit.createInventory(this, guiType.getInventoryType(), title);
     }
 
     /**
@@ -100,12 +117,11 @@ public abstract class BaseGui implements InventoryHolder {
      *
      * @param rows  The amount of rows the GUI should have
      * @param title The GUI title
-     * @deprecated In favor of {@link BaseGui#BaseGui(GuiOptions)}
+     * @deprecated In favor of {@link BaseGui#BaseGui(int, Component)}
      */
     @Deprecated
     public BaseGui(final int rows, @NotNull final String title) {
-        this.guiOptions = new LegacyGuiOptions(title, rows);
-        inventory = guiOptions.createInventory(this);
+        this(rows, Component.text(title));
     }
 
     /**
@@ -113,12 +129,11 @@ public abstract class BaseGui implements InventoryHolder {
      *
      * @param guiType The {@link GuiType} to use
      * @param title   The GUI title
-     * @deprecated In favor of {@link BaseGui#BaseGui(GuiOptions)}
+     * @deprecated In favor of {@link BaseGui#BaseGui(GuiType, Component)}
      */
     @Deprecated
     public BaseGui(@NotNull final GuiType guiType, @NotNull final String title) {
-        this.guiOptions = new LegacyGuiOptions(title, guiType);
-        inventory = guiOptions.createInventory(this);
+        this(guiType, Component.text(title));
     }
 
     /**
@@ -140,7 +155,7 @@ public abstract class BaseGui implements InventoryHolder {
 
         final List<HumanEntity> viewers = new ArrayList<>(inventory.getViewers());
 
-        inventory = Bukkit.createInventory(this, this.rows * 9, this.title);
+        inventory = Bukkit.createInventory(this, this.rows, title);
 
         for (HumanEntity player : viewers) {
             open(player);
@@ -442,13 +457,13 @@ public abstract class BaseGui implements InventoryHolder {
      */
     // TODO fix
     public BaseGui updateTitle(@NotNull final String title) {
-        this.title = title;
+        //this.title = title;
 
         updating = true;
 
         final List<HumanEntity> viewers = new ArrayList<>(inventory.getViewers());
 
-        inventory = Bukkit.createInventory(this, inventory.getSize(), this.title);
+        //inventory = Bukkit.createInventory(this, inventory.getSize(), this.title);
 
         for (final HumanEntity player : viewers) {
             open(player);
@@ -596,7 +611,7 @@ public abstract class BaseGui implements InventoryHolder {
      * @param title The new title
      */
     void setTitle(@NotNull final String title) {
-        this.title = title;
+        //this.title = title;
     }
 
     /**

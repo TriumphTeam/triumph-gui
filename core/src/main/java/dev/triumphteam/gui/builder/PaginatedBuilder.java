@@ -15,7 +15,7 @@ import java.util.function.Consumer;
  * I don't really like how it is since requires a lot of repetition
  * Please send help
  */
-public final class PaginatedBuilder extends BaseGuiBuilder<PaginatedGui, Component> {
+public final class PaginatedBuilder extends BaseGuiBuilder<PaginatedGui> {
 
     private int pageSize = 0;
 

@@ -1,6 +1,6 @@
 package dev.triumphteam.gui.guis;
 
-import dev.triumphteam.gui.builder.GuiOptions;
+import dev.triumphteam.gui.builder.Title;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.event.inventory.InventoryClickEvent;
@@ -29,8 +29,13 @@ public class PaginatedGui extends BaseGui {
     private int pageSize;
     private int pageNum = 1;
 
-
-    public PaginatedGui(@NotNull final GuiOptions guiOptions) {
+    /**
+     * Main constructor for the {@link PaginatedGui}
+     *
+     * @param guiOptions The {@link Title} implementation
+     * @since 3.0.0
+     */
+    public PaginatedGui(@NotNull final Title guiOptions) {
         super(guiOptions);
     }
 
@@ -40,7 +45,9 @@ public class PaginatedGui extends BaseGui {
      * @param rows     The rows the GUI should have
      * @param pageSize The pageSize
      * @param title    The GUI's title
+     * @deprecated In favor of {@link PaginatedGui#PaginatedGui(Title)}
      */
+    @Deprecated
     public PaginatedGui(final int rows, final int pageSize, @NotNull final String title) {
         super(rows, title);
         this.pageSize = pageSize;
@@ -51,7 +58,9 @@ public class PaginatedGui extends BaseGui {
      *
      * @param rows  The rows the GUI should have
      * @param title The GUI's title
+     * @deprecated In favor of {@link PaginatedGui#PaginatedGui(Title)}
      */
+    @Deprecated
     public PaginatedGui(final int rows, @NotNull final String title) {
         this(rows, 0, title);
     }
@@ -60,7 +69,9 @@ public class PaginatedGui extends BaseGui {
      * Alternative constructor that only requires title
      *
      * @param title The GUI's title
+     * @deprecated In favor of {@link PaginatedGui#PaginatedGui(Title)}
      */
+    @Deprecated
     public PaginatedGui(@NotNull final String title) {
         this(2, title);
     }
@@ -81,31 +92,6 @@ public class PaginatedGui extends BaseGui {
         this.pageSize = pageSize;
 
         if (rows < 2) setRows(2);
-    }
-
-    /**
-     * Old constructor
-     *
-     * @param plugin The plugin's instance
-     * @param rows   The rows the GUI should have
-     * @param title  The GUI's title
-     * @deprecated No longer requires the plugin's instance to be passed use {@link #PaginatedGui(int, String)} instead
-     */
-    @Deprecated
-    public PaginatedGui(@NotNull final Plugin plugin, final int rows, @NotNull final String title) {
-        this(plugin, rows, 0, title);
-    }
-
-    /**
-     * Old constructor
-     *
-     * @param plugin The plugin's instance
-     * @param title  The GUI's title
-     * @deprecated No longer requires the plugin's instance to be passed use {@link #PaginatedGui(String)} instead
-     */
-    @Deprecated
-    public PaginatedGui(@NotNull final Plugin plugin, @NotNull final String title) {
-        this(plugin, 2, title);
     }
 
     /**
