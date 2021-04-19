@@ -17,7 +17,7 @@ import java.util.function.Consumer;
  */
 public final class SimpleBuilder extends BaseGuiBuilder<Gui> {
 
-    private GuiType guiType = null;
+    private GuiType guiType;
 
     /**
      * Main constructor
@@ -85,11 +85,17 @@ public final class SimpleBuilder extends BaseGuiBuilder<Gui> {
     @Contract(" -> new")
     @Override
     public Gui create() {
-        if (guiType == null) {
-            return new Gui(getRows(), getTitle());
+        final Gui gui;
+        if (guiType == null || guiType == GuiType.CHEST) {
+            gui = new Gui(getRows(), getTitle());
+        } else {
+            gui = new Gui(guiType, getTitle());
         }
+        System.out.println(guiType);
+        final Consumer<Gui> consumer = getConsumer();
+        if (consumer != null) consumer.accept(gui);
 
-        return new Gui(guiType, getTitle());
+        return gui;
     }
 
 }

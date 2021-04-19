@@ -1,7 +1,7 @@
 package dev.triumphteam.gui.guis;
 
-import dev.triumphteam.gui.builder.Title;
 import dev.triumphteam.gui.components.ScrollType;
+import net.kyori.adventure.text.Component;
 import org.bukkit.entity.HumanEntity;
 import org.jetbrains.annotations.NotNull;
 
@@ -18,24 +18,15 @@ public class ScrollingGui extends PaginatedGui {
     private int scrollSize = 0;
 
     /**
-     * Main constructor for the {@link PaginatedGui}
-     *
-     * @param guiOptions The {@link Title} implementation
-     * @since 3.0.0
-     */
-    public ScrollingGui(@NotNull final Title guiOptions) {
-        super(guiOptions);
-    }
-
-    /**
      * Main constructor of the Scrolling GUI
      *
      * @param rows       The rows the GUI should have
      * @param pageSize   The Page size
-     * @param title      The GUI's title
+     * @param title      The title using {@link Component}
      * @param scrollType The {@link ScrollType}
+     * @since 3.0.0
      */
-    public ScrollingGui(final int rows, final int pageSize, @NotNull final String title, @NotNull final ScrollType scrollType) {
+    public ScrollingGui(final int rows, final int pageSize, @NotNull final Component title, @NotNull final ScrollType scrollType) {
         super(rows, pageSize, title);
 
         this.scrollType = scrollType;
@@ -46,8 +37,80 @@ public class ScrollingGui extends PaginatedGui {
      *
      * @param rows     The rows the GUI should have
      * @param pageSize The Page size
-     * @param title    The GUI's title
+     * @param title    The title using {@link Component}
+     * @since 3.0.0
      */
+    public ScrollingGui(final int rows, final int pageSize, @NotNull final Component title) {
+        this(rows, pageSize, title, ScrollType.VERTICAL);
+    }
+
+    /**
+     * Alternative constructor that doesn't require the page size
+     *
+     * @param rows       The rows the GUI should have
+     * @param title      The title using {@link Component}
+     * @param scrollType The {@link ScrollType}
+     * @since 3.0.0
+     */
+    public ScrollingGui(final int rows, @NotNull final Component title, @NotNull final ScrollType scrollType) {
+        this(rows, 0, title, scrollType);
+    }
+
+
+    /**
+     * Alternative constructor that doesn't require the {@link ScrollType} or page size
+     *
+     * @param rows  The rows the GUI should have
+     * @param title The title using {@link Component}
+     * @since 3.0.0
+     */
+    public ScrollingGui(final int rows, @NotNull final Component title) {
+        this(rows, 0, title, ScrollType.VERTICAL);
+    }
+
+    /**
+     * Alternative constructor that doesn't require the rows or page size
+     *
+     * @param title      The title using {@link Component}
+     * @param scrollType The {@link ScrollType}
+     * @since 3.0.0
+     */
+    public ScrollingGui(@NotNull final Component title, @NotNull final ScrollType scrollType) {
+        this(2, title, scrollType);
+    }
+
+    /**
+     * Alternative constructor that only requires title
+     *
+     * @param title The title using {@link Component}
+     */
+    public ScrollingGui(@NotNull final Component title) {
+        this(2, title);
+    }
+
+    /**
+     * Main constructor of the Scrolling GUI
+     *
+     * @param rows       The rows the GUI should have
+     * @param pageSize   The Page size
+     * @param title      The GUI's title
+     * @param scrollType The {@link ScrollType}
+     * @deprecated In favor of {@link ScrollingGui#ScrollingGui(int, int, Component, ScrollType)}
+     */
+    @Deprecated
+    public ScrollingGui(final int rows, final int pageSize, @NotNull final String title, @NotNull final ScrollType scrollType) {
+        this(rows, pageSize, Component.text(title));
+    }
+
+    /**
+     * Alternative constructor that doesn't require the {@link ScrollType}
+     *
+     * @param rows     The rows the GUI should have
+     * @param pageSize The Page size
+     * @param title    The GUI's title
+     * @deprecated In favor of {@link ScrollingGui#ScrollingGui(int, int, Component)}
+     */
+    @Deprecated
     public ScrollingGui(final int rows, final int pageSize, @NotNull final String title) {
         this(rows, pageSize, title, ScrollType.VERTICAL);
     }
@@ -57,7 +120,9 @@ public class ScrollingGui extends PaginatedGui {
      *
      * @param rows  The rows the GUI should have
      * @param title The GUI's title
+     * @deprecated In favor of {@link ScrollingGui#ScrollingGui(int, Component)}
      */
+    @Deprecated
     public ScrollingGui(final int rows, @NotNull final String title) {
         this(rows, 0, title, ScrollType.VERTICAL);
     }
@@ -68,7 +133,9 @@ public class ScrollingGui extends PaginatedGui {
      * @param rows       The rows the GUI should have
      * @param title      The GUI's title
      * @param scrollType The {@link ScrollType}
+     * @deprecated In favor of {@link ScrollingGui#ScrollingGui(int, Component, ScrollType)}
      */
+    @Deprecated
     public ScrollingGui(final int rows, @NotNull final String title, @NotNull final ScrollType scrollType) {
         this(rows, 0, title, scrollType);
     }
@@ -77,7 +144,9 @@ public class ScrollingGui extends PaginatedGui {
      * Alternative constructor that only requires title
      *
      * @param title The GUI's title
+     * @deprecated In favor of {@link ScrollingGui#ScrollingGui(Component)}
      */
+    @Deprecated
     public ScrollingGui(@NotNull final String title) {
         this(2, title);
     }
@@ -87,7 +156,9 @@ public class ScrollingGui extends PaginatedGui {
      *
      * @param title      The GUI's title
      * @param scrollType The {@link ScrollType}
+     * @deprecated In favor of {@link ScrollingGui#ScrollingGui(Component, ScrollType)}
      */
+    @Deprecated
     public ScrollingGui(@NotNull final String title, @NotNull final ScrollType scrollType) {
         this(2, title, scrollType);
     }

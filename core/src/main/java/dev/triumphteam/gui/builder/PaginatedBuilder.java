@@ -1,6 +1,5 @@
 package dev.triumphteam.gui.builder;
 
-import dev.triumphteam.gui.PaperGuiOptions;
 import dev.triumphteam.gui.guis.PaginatedGui;
 import net.kyori.adventure.text.Component;
 import org.jetbrains.annotations.Contract;
@@ -9,13 +8,13 @@ import org.jetbrains.annotations.NotNull;
 import java.util.function.Consumer;
 
 /**
- * The simple GUI builder is used for creating a {@link PaginatedGui    } that uses {@link Component} for title
+ * The simple GUI builder is used for creating a {@link PaginatedGui}
  * For now this is the system I'll use, if anyone can figure a better system PR or let me know!
  * Most of the methods have to be overridden and casted so that the builder can have differences
  * I don't really like how it is since requires a lot of repetition
  * Please send help
  */
-public final class PaginatedBuilder extends BaseGuiBuilder<PaginatedGui> {
+public class PaginatedBuilder extends BaseGuiBuilder<PaginatedGui> {
 
     private int pageSize = 0;
 
@@ -75,7 +74,12 @@ public final class PaginatedBuilder extends BaseGuiBuilder<PaginatedGui> {
     @Contract(" -> new")
     @Override
     public PaginatedGui create() {
-        return new PaginatedGui(new PaperGuiOptions(getTitle(), getRows(), pageSize));
+        final PaginatedGui gui = new PaginatedGui(getRows(), pageSize, getTitle());
+
+        final Consumer<PaginatedGui> consumer = getConsumer();
+        if (consumer != null) consumer.accept(gui);
+
+        return gui;
     }
 
 }

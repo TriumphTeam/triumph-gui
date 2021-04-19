@@ -1,11 +1,10 @@
 package dev.triumphteam.gui.guis;
 
-import dev.triumphteam.gui.builder.Title;
+import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.plugin.Plugin;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -30,27 +29,49 @@ public class PaginatedGui extends BaseGui {
     private int pageNum = 1;
 
     /**
-     * Main constructor for the {@link PaginatedGui}
+     * Main constructor of the PaginatedGui, uses {@link Component}
      *
-     * @param guiOptions The {@link Title} implementation
+     * @param rows     The rows the GUI should have
+     * @param pageSize The pageSize
+     * @param title    The title using {@link Component}
      * @since 3.0.0
      */
-    public PaginatedGui(@NotNull final Title guiOptions) {
-        super(guiOptions);
+    public PaginatedGui(final int rows, final int pageSize, @NotNull final Component title) {
+        super(rows, title);
+        this.pageSize = pageSize;
     }
 
     /**
-     * Main constructor of the PaginatedGui
+     * Alternative constructor for the {@link PaginatedGui} without page size
+     *
+     * @param title The title using {@link Component}
+     * @since 3.0.0
+     */
+    public PaginatedGui(final int rows, @NotNull final Component title) {
+        this(rows, 0, title);
+    }
+
+    /**
+     * Alternative constructor that only requires title
+     *
+     * @param title The title using {@link Component}
+     * @since 3.0.0
+     */
+    public PaginatedGui(@NotNull final Component title) {
+        this(2, title);
+    }
+
+    /**
+     * Old main constructor of the PaginatedGui
      *
      * @param rows     The rows the GUI should have
      * @param pageSize The pageSize
      * @param title    The GUI's title
-     * @deprecated In favor of {@link PaginatedGui#PaginatedGui(Title)}
+     * @deprecated In favor of {@link PaginatedGui#PaginatedGui(int, int, Component)}
      */
     @Deprecated
     public PaginatedGui(final int rows, final int pageSize, @NotNull final String title) {
-        super(rows, title);
-        this.pageSize = pageSize;
+        this(rows, pageSize, Component.text(title));
     }
 
     /**
@@ -58,40 +79,22 @@ public class PaginatedGui extends BaseGui {
      *
      * @param rows  The rows the GUI should have
      * @param title The GUI's title
-     * @deprecated In favor of {@link PaginatedGui#PaginatedGui(Title)}
+     * @deprecated In favor of {@link PaginatedGui#PaginatedGui(int, Component)}
      */
     @Deprecated
     public PaginatedGui(final int rows, @NotNull final String title) {
-        this(rows, 0, title);
+        this(rows, Component.text(title));
     }
 
     /**
      * Alternative constructor that only requires title
      *
      * @param title The GUI's title
-     * @deprecated In favor of {@link PaginatedGui#PaginatedGui(Title)}
+     * @deprecated In favor of {@link PaginatedGui#PaginatedGui(Component)}
      */
     @Deprecated
     public PaginatedGui(@NotNull final String title) {
         this(2, title);
-    }
-
-    /**
-     * Old constructor
-     *
-     * @param plugin   The plugin's instance
-     * @param rows     The rows the GUI should have
-     * @param pageSize The pageSize
-     * @param title    The GUI's title
-     * @deprecated No longer requires the plugin's instance to be passed use {@link #PaginatedGui(int, int, String)} instead
-     */
-    @Deprecated
-    public PaginatedGui(@NotNull final Plugin plugin, final int rows, final int pageSize, @NotNull final String title) {
-        super(rows, title);
-
-        this.pageSize = pageSize;
-
-        if (rows < 2) setRows(2);
     }
 
     /**
@@ -100,7 +103,6 @@ public class PaginatedGui extends BaseGui {
      * @param pageSize The new page size
      * @return The GUI for easier use when declaring, works like a builder
      */
-    @SuppressWarnings("UnusedReturnValue")
     public BaseGui setPageSize(final int pageSize) {
         this.pageSize = pageSize;
         return this;

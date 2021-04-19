@@ -95,7 +95,7 @@ public abstract class BaseGui implements InventoryHolder {
         this.title = title;
 
         // TODO add create inventory method
-        inventory = Bukkit.createInventory(this, rows, title);
+        inventory = Bukkit.createInventory(this, this.rows * 9, title);
     }
 
     /**

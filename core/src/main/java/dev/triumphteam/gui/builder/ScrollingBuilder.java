@@ -1,6 +1,5 @@
 package dev.triumphteam.gui.builder;
 
-import dev.triumphteam.gui.PaperGuiOptions;
 import dev.triumphteam.gui.components.ScrollType;
 import dev.triumphteam.gui.guis.ScrollingGui;
 import net.kyori.adventure.text.Component;
@@ -99,7 +98,12 @@ public final class ScrollingBuilder extends BaseGuiBuilder<ScrollingGui> {
     @Contract(" -> new")
     @Override
     public ScrollingGui create() {
-        return new ScrollingGui(getTitle(), getRows(), pageSize, scrollType));
+        final ScrollingGui gui = new ScrollingGui(getRows(), pageSize, getTitle(), scrollType);
+
+        final Consumer<ScrollingGui> consumer = getConsumer();
+        if (consumer != null) consumer.accept(gui);
+
+        return gui;
     }
 
 }
