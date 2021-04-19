@@ -1,9 +1,10 @@
-package dev.triumphteam.gui.components.util;
+package dev.triumphteam.gui.builder.item;
 
 import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.properties.Property;
 import dev.triumphteam.gui.components.GuiAction;
 import dev.triumphteam.gui.components.exception.GuiException;
+import dev.triumphteam.gui.components.util.ItemNBT;
 import dev.triumphteam.gui.components.xseries.XMaterial;
 import dev.triumphteam.gui.guis.GuiItem;
 import me.mattstudios.util.ServerVersion;
@@ -36,25 +37,12 @@ public final class ItemBuilder {
      * Constructor of the item builder
      *
      * @param itemStack The {@link ItemStack} of the item
-     * @deprecated Use {@link ItemBuilder#from(ItemStack)} instead, it's more idiomatic for a builder
      */
-    @Deprecated
-    public ItemBuilder(@NotNull final ItemStack itemStack) {
+    private ItemBuilder(@NotNull final ItemStack itemStack) {
         Validate.notNull(itemStack, "Item can't be null!");
 
         this.itemStack = itemStack;
         meta = itemStack.hasItemMeta() ? itemStack.getItemMeta() : Bukkit.getItemFactory().getItemMeta(itemStack.getType());
-    }
-
-    /**
-     * Alternative constructor with {@link Material}
-     *
-     * @param material The {@link Material} of the {@link ItemStack}
-     * @deprecated Use {@link ItemBuilder#from(Material)} instead, it's more idiomatic for a builder
-     */
-    @Deprecated
-    public ItemBuilder(final Material material) {
-        this(new ItemStack(material));
     }
 
     /**
@@ -74,7 +62,7 @@ public final class ItemBuilder {
      * @return A new {@link ItemBuilder}
      */
     public static ItemBuilder from(@NotNull final Material material) {
-        return new ItemBuilder(material);
+        return new ItemBuilder(new ItemStack(material));
     }
 
     /**

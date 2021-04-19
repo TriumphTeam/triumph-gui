@@ -4,7 +4,9 @@ import dev.triumphteam.gui.components.GuiAction;
 import dev.triumphteam.gui.components.GuiType;
 import dev.triumphteam.gui.components.exception.GuiException;
 import dev.triumphteam.gui.components.util.GuiFiller;
+import dev.triumphteam.gui.components.util.VersionHelper;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
@@ -12,6 +14,7 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.inventory.InventoryDragEvent;
 import org.bukkit.event.inventory.InventoryOpenEvent;
+import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
@@ -32,6 +35,12 @@ import java.util.Map;
  */
 @SuppressWarnings("unused")
 public abstract class BaseGui implements InventoryHolder {
+
+    // Uses the stupid format to serialize hex for the titles for spigot
+    private static final LegacyComponentSerializer LEGACY = LegacyComponentSerializer.builder()
+            .hexColors()
+            .useUnusualXRepeatedCharacterHexFormat()
+            .build();
 
     // The plugin instance for registering the event and for the close delay
     private static final Plugin plugin = JavaPlugin.getProvidingPlugin(BaseGui.class);
@@ -94,8 +103,7 @@ public abstract class BaseGui implements InventoryHolder {
         this.rows = finalRows;
         this.title = title;
 
-        // TODO add create inventory method
-        inventory = Bukkit.createInventory(this, this.rows * 9, title);
+        inventory = createRowedInventory();
     }
 
     /**
@@ -109,7 +117,7 @@ public abstract class BaseGui implements InventoryHolder {
         this.guiType = guiType;
         this.title = title;
 
-        inventory = Bukkit.createInventory(this, guiType.getInventoryType(), title);
+        inventory = createTypedInventory();
     }
 
     /**
@@ -621,6 +629,35 @@ public abstract class BaseGui implements InventoryHolder {
      */
     public void setInventory(@NotNull final Inventory inventory) {
         this.inventory = inventory;
+    }
+
+    /**
+     * Creates a rowed {@link Inventory}
+     * If the server is unfortunately legacy it'll serialize to string using the stupid format
+     *
+     * @return The new rowed {@link Inventory}
+     */
+    private Inventory createRowedInventory() {
+        if (VersionHelper.isComponentLegacy()) {
+            return Bukkit.createInventory(this, this.rows * 9, LEGACY.serialize(this.title));
+        }
+
+        return inventory = Bukkit.createInventory(this, this.rows * 9, title);
+    }
+
+    /**
+     * Creates a typed {@link Inventory}
+     * If the server is unfortunately legacy it'll serialize to string using the stupid format
+     *
+     * @return The new typed {@link Inventory}
+     */
+    private Inventory createTypedInventory() {
+        final InventoryType inventoryType = guiType.getInventoryType();
+        if (VersionHelper.isComponentLegacy()) {
+            return Bukkit.createInventory(this, inventoryType, LEGACY.serialize(this.title));
+        }
+
+        return Bukkit.createInventory(this, inventoryType, title);
     }
 
     /**

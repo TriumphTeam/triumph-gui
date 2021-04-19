@@ -1,4 +1,4 @@
-package dev.triumphteam.gui.builder;
+package dev.triumphteam.gui.builder.gui;
 
 import dev.triumphteam.gui.components.ScrollType;
 import dev.triumphteam.gui.guis.ScrollingGui;
