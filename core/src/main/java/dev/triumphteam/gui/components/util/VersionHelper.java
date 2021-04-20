@@ -35,6 +35,10 @@ public final class VersionHelper {
         return !IS_PAPER || CURRENT_VERSION < V1_16_5;
     }
 
+    public static boolean isItemLegacy() {
+        return CURRENT_VERSION < V1_13_1;
+    }
+
     /**
      * Check if the server has access to the Paper API
      * Taken from <a href="https://github.com/PaperMC/PaperLib">PaperLib</a>
