@@ -15,7 +15,8 @@ import java.util.function.Consumer;
  *
  * @param <G> The Type of {@link BaseGui}
  */
-public abstract class BaseGuiBuilder<G extends BaseGui> {
+@SuppressWarnings("unchecked")
+public abstract class BaseGuiBuilder<G extends BaseGui, B extends BaseGuiBuilder<G, B>> {
 
     private Component title = null;
     private int rows = 1;
@@ -30,9 +31,9 @@ public abstract class BaseGuiBuilder<G extends BaseGui> {
      * @return The builder
      */
     @Contract("_ -> this")
-    public BaseGuiBuilder<G> rows(final int rows) {
+    public B rows(final int rows) {
         this.rows = rows;
-        return this;
+        return (B) this;
     }
 
     /**
@@ -43,9 +44,9 @@ public abstract class BaseGuiBuilder<G extends BaseGui> {
      * @return The builder
      */
     @Contract("_ -> this")
-    public BaseGuiBuilder<G> title(@NotNull final Component title) {
+    public B title(@NotNull final Component title) {
         this.title = title;
-        return this;
+        return (B) this;
     }
 
     /**
@@ -56,9 +57,9 @@ public abstract class BaseGuiBuilder<G extends BaseGui> {
      * @return The builder
      */
     @Contract("_ -> this")
-    public BaseGuiBuilder<G> apply(@NotNull final Consumer<G> consumer) {
+    public B apply(@NotNull final Consumer<G> consumer) {
         this.consumer = consumer;
-        return this;
+        return (B) this;
     }
 
     /**
@@ -78,7 +79,6 @@ public abstract class BaseGuiBuilder<G extends BaseGui> {
     @NotNull
     protected Component getTitle() {
         if (title == null) {
-            // TODO better message
             throw new GuiException("GUI title is missing!");
         }
 

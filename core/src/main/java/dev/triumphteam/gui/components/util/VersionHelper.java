@@ -12,7 +12,7 @@ import java.util.regex.Pattern;
 public final class VersionHelper {
 
     // Unbreakable change
-    private static final int V1_12_1 = 1121;
+    private static final int V1_11_1 = 1111;
     // Material change
     private static final int V1_13_1 = 1131;
     // Paper changes
@@ -40,6 +40,15 @@ public final class VersionHelper {
      */
     public static boolean isItemLegacy() {
         return CURRENT_VERSION < V1_13_1;
+    }
+
+    /**
+     * Checks if the version supports the {@link org.bukkit.inventory.meta.ItemMeta#setUnbreakable(boolean)} method
+     *
+     * @return Whether or not the version is lower than 1.11
+     */
+    public static boolean isUnbreakableLegacy() {
+        return CURRENT_VERSION < V1_11_1;
     }
 
     /**

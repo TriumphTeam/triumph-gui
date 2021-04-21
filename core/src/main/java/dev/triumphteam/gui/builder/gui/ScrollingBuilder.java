@@ -10,12 +10,9 @@ import java.util.function.Consumer;
 
 /**
  * The simple GUI builder is used for creating a {@link ScrollingGui} that uses {@link Component} for title
- * For now this is the system I'll use, if anyone can figure a better system PR or let me know!
- * Most of the methods have to be overridden and casted so that the builder can have differences
- * I don't really like how it is since requires a lot of repetition
- * Please send help
+ * TODO This class needs more work to remove the redundant pageSize since it's the same as the paginated builder
  */
-public final class ScrollingBuilder extends BaseGuiBuilder<ScrollingGui> {
+public final class ScrollingBuilder extends BaseGuiBuilder<ScrollingGui, ScrollingBuilder> {
 
     private ScrollType scrollType;
     private int pageSize = -1;
@@ -27,42 +24,6 @@ public final class ScrollingBuilder extends BaseGuiBuilder<ScrollingGui> {
      */
     public ScrollingBuilder(@NotNull final ScrollType scrollType) {
         this.scrollType = scrollType;
-    }
-
-    /**
-     * Sets the rows for the GUI
-     *
-     * @param rows The amount of rows
-     * @return The current builder
-     */
-    @Contract("_ -> this")
-    @Override
-    public ScrollingBuilder rows(final int rows) {
-        return (ScrollingBuilder) super.rows(rows);
-    }
-
-    /**
-     * Sets the title of the GUI using {@link Component}
-     *
-     * @param title The GUI title
-     * @return The current builder
-     */
-    @Contract("_ -> this")
-    @Override
-    public ScrollingBuilder title(@NotNull final Component title) {
-        return (ScrollingBuilder) super.title(title);
-    }
-
-    /**
-     * Sets the consumer to that'll apply changes to the GUI using a {@link ScrollingGui}
-     *
-     * @param consumer A {@link Consumer} that passes the built GUI
-     * @return The current builder
-     */
-    @Contract("_ -> this")
-    @Override
-    public ScrollingBuilder apply(@NotNull final Consumer<ScrollingGui> consumer) {
-        return (ScrollingBuilder) super.apply(consumer);
     }
 
     /**

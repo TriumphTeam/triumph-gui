@@ -8,8 +8,8 @@ allprojects {
         plugin("java-library")
     }
 
-    group = "me.mattstudios"
-    version = "3.0.5-SNAPSHOT"
+    group = "dev.triumphteam"
+    version = "3.0.0-SNAPSHOT"
 
     repositories {
         mavenCentral()

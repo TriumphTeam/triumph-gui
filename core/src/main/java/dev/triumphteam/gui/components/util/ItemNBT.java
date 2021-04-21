@@ -17,6 +17,7 @@ public final class ItemNBT {
 
     private static Method getStringMethod;
     private static Method setStringMethod;
+    private static Method setBooleanMethod;
     private static Method hasTagMethod;
     private static Method getTagMethod;
     private static Method setTagMethod;
@@ -31,6 +32,7 @@ public final class ItemNBT {
             getStringMethod = Objects.requireNonNull(getNMSClass("NBTTagCompound")).getMethod("getString", String.class);
             removeTagMethod = Objects.requireNonNull(getNMSClass("NBTTagCompound")).getMethod("remove", String.class);
             setStringMethod = Objects.requireNonNull(getNMSClass("NBTTagCompound")).getMethod("setString", String.class, String.class);
+            setBooleanMethod = Objects.requireNonNull(getNMSClass("NBTTagCompound")).getMethod("setBoolean", String.class, boolean.class);
             hasTagMethod = Objects.requireNonNull(getNMSClass("ItemStack")).getMethod("hasTag");
             getTagMethod = Objects.requireNonNull(getNMSClass("ItemStack")).getMethod("getTag");
             setTagMethod = Objects.requireNonNull(getNMSClass("ItemStack")).getMethod("setTag", getNMSClass("NBTTagCompound"));
@@ -75,12 +77,20 @@ public final class ItemNBT {
         Object nmsItemStack = asNMSCopy(itemStack);
         Object itemCompound = hasTag(nmsItemStack) ? getTag(nmsItemStack) : newNBTTagCompound();
 
-        System.out.println("Before");
-        System.out.println(itemCompound);
         remove(itemCompound, key);
         setTag(nmsItemStack, itemCompound);
-        System.out.println("After");
-        System.out.println(itemCompound);
+
+        return asBukkitCopy(nmsItemStack);
+    }
+
+    public static ItemStack setNBTTag(final ItemStack itemStack, final String key, final boolean value) {
+        if (itemStack == null || itemStack.getType() == Material.AIR) return itemStack;
+
+        Object nmsItemStack = asNMSCopy(itemStack);
+        Object itemCompound = hasTag(nmsItemStack) ? getTag(nmsItemStack) : newNBTTagCompound();
+
+        setBoolean(itemCompound, key, value);
+        setTag(nmsItemStack, itemCompound);
 
         return asBukkitCopy(nmsItemStack);
     }
@@ -111,6 +121,13 @@ public final class ItemNBT {
     private static void setString(final Object itemCompound, final String key, final String value) {
         try {
             setStringMethod.invoke(itemCompound, key, value);
+        } catch (IllegalAccessException | InvocationTargetException ignored) {
+        }
+    }
+
+    private static void setBoolean(final Object itemCompound, final String key, final boolean value) {
+        try {
+            setBooleanMethod.invoke(itemCompound, key, value);
         } catch (IllegalAccessException | InvocationTargetException ignored) {
         }
     }
