@@ -15,8 +15,6 @@ public final class VersionHelper {
     private static final int V1_12_1 = 1121;
     // Material change
     private static final int V1_13_1 = 1131;
-    // PDC
-    private static final int V1_14_1 = 1141;
     // Paper changes
     private static final int V1_16_5 = 1165;
 
@@ -35,6 +33,11 @@ public final class VersionHelper {
         return !IS_PAPER || CURRENT_VERSION < V1_16_5;
     }
 
+    /**
+     * Checks if the version is lower than 1.13 due to the item changes
+     *
+     * @return Whether or not the version is lower than 1.13
+     */
     public static boolean isItemLegacy() {
         return CURRENT_VERSION < V1_13_1;
     }

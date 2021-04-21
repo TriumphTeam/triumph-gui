@@ -3,10 +3,10 @@ package dev.triumphteam.gui.guis;
 import dev.triumphteam.gui.components.GuiAction;
 import dev.triumphteam.gui.components.GuiType;
 import dev.triumphteam.gui.components.exception.GuiException;
+import dev.triumphteam.gui.components.util.Legacy;
 import dev.triumphteam.gui.components.util.GuiFiller;
 import dev.triumphteam.gui.components.util.VersionHelper;
 import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
@@ -36,12 +36,6 @@ import java.util.Map;
 @SuppressWarnings("unused")
 public abstract class BaseGui implements InventoryHolder {
 
-    // Uses the stupid format to serialize hex for the titles for spigot
-    private static final LegacyComponentSerializer LEGACY = LegacyComponentSerializer.builder()
-            .hexColors()
-            .useUnusualXRepeatedCharacterHexFormat()
-            .build();
-
     // The plugin instance for registering the event and for the close delay
     private static final Plugin plugin = JavaPlugin.getProvidingPlugin(BaseGui.class);
 
@@ -56,8 +50,6 @@ public abstract class BaseGui implements InventoryHolder {
     // Gui filler
     private final GuiFiller filler = new GuiFiller(this);
 
-    // Inventory attributes
-    private Component title;
     private int rows = 1;
 
     // Gui type, defaults to chest
@@ -101,9 +93,8 @@ public abstract class BaseGui implements InventoryHolder {
         int finalRows = rows;
         if (!(rows >= 1 && rows <= 6)) finalRows = 1;
         this.rows = finalRows;
-        this.title = title;
 
-        inventory = createRowedInventory();
+        inventory = createRowedInventory(title);
     }
 
     /**
@@ -115,9 +106,7 @@ public abstract class BaseGui implements InventoryHolder {
      */
     public BaseGui(@NotNull final GuiType guiType, @NotNull final Component title) {
         this.guiType = guiType;
-        this.title = title;
-
-        inventory = createTypedInventory();
+        inventory = createTypedInventory(title);
     }
 
     /**
@@ -129,7 +118,11 @@ public abstract class BaseGui implements InventoryHolder {
      */
     @Deprecated
     public BaseGui(final int rows, @NotNull final String title) {
-        this(rows, Component.text(title));
+        int finalRows = rows;
+        if (!(rows >= 1 && rows <= 6)) finalRows = 1;
+        this.rows = finalRows;
+
+        inventory = Bukkit.createInventory(this, this.rows, title);
     }
 
     /**
@@ -141,7 +134,8 @@ public abstract class BaseGui implements InventoryHolder {
      */
     @Deprecated
     public BaseGui(@NotNull final GuiType guiType, @NotNull final String title) {
-        this(guiType, Component.text(title));
+        this.guiType = guiType;
+        inventory = Bukkit.createInventory(this, this.guiType.getInventoryType(), title);
     }
 
     /**
@@ -163,7 +157,7 @@ public abstract class BaseGui implements InventoryHolder {
 
         final List<HumanEntity> viewers = new ArrayList<>(inventory.getViewers());
 
-        inventory = Bukkit.createInventory(this, this.rows, title);
+        //inventory = Bukkit.createInventory(this, this.rows, title);
 
         for (HumanEntity player : viewers) {
             open(player);
@@ -635,11 +629,12 @@ public abstract class BaseGui implements InventoryHolder {
      * Creates a rowed {@link Inventory}
      * If the server is unfortunately legacy it'll serialize to string using the stupid format
      *
+     * @param title The title as a {@link Component}
      * @return The new rowed {@link Inventory}
      */
-    private Inventory createRowedInventory() {
+    private Inventory createRowedInventory(@NotNull final Component title) {
         if (VersionHelper.isComponentLegacy()) {
-            return Bukkit.createInventory(this, this.rows * 9, LEGACY.serialize(this.title));
+            return Bukkit.createInventory(this, this.rows * 9, Legacy.SERIALIZER.serialize(title));
         }
 
         return inventory = Bukkit.createInventory(this, this.rows * 9, title);
@@ -649,12 +644,13 @@ public abstract class BaseGui implements InventoryHolder {
      * Creates a typed {@link Inventory}
      * If the server is unfortunately legacy it'll serialize to string using the stupid format
      *
+     * @param title The title as a {@link Component}
      * @return The new typed {@link Inventory}
      */
-    private Inventory createTypedInventory() {
+    private Inventory createTypedInventory(@NotNull final Component title) {
         final InventoryType inventoryType = guiType.getInventoryType();
         if (VersionHelper.isComponentLegacy()) {
-            return Bukkit.createInventory(this, inventoryType, LEGACY.serialize(this.title));
+            return Bukkit.createInventory(this, inventoryType, Legacy.SERIALIZER.serialize(title));
         }
 
         return Bukkit.createInventory(this, inventoryType, title);

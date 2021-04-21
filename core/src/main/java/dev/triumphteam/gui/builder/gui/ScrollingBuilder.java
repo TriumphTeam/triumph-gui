@@ -91,7 +91,6 @@ public final class ScrollingBuilder extends BaseGuiBuilder<ScrollingGui> {
 
     /**
      * Creates a new {@link ScrollingGui}
-     * TODO fix this
      *
      * @return A new {@link ScrollingGui}
      */

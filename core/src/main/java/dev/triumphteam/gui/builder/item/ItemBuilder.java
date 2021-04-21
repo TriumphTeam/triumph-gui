@@ -4,7 +4,9 @@ import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.properties.Property;
 import dev.triumphteam.gui.components.GuiAction;
 import dev.triumphteam.gui.components.util.ItemNBT;
+import dev.triumphteam.gui.components.util.Legacy;
 import dev.triumphteam.gui.components.util.SkullUtil;
+import dev.triumphteam.gui.components.util.VersionHelper;
 import dev.triumphteam.gui.guis.GuiItem;
 import net.kyori.adventure.text.Component;
 import org.apache.commons.lang.Validate;
@@ -28,6 +30,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 import java.util.function.Consumer;
+import java.util.stream.Collectors;
 
 @SuppressWarnings("unused")
 public class ItemBuilder {
@@ -89,14 +92,18 @@ public class ItemBuilder {
     /**
      * Sets the display name of the item using {@link Component}
      *
-     * @param component The {@link Component} name
+     * @param name The {@link Component} name
      * @return {@link ItemBuilder}
      * @since 3.0.0
      */
     @Contract("_ -> this")
-    public ItemBuilder name(@NotNull final Component component) {
-        meta.displayName(component);
-        // TODO legacy
+    public ItemBuilder name(@NotNull final Component name) {
+        if (VersionHelper.isComponentLegacy()) {
+            setName(Legacy.SERIALIZER.serialize(name));
+            return this;
+        }
+
+        meta.displayName(name);
         return this;
     }
 
@@ -133,8 +140,12 @@ public class ItemBuilder {
      */
     @Contract("_ -> this")
     public ItemBuilder lore(@NotNull final List<Component> lore) {
+        if (VersionHelper.isComponentLegacy()) {
+            setLore(lore.stream().map(Legacy.SERIALIZER::serialize).collect(Collectors.toList()));
+            return this;
+        }
+
         meta.lore(lore);
-        // TODO legacy
         return this;
     }
 
@@ -344,28 +355,62 @@ public class ItemBuilder {
         return itemStack;
     }
 
-    // TODO this
+    /**
+     * Creates a {@link GuiItem} instead of an {@link ItemStack}
+     *
+     * @return A {@link GuiItem} with no {@link GuiAction}
+     */
+    @Contract(" -> new")
     public GuiItem asGuiItem() {
         return new GuiItem(build());
     }
 
+    /**
+     * Creates a {@link GuiItem} instead of an {@link ItemStack}
+     *
+     * @param action The {@link GuiAction} to apply to the item
+     * @return A {@link GuiItem} with {@link GuiAction}
+     */
+    @Contract("_ -> new")
     public GuiItem asGuiItem(@NotNull final GuiAction<InventoryClickEvent> action) {
         return new GuiItem(build(), action);
     }
 
+    /**
+     * Package private getter for extended builders
+     *
+     * @return The ItemStack
+     */
+    @NotNull
     ItemStack getItemStack() {
         return itemStack;
     }
 
-    void setItemStack(final ItemStack itemStack) {
+    /**
+     * Package private setter for the extended builders
+     *
+     * @param itemStack The ItemStack
+     */
+    void setItemStack(@NotNull final ItemStack itemStack) {
         this.itemStack = itemStack;
     }
 
+    /**
+     * Package private getter for extended builders
+     *
+     * @return The ItemMeta
+     */
+    @NotNull
     ItemMeta getMeta() {
         return meta;
     }
 
-    void setMeta(final ItemMeta meta) {
+    /**
+     * Package private setter for the extended builders
+     *
+     * @param meta The ItemMeta
+     */
+    void setMeta(@NotNull final ItemMeta meta) {
         this.meta = meta;
     }
 

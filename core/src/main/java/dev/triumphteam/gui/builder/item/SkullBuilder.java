@@ -52,8 +52,8 @@ public final class SkullBuilder extends ItemBuilder {
     }
 
     @Override
-    public SkullBuilder name(final @NotNull Component component) {
-        return (SkullBuilder) super.name(component);
+    public SkullBuilder name(final @NotNull Component name) {
+        return (SkullBuilder) super.name(name);
     }
 
     @Override

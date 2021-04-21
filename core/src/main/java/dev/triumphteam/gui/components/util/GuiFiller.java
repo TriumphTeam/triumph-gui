@@ -10,7 +10,9 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-@SuppressWarnings("unused")
+/**
+ * TODO fix comments
+ */
 public final class GuiFiller {
 
     private final BaseGui gui;
@@ -86,10 +88,10 @@ public final class GuiFiller {
 
         for (int i = 0; i < rows * 9; i++) {
             if ((i <= 8) || (i >= (rows * 9) - 9)
-                || i == 9 || i == 18
-                || i == 27 || i == 36
-                || i == 17 || i == 26
-                || i == 35 || i == 44)
+                    || i == 9 || i == 18
+                    || i == 27 || i == 36
+                    || i == 17 || i == 26
+                    || i == 35 || i == 44)
                 gui.setItem(i, items.get(i));
 
         }
