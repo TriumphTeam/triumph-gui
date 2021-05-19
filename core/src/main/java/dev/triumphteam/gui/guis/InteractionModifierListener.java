@@ -135,7 +135,7 @@ public final class InteractionModifierListener implements Listener {
     }
 
     /**
-     *
+     * Checks if any item is being dragged on the GUI
      *
      * @param event The InventoryDragEvent
      * @return True if the {@link InventoryDragEvent} is for dragging an item inside the GUI
