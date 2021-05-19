@@ -46,9 +46,9 @@ public final class SimpleBuilder extends BaseGuiBuilder<Gui, SimpleBuilder> {
     public Gui create() {
         final Gui gui;
         if (guiType == null || guiType == GuiType.CHEST) {
-            gui = new Gui(getRows(), getTitle());
+            gui = new Gui(getRows(), getTitle(), getModifiers());
         } else {
-            gui = new Gui(guiType, getTitle());
+            gui = new Gui(guiType, getTitle(), getModifiers());
         }
         System.out.println(guiType);
         final Consumer<Gui> consumer = getConsumer();

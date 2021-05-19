@@ -1,5 +1,6 @@
 package dev.triumphteam.gui.builder.gui;
 
+import dev.triumphteam.gui.components.InteractionModifier;
 import dev.triumphteam.gui.components.exception.GuiException;
 import dev.triumphteam.gui.guis.BaseGui;
 import net.kyori.adventure.text.Component;
@@ -7,6 +8,8 @@ import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.EnumSet;
+import java.util.Set;
 import java.util.function.Consumer;
 
 /**
@@ -20,6 +23,7 @@ public abstract class BaseGuiBuilder<G extends BaseGui, B extends BaseGuiBuilder
 
     private Component title = null;
     private int rows = 1;
+    private final EnumSet<InteractionModifier> interactionModifiers = EnumSet.noneOf(InteractionModifier.class);
 
     private Consumer<G> consumer;
 
@@ -46,6 +50,110 @@ public abstract class BaseGuiBuilder<G extends BaseGui, B extends BaseGuiBuilder
     @Contract("_ -> this")
     public B title(@NotNull final Component title) {
         this.title = title;
+        return (B) this;
+    }
+
+    /**
+     * Disable item placement inside the GUI
+     *
+     * @return The builder
+     * @since 3.0.0
+     * @author SecretX
+     */
+    @Contract(" -> this")
+    public B disableItemPlace() {
+        interactionModifiers.add(InteractionModifier.PREVENT_ITEM_PLACE);
+        return (B) this;
+    }
+
+    /**
+     * Disable item retrieval inside the GUI
+     *
+     * @return The builder
+     * @since 3.0.0
+     * @author SecretX
+     */
+    @Contract(" -> this")
+    public B disableItemTake() {
+        interactionModifiers.add(InteractionModifier.PREVENT_ITEM_TAKE);
+        return (B) this;
+    }
+
+    /**
+     * Disable item swap inside the GUI
+     *
+     * @return The builder
+     * @since 3.0.0
+     * @author SecretX
+     */
+    @Contract(" -> this")
+    public B disableItemSwap() {
+        interactionModifiers.add(InteractionModifier.PREVENT_ITEM_SWAP);
+        return (B) this;
+    }
+
+    /**
+     * Disable all the modifications of the GUI, making it immutable by player interaction
+     *
+     * @return The builder
+     * @since 3.0.0
+     * @author SecretX
+     */
+    @Contract(" -> this")
+    public B disableAllInteractions() {
+        interactionModifiers.addAll(InteractionModifier.VALUES);
+        return (B) this;
+    }
+
+    /**
+     * Allows item placement inside the GUI
+     *
+     * @return The builder
+     * @since 3.0.0
+     * @author SecretX
+     */
+    @Contract(" -> this")
+    public B enableItemPlace() {
+        interactionModifiers.remove(InteractionModifier.PREVENT_ITEM_PLACE);
+        return (B) this;
+    }
+
+    /**
+     * Allow items to be taken from the GUI
+     *
+     * @return The builder
+     * @since 3.0.0
+     * @author SecretX
+     */
+    @Contract(" -> this")
+    public B enableItemTake() {
+        interactionModifiers.remove(InteractionModifier.PREVENT_ITEM_TAKE);
+        return (B) this;
+    }
+
+    /**
+     * Allows item swap inside the GUI
+     *
+     * @return The builder
+     * @since 3.0.0
+     * @author SecretX
+     */
+    @Contract(" -> this")
+    public B enableItemSwap() {
+        interactionModifiers.remove(InteractionModifier.PREVENT_ITEM_SWAP);
+        return (B) this;
+    }
+
+    /**
+     * Enable all modifications of the GUI, making it completely mutable by player interaction
+     *
+     * @return The builder
+     * @since 3.0.0
+     * @author SecretX
+     */
+    @Contract(" -> this")
+    public B enableAllInteractions() {
+        interactionModifiers.clear();
         return (B) this;
     }
 
@@ -104,4 +212,14 @@ public abstract class BaseGuiBuilder<G extends BaseGui, B extends BaseGuiBuilder
         return consumer;
     }
 
+
+    /**
+     * Getter for the set of interaction modifiers
+     * @return The set of {@link InteractionModifier}
+     * @since 3.0.0
+     * @author SecretX
+     */
+    protected Set<InteractionModifier> getModifiers() {
+        return interactionModifiers;
+    }
 }

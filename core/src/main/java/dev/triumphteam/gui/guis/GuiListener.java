@@ -4,11 +4,7 @@ import dev.triumphteam.gui.components.GuiAction;
 import dev.triumphteam.gui.components.util.ItemNBT;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.inventory.InventoryClickEvent;
-import org.bukkit.event.inventory.InventoryCloseEvent;
-import org.bukkit.event.inventory.InventoryDragEvent;
-import org.bukkit.event.inventory.InventoryOpenEvent;
-import org.bukkit.event.inventory.InventoryType;
+import org.bukkit.event.inventory.*;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.Nullable;
 
@@ -20,7 +16,7 @@ public final class GuiListener implements Listener {
      * @param event The InventoryClickEvent
      */
     @EventHandler
-    public void onGuiCLick(final InventoryClickEvent event) {
+    public void onGuiClick(final InventoryClickEvent event) {
         if (!(event.getInventory().getHolder() instanceof BaseGui)) return;
 
         // Gui
@@ -103,7 +99,7 @@ public final class GuiListener implements Listener {
      * @param event The InventoryCloseEvent
      */
     @EventHandler
-    public void onGuiClose(InventoryCloseEvent event) {
+    public void onGuiClose(final InventoryCloseEvent event) {
         if (!(event.getInventory().getHolder() instanceof BaseGui)) return;
 
         // GUI
@@ -127,7 +123,7 @@ public final class GuiListener implements Listener {
      * @param event The InventoryOpenEvent
      */
     @EventHandler
-    public void onGuiOpen(InventoryOpenEvent event) {
+    public void onGuiOpen(final InventoryOpenEvent event) {
         if (!(event.getInventory().getHolder() instanceof BaseGui)) return;
 
         // GUI

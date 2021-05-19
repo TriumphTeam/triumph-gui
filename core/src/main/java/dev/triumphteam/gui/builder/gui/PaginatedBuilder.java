@@ -32,7 +32,7 @@ public class PaginatedBuilder extends BaseGuiBuilder<PaginatedGui, PaginatedBuil
     @Contract(" -> new")
     @Override
     public PaginatedGui create() {
-        final PaginatedGui gui = new PaginatedGui(getRows(), pageSize, getTitle());
+        final PaginatedGui gui = new PaginatedGui(getRows(), pageSize, getTitle(), getModifiers());
 
         final Consumer<PaginatedGui> consumer = getConsumer();
         if (consumer != null) consumer.accept(gui);

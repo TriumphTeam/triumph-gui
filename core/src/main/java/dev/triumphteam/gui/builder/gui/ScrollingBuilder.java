@@ -58,7 +58,7 @@ public final class ScrollingBuilder extends BaseGuiBuilder<ScrollingGui, Scrolli
     @Contract(" -> new")
     @Override
     public ScrollingGui create() {
-        final ScrollingGui gui = new ScrollingGui(getRows(), pageSize, getTitle(), scrollType);
+        final ScrollingGui gui = new ScrollingGui(getRows(), pageSize, getTitle(), scrollType, getModifiers());
 
         final Consumer<ScrollingGui> consumer = getConsumer();
         if (consumer != null) consumer.accept(gui);

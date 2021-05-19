@@ -1,12 +1,15 @@
 package dev.triumphteam.gui.guis;
 
+import dev.triumphteam.gui.components.InteractionModifier;
 import dev.triumphteam.gui.components.ScrollType;
 import net.kyori.adventure.text.Component;
 import org.bukkit.entity.HumanEntity;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 
 /**
  * GUI that allows you to scroll through items
@@ -24,12 +27,27 @@ public class ScrollingGui extends PaginatedGui {
      * @param pageSize   The Page size
      * @param title      The title using {@link Component}
      * @param scrollType The {@link ScrollType}
+     * @param interactionModifiers A set containing the {@link InteractionModifier} this GUI should use
+     * @since 3.0.0
+     * @author SecretX
+     */
+    public ScrollingGui(final int rows, final int pageSize, @NotNull final Component title, @NotNull final ScrollType scrollType, @NotNull final Set<InteractionModifier> interactionModifiers) {
+        super(rows, pageSize, title, interactionModifiers);
+
+        this.scrollType = scrollType;
+    }
+
+    /**
+     * Alternative constructor of the Scrolling GUI, for when the GUI doesn't require any {@link InteractionModifier}
+     *
+     * @param rows       The rows the GUI should have
+     * @param pageSize   The Page size
+     * @param title      The title using {@link Component}
+     * @param scrollType The {@link ScrollType}
      * @since 3.0.0
      */
     public ScrollingGui(final int rows, final int pageSize, @NotNull final Component title, @NotNull final ScrollType scrollType) {
-        super(rows, pageSize, title);
-
-        this.scrollType = scrollType;
+        this(rows, pageSize, title, scrollType, Collections.emptySet());
     }
 
     /**
