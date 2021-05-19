@@ -1,5 +1,6 @@
 package dev.triumphteam.gui.guis;
 
+import dev.triumphteam.gui.components.InteractionModifier;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.HumanEntity;
@@ -7,12 +8,7 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * GUI that allows you to have multiple pages
@@ -29,7 +25,21 @@ public class PaginatedGui extends BaseGui {
     private int pageNum = 1;
 
     /**
-     * Main constructor of the PaginatedGui, uses {@link Component}
+     * Main constructor to provide a way to create PaginatedGui, uses {@link Component}
+     *
+     * @param rows  The amount of rows the GUI should have
+     * @param title The GUI's title using {@link Component}
+     * @param interactionModifiers A set containing what {@link InteractionModifier} this GUI should have
+     * @since 3.0.0
+     * @author SecretX
+     */
+    public PaginatedGui(final int rows, final int pageSize, @NotNull final Component title, @NotNull final Set<InteractionModifier> interactionModifiers) {
+        super(rows, title, interactionModifiers);
+        this.pageSize = pageSize;
+    }
+
+    /**
+     * Alternative constructor of the PaginatedGui, uses {@link Component} and provides a way to create PaginatedGui that don't use any {@link InteractionModifier}
      *
      * @param rows     The rows the GUI should have
      * @param pageSize The pageSize
@@ -37,9 +47,9 @@ public class PaginatedGui extends BaseGui {
      * @since 3.0.0
      */
     public PaginatedGui(final int rows, final int pageSize, @NotNull final Component title) {
-        super(rows, title);
-        this.pageSize = pageSize;
+        this(rows, pageSize, title, Collections.emptySet());
     }
+
 
     /**
      * Alternative constructor for the {@link PaginatedGui} without page size

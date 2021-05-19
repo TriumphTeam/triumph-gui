@@ -2,31 +2,26 @@ package dev.triumphteam.gui.guis;
 
 import dev.triumphteam.gui.components.GuiAction;
 import dev.triumphteam.gui.components.GuiType;
+import dev.triumphteam.gui.components.InteractionModifier;
 import dev.triumphteam.gui.components.exception.GuiException;
-import dev.triumphteam.gui.components.util.Legacy;
 import dev.triumphteam.gui.components.util.GuiFiller;
+import dev.triumphteam.gui.components.util.Legacy;
 import dev.triumphteam.gui.components.util.VersionHelper;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
-import org.bukkit.event.inventory.InventoryClickEvent;
-import org.bukkit.event.inventory.InventoryCloseEvent;
-import org.bukkit.event.inventory.InventoryDragEvent;
-import org.bukkit.event.inventory.InventoryOpenEvent;
-import org.bukkit.event.inventory.InventoryType;
+import org.bukkit.event.inventory.*;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Base class that every GUI extends
@@ -42,6 +37,7 @@ public abstract class BaseGui implements InventoryHolder {
     // Registering the listener class
     static {
         Bukkit.getPluginManager().registerEvents(new GuiListener(), plugin);
+        Bukkit.getPluginManager().registerEvents(new InteractionModifierListener(), plugin);
     }
 
     // Main inventory
@@ -60,6 +56,8 @@ public abstract class BaseGui implements InventoryHolder {
 
     // Actions for specific slots
     private final Map<Integer, GuiAction<InventoryClickEvent>> slotActions = new LinkedHashMap<>();
+    // Interaction modifiers
+    private final Set<InteractionModifier> interactionModifiers;
     // Action to execute when clicking on any item
     private GuiAction<InventoryClickEvent> defaultClickAction;
     // Action to execute when clicking on the top part of the GUI only
@@ -89,10 +87,11 @@ public abstract class BaseGui implements InventoryHolder {
      * @param title The GUI title using {@link Component}
      * @since 3.0.0
      */
-    public BaseGui(final int rows, @NotNull final Component title) {
+    public BaseGui(final int rows, @NotNull final Component title, @NotNull final Set<InteractionModifier> interactionModifiers) {
         int finalRows = rows;
         if (!(rows >= 1 && rows <= 6)) finalRows = 1;
         this.rows = finalRows;
+        this.interactionModifiers = safeCopyOf(interactionModifiers);
 
         inventory = createRowedInventory(title);
     }
@@ -104,9 +103,22 @@ public abstract class BaseGui implements InventoryHolder {
      * @param title   The GUI title using {@link Component}
      * @since 3.0.0
      */
-    public BaseGui(@NotNull final GuiType guiType, @NotNull final Component title) {
+    public BaseGui(@NotNull final GuiType guiType, @NotNull final Component title, @NotNull final Set<InteractionModifier> interactionModifiers) {
         this.guiType = guiType;
+        this.interactionModifiers = safeCopyOf(interactionModifiers);
         inventory = createTypedInventory(title);
+    }
+
+    /**
+     * Copy a set into an EnumSet, required because {@link EnumSet#copyOf(EnumSet)} throws an exception if the collection passed as argument is empty.
+     *
+     * @param set The set to be copied
+     * @return An EnumSet with the provided elements from the original set
+     */
+    @NotNull
+    private EnumSet<InteractionModifier> safeCopyOf(@NotNull final Set<InteractionModifier> set) {
+        if(set.isEmpty()) return EnumSet.noneOf(InteractionModifier.class);
+        else return EnumSet.copyOf(set);
     }
 
     /**
@@ -114,13 +126,14 @@ public abstract class BaseGui implements InventoryHolder {
      *
      * @param rows  The amount of rows the GUI should have
      * @param title The GUI title
-     * @deprecated In favor of {@link BaseGui#BaseGui(int, Component)}
+     * @deprecated In favor of {@link BaseGui#BaseGui(int, Component, Set)}
      */
     @Deprecated
     public BaseGui(final int rows, @NotNull final String title) {
         int finalRows = rows;
         if (!(rows >= 1 && rows <= 6)) finalRows = 1;
         this.rows = finalRows;
+        this.interactionModifiers = EnumSet.noneOf(InteractionModifier.class);
 
         inventory = Bukkit.createInventory(this, this.rows, title);
     }
@@ -130,11 +143,12 @@ public abstract class BaseGui implements InventoryHolder {
      *
      * @param guiType The {@link GuiType} to use
      * @param title   The GUI title
-     * @deprecated In favor of {@link BaseGui#BaseGui(GuiType, Component)}
+     * @deprecated In favor of {@link BaseGui#BaseGui(GuiType, Component, Set)}
      */
     @Deprecated
     public BaseGui(@NotNull final GuiType guiType, @NotNull final String title) {
         this.guiType = guiType;
+        this.interactionModifiers = EnumSet.noneOf(InteractionModifier.class);
         inventory = Bukkit.createInventory(this, this.guiType.getInventoryType(), title);
     }
 
@@ -474,6 +488,143 @@ public abstract class BaseGui implements InventoryHolder {
         updating = false;
 
         return this;
+    }
+
+    /**
+     * Disable item placement inside the GUI
+     *
+     * @return The BaseGui
+     * @since 3.0.0
+     * @author SecretX
+     */
+    @Contract(" -> this")
+    public BaseGui disableItemPlace() {
+        interactionModifiers.add(InteractionModifier.PREVENT_ITEM_PLACE);
+        return this;
+    }
+
+    /**
+     * Disable item retrieval inside the GUI
+     *
+     * @return The BaseGui
+     * @since 3.0.0
+     * @author SecretX
+     */
+    @Contract(" -> this")
+    public BaseGui disableItemTake() {
+        interactionModifiers.add(InteractionModifier.PREVENT_ITEM_TAKE);
+        return this;
+    }
+
+    /**
+     * Disable item swap inside the GUI
+     *
+     * @return The BaseGui
+     * @since 3.0.0
+     * @author SecretX
+     */
+    @Contract(" -> this")
+    public BaseGui disableItemSwap() {
+        interactionModifiers.add(InteractionModifier.PREVENT_ITEM_SWAP);
+        return this;
+    }
+
+    /**
+     * Disable all the modifications of the GUI, making it immutable by player interaction
+     *
+     * @return The BaseGui
+     * @since 3.0.0
+     * @author SecretX
+     */
+    @Contract(" -> this")
+    public BaseGui disableAllInteractions() {
+        interactionModifiers.addAll(InteractionModifier.VALUES);
+        return this;
+    }
+
+    /**
+     * Allows item placement inside the GUI
+     *
+     * @return The BaseGui
+     * @since 3.0.0
+     * @author SecretX
+     */
+    @Contract(" -> this")
+    public BaseGui enableItemPlace() {
+        interactionModifiers.remove(InteractionModifier.PREVENT_ITEM_PLACE);
+        return this;
+    }
+
+    /**
+     * Allow items to be taken from the GUI
+     *
+     * @return The BaseGui
+     * @since 3.0.0
+     * @author SecretX
+     */
+    @Contract(" -> this")
+    public BaseGui enableItemTake() {
+        interactionModifiers.remove(InteractionModifier.PREVENT_ITEM_TAKE);
+        return this;
+    }
+
+    /**
+     * Allows item swap inside the GUI
+     *
+     * @return The BaseGui
+     * @since 3.0.0
+     * @author SecretX
+     */
+    @Contract(" -> this")
+    public BaseGui enableItemSwap() {
+        interactionModifiers.remove(InteractionModifier.PREVENT_ITEM_SWAP);
+        return this;
+    }
+
+    /**
+     * Enable all modifications of the GUI, making it completely mutable by player interaction
+     *
+     * @return The BaseGui
+     * @since 3.0.0
+     * @author SecretX
+     */
+    @Contract(" -> this")
+    public BaseGui enableAllInteractions() {
+        interactionModifiers.clear();
+        return this;
+    }
+
+    /**
+     * Check if item placement is allowed inside this GUI
+     *
+     * @return True if item placement is allowed for this GUI
+     * @since 3.0.0
+     * @author SecretX
+     */
+    public boolean canPlaceItems() {
+        return !interactionModifiers.contains(InteractionModifier.PREVENT_ITEM_PLACE);
+    }
+
+    /**
+     * Check if item retrieval is allowed inside this GUI
+     *
+     * @return True if item retrieval is allowed inside this GUI
+     * @since 3.0.0
+     * @author SecretX
+     */
+    public boolean canTakeItems() {
+        return !interactionModifiers.contains(InteractionModifier.PREVENT_ITEM_TAKE);
+    }
+
+    /**
+     * Check if item swap is allowed inside this GUI
+     *
+     * @return True if item swap is allowed for this GUI
+     * @since 3.0.0
+     * @author SecretX
+     */
+    public boolean canSwapItems() {
+        return !interactionModifiers.contains(InteractionModifier.PREVENT_ITEM_SWAP);
     }
 
     /**
