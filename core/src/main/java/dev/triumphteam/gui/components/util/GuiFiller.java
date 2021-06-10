@@ -92,8 +92,8 @@ public final class GuiFiller {
                     || i == 27 || i == 36
                     || i == 17 || i == 26
                     || i == 35 || i == 44)
-                gui.setItem(i, items.get(i));
-
+                if (gui.getItem(i) == null)
+                    gui.setItem(i, items.get(i));
         }
     }
 
