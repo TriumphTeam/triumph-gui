@@ -46,6 +46,7 @@ public abstract class BaseGui implements InventoryHolder {
     // Registering the listener class
     static {
         Bukkit.getPluginManager().registerEvents(new GuiListener(), plugin);
+        // TODO might join these two
         Bukkit.getPluginManager().registerEvents(new InteractionModifierListener(), plugin);
     }
 
@@ -126,7 +127,7 @@ public abstract class BaseGui implements InventoryHolder {
      */
     @NotNull
     private EnumSet<InteractionModifier> safeCopyOf(@NotNull final Set<InteractionModifier> set) {
-        if(set.isEmpty()) return EnumSet.noneOf(InteractionModifier.class);
+        if (set.isEmpty()) return EnumSet.noneOf(InteractionModifier.class);
         else return EnumSet.copyOf(set);
     }
 
@@ -144,7 +145,7 @@ public abstract class BaseGui implements InventoryHolder {
         this.rows = finalRows;
         this.interactionModifiers = EnumSet.noneOf(InteractionModifier.class);
 
-        inventory = Bukkit.createInventory(this, this.rows, title);
+        inventory = Bukkit.createInventory(this, this.rows * 9, title);
     }
 
     /**
@@ -503,8 +504,8 @@ public abstract class BaseGui implements InventoryHolder {
      * Disable item placement inside the GUI
      *
      * @return The BaseGui
-     * @since 3.0.0
      * @author SecretX
+     * @since 3.0.0
      */
     @Contract(" -> this")
     public BaseGui disableItemPlace() {
@@ -516,8 +517,8 @@ public abstract class BaseGui implements InventoryHolder {
      * Disable item retrieval inside the GUI
      *
      * @return The BaseGui
-     * @since 3.0.0
      * @author SecretX
+     * @since 3.0.0
      */
     @Contract(" -> this")
     public BaseGui disableItemTake() {
@@ -529,8 +530,8 @@ public abstract class BaseGui implements InventoryHolder {
      * Disable item swap inside the GUI
      *
      * @return The BaseGui
-     * @since 3.0.0
      * @author SecretX
+     * @since 3.0.0
      */
     @Contract(" -> this")
     public BaseGui disableItemSwap() {
@@ -542,8 +543,8 @@ public abstract class BaseGui implements InventoryHolder {
      * Disable all the modifications of the GUI, making it immutable by player interaction
      *
      * @return The BaseGui
-     * @since 3.0.0
      * @author SecretX
+     * @since 3.0.0
      */
     @Contract(" -> this")
     public BaseGui disableAllInteractions() {
@@ -555,8 +556,8 @@ public abstract class BaseGui implements InventoryHolder {
      * Allows item placement inside the GUI
      *
      * @return The BaseGui
-     * @since 3.0.0
      * @author SecretX
+     * @since 3.0.0
      */
     @Contract(" -> this")
     public BaseGui enableItemPlace() {
@@ -568,8 +569,8 @@ public abstract class BaseGui implements InventoryHolder {
      * Allow items to be taken from the GUI
      *
      * @return The BaseGui
-     * @since 3.0.0
      * @author SecretX
+     * @since 3.0.0
      */
     @Contract(" -> this")
     public BaseGui enableItemTake() {
@@ -581,8 +582,8 @@ public abstract class BaseGui implements InventoryHolder {
      * Allows item swap inside the GUI
      *
      * @return The BaseGui
-     * @since 3.0.0
      * @author SecretX
+     * @since 3.0.0
      */
     @Contract(" -> this")
     public BaseGui enableItemSwap() {
@@ -594,8 +595,8 @@ public abstract class BaseGui implements InventoryHolder {
      * Enable all modifications of the GUI, making it completely mutable by player interaction
      *
      * @return The BaseGui
-     * @since 3.0.0
      * @author SecretX
+     * @since 3.0.0
      */
     @Contract(" -> this")
     public BaseGui enableAllInteractions() {
@@ -607,8 +608,8 @@ public abstract class BaseGui implements InventoryHolder {
      * Check if item placement is allowed inside this GUI
      *
      * @return True if item placement is allowed for this GUI
-     * @since 3.0.0
      * @author SecretX
+     * @since 3.0.0
      */
     public boolean canPlaceItems() {
         return !interactionModifiers.contains(InteractionModifier.PREVENT_ITEM_PLACE);
@@ -618,8 +619,8 @@ public abstract class BaseGui implements InventoryHolder {
      * Check if item retrieval is allowed inside this GUI
      *
      * @return True if item retrieval is allowed inside this GUI
-     * @since 3.0.0
      * @author SecretX
+     * @since 3.0.0
      */
     public boolean canTakeItems() {
         return !interactionModifiers.contains(InteractionModifier.PREVENT_ITEM_TAKE);
@@ -629,8 +630,8 @@ public abstract class BaseGui implements InventoryHolder {
      * Check if item swap is allowed inside this GUI
      *
      * @return True if item swap is allowed for this GUI
-     * @since 3.0.0
      * @author SecretX
+     * @since 3.0.0
      */
     public boolean canSwapItems() {
         return !interactionModifiers.contains(InteractionModifier.PREVENT_ITEM_SWAP);

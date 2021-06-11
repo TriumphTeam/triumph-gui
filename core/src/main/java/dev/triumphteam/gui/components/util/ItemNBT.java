@@ -11,7 +11,6 @@ import java.util.Objects;
 
 /**
  * Class to set / get NBT tags from items
- * TODO rework this class a little
  */
 public final class ItemNBT {
 
