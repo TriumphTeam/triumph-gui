@@ -3,6 +3,7 @@ package dev.triumphteam.gui.guis;
 import dev.triumphteam.gui.builder.gui.PaginatedBuilder;
 import dev.triumphteam.gui.builder.gui.ScrollingBuilder;
 import dev.triumphteam.gui.builder.gui.SimpleBuilder;
+import dev.triumphteam.gui.builder.gui.StorageBuilder;
 import dev.triumphteam.gui.components.GuiType;
 import dev.triumphteam.gui.components.InteractionModifier;
 import dev.triumphteam.gui.components.ScrollType;
@@ -21,11 +22,11 @@ public class Gui extends BaseGui {
     /**
      * Main constructor for the GUI, now with {@link Component} support
      *
-     * @param rows  The amount of rows the GUI should have
-     * @param title The GUI's title using {@link Component}
+     * @param rows                 The amount of rows the GUI should have
+     * @param title                The GUI's title using {@link Component}
      * @param interactionModifiers A set containing the {@link InteractionModifier} this GUI should use
-     * @since 3.0.0
      * @author SecretX
+     * @since 3.0.0
      */
     public Gui(final int rows, @NotNull final Component title, @NotNull final Set<InteractionModifier> interactionModifiers) {
         super(rows, title, interactionModifiers);
@@ -66,11 +67,11 @@ public class Gui extends BaseGui {
     /**
      * Alternative constructor that takes both a {@link GuiType} and a set of {@link InteractionModifier}
      *
-     * @param guiType The {@link GuiType} to be used
-     * @param title   The GUI's title using {@link Component}
+     * @param guiType              The {@link GuiType} to be used
+     * @param title                The GUI's title using {@link Component}
      * @param interactionModifiers A set containing the {@link InteractionModifier} this GUI should use
-     * @since 3.0.0
      * @author SecretX
+     * @since 3.0.0
      */
     public Gui(@NotNull final GuiType guiType, @NotNull final Component title, @NotNull final Set<InteractionModifier> interactionModifiers) {
         super(guiType, title, interactionModifiers);
@@ -132,6 +133,17 @@ public class Gui extends BaseGui {
     @Contract(" -> new")
     public static SimpleBuilder gui() {
         return gui(GuiType.CHEST);
+    }
+
+    /**
+     * Creates a {@link StorageBuilder}.
+     *
+     * @return A CHEST {@link StorageBuilder}.
+     * @since 3.0.0.
+     */
+    @Contract(" -> new")
+    public static StorageBuilder storage() {
+        return new StorageBuilder();
     }
 
     /**
