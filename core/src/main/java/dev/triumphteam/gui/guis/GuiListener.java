@@ -1,10 +1,14 @@
 package dev.triumphteam.gui.guis;
 
 import dev.triumphteam.gui.components.GuiAction;
-import dev.triumphteam.gui.components.util.ItemNBT;
+import dev.triumphteam.gui.components.util.ItemNbt;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.inventory.*;
+import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.inventory.InventoryCloseEvent;
+import org.bukkit.event.inventory.InventoryDragEvent;
+import org.bukkit.event.inventory.InventoryOpenEvent;
+import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.Nullable;
 
@@ -144,9 +148,9 @@ public final class GuiListener implements Listener {
      * @return Whether it is or not a GUI item
      */
     private boolean isGuiItem(@Nullable final ItemStack currentItem, @Nullable final GuiItem guiItem) {
-        if (guiItem == null) return false;
+        if (currentItem == null || guiItem == null) return false;
         // Checks whether or not the Item is truly a GUI Item
-        return ItemNBT.getNBTTag(currentItem, "mf-gui").equals(guiItem.getUuid().toString());
+        return ItemNbt.getString(currentItem, "mf-gui").equals(guiItem.getUuid().toString());
     }
 
 }

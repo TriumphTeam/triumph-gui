@@ -794,7 +794,7 @@ public abstract class BaseGui implements InventoryHolder {
      * @return The new rowed {@link Inventory}
      */
     private Inventory createRowedInventory(@NotNull final Component title) {
-        if (VersionHelper.isComponentLegacy()) {
+        if (VersionHelper.IS_COMPONENT_LEGACY) {
             return Bukkit.createInventory(this, this.rows * 9, Legacy.SERIALIZER.serialize(title));
         }
 
@@ -810,7 +810,7 @@ public abstract class BaseGui implements InventoryHolder {
      */
     private Inventory createTypedInventory(@NotNull final Component title) {
         final InventoryType inventoryType = guiType.getInventoryType();
-        if (VersionHelper.isComponentLegacy()) {
+        if (VersionHelper.IS_COMPONENT_LEGACY) {
             return Bukkit.createInventory(this, inventoryType, Legacy.SERIALIZER.serialize(title));
         }
 

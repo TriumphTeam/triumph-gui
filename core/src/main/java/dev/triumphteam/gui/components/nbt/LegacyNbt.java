@@ -1,8 +1,10 @@
-package dev.triumphteam.gui.components.util;
+package dev.triumphteam.gui.components.nbt;
 
-import me.mattstudios.util.ServerVersion;
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
@@ -10,9 +12,13 @@ import java.lang.reflect.Method;
 import java.util.Objects;
 
 /**
- * Class to set / get NBT tags from items
+ * Class to set / get NBT tags from items.
+ * I hate this class.
  */
-public final class ItemNBT {
+public final class LegacyNbt implements NbtWrapper {
+
+    public static final String PACKAGE_NAME = Bukkit.getServer().getClass().getPackage().getName();
+    public static final String NMS_VERSION = PACKAGE_NAME.substring(PACKAGE_NAME.lastIndexOf(46) + 1);
 
     private static Method getStringMethod;
     private static Method setStringMethod;
@@ -44,15 +50,16 @@ public final class ItemNBT {
     }
 
     /**
-     * Sets an NBT tag to the an {@link ItemStack}
+     * Sets an NBT tag to the an {@link ItemStack}.
      *
-     * @param itemStack The current {@link ItemStack} to be set
-     * @param key       The NBT key to use
-     * @param value     The tag value to set
-     * @return An {@link ItemStack} that has NBT set
+     * @param itemStack The current {@link ItemStack} to be set.
+     * @param key       The NBT key to use.
+     * @param value     The tag value to set.
+     * @return An {@link ItemStack} that has NBT set.
      */
-    public static ItemStack setNBTTag(final ItemStack itemStack, final String key, final String value) {
-        if (itemStack == null || itemStack.getType() == Material.AIR) return itemStack;
+    @Override
+    public ItemStack setString(@NotNull final ItemStack itemStack, final String key, final String value) {
+        if (itemStack.getType() == Material.AIR) return itemStack;
 
         Object nmsItemStack = asNMSCopy(itemStack);
         Object itemCompound = hasTag(nmsItemStack) ? getTag(nmsItemStack) : newNBTTagCompound();
@@ -64,14 +71,15 @@ public final class ItemNBT {
     }
 
     /**
-     * Sets an NBT tag to the an {@link ItemStack}
+     * Removes a tag from an {@link ItemStack}.
      *
-     * @param itemStack The current {@link ItemStack} to be set
-     * @param key       The NBT key to remove
-     * @return An {@link ItemStack} that has NBT set
+     * @param itemStack The current {@link ItemStack} to be remove.
+     * @param key       The NBT key to remove.
+     * @return An {@link ItemStack} that has the tag removed.
      */
-    public static ItemStack removeNBTTag(final ItemStack itemStack, final String key) {
-        if (itemStack == null || itemStack.getType() == Material.AIR) return itemStack;
+    @Override
+    public ItemStack removeTag(@NotNull final ItemStack itemStack, final String key) {
+        if (itemStack.getType() == Material.AIR) return itemStack;
 
         Object nmsItemStack = asNMSCopy(itemStack);
         Object itemCompound = hasTag(nmsItemStack) ? getTag(nmsItemStack) : newNBTTagCompound();
@@ -82,8 +90,18 @@ public final class ItemNBT {
         return asBukkitCopy(nmsItemStack);
     }
 
-    public static ItemStack setNBTTag(final ItemStack itemStack, final String key, final boolean value) {
-        if (itemStack == null || itemStack.getType() == Material.AIR) return itemStack;
+    /**
+     * Sets a boolean to the {@link ItemStack}.
+     * Mainly used for setting an item to be unbreakable on older versions.
+     *
+     * @param itemStack The {@link ItemStack} to set the boolean to.
+     * @param key       The key to use.
+     * @param value     The boolean value.
+     * @return An {@link ItemStack} with a boolean value set.
+     */
+    @Override
+    public ItemStack setBoolean(@NotNull final ItemStack itemStack, final String key, final boolean value) {
+        if (itemStack.getType() == Material.AIR) return itemStack;
 
         Object nmsItemStack = asNMSCopy(itemStack);
         Object itemCompound = hasTag(nmsItemStack) ? getTag(nmsItemStack) : newNBTTagCompound();
@@ -95,14 +113,16 @@ public final class ItemNBT {
     }
 
     /**
-     * Gets the NBT tag based on a given key
+     * Gets the NBT tag based on a given key.
      *
-     * @param itemStack The {@link ItemStack} to get from
-     * @param key       The key to look for
-     * @return The tag that was stored in the {@link ItemStack}
+     * @param itemStack The {@link ItemStack} to get from.
+     * @param key       The key to look for.
+     * @return The tag that was stored in the {@link ItemStack}.
      */
-    public static String getNBTTag(final ItemStack itemStack, final String key) {
-        if (itemStack == null || itemStack.getType() == Material.AIR) return "";
+    @Nullable
+    @Override
+    public String getString(@NotNull final ItemStack itemStack, final String key) {
+        if (itemStack.getType() == Material.AIR) return null;
 
         Object nmsItemStack = asNMSCopy(itemStack);
         Object itemCompound = hasTag(nmsItemStack) ? getTag(nmsItemStack) : newNBTTagCompound();
@@ -111,11 +131,11 @@ public final class ItemNBT {
     }
 
     /**
-     * Mimics the itemCompound#setString method
+     * Mimics the itemCompound#setString method.
      *
-     * @param itemCompound The ItemCompound
-     * @param key          The key to add
-     * @param value        The value to add
+     * @param itemCompound The ItemCompound.
+     * @param key          The key to add.
+     * @param value        The value to add.
      */
     private static void setString(final Object itemCompound, final String key, final String value) {
         try {
@@ -132,10 +152,10 @@ public final class ItemNBT {
     }
 
     /**
-     * Mimics the itemCompound#remove method
+     * Mimics the itemCompound#remove method.
      *
-     * @param itemCompound The ItemCompound
-     * @param key          The key to remove
+     * @param itemCompound The ItemCompound.
+     * @param key          The key to remove.
      */
     private static void remove(final Object itemCompound, final String key) {
         try {
@@ -145,11 +165,11 @@ public final class ItemNBT {
     }
 
     /**
-     * Mimics the itemCompound#getString method
+     * Mimics the itemCompound#getString method.
      *
-     * @param itemCompound The ItemCompound
-     * @param key          The key to get from
-     * @return A string with the value from the key
+     * @param itemCompound The ItemCompound.
+     * @param key          The key to get from.
+     * @return A string with the value from the key.
      */
     private static String getString(final Object itemCompound, final String key) {
         try {
@@ -160,10 +180,10 @@ public final class ItemNBT {
     }
 
     /**
-     * Mimics the nmsItemStack#hasTag method
+     * Mimics the nmsItemStack#hasTag method.
      *
-     * @param nmsItemStack the NMS ItemStack to check from
-     * @return True or false depending if it has tag or not
+     * @param nmsItemStack the NMS ItemStack to check from.
+     * @return True or false depending if it has tag or not.
      */
     private static boolean hasTag(final Object nmsItemStack) {
         try {
@@ -174,10 +194,10 @@ public final class ItemNBT {
     }
 
     /**
-     * Mimics the nmsItemStack#getTag method
+     * Mimics the nmsItemStack#getTag method.
      *
-     * @param nmsItemStack The NMS ItemStack to get from
-     * @return The tag compound
+     * @param nmsItemStack The NMS ItemStack to get from.
+     * @return The tag compound.
      */
     public static Object getTag(final Object nmsItemStack) {
         try {
@@ -188,10 +208,10 @@ public final class ItemNBT {
     }
 
     /**
-     * Mimics the nmsItemStack#setTag method
+     * Mimics the nmsItemStack#setTag method.
      *
-     * @param nmsItemStack the NMS ItemStack to set the tag to
-     * @param itemCompound The item compound to set
+     * @param nmsItemStack the NMS ItemStack to set the tag to.
+     * @param itemCompound The item compound to set.
      */
     private static void setTag(final Object nmsItemStack, final Object itemCompound) {
         try {
@@ -201,9 +221,9 @@ public final class ItemNBT {
     }
 
     /**
-     * Mimics the new NBTTagCompound instantiation
+     * Mimics the new NBTTagCompound instantiation.
      *
-     * @return The new NBTTagCompound
+     * @return The new NBTTagCompound.
      */
     private static Object newNBTTagCompound() {
         try {
@@ -214,10 +234,10 @@ public final class ItemNBT {
     }
 
     /**
-     * Mimics the CraftItemStack#asNMSCopy method
+     * Mimics the CraftItemStack#asNMSCopy method.
      *
-     * @param itemStack The ItemStack to make NMS copy
-     * @return An NMS copy of the ItemStack
+     * @param itemStack The ItemStack to make NMS copy.
+     * @return An NMS copy of the ItemStack.
      */
     public static Object asNMSCopy(final ItemStack itemStack) {
         try {
@@ -228,10 +248,10 @@ public final class ItemNBT {
     }
 
     /**
-     * Mimics the CraftItemStack#asBukkitCopy method
+     * Mimics the CraftItemStack#asBukkitCopy method.
      *
-     * @param nmsItemStack The NMS ItemStack to turn into {@link ItemStack}
-     * @return The new {@link ItemStack}
+     * @param nmsItemStack The NMS ItemStack to turn into {@link ItemStack}.
+     * @return The new {@link ItemStack}.
      */
     public static ItemStack asBukkitCopy(final Object nmsItemStack) {
         try {
@@ -242,26 +262,26 @@ public final class ItemNBT {
     }
 
     /**
-     * Gets the NMS class from class name
+     * Gets the NMS class from class name.
      *
-     * @return The NMS class
+     * @return The NMS class.
      */
     private static Class<?> getNMSClass(final String className) {
         try {
-            return Class.forName("net.minecraft.server." + ServerVersion.NMS_VERSION + "." + className);
+            return Class.forName("net.minecraft.server." + NMS_VERSION + "." + className);
         } catch (ClassNotFoundException e) {
             return null;
         }
     }
 
     /**
-     * Gets the NMS craft {@link ItemStack} class from class name
+     * Gets the NMS craft {@link ItemStack} class from class name.
      *
-     * @return The NMS craft {@link ItemStack} class
+     * @return The NMS craft {@link ItemStack} class.
      */
     private static Class<?> getCraftItemStackClass() {
         try {
-            return Class.forName("org.bukkit.craftbukkit." + ServerVersion.NMS_VERSION + ".inventory.CraftItemStack");
+            return Class.forName("org.bukkit.craftbukkit." + NMS_VERSION + ".inventory.CraftItemStack");
         } catch (ClassNotFoundException e) {
             return null;
         }

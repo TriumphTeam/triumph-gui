@@ -1,7 +1,7 @@
 package dev.triumphteam.gui.builder.item;
 
 import dev.triumphteam.gui.components.GuiAction;
-import dev.triumphteam.gui.components.util.ItemNBT;
+import dev.triumphteam.gui.components.util.ItemNbt;
 import dev.triumphteam.gui.components.util.Legacy;
 import dev.triumphteam.gui.components.util.VersionHelper;
 import dev.triumphteam.gui.guis.GuiItem;
@@ -35,7 +35,7 @@ public abstract class BaseItemBuilder<B extends BaseItemBuilder<B>> {
     private ItemStack itemStack;
     private ItemMeta meta;
 
-    BaseItemBuilder(@NotNull final ItemStack itemStack) {
+    protected BaseItemBuilder(@NotNull final ItemStack itemStack) {
         Validate.notNull(itemStack, "Item can't be null!");
 
         this.itemStack = itemStack;
@@ -51,7 +51,7 @@ public abstract class BaseItemBuilder<B extends BaseItemBuilder<B>> {
      */
     @Contract("_ -> this")
     public B name(@NotNull final Component name) {
-        if (VersionHelper.isComponentLegacy()) {
+        if (VersionHelper.IS_COMPONENT_LEGACY) {
             meta.setDisplayName(Legacy.SERIALIZER.serialize(name));
             return (B) this;
         }
@@ -93,7 +93,7 @@ public abstract class BaseItemBuilder<B extends BaseItemBuilder<B>> {
      */
     @Contract("_ -> this")
     public B lore(@NotNull final List<Component> lore) {
-        if (VersionHelper.isComponentLegacy()) {
+        if (VersionHelper.IS_COMPONENT_LEGACY) {
             meta.setLore(lore.stream().map(Legacy.SERIALIZER::serialize).collect(Collectors.toList()));
             return (B) this;
         }
@@ -204,7 +204,7 @@ public abstract class BaseItemBuilder<B extends BaseItemBuilder<B>> {
      */
     @Contract("_ -> this")
     public B unbreakable(boolean unbreakable) {
-        if (VersionHelper.isUnbreakableLegacy()) {
+        if (VersionHelper.IS_UNBREAKABLE_LEGACY) {
             return setNbt("Unbreakable", true);
         }
 
@@ -282,7 +282,7 @@ public abstract class BaseItemBuilder<B extends BaseItemBuilder<B>> {
     @Contract("_, _ -> this")
     public B setNbt(@NotNull final String key, @Nullable final String value) {
         itemStack.setItemMeta(meta);
-        itemStack = ItemNBT.setNBTTag(itemStack, key, value);
+        itemStack = ItemNbt.setString(itemStack, key, value);
         meta = itemStack.getItemMeta();
         return (B) this;
     }
@@ -297,7 +297,7 @@ public abstract class BaseItemBuilder<B extends BaseItemBuilder<B>> {
     @Contract("_, _ -> this")
     public B setNbt(@NotNull final String key, final boolean value) {
         itemStack.setItemMeta(meta);
-        itemStack = ItemNBT.setNBTTag(itemStack, key, value);
+        itemStack = ItemNbt.setBoolean(itemStack, key, value);
         meta = itemStack.getItemMeta();
         return (B) this;
     }
@@ -311,7 +311,7 @@ public abstract class BaseItemBuilder<B extends BaseItemBuilder<B>> {
     @Contract("_ -> this")
     public B removeNbt(@NotNull final String key) {
         itemStack.setItemMeta(meta);
-        itemStack = ItemNBT.removeNBTTag(itemStack, key);
+        itemStack = ItemNbt.removeTag(itemStack, key);
         meta = itemStack.getItemMeta();
         return (B) this;
     }

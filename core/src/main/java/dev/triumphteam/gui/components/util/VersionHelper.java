@@ -12,10 +12,12 @@ import java.util.regex.Pattern;
 public final class VersionHelper {
 
     // Unbreakable change
-    private static final int V1_11_1 = 1111;
+    private static final int V1_11 = 1110;
     // Material change
-    private static final int V1_13_1 = 1131;
-    // Paper changes
+    private static final int V1_13 = 1130;
+    // PDC
+    private static final int V1_14 = 1140;
+    // Paper adventure changes
     private static final int V1_16_5 = 1165;
 
     private static final int CURRENT_VERSION = getCurrentVersion();
@@ -26,30 +28,23 @@ public final class VersionHelper {
      * Checks if the version supports Components or not
      * Paper versions above 1.16.5 would be true
      * Spigot always false
-     *
-     * @return Whether or not the version supports components
      */
-    public static boolean isComponentLegacy() {
-        return !IS_PAPER || CURRENT_VERSION < V1_16_5;
-    }
+    public static final boolean IS_COMPONENT_LEGACY = !IS_PAPER || CURRENT_VERSION < V1_16_5;
 
     /**
      * Checks if the version is lower than 1.13 due to the item changes
-     *
-     * @return Whether or not the version is lower than 1.13
      */
-    public static boolean isItemLegacy() {
-        return CURRENT_VERSION < V1_13_1;
-    }
+    public static final boolean IS_ITEM_LEGACY = CURRENT_VERSION < V1_13;
 
     /**
      * Checks if the version supports the {@link org.bukkit.inventory.meta.ItemMeta#setUnbreakable(boolean)} method
-     *
-     * @return Whether or not the version is lower than 1.11
      */
-    public static boolean isUnbreakableLegacy() {
-        return CURRENT_VERSION < V1_11_1;
-    }
+    public static final boolean IS_UNBREAKABLE_LEGACY = CURRENT_VERSION < V1_11;
+
+    /**
+     * Checks if the version supports {@link org.bukkit.persistence.PersistentDataContainer}
+     */
+    public static final boolean IS_PDC_VERSION = CURRENT_VERSION >= V1_14;
 
     /**
      * Check if the server has access to the Paper API
@@ -71,12 +66,14 @@ public final class VersionHelper {
      *
      * @return A protocol like number representing the version, for example 1.16.5 - 1165
      */
-    public static int getCurrentVersion() {
-        final Matcher matcher = Pattern.compile("(?<version>1\\.\\d+\\.\\d+)").matcher(Bukkit.getBukkitVersion());
+    private static int getCurrentVersion() {
+        final Matcher matcher = Pattern.compile("(?<version>\\d+\\.\\d+\\.?\\d+)").matcher(Bukkit.getBukkitVersion());
         if (!matcher.find()) return 0;
 
-        final Integer version = Ints.tryParse(matcher.group("version").replace(".", ""));
+        Integer version = Ints.tryParse(matcher.group("version").replace(".", ""));
         if (version == null) return 0;
+        // For handling versions like 1.17 (due to being 117 instead of 1170)
+        if (version < 1000) version *= 10;
         return version;
     }
 

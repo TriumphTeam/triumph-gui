@@ -1,7 +1,7 @@
 package dev.triumphteam.gui.guis;
 
 import dev.triumphteam.gui.components.GuiAction;
-import dev.triumphteam.gui.components.util.ItemNBT;
+import dev.triumphteam.gui.components.util.ItemNbt;
 import org.apache.commons.lang.Validate;
 import org.bukkit.Material;
 import org.bukkit.event.inventory.InventoryClickEvent;
@@ -39,7 +39,7 @@ public class GuiItem {
         this.action = action;
 
         // Sets the UUID to an NBT tag to be identifiable later
-        this.itemStack = ItemNBT.setNBTTag(itemStack, "mf-gui", uuid.toString());
+        this.itemStack = ItemNbt.setString(itemStack, "mf-gui", uuid.toString());
     }
 
     /**
@@ -77,7 +77,7 @@ public class GuiItem {
      */
     public void setItemStack(@NotNull final ItemStack itemStack) {
         Validate.notNull(itemStack, "The ItemStack for the GUI Item cannot be null!");
-        this.itemStack = ItemNBT.setNBTTag(itemStack, "mf-gui", uuid.toString());
+        this.itemStack = ItemNbt.setString(itemStack, "mf-gui", uuid.toString());
     }
 
     /**

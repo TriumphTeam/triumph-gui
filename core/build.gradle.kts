@@ -9,9 +9,6 @@ repositories {
 }
 
 dependencies {
-    implementation("me.mattstudios:server-version-util:1.0.1")
-
-    //compileOnly("org.spigotmc:spigot-api:1.16.4-R0.1-SNAPSHOT")
     compileOnly("com.mojang:authlib:1.5.21")
 }
 

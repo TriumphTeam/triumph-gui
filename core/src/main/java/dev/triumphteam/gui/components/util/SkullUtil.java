@@ -15,7 +15,7 @@ public final class SkullUtil {
      * @return The correct SKULL {@link Material}
      */
     private static Material getSkullMaterial() {
-        if (VersionHelper.isItemLegacy()) {
+        if (VersionHelper.IS_ITEM_LEGACY) {
             return Material.valueOf("SKULL_ITEM");
         }
 
