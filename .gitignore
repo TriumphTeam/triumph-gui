@@ -1,18 +1,18 @@
 
+gui/build/
+
+test-plugin/build/
+
 .idea/
 
-target/
-
-*.iml
-
-temp.java.asc
+.gradle/
 
 temp.java
 
-src/main/java/me/mattstudios/mfgui/CMD.java
-src/main/java/me/mattstudios/mfgui/Main.java
-src/main/resources/
+temp.java.asc
 
-src/main/java/me/mattstudios/mfgui/gui/Cmd.java
+gradle.properties
 
-src/main/java/me/mattstudios/mfgui/gui/Main.java
+test-plugin/
+
+build/
