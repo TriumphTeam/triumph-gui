@@ -163,36 +163,6 @@ public abstract class BaseGui implements InventoryHolder {
     }
 
     /**
-     * Sets the number of rows the GUI should have
-     *
-     * @param rows The number of rows to set
-     * @return The GUI for easier use when declaring, works like a builder
-     */
-    // TODO fix
-    @SuppressWarnings("UnusedReturnValue")
-    public BaseGui setRows(final int rows) {
-        if (guiType != GuiType.CHEST) throw new GuiException("Cannot set rows of non chest GUI!");
-
-        int finalRows = rows;
-        if (!(rows >= 1 && rows <= 6)) finalRows = 1;
-        this.rows = finalRows;
-
-        updating = true;
-
-        final List<HumanEntity> viewers = new ArrayList<>(inventory.getViewers());
-
-        //inventory = Bukkit.createInventory(this, this.rows, title);
-
-        for (HumanEntity player : viewers) {
-            open(player);
-        }
-
-        updating = false;
-
-        return this;
-    }
-
-    /**
      * Sets the {@link GuiItem} to a specific slot on the GUI
      *
      * @param slot    The GUI slot
