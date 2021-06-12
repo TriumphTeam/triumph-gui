@@ -12,7 +12,7 @@
 
 👤 **TriumphTeam**
 
-* Documentation: https://mf.mattstudios.me/mf-gui/
+* Documentation: https://mf.mattstudios.me/triumph-gui/
 * Github: [@ipsk](https://github.com/ipsk)
 
 ## 🤝 Contributing

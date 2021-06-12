@@ -810,7 +810,7 @@ public abstract class BaseGui implements InventoryHolder {
      * @param title The title as a {@link Component}.
      * @return The new rowed {@link Inventory}.
      */
-    private Inventory createRowedInventory(@NotNull final Component title) {
+    protected Inventory createRowedInventory(@NotNull final Component title) {
         if (VersionHelper.IS_COMPONENT_LEGACY) {
             return Bukkit.createInventory(this, this.rows * 9, Legacy.SERIALIZER.serialize(title));
         }
