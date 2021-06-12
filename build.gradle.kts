@@ -9,7 +9,7 @@ allprojects {
     }
 
     group = "dev.triumphteam"
-    version = "3.0.0-SNAPSHOT"
+    version = "3.0.0"
 
     repositories {
         mavenCentral()
@@ -18,7 +18,7 @@ allprojects {
     }
 
     dependencies {
-        compileOnly("org.jetbrains:annotations:20.1.0")
+        compileOnly("org.jetbrains:annotations:21.0.1")
         compileOnly("com.destroystokyo.paper:paper-api:1.16.5-R0.1-SNAPSHOT")
     }
 

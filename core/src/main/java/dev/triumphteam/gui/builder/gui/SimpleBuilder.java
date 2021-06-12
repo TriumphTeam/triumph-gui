@@ -50,7 +50,7 @@ public final class SimpleBuilder extends BaseGuiBuilder<Gui, SimpleBuilder> {
         } else {
             gui = new Gui(guiType, getTitle(), getModifiers());
         }
-        System.out.println(guiType);
+
         final Consumer<Gui> consumer = getConsumer();
         if (consumer != null) consumer.accept(gui);
 

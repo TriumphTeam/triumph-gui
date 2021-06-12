@@ -44,7 +44,7 @@ tasks {
                 pom {
                     name.set("Triumph GUI")
                     description.set("Lib for easy creation of GUIs for Bukkit plugins.")
-                    url.set("https://github.com/TriumphDev/triumph-gui")
+                    url.set("https://github.com/TriumphTeam/triumph-gui")
 
                     licenses {
                         license {
@@ -61,9 +61,9 @@ tasks {
                     }
 
                     scm {
-                        connection.set("scm:git:git://github.com/TriumphDev/triumph-gui.git")
-                        developerConnection.set("scm:git:ssh://github.com:TriumphDev/triumph-gui.git")
-                        url.set("http://github.com/TriumphDev/triumph-gui")
+                        connection.set("scm:git:git://github.com/TriumphTeam/triumph-gui.git")
+                        developerConnection.set("scm:git:ssh://github.com:TriumphTeam/triumph-gui.git")
+                        url.set("https://github.com/TriumphTeam/triumph-gui")
                     }
                 }
             }
