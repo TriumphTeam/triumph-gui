@@ -1,13 +1,29 @@
-![Header](http://mattstudios.me/images/mfthread.png)
-# What is MF-GUI?
-This is an addition to my framework for inventory GUIs.
-However it does not depend on the commands part of the framework.
-This lib was made to simplify the creation of GUIs.
+<img src="https://cdn.discordapp.com/attachments/431545763928211457/853353180271214662/mfthread.png">
+<h1 align="center">Welcome to triumph-gui 👋</h1>
+<p>
+  <img src="https://img.shields.io/github/license/TriumphTeam/triumph-gui?color=blue&style=flat-square"  alt="license"/>
+  <img src="https://img.shields.io/github/v/release/TriumphTeam/triumph-gui?color=green&style=flat-square" alt="release">
+<a href="https://mattstudios.me/discord"><img src="https://img.shields.io/discord/493380790718038028?label=discord&style=flat-square"  alt="language"/></a>
+</p>
 
-Check out the [**wiki**](https://mf.mattstudios.me/gui) for more information!
+> This lib was made to simplify the creation of GUIs.
 
-## Contributing
+## Author
 
-Found any issue? Please report it [**here**](https://github.com/ipsk/MF-GUI/issues). 
-Feel free to PR any changes you'd like to see in it!  
-The source code can be found [**here**](https://github.com/ipsk/MF-GUI)..
+👤 **TriumphTeam**
+
+* Documentation: https://mf.mattstudios.me/mf-gui/
+* Github: [@ipsk](https://github.com/ipsk)
+
+## 🤝 Contributing
+
+Contributions, issues and feature requests are welcome!<br />Feel free to check [issues page](https://github.com/TriumphTeam/triumph-gui/issues).
+
+## Show your support
+
+Give a ⭐️ if this project helped you!
+
+## 📝 License
+
+Copyright © 2021 [TriumphTeam](https://github.com/ipsk).<br />
+This project is [MIT](https://github.com/TriumphTeam/triumph-gui/blob/master/LICENSE) licensed.
