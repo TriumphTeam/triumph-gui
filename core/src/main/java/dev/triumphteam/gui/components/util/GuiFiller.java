@@ -1,5 +1,6 @@
 package dev.triumphteam.gui.components.util;
 
+import dev.triumphteam.gui.components.GuiType;
 import dev.triumphteam.gui.components.exception.GuiException;
 import dev.triumphteam.gui.guis.BaseGui;
 import dev.triumphteam.gui.guis.GuiItem;
@@ -156,12 +157,22 @@ public final class GuiFiller {
      * @param guiItems GuiItem
      */
     public void fill(@NotNull final List<GuiItem> guiItems) {
-        if (gui instanceof PaginatedGui)
+        if (gui instanceof PaginatedGui) {
             throw new GuiException("Full filling a GUI is not supported in a Paginated GUI!");
+        }
+
+        final GuiType type = gui.guiType();
+
+        final int fill;
+        if (type == GuiType.CHEST) {
+            fill = gui.getRows() * type.getLimit();
+        } else {
+            fill = type.getLimit();
+        }
 
         final int rows = gui.getRows();
         final List<GuiItem> items = repeatList(guiItems, rows * 9);
-        for (int i = 0; i < (rows) * 9; i++) {
+        for (int i = 0; i < fill; i++) {
             if (gui.getGuiItems().get(i) == null) gui.setItem(i, items.get(i));
         }
     }

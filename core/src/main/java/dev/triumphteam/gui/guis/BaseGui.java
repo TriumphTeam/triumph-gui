@@ -675,6 +675,15 @@ public abstract class BaseGui implements InventoryHolder {
     }
 
     /**
+     * Gets the {@link GuiType} in use.
+     *
+     * @return The {@link GuiType}.
+     */
+    public GuiType guiType() {
+        return guiType;
+    }
+
+    /**
      * Gets the default click resolver
      */
     @Nullable
