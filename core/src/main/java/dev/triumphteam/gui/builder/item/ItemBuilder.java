@@ -93,6 +93,7 @@ public class ItemBuilder extends BaseItemBuilder<ItemBuilder> {
      *
      * @param itemStack An existing BANNER {@link ItemStack}
      * @return A new {@link BannerBuilder}
+     * @throws dev.triumphteam.gui.components.exception.GuiException if the item is not a BANNER
      * @since 3.0.1
      */
     public static BannerBuilder banner(@NotNull final ItemStack itemStack) {
@@ -105,6 +106,9 @@ public class ItemBuilder extends BaseItemBuilder<ItemBuilder> {
      *
      * @param itemStack an existing {@link Material#WRITABLE_BOOK} / {@link Material#WRITTEN_BOOK} {@link ItemStack}
      * @return A new {@link FireworkBuilder}
+     * @throws dev.triumphteam.gui.components.exception.GuiException if the item type is not {@link Material#WRITABLE_BOOK}
+     *                                                               or {@link Material#WRITTEN_BOOK}
+     * @since 3.0.1
      */
     public static BookBuilder book(@NotNull final ItemStack itemStack) {
         return new BookBuilder(itemStack);
@@ -125,10 +129,33 @@ public class ItemBuilder extends BaseItemBuilder<ItemBuilder> {
      *
      * @param itemStack an existing {@link Material#FIREWORK_ROCKET} {@link ItemStack}
      * @return A new {@link FireworkBuilder}
+     * @throws dev.triumphteam.gui.components.exception.GuiException if the item type is not {@link Material#FIREWORK_ROCKET}
      * @since 3.0.1
      */
     public static FireworkBuilder firework(@NotNull final ItemStack itemStack) {
         return new FireworkBuilder(itemStack);
+    }
+
+    /**
+     * Method for creating a {@link MapBuilder} which will have {@link Material#MAP} specific methods
+     *
+     * @return A new {@link MapBuilder}
+     * @since 3.0.1
+     */
+    public static MapBuilder map() {
+        return new MapBuilder();
+    }
+
+    /**
+     * Method for creating a {@link MapBuilder} which will have @link Material#MAP} specific methods
+     *
+     * @param itemStack An existing {@link Material#MAP} {@link ItemStack}
+     * @return A new {@link MapBuilder}
+     * @throws dev.triumphteam.gui.components.exception.GuiException if the item type is not {@link Material#MAP}
+     * @since 3.0.1
+     */
+    public static MapBuilder map(@NotNull final ItemStack itemStack) {
+        return new MapBuilder(itemStack);
     }
 
     /**
@@ -145,6 +172,7 @@ public class ItemBuilder extends BaseItemBuilder<ItemBuilder> {
      *
      * @param itemStack An existing PLAYER_HEAD {@link ItemStack}
      * @return A new {@link SkullBuilder}
+     * @throws dev.triumphteam.gui.components.exception.GuiException if the item is not a player head
      */
     public static SkullBuilder skull(@NotNull final ItemStack itemStack) {
         return new SkullBuilder(itemStack);
@@ -165,6 +193,7 @@ public class ItemBuilder extends BaseItemBuilder<ItemBuilder> {
      *
      * @param itemStack an existing {@link Material#FIREWORK_STAR} {@link ItemStack}
      * @return A new {@link FireworkBuilder}
+     * @throws dev.triumphteam.gui.components.exception.GuiException if the item type is not {@link Material#FIREWORK_STAR}
      * @since 3.0.1
      */
     public static FireworkBuilder star(@NotNull final ItemStack itemStack) {
