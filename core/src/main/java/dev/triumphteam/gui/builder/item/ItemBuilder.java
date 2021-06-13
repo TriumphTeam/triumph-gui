@@ -1,18 +1,18 @@
 /**
  * MIT License
- *
+ * <p>
  * Copyright (c) 2021 TriumphTeam
- *
+ * <p>
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- *
+ * <p>
  * The above copyright notice and this permission notice shall be included in all
  * copies or substantial portions of the Software.
- *
+ * <p>
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -84,7 +84,9 @@ public class ItemBuilder extends BaseItemBuilder<ItemBuilder> {
      * @return A new {@link BannerBuilder}
      * @since 3.0.1
      */
-    public static BannerBuilder banner() { return new BannerBuilder(); }
+    public static BannerBuilder banner() {
+        return new BannerBuilder();
+    }
 
     /**
      * Method for creating a {@link BannerBuilder} which will have BANNER specific methods
@@ -93,7 +95,28 @@ public class ItemBuilder extends BaseItemBuilder<ItemBuilder> {
      * @return A new {@link BannerBuilder}
      * @since 3.0.1
      */
-    public static BannerBuilder banner(@NotNull final ItemStack itemStack) { return new BannerBuilder(itemStack); }
+    public static BannerBuilder banner(@NotNull final ItemStack itemStack) {
+        return new BannerBuilder(itemStack);
+    }
+
+    /**
+     * Method for creating a {@link FireworkBuilder} which will have {@link Material#FIREWORK_ROCKET} specific methods
+     *
+     * @return A new {@link FireworkBuilder}
+     */
+    public static FireworkBuilder firework() {
+        return new FireworkBuilder(new ItemStack(Material.FIREWORK_ROCKET));
+    }
+
+    /**
+     * Method for creating a {@link FireworkBuilder} which will have {@link Material#FIREWORK_ROCKET} specific methods
+     *
+     * @param itemStack an existing {@link Material#FIREWORK_ROCKET} {@link ItemStack}
+     * @return A new {@link FireworkBuilder}
+     */
+    public static FireworkBuilder firework(@NotNull final ItemStack itemStack) {
+        return new FireworkBuilder(itemStack);
+    }
 
     /**
      * Method for creating a {@link SkullBuilder} which will have PLAYER_HEAD specific methods
@@ -112,6 +135,25 @@ public class ItemBuilder extends BaseItemBuilder<ItemBuilder> {
      */
     public static SkullBuilder skull(@NotNull final ItemStack itemStack) {
         return new SkullBuilder(itemStack);
+    }
+
+    /**
+     * Method for creating a {@link FireworkBuilder} which will have {@link Material#FIREWORK_STAR} specific methods
+     *
+     * @return A new {@link FireworkBuilder}
+     */
+    public static FireworkBuilder star() {
+        return new FireworkBuilder(new ItemStack(Material.FIREWORK_STAR));
+    }
+
+    /**
+     * Method for creating a {@link FireworkBuilder} which will have {@link Material#FIREWORK_STAR} specific methods
+     *
+     * @param itemStack an existing {@link Material#FIREWORK_STAR} {@link ItemStack}
+     * @return A new {@link FireworkBuilder}
+     */
+    public static FireworkBuilder star(@NotNull final ItemStack itemStack) {
+        return new FireworkBuilder(itemStack);
     }
 
     // DEPRECATED, TO BE REMOVED METHODS

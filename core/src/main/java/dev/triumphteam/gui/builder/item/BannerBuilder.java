@@ -41,7 +41,7 @@ import java.util.List;
 /**
  * Item builder for banners only
  *
- * @author GabyTM (https://github.com/iGabyTM)
+ * @author GabyTM <a href="https://github.com/iGabyTM">https://github.com/iGabyTM</a>
  * @since 3.0.1
  */
 @SuppressWarnings("unused")
