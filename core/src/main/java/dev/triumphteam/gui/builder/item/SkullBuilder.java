@@ -41,6 +41,23 @@ import java.util.UUID;
  */
 public final class SkullBuilder extends BaseItemBuilder<SkullBuilder> {
 
+    private static final Field PROFILE_FIELD;
+
+    static {
+        Field field;
+
+        try {
+            final SkullMeta skullMeta = (SkullMeta) new ItemStack(SkullUtil.SKULL).getItemMeta();
+            field = skullMeta.getClass().getDeclaredField("profile");
+            field.setAccessible(true);
+        } catch (NoSuchFieldException e) {
+            e.printStackTrace();
+            field = null;
+        }
+
+        PROFILE_FIELD = field;
+    }
+
     SkullBuilder() {
         super(new ItemStack(SkullUtil.SKULL));
     }
@@ -61,16 +78,17 @@ public final class SkullBuilder extends BaseItemBuilder<SkullBuilder> {
     public SkullBuilder texture(@NotNull final String texture) {
         if (getItemStack().getType() != SkullUtil.SKULL) return this;
 
-        SkullMeta skullMeta = (SkullMeta) getMeta();
-        GameProfile profile = new GameProfile(UUID.randomUUID(), null);
+        if (PROFILE_FIELD == null) {
+            return this;
+        }
+
+        final SkullMeta skullMeta = (SkullMeta) getMeta();
+        final GameProfile profile = new GameProfile(UUID.randomUUID(), null);
         profile.getProperties().put("textures", new Property("textures", texture));
-        Field profileField;
 
         try {
-            profileField = skullMeta.getClass().getDeclaredField("profile");
-            profileField.setAccessible(true);
-            profileField.set(skullMeta, profile);
-        } catch (NoSuchFieldException | IllegalArgumentException | IllegalAccessException ex) {
+            PROFILE_FIELD.set(skullMeta, profile);
+        } catch (IllegalArgumentException | IllegalAccessException ex) {
             ex.printStackTrace();
         }
 
