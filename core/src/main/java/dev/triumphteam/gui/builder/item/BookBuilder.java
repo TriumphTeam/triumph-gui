@@ -15,7 +15,7 @@ import java.util.EnumSet;
 import java.util.List;
 
 /**
- * Item builder for {@link Material#WRITTEN_BOOK} & {@link Material#WRITTEN_BOOK} only
+ * Item builder for {@link Material#WRITTEN_BOOK} and {@link Material#WRITTEN_BOOK} only
  *
  * @author GabyTM <a href="https://github.com/iGabyTM">https://github.com/iGabyTM</a>
  * @since 3.0.1

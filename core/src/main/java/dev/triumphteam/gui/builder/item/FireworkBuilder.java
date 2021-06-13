@@ -12,7 +12,7 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
- * Item builder for {@link Material#FIREWORK_ROCKET} & {@link Material#FIREWORK_ROCKET} only
+ * Item builder for {@link Material#FIREWORK_ROCKET} and {@link Material#FIREWORK_ROCKET} only
  *
  * @author GabyTM <a href="https://github.com/iGabyTM">https://github.com/iGabyTM</a>
  * @since 3.0.1
