@@ -27,6 +27,7 @@ import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.properties.Property;
 import dev.triumphteam.gui.components.exception.GuiException;
 import dev.triumphteam.gui.components.util.SkullUtil;
+import dev.triumphteam.gui.components.util.VersionHelper;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.SkullMeta;
@@ -40,6 +41,24 @@ import java.util.UUID;
  * Soon I'll add more useful features to this builder
  */
 public final class SkullBuilder extends BaseItemBuilder<SkullBuilder> {
+
+    private static final int V1_12 = 1120;
+    private static final Field PROFILE_FIELD;
+
+    static {
+        Field field;
+
+        try {
+            final SkullMeta skullMeta = (SkullMeta) new ItemStack(SkullUtil.SKULL).getItemMeta();
+            field = skullMeta.getClass().getDeclaredField("profile");
+            field.setAccessible(true);
+        } catch (NoSuchFieldException e) {
+            e.printStackTrace();
+            field = null;
+        }
+
+        PROFILE_FIELD = field;
+    }
 
     SkullBuilder() {
         super(new ItemStack(SkullUtil.SKULL));
@@ -61,16 +80,17 @@ public final class SkullBuilder extends BaseItemBuilder<SkullBuilder> {
     public SkullBuilder texture(@NotNull final String texture) {
         if (getItemStack().getType() != SkullUtil.SKULL) return this;
 
-        SkullMeta skullMeta = (SkullMeta) getMeta();
-        GameProfile profile = new GameProfile(UUID.randomUUID(), null);
+        if (PROFILE_FIELD == null) {
+            return this;
+        }
+
+        final SkullMeta skullMeta = (SkullMeta) getMeta();
+        final GameProfile profile = new GameProfile(UUID.randomUUID(), null);
         profile.getProperties().put("textures", new Property("textures", texture));
-        Field profileField;
 
         try {
-            profileField = skullMeta.getClass().getDeclaredField("profile");
-            profileField.setAccessible(true);
-            profileField.set(skullMeta, profile);
-        } catch (NoSuchFieldException | IllegalArgumentException | IllegalAccessException ex) {
+            PROFILE_FIELD.set(skullMeta, profile);
+        } catch (IllegalArgumentException | IllegalAccessException ex) {
             ex.printStackTrace();
         }
 
@@ -88,7 +108,12 @@ public final class SkullBuilder extends BaseItemBuilder<SkullBuilder> {
         if (getItemStack().getType() != SkullUtil.SKULL) return this;
 
         final SkullMeta skullMeta = (SkullMeta) getMeta();
-        skullMeta.setOwningPlayer(player);
+
+        if (VersionHelper.IS_SKULL_OWNER_LEGACY) {
+            skullMeta.setOwner(player.getName());
+        } else {
+            skullMeta.setOwningPlayer(player);
+        }
 
         setMeta(skullMeta);
         return this;
