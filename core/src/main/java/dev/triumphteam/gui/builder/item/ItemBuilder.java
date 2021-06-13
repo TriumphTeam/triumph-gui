@@ -79,6 +79,23 @@ public class ItemBuilder extends BaseItemBuilder<ItemBuilder> {
     }
 
     /**
+     * Method for creating a {@link BannerBuilder} which will have BANNER specific methods
+     *
+     * @return A new {@link BannerBuilder}
+     * @since 3.0.1
+     */
+    public static BannerBuilder banner() { return new BannerBuilder(); }
+
+    /**
+     * Method for creating a {@link BannerBuilder} which will have BANNER specific methods
+     *
+     * @param itemStack An existing BANNER {@link ItemStack}
+     * @return A new {@link BannerBuilder}
+     * @since 3.0.1
+     */
+    public static BannerBuilder banner(@NotNull final ItemStack itemStack) { return new BannerBuilder(itemStack); }
+
+    /**
      * Method for creating a {@link SkullBuilder} which will have PLAYER_HEAD specific methods
      *
      * @return A new {@link SkullBuilder}
