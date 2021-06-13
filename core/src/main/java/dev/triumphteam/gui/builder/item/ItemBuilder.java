@@ -100,9 +100,21 @@ public class ItemBuilder extends BaseItemBuilder<ItemBuilder> {
     }
 
     /**
+     * Method for creating a {@link BookBuilder} which will have {@link Material#WRITABLE_BOOK} /
+     * {@link Material#WRITTEN_BOOK} specific methods
+     *
+     * @param itemStack an existing {@link Material#WRITABLE_BOOK} / {@link Material#WRITTEN_BOOK} {@link ItemStack}
+     * @return A new {@link FireworkBuilder}
+     */
+    public static BookBuilder book(@NotNull final ItemStack itemStack) {
+        return new BookBuilder(itemStack);
+    }
+
+    /**
      * Method for creating a {@link FireworkBuilder} which will have {@link Material#FIREWORK_ROCKET} specific methods
      *
      * @return A new {@link FireworkBuilder}
+     * @since 3.0.1
      */
     public static FireworkBuilder firework() {
         return new FireworkBuilder(new ItemStack(Material.FIREWORK_ROCKET));
@@ -113,6 +125,7 @@ public class ItemBuilder extends BaseItemBuilder<ItemBuilder> {
      *
      * @param itemStack an existing {@link Material#FIREWORK_ROCKET} {@link ItemStack}
      * @return A new {@link FireworkBuilder}
+     * @since 3.0.1
      */
     public static FireworkBuilder firework(@NotNull final ItemStack itemStack) {
         return new FireworkBuilder(itemStack);
@@ -141,6 +154,7 @@ public class ItemBuilder extends BaseItemBuilder<ItemBuilder> {
      * Method for creating a {@link FireworkBuilder} which will have {@link Material#FIREWORK_STAR} specific methods
      *
      * @return A new {@link FireworkBuilder}
+     * @since 3.0.1
      */
     public static FireworkBuilder star() {
         return new FireworkBuilder(new ItemStack(Material.FIREWORK_STAR));
@@ -151,6 +165,7 @@ public class ItemBuilder extends BaseItemBuilder<ItemBuilder> {
      *
      * @param itemStack an existing {@link Material#FIREWORK_STAR} {@link ItemStack}
      * @return A new {@link FireworkBuilder}
+     * @since 3.0.1
      */
     public static FireworkBuilder star(@NotNull final ItemStack itemStack) {
         return new FireworkBuilder(itemStack);
