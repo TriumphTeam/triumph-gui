@@ -1,18 +1,18 @@
 /**
  * MIT License
- *
+ * <p>
  * Copyright (c) 2021 TriumphTeam
- *
+ * <p>
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- *
+ * <p>
  * The above copyright notice and this permission notice shall be included in all
  * copies or substantial portions of the Software.
- *
+ * <p>
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -24,6 +24,7 @@
 package dev.triumphteam.gui.components.util;
 
 import com.google.common.primitives.Ints;
+import dev.triumphteam.gui.components.exception.GuiException;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 
@@ -37,9 +38,9 @@ public final class VersionHelper {
 
     // Unbreakable change
     private static final int V1_11 = 1110;
-    // Material change
+    // Material change and customModelData
     private static final int V1_13 = 1130;
-    // PDC and customModelData
+    // PDC
     private static final int V1_14 = 1140;
     // Paper adventure changes
     private static final int V1_16_5 = 1165;
@@ -104,13 +105,22 @@ public final class VersionHelper {
      * @return A protocol like number representing the version, for example 1.16.5 - 1165
      */
     private static int getCurrentVersion() {
-        final Matcher matcher = Pattern.compile("(?<version>\\d+\\.\\d+\\.?\\d+)").matcher(Bukkit.getBukkitVersion());
-        if (!matcher.find()) return 0;
+        // No need to cache since will only run once
+        final Matcher matcher = Pattern.compile("(?<version>\\d+\\.\\d+)(?<patch>\\.\\d+)?").matcher(Bukkit.getBukkitVersion());
 
-        Integer version = Ints.tryParse(matcher.group("version").replace(".", ""));
-        if (version == null) return 0;
-        // For handling versions like 1.17 (due to being 117 instead of 1170)
-        if (version < 1000) version *= 10;
+        final StringBuilder stringBuilder = new StringBuilder();
+        if (matcher.find()) {
+            stringBuilder.append(matcher.group("version").replace(".", ""));
+            final String patch = matcher.group("patch");
+            if (patch == null) stringBuilder.append("0");
+            else stringBuilder.append(patch.replace(".", ""));
+        }
+
+        Integer version = Ints.tryParse(stringBuilder.toString());
+
+        // Should never fail
+        if (version == null) throw new GuiException("Could not retrieve server version!");
+
         return version;
     }
 
