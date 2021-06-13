@@ -72,6 +72,21 @@ public final class BannerBuilder extends BaseItemBuilder<BannerBuilder> {
     }
 
     /**
+     * Sets the base color for this banner
+     *
+     * @param color the base color
+     * @return {@link BannerBuilder}
+     * @since 3.0.1
+     */
+    public BannerBuilder baseColor(@NotNull final DyeColor color) {
+        final BannerMeta bannerMeta = (BannerMeta) getMeta();
+
+        bannerMeta.setBaseColor(color);
+        setMeta(bannerMeta);
+        return this;
+    }
+
+    /**
      * Adds a new pattern on top of the existing patterns
      *
      * @param color   the pattern color
