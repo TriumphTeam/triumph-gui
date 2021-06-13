@@ -291,7 +291,10 @@ public abstract class BaseItemBuilder<B extends BaseItemBuilder<B>> {
      */
     @Contract("_ -> this")
     public B model(final int modelData) {
-        meta.setCustomModelData(modelData);
+        if (VersionHelper.IS_CUSTOM_MODEL_DATA) {
+            meta.setCustomModelData(modelData);
+        }
+
         return (B) this;
     }
 

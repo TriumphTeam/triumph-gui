@@ -27,6 +27,7 @@ import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.properties.Property;
 import dev.triumphteam.gui.components.exception.GuiException;
 import dev.triumphteam.gui.components.util.SkullUtil;
+import dev.triumphteam.gui.components.util.VersionHelper;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.SkullMeta;
@@ -41,6 +42,7 @@ import java.util.UUID;
  */
 public final class SkullBuilder extends BaseItemBuilder<SkullBuilder> {
 
+    private static final int V1_12 = 1120;
     private static final Field PROFILE_FIELD;
 
     static {
@@ -106,7 +108,12 @@ public final class SkullBuilder extends BaseItemBuilder<SkullBuilder> {
         if (getItemStack().getType() != SkullUtil.SKULL) return this;
 
         final SkullMeta skullMeta = (SkullMeta) getMeta();
-        skullMeta.setOwningPlayer(player);
+
+        if (VersionHelper.IS_SKULL_OWNER_LEGACY) {
+            skullMeta.setOwner(player.getName());
+        } else {
+            skullMeta.setOwningPlayer(player);
+        }
 
         setMeta(skullMeta);
         return this;
