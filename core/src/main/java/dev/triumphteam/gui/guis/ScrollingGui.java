@@ -40,7 +40,7 @@ import java.util.Set;
 @SuppressWarnings("unused")
 public class ScrollingGui extends PaginatedGui {
 
-    private final ScrollType scrollType;
+    private ScrollType scrollType;
     private int scrollSize = 0;
 
     /**
@@ -140,7 +140,8 @@ public class ScrollingGui extends PaginatedGui {
      */
     @Deprecated
     public ScrollingGui(final int rows, final int pageSize, @NotNull final String title, @NotNull final ScrollType scrollType) {
-        this(rows, pageSize, Component.text(title));
+        super(rows, pageSize, title);
+        this.scrollType = scrollType;
     }
 
     /**

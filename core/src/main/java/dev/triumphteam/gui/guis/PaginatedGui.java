@@ -50,12 +50,12 @@ public class PaginatedGui extends BaseGui {
     /**
      * Main constructor to provide a way to create PaginatedGui, uses {@link Component}
      *
-     * @param rows  The amount of rows the GUI should have
-     * @param pageSize The page size.
-     * @param title The GUI's title using {@link Component}
+     * @param rows                 The amount of rows the GUI should have
+     * @param pageSize             The page size.
+     * @param title                The GUI's title using {@link Component}
      * @param interactionModifiers A set containing what {@link InteractionModifier} this GUI should have
-     * @since 3.0.0
      * @author SecretX
+     * @since 3.0.0
      */
     public PaginatedGui(final int rows, final int pageSize, @NotNull final Component title, @NotNull final Set<InteractionModifier> interactionModifiers) {
         super(rows, title, interactionModifiers);
@@ -78,7 +78,7 @@ public class PaginatedGui extends BaseGui {
     /**
      * Alternative constructor for the {@link PaginatedGui} without page size
      *
-     * @param rows Number of rows.
+     * @param rows  Number of rows.
      * @param title The title using {@link Component}
      * @since 3.0.0
      */
@@ -106,7 +106,8 @@ public class PaginatedGui extends BaseGui {
      */
     @Deprecated
     public PaginatedGui(final int rows, final int pageSize, @NotNull final String title) {
-        this(rows, pageSize, Component.text(title));
+        super(rows, title);
+        this.pageSize = pageSize;
     }
 
     /**
@@ -118,7 +119,7 @@ public class PaginatedGui extends BaseGui {
      */
     @Deprecated
     public PaginatedGui(final int rows, @NotNull final String title) {
-        this(rows, Component.text(title));
+        this(rows, 0, title);
     }
 
     /**
@@ -352,6 +353,7 @@ public class PaginatedGui extends BaseGui {
 
     /**
      * Goes to the next page
+     *
      * @return False if there is no next page.
      */
     public boolean next() {
@@ -364,6 +366,7 @@ public class PaginatedGui extends BaseGui {
 
     /**
      * Goes to the previous page if possible
+     *
      * @return False if there is no previous page.
      */
     public boolean previous() {

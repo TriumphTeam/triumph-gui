@@ -38,9 +38,9 @@ public final class VersionHelper {
 
     // Unbreakable change
     private static final int V1_11 = 1110;
-    // Material change and customModelData
+    // Material change
     private static final int V1_13 = 1130;
-    // PDC
+    // PDC and customModelData
     private static final int V1_14 = 1140;
     // Paper adventure changes
     private static final int V1_16_5 = 1165;
