@@ -23,6 +23,7 @@
  */
 package dev.triumphteam.gui.builder.gui;
 
+import dev.triumphteam.gui.components.util.Legacy;
 import dev.triumphteam.gui.guis.PaginatedGui;
 import org.jetbrains.annotations.Contract;
 
@@ -55,7 +56,7 @@ public class PaginatedBuilder extends BaseGuiBuilder<PaginatedGui, PaginatedBuil
     @Contract(" -> new")
     @Override
     public PaginatedGui create() {
-        final PaginatedGui gui = new PaginatedGui(getRows(), pageSize, getTitle(), getModifiers());
+        final PaginatedGui gui = new PaginatedGui(getRows(), pageSize, Legacy.SERIALIZER.serialize(getTitle()), getModifiers());
 
         final Consumer<PaginatedGui> consumer = getConsumer();
         if (consumer != null) consumer.accept(gui);

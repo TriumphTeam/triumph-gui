@@ -28,9 +28,6 @@ import dev.triumphteam.gui.components.GuiType;
 import dev.triumphteam.gui.components.InteractionModifier;
 import dev.triumphteam.gui.components.exception.GuiException;
 import dev.triumphteam.gui.components.util.GuiFiller;
-import dev.triumphteam.gui.components.util.Legacy;
-import dev.triumphteam.gui.components.util.VersionHelper;
-import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
@@ -38,7 +35,6 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.inventory.InventoryDragEvent;
 import org.bukkit.event.inventory.InventoryOpenEvent;
-import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
@@ -114,34 +110,34 @@ public abstract class BaseGui implements InventoryHolder {
     private boolean runOpenAction = true;
 
     /**
-     * The main constructor, using {@link Component}.
+     * The main constructor, using {@link String}.
      *
-     * @param rows  The amount of rows to use.
-     * @param title The GUI title using {@link Component}.
+     * @param rows                 The amount of rows to use.
+     * @param title                The GUI title using {@link String}.
      * @param interactionModifiers Modifiers to select which interactions are allowed.
      * @since 3.0.0.
      */
-    public BaseGui(final int rows, @NotNull final Component title, @NotNull final Set<InteractionModifier> interactionModifiers) {
+    public BaseGui(final int rows, @NotNull final String title, @NotNull final Set<InteractionModifier> interactionModifiers) {
         int finalRows = rows;
         if (!(rows >= 1 && rows <= 6)) finalRows = 1;
         this.rows = finalRows;
         this.interactionModifiers = safeCopyOf(interactionModifiers);
 
-        inventory = createRowedInventory(title);
+        inventory = Bukkit.createInventory(this, this.rows * 9, title);
     }
 
     /**
      * Alternative constructor that takes {@link GuiType} instead of rows number.
      *
-     * @param guiType The {@link GuiType} to use.
-     * @param title   The GUI title using {@link Component}.
+     * @param guiType              The {@link GuiType} to use.
+     * @param title                The GUI title using {@link String}.
      * @param interactionModifiers Modifiers to select which interactions are allowed.
      * @since 3.0.0
      */
-    public BaseGui(@NotNull final GuiType guiType, @NotNull final Component title, @NotNull final Set<InteractionModifier> interactionModifiers) {
+    public BaseGui(@NotNull final GuiType guiType, @NotNull final String title, @NotNull final Set<InteractionModifier> interactionModifiers) {
         this.guiType = guiType;
         this.interactionModifiers = safeCopyOf(interactionModifiers);
-        inventory = createTypedInventory(title);
+        inventory = Bukkit.createInventory(this, guiType.getInventoryType(), title);
     }
 
     /**
@@ -161,7 +157,7 @@ public abstract class BaseGui implements InventoryHolder {
      *
      * @param rows  The amount of rows the GUI should have.
      * @param title The GUI title.
-     * @deprecated In favor of {@link BaseGui#BaseGui(int, Component, Set)}.
+     * @deprecated In favor of {@link BaseGui#BaseGui(int, String, Set)}.
      */
     @Deprecated
     public BaseGui(final int rows, @NotNull final String title) {
@@ -178,7 +174,7 @@ public abstract class BaseGui implements InventoryHolder {
      *
      * @param guiType The {@link GuiType} to use.
      * @param title   The GUI title.
-     * @deprecated In favor of {@link BaseGui#BaseGui(GuiType, Component, Set)}.
+     * @deprecated In favor of {@link BaseGui#BaseGui(GuiType, String, Set)}.
      */
     @Deprecated
     public BaseGui(@NotNull final GuiType guiType, @NotNull final String title) {
@@ -423,6 +419,29 @@ public abstract class BaseGui implements InventoryHolder {
     }
 
     /**
+     * Updates the title of the GUI.
+     * <i>This method may cause LAG if used on a loop</i>.
+     *
+     * @param title The title to set.
+     * @return The GUI for easier use when declaring, works like a builder.
+     */
+    public BaseGui updateTitle(@NotNull final String title) {
+        updating = true;
+
+        final List<HumanEntity> viewers = new ArrayList<>(inventory.getViewers());
+
+        inventory = Bukkit.createInventory(this, inventory.getSize(), title);
+
+        for (final HumanEntity player : viewers) {
+            open(player);
+        }
+
+        updating = false;
+
+        return this;
+    }
+
+    /**
      * Updates the specified item in the GUI at runtime, without creating a new {@link GuiItem}.
      *
      * @param slot      The slot of the item to update.
@@ -467,54 +486,6 @@ public abstract class BaseGui implements InventoryHolder {
      */
     public void updateItem(final int row, final int col, @NotNull final GuiItem item) {
         updateItem(getSlotFromRowCol(row, col), item);
-    }
-
-    /**
-     * Updates the title of the GUI.
-     * <i>This method may cause LAG if used on a loop</i>.
-     *
-     * @param title The title to set.
-     * @return The GUI for easier use when declaring, works like a builder.
-     * @deprecated Should use {@link #updateTitle(Component)} instead.
-     */
-    @Deprecated
-    public BaseGui updateTitle(@NotNull final String title) {
-        updating = true;
-
-        final List<HumanEntity> viewers = new ArrayList<>(inventory.getViewers());
-
-        inventory = Bukkit.createInventory(this, inventory.getSize(), title);
-
-        for (final HumanEntity player : viewers) {
-            open(player);
-        }
-
-        updating = false;
-
-        return this;
-    }
-
-    /**
-     * Updates the title of the GUI.
-     * <i>I do not recommend using this too often.</i>
-     *
-     * @param title The title to set.
-     * @return The GUI for easier use when declaring, works like a builder.
-     */
-    public BaseGui updateTitle(@NotNull final Component title) {
-        updating = true;
-
-        final List<HumanEntity> viewers = new ArrayList<>(inventory.getViewers());
-
-        inventory = createRowedInventory(title);
-
-        for (final HumanEntity player : viewers) {
-            open(player);
-        }
-
-        updating = false;
-
-        return this;
     }
 
     /**
@@ -805,13 +776,8 @@ public abstract class BaseGui implements InventoryHolder {
         this.inventory = inventory;
     }
 
-    /**
-     * Creates a rowed {@link Inventory}.
-     * If the server is unfortunately legacy it'll serialize to string using the stupid format.
-     *
-     * @param title The title as a {@link Component}.
-     * @return The new rowed {@link Inventory}.
-     */
+    /*
+    TODO fix this part, find a better solution for using Paper
     protected Inventory createRowedInventory(@NotNull final Component title) {
         if (VersionHelper.IS_COMPONENT_LEGACY) {
             return Bukkit.createInventory(this, this.rows * 9, Legacy.SERIALIZER.serialize(title));
@@ -820,13 +786,6 @@ public abstract class BaseGui implements InventoryHolder {
         return inventory = Bukkit.createInventory(this, this.rows * 9, title);
     }
 
-    /**
-     * Creates a typed {@link Inventory}.
-     * If the server is unfortunately legacy it'll serialize to string using the stupid format.
-     *
-     * @param title The title as a {@link Component}.
-     * @return The new typed {@link Inventory}.
-     */
     private Inventory createTypedInventory(@NotNull final Component title) {
         final InventoryType inventoryType = guiType.getInventoryType();
         if (VersionHelper.IS_COMPONENT_LEGACY) {
@@ -834,7 +793,7 @@ public abstract class BaseGui implements InventoryHolder {
         }
 
         return Bukkit.createInventory(this, inventoryType, title);
-    }
+    }*/
 
     /**
      * Checks if the slot introduces is a valid slot.
