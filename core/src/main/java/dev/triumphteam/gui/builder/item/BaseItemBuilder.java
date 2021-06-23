@@ -74,12 +74,7 @@ public abstract class BaseItemBuilder<B extends BaseItemBuilder<B>> {
      */
     @Contract("_ -> this")
     public B name(@NotNull final Component name) {
-        if (VersionHelper.IS_COMPONENT_LEGACY) {
-            meta.setDisplayName(Legacy.SERIALIZER.serialize(name));
-            return (B) this;
-        }
-
-        meta.displayName(name);
+        meta.setDisplayName(Legacy.SERIALIZER.serialize(name));
         return (B) this;
     }
 
@@ -116,12 +111,7 @@ public abstract class BaseItemBuilder<B extends BaseItemBuilder<B>> {
      */
     @Contract("_ -> this")
     public B lore(@NotNull final List<Component> lore) {
-        if (VersionHelper.IS_COMPONENT_LEGACY) {
-            meta.setLore(lore.stream().map(Legacy.SERIALIZER::serialize).collect(Collectors.toList()));
-            return (B) this;
-        }
-
-        meta.lore(lore);
+        meta.setLore(lore.stream().map(Legacy.SERIALIZER::serialize).collect(Collectors.toList()));
         return (B) this;
     }
 
