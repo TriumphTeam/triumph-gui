@@ -528,6 +528,18 @@ public abstract class BaseGui implements InventoryHolder {
     }
 
     /**
+     * Disable item drop inside the GUI
+     *
+     * @return The BaseGui
+     * @since 3.0.3.
+     */
+    @Contract(" -> this")
+    public BaseGui disableItemDrop() {
+        interactionModifiers.add(InteractionModifier.PREVENT_ITEM_DROP);
+        return this;
+    }
+
+    /**
      * Disable all the modifications of the GUI, making it immutable by player interaction.
      *
      * @return The BaseGui.
@@ -580,6 +592,18 @@ public abstract class BaseGui implements InventoryHolder {
     }
 
     /**
+     * Allows item drop inside the GUI
+     *
+     * @return The BaseGui
+     * @since 3.0.3
+     */
+    @Contract(" -> this")
+    public BaseGui enableItemDrop() {
+        interactionModifiers.remove(InteractionModifier.PREVENT_ITEM_DROP);
+        return this;
+    }
+
+    /**
      * Enable all modifications of the GUI, making it completely mutable by player interaction.
      *
      * @return The BaseGui.
@@ -623,6 +647,16 @@ public abstract class BaseGui implements InventoryHolder {
      */
     public boolean canSwapItems() {
         return !interactionModifiers.contains(InteractionModifier.PREVENT_ITEM_SWAP);
+    }
+
+    /**
+     * Check if item drop is allowed inside this GUI
+     *
+     * @return True if item drop is allowed for this GUI
+     * @since 3.0.3
+     */
+    public boolean canDropItems() {
+        return !interactionModifiers.contains(InteractionModifier.PREVENT_ITEM_DROP);
     }
 
     /**
