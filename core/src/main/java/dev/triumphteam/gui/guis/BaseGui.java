@@ -811,10 +811,6 @@ public abstract class BaseGui implements InventoryHolder {
         return slotActions.get(slot);
     }
 
-    public Map<Integer, GuiAction<InventoryClickEvent>> getSlotActions() {
-        return slotActions;
-    }
-
     /**
      * Populates the GUI with it's items.
      */

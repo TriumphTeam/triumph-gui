@@ -31,7 +31,7 @@ public enum GuiType {
 
     CHEST(InventoryType.CHEST, 9),
     WORKBENCH(InventoryType.WORKBENCH, 9),
-    HOPPER(InventoryType.HOPPER, 5),
+    //HOPPER(InventoryType.HOPPER, 5),
     DISPENSER(InventoryType.DISPENSER, 8),
     BREWING(InventoryType.BREWING, 4);
 
