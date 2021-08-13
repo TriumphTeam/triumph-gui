@@ -210,7 +210,6 @@ public class ItemBuilder extends BaseItemBuilder<ItemBuilder> {
      * @return {@link ItemBuilder}
      * @deprecated In favor of {@link ItemBuilder#name(Component)}, will be removed in 3.0.1
      */
-    @Deprecated
     public ItemBuilder setName(@NotNull final String name) {
         getMeta().setDisplayName(name);
         return this;
@@ -280,7 +279,6 @@ public class ItemBuilder extends BaseItemBuilder<ItemBuilder> {
      * @return {@link ItemBuilder}
      * @deprecated In favor of {@link ItemBuilder#lore(List)}, will be removed in 3.0.1
      */
-    @Deprecated
     public ItemBuilder setLore(@NotNull final List<String> lore) {
         getMeta().setLore(lore);
         return this;

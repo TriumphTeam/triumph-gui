@@ -263,7 +263,7 @@ public class PaginatedGui extends BaseGui {
      * @return The {@link Map} with all the {@link #currentPage}
      */
     public Map<Integer, GuiItem> getCurrentPageItems() {
-        return Collections.unmodifiableMap(currentPage);
+        return currentPage;
     }
 
     /**
@@ -272,7 +272,7 @@ public class PaginatedGui extends BaseGui {
      * @return The  {@link List} with all the {@link #pageItems}
      */
     public List<GuiItem> getPageItems() {
-        return Collections.unmodifiableList(pageItems);
+        return pageItems;
     }
 
 
