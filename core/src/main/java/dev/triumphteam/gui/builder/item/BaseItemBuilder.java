@@ -124,12 +124,11 @@ public abstract class BaseItemBuilder<B extends BaseItemBuilder<B>> {
      */
     @Contract("_ -> this")
     public B lore(@NotNull final Consumer<List<Component>> lore) {
-        List<Component> metaLore = meta.lore();
-        if (metaLore == null) {
-            metaLore = new ArrayList<>();
-        }
-        lore.accept(metaLore);
-        return lore(metaLore);
+        final List<String> strings = meta.hasLore() ? meta.getLore() : new ArrayList<>();
+        final List<Component> components = strings.stream().map(Legacy.SERIALIZER::deserialize).collect(Collectors.toList());
+
+        lore.accept(components);
+        return lore(components);
     }
 
     /**

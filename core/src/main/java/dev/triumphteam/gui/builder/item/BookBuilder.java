@@ -47,13 +47,8 @@ public class BookBuilder extends BaseItemBuilder<BookBuilder> {
             return this;
         }
 
-        if (VersionHelper.IS_COMPONENT_LEGACY) {
-            bookMeta.setAuthor(Legacy.SERIALIZER.serialize(author));
-            setMeta(bookMeta);
-        } else {
-            setMeta(bookMeta.author(author));
-        }
-
+        bookMeta.setAuthor(Legacy.SERIALIZER.serialize(author));
+        setMeta(bookMeta);
         return this;
     }
 
@@ -95,12 +90,8 @@ public class BookBuilder extends BaseItemBuilder<BookBuilder> {
     public BookBuilder page(@NotNull final List<Component> pages) {
         final BookMeta bookMeta = (BookMeta) getMeta();
 
-        if (VersionHelper.IS_COMPONENT_LEGACY) {
-            for (final Component page : pages) {
-                bookMeta.addPage(Legacy.SERIALIZER.serialize(page));
-            }
-        } else {
-            bookMeta.addPages(pages.toArray(new Component[0]));
+        for (final Component page : pages) {
+            bookMeta.addPage(Legacy.SERIALIZER.serialize(page));
         }
 
         setMeta(bookMeta);
@@ -124,12 +115,7 @@ public class BookBuilder extends BaseItemBuilder<BookBuilder> {
     public BookBuilder page(final int page, @NotNull final Component data) {
         final BookMeta bookMeta = (BookMeta) getMeta();
 
-        if (VersionHelper.IS_COMPONENT_LEGACY) {
-            bookMeta.setPage(page, Legacy.SERIALIZER.serialize(data));
-        } else {
-            bookMeta.page(page, data);
-        }
-
+        bookMeta.setPage(page, Legacy.SERIALIZER.serialize(data));
         setMeta(bookMeta);
         return this;
     }
@@ -152,13 +138,8 @@ public class BookBuilder extends BaseItemBuilder<BookBuilder> {
             return this;
         }
 
-        if (VersionHelper.IS_COMPONENT_LEGACY) {
-            bookMeta.setTitle(Legacy.SERIALIZER.serialize(title));
-            setMeta(bookMeta);
-        } else {
-            setMeta(bookMeta.title(title));
-        }
-
+        bookMeta.setTitle(Legacy.SERIALIZER.serialize(title));
+        setMeta(bookMeta);
         return this;
     }
 
