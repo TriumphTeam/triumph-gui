@@ -26,7 +26,7 @@ public class MapBuilder extends BaseItemBuilder<MapBuilder> {
     MapBuilder(@NotNull ItemStack itemStack) {
         super(itemStack);
         if (itemStack.getType() != MAP) {
-            throw new GuiException("BookBuilder requires the material to be a MAP!");
+            throw new GuiException("MapBuilder requires the material to be a MAP!");
         }
     }
 
