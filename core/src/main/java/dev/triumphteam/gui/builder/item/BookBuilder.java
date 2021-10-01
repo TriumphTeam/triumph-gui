@@ -1,3 +1,26 @@
+/**
+ * MIT License
+ *
+ * Copyright (c) 2021 TriumphTeam
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ */
 package dev.triumphteam.gui.builder.item;
 
 import dev.triumphteam.gui.components.exception.GuiException;
@@ -47,13 +70,8 @@ public class BookBuilder extends BaseItemBuilder<BookBuilder> {
             return this;
         }
 
-        if (VersionHelper.IS_COMPONENT_LEGACY) {
-            bookMeta.setAuthor(Legacy.SERIALIZER.serialize(author));
-            setMeta(bookMeta);
-        } else {
-            setMeta(bookMeta.author(author));
-        }
-
+        bookMeta.setAuthor(Legacy.SERIALIZER.serialize(author));
+        setMeta(bookMeta);
         return this;
     }
 
@@ -95,12 +113,8 @@ public class BookBuilder extends BaseItemBuilder<BookBuilder> {
     public BookBuilder page(@NotNull final List<Component> pages) {
         final BookMeta bookMeta = (BookMeta) getMeta();
 
-        if (VersionHelper.IS_COMPONENT_LEGACY) {
-            for (final Component page : pages) {
-                bookMeta.addPage(Legacy.SERIALIZER.serialize(page));
-            }
-        } else {
-            bookMeta.addPages(pages.toArray(new Component[0]));
+        for (final Component page : pages) {
+            bookMeta.addPage(Legacy.SERIALIZER.serialize(page));
         }
 
         setMeta(bookMeta);
@@ -124,12 +138,7 @@ public class BookBuilder extends BaseItemBuilder<BookBuilder> {
     public BookBuilder page(final int page, @NotNull final Component data) {
         final BookMeta bookMeta = (BookMeta) getMeta();
 
-        if (VersionHelper.IS_COMPONENT_LEGACY) {
-            bookMeta.setPage(page, Legacy.SERIALIZER.serialize(data));
-        } else {
-            bookMeta.page(page, data);
-        }
-
+        bookMeta.setPage(page, Legacy.SERIALIZER.serialize(data));
         setMeta(bookMeta);
         return this;
     }
@@ -152,13 +161,8 @@ public class BookBuilder extends BaseItemBuilder<BookBuilder> {
             return this;
         }
 
-        if (VersionHelper.IS_COMPONENT_LEGACY) {
-            bookMeta.setTitle(Legacy.SERIALIZER.serialize(title));
-            setMeta(bookMeta);
-        } else {
-            setMeta(bookMeta.title(title));
-        }
-
+        bookMeta.setTitle(Legacy.SERIALIZER.serialize(title));
+        setMeta(bookMeta);
         return this;
     }
 
