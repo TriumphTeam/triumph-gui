@@ -250,13 +250,8 @@ public class ItemBuilder extends BaseItemBuilder<ItemBuilder> {
      */
     @Deprecated
     public ItemBuilder addLore(@NotNull final List<String> lore) {
-        final List<String> newLore;
-        final ItemMeta meta = getMeta();
-        if (meta.getLore() == null) {
-            newLore = new ArrayList<>();
-        } else {
-            newLore = meta.getLore();
-        }
+        final List<String> newLore = getMeta().hasLore() ? getMeta().getLore() : new ArrayList<>();
+
         newLore.addAll(lore);
         return setLore(newLore);
     }
