@@ -475,7 +475,7 @@ public abstract class BaseGui implements InventoryHolder {
         }
 
         updating = false;
-
+        this.title = title;
         return this;
     }
 
