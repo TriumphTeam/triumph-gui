@@ -32,13 +32,15 @@ import org.bukkit.map.MapView;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Map;
+
 /**
  * Item builder for {@link Material#MAP} only
  *
  * @author GabyTM <a href="https://github.com/iGabyTM">https://github.com/iGabyTM</a>
  * @since 3.0.1
  */
-public class MapBuilder extends BaseItemBuilder<MapBuilder> {
+public class MapBuilder extends BaseItemBuilder<MapBuilder> implements ColorableBuilder<MapBuilder> {
 
     private static final Material MAP = Material.MAP;
 
@@ -61,6 +63,7 @@ public class MapBuilder extends BaseItemBuilder<MapBuilder> {
      * @return {@link MapBuilder}
      * @since 3.0.1
      */
+    @Override
     public MapBuilder color(@Nullable final Color color) {
         final MapMeta mapMeta = (MapMeta) getMeta();
 

@@ -31,11 +31,14 @@ import dev.triumphteam.gui.guis.GuiItem;
 import net.kyori.adventure.text.Component;
 import org.apache.commons.lang.Validate;
 import org.bukkit.Bukkit;
+import org.bukkit.Color;
+import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.inventory.meta.LeatherArmorMeta;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
@@ -43,6 +46,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.EnumSet;
 import java.util.List;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
@@ -53,7 +57,11 @@ import java.util.stream.Collectors;
  * @param <B> The ItemBuilder type so the methods can cast to the subtype
  */
 @SuppressWarnings("unchecked")
-public abstract class BaseItemBuilder<B extends BaseItemBuilder<B>> {
+public abstract class BaseItemBuilder<B extends BaseItemBuilder<B>> implements ColorableBuilder<B> {
+
+    private static final EnumSet<Material> LETHER_ARMOR = EnumSet.of(
+            Material.LEATHER_HELMET, Material.LEATHER_CHESTPLATE, Material.LEATHER_LEGGINGS, Material.LEATHER_BOOTS
+    );
 
     private ItemStack itemStack;
     private ItemMeta meta;
@@ -282,6 +290,24 @@ public abstract class BaseItemBuilder<B extends BaseItemBuilder<B>> {
     public B model(final int modelData) {
         if (VersionHelper.IS_CUSTOM_MODEL_DATA) {
             meta.setCustomModelData(modelData);
+        }
+
+        return (B) this;
+    }
+
+    /**
+     * {@inheritDoc}
+     * @param color color
+     * @return {@link ItemBuilder}
+     * @since 3.0.3
+     */
+    @Override
+    public B color(@NotNull Color color) {
+        if (LETHER_ARMOR.contains(itemStack.getType())) {
+            final LeatherArmorMeta lam = (LeatherArmorMeta) getMeta();
+
+            lam.setColor(color);
+            setMeta(lam);
         }
 
         return (B) this;
