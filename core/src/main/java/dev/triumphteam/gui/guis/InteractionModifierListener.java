@@ -60,7 +60,7 @@ public final class InteractionModifierListener implements Listener {
         final BaseGui gui = (BaseGui) event.getInventory().getHolder();
 
         // if player is trying to do a disabled action, cancel it
-        if ((!gui.canPlaceItems() && isPlaceItemEvent(event)) || (!gui.canTakeItems() && isTakeItemEvent(event)) || (!gui.canSwapItems() && isSwapItemEvent(event))) {
+        if ((!gui.canPlaceItems() && isPlaceItemEvent(event)) || (!gui.canTakeItems() && isTakeItemEvent(event)) || (!gui.canSwapItems() && isSwapItemEvent(event)) || (!gui.canDropItems() && isDropItemEvent(event))) {
             event.setCancelled(true);
             event.setResult(Event.Result.DENY);
         }
@@ -157,6 +157,17 @@ public final class InteractionModifierListener implements Listener {
             && inventory.getType() != InventoryType.PLAYER;
     }
 
+    private boolean isDropItemEvent(final InventoryClickEvent event) {
+        Preconditions.checkNotNull(event, "event cannot be null");
+
+        final Inventory inventory = event.getInventory();
+        final Inventory clickedInventory = event.getClickedInventory();
+        final InventoryAction action = event.getAction();
+
+        return isDropAction(action)
+                && (clickedInventory != null || inventory.getType() != InventoryType.PLAYER);
+    }
+
     /**
      * Checks if any item is being dragged on the GUI
      *
@@ -185,6 +196,11 @@ public final class InteractionModifierListener implements Listener {
     private boolean isSwapAction(final InventoryAction action) {
         Preconditions.checkNotNull(action, "action cannot be null");
         return action == InventoryAction.SWAP_WITH_CURSOR;
+    }
+
+    private boolean isDropAction(final InventoryAction action) {
+        Preconditions.checkNotNull(action, "action cannot be null");
+        return action == InventoryAction.DROP_ONE_SLOT || action == InventoryAction.DROP_ALL_SLOT;
     }
 
     /**

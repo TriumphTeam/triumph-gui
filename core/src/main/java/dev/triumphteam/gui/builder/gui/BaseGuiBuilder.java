@@ -116,6 +116,18 @@ public abstract class BaseGuiBuilder<G extends BaseGui, B extends BaseGuiBuilder
     }
 
     /**
+     * Disable item drop inside the GUI
+     *
+     * @return The builder
+     * @since 3.0.3
+     */
+    @Contract(" -> this")
+    public B disableItemDrop() {
+        interactionModifiers.add(InteractionModifier.PREVENT_ITEM_DROP);
+        return (B) this;
+    }
+
+    /**
      * Disable all the modifications of the GUI, making it immutable by player interaction
      *
      * @return The builder
@@ -164,6 +176,18 @@ public abstract class BaseGuiBuilder<G extends BaseGui, B extends BaseGuiBuilder
     @Contract(" -> this")
     public B enableItemSwap() {
         interactionModifiers.remove(InteractionModifier.PREVENT_ITEM_SWAP);
+        return (B) this;
+    }
+
+    /**
+     * Allows item drop inside the GUI
+     *
+     * @return The builder
+     * @since 3.0.3
+     */
+    @Contract(" -> this")
+    public B enableItemDrop() {
+        interactionModifiers.remove(InteractionModifier.PREVENT_ITEM_DROP);
         return (B) this;
     }
 
