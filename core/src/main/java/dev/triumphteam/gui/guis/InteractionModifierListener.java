@@ -211,7 +211,7 @@ public final class InteractionModifierListener implements Listener {
 
     private boolean isDropAction(final InventoryAction action) {
         Preconditions.checkNotNull(action, "action cannot be null");
-        return action == InventoryAction.DROP_ONE_SLOT || action == InventoryAction.DROP_ALL_SLOT;
+        return ITEM_DROP_ACTIONS.contains(action);
     }
 
     private boolean isOtherAction(final InventoryAction action) {
@@ -233,4 +233,9 @@ public final class InteractionModifierListener implements Listener {
      * Holds all actions relating to swapping items
      */
     private static final Set<InventoryAction> ITEM_SWAP_ACTIONS = Collections.unmodifiableSet(EnumSet.of(InventoryAction.HOTBAR_SWAP, InventoryAction.SWAP_WITH_CURSOR, InventoryAction.HOTBAR_MOVE_AND_READD));
+
+    /**
+     * Holds all actions relating to dropping items
+     */
+    private static final Set<InventoryAction> ITEM_DROP_ACTIONS = Collections.unmodifiableSet(EnumSet.of(InventoryAction.DROP_ONE_SLOT, InventoryAction.DROP_ALL_SLOT, InventoryAction.DROP_ONE_CURSOR, InventoryAction.DROP_ALL_CURSOR));
 }
