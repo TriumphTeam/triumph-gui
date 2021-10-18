@@ -727,7 +727,7 @@ public abstract class BaseGui implements InventoryHolder {
      * Check if any other actions are allowed in this GUI
      *
      * @return True if other actions are allowed
-     * @since 3.0.3
+     * @since 3.0.4
      */
     public boolean allowsOtherActions() {
         return !interactionModifiers.contains(InteractionModifier.PREVENT_OTHER_ACTIONS);
