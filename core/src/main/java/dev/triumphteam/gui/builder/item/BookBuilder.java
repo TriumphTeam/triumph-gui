@@ -69,8 +69,19 @@ public class BookBuilder extends BaseItemBuilder<BookBuilder> {
             return this;
         }
 
+<<<<<<< Updated upstream
         bookMeta.setAuthor(Legacy.SERIALIZER.serialize(author));
         setMeta(bookMeta);
+=======
+        if (VersionHelper.IS_COMPONENT_LEGACY) {
+            bookMeta.setAuthor(Legacy.SERIALIZER.serialize(author));
+            setMeta(bookMeta);
+        } else {
+            bookMeta.setAuthor(Legacy.SERIALIZER.serialize(author));
+            setMeta(bookMeta);
+        }
+
+>>>>>>> Stashed changes
         return this;
     }
 
