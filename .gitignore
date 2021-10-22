@@ -16,3 +16,7 @@ gradle.properties
 test-plugin/
 
 build/
+
+run/
+
+fabric-test/

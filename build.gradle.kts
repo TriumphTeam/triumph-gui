@@ -19,13 +19,13 @@ subprojects {
     }
 
     group = "dev.triumphteam"
-    version = "3.0.3"
+    version = "3.0.4"
 
     dependencies {
         compileOnly("org.jetbrains:annotations:21.0.1")
         compileOnly("org.spigotmc:spigot-api:1.16.5-R0.1-SNAPSHOT")
-        api("net.kyori:adventure-api:4.9.1")
-        api("net.kyori:adventure-text-serializer-legacy:4.9.1")
+        api("net.kyori:adventure-api:4.9.2")
+        api("net.kyori:adventure-text-serializer-legacy:4.9.2")
     }
 
     license {

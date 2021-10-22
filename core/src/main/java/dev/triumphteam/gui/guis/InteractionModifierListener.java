@@ -1,18 +1,18 @@
 /**
  * MIT License
- *
+ * <p>
  * Copyright (c) 2021 TriumphTeam
- *
+ * <p>
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- *
+ * <p>
  * The above copyright notice and this permission notice shall be included in all
  * copies or substantial portions of the Software.
- *
+ * <p>
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -40,8 +40,8 @@ import java.util.Set;
 /**
  * Listener that apply default GUI {@link dev.triumphteam.gui.components.InteractionModifier InteractionModifier}s to all GUIs
  *
- * @since 3.0.0
  * @author SecretX
+ * @since 3.0.0
  */
 public final class InteractionModifierListener implements Listener {
 
@@ -49,8 +49,8 @@ public final class InteractionModifierListener implements Listener {
      * Handles any click on GUIs, applying all {@link dev.triumphteam.gui.components.InteractionModifier InteractionModifier} as required
      *
      * @param event The InventoryClickEvent
-     * @since 3.0.0
      * @author SecretX
+     * @since 3.0.0
      */
     @EventHandler
     public void onGuiClick(final InventoryClickEvent event) {
@@ -70,8 +70,8 @@ public final class InteractionModifierListener implements Listener {
      * Handles any item drag on GUIs, applying all {@link dev.triumphteam.gui.components.InteractionModifier InteractionModifier} as required
      *
      * @param event The InventoryDragEvent
-     * @since 3.0.0
      * @author SecretX
+     * @since 3.0.0
      */
     @EventHandler
     public void onGuiDrag(final InventoryDragEvent event) {
@@ -81,7 +81,7 @@ public final class InteractionModifierListener implements Listener {
         final BaseGui gui = (BaseGui) event.getInventory().getHolder();
 
         // if players are allowed to place items on the GUI, or player is not dragging on GUI, return
-        if(gui.canPlaceItems() || !isDraggingOnGui(event)) return;
+        if (gui.canPlaceItems() || !isDraggingOnGui(event)) return;
 
         // cancel the interaction
         event.setCancelled(true);
@@ -93,8 +93,8 @@ public final class InteractionModifierListener implements Listener {
      *
      * @param event The InventoryClickEvent
      * @return True if the {@link InventoryClickEvent} is for taking an item from the GUI
-     * @since 3.0.0
      * @author SecretX
+     * @since 3.0.0
      */
     private boolean isTakeItemEvent(final InventoryClickEvent event) {
         Preconditions.checkNotNull(event, "event cannot be null");
@@ -104,8 +104,9 @@ public final class InteractionModifierListener implements Listener {
         final InventoryAction action = event.getAction();
 
         // magic logic, simplified version of https://paste.helpch.at/tizivomeco.cpp
-        if(clickedInventory != null && clickedInventory.getType() == InventoryType.PLAYER || inventory.getType() == InventoryType.PLAYER)
+        if (clickedInventory != null && clickedInventory.getType() == InventoryType.PLAYER || inventory.getType() == InventoryType.PLAYER) {
             return false;
+        }
 
         return action == InventoryAction.MOVE_TO_OTHER_INVENTORY || isTakeAction(action);
     }
@@ -115,8 +116,8 @@ public final class InteractionModifierListener implements Listener {
      *
      * @param event The InventoryClickEvent
      * @return True if the {@link InventoryClickEvent} is for placing an item from the GUI
-     * @since 3.0.0
      * @author SecretX
+     * @since 3.0.0
      */
     private boolean isPlaceItemEvent(final InventoryClickEvent event) {
         Preconditions.checkNotNull(event, "event cannot be null");
@@ -126,15 +127,16 @@ public final class InteractionModifierListener implements Listener {
         final InventoryAction action = event.getAction();
 
         // shift click on item in player inventory
-        if(action == InventoryAction.MOVE_TO_OTHER_INVENTORY
+        if (action == InventoryAction.MOVE_TO_OTHER_INVENTORY
                 && clickedInventory != null && clickedInventory.getType() == InventoryType.PLAYER
-                && inventory.getType() != clickedInventory.getType())
+                && inventory.getType() != clickedInventory.getType()) {
             return true;
+        }
 
         // normal click on gui empty slot with item on cursor
         return isPlaceAction(action)
-            && (clickedInventory == null || clickedInventory.getType() != InventoryType.PLAYER)
-            && inventory.getType() != InventoryType.PLAYER;
+                && (clickedInventory == null || clickedInventory.getType() != InventoryType.PLAYER)
+                && inventory.getType() != InventoryType.PLAYER;
     }
 
     /**
@@ -142,8 +144,8 @@ public final class InteractionModifierListener implements Listener {
      *
      * @param event The InventoryClickEvent
      * @return True if the {@link InventoryClickEvent} is for swapping any item with an item from the GUI
-     * @since 3.0.0
      * @author SecretX
+     * @since 3.0.0
      */
     private boolean isSwapItemEvent(final InventoryClickEvent event) {
         Preconditions.checkNotNull(event, "event cannot be null");
@@ -153,8 +155,8 @@ public final class InteractionModifierListener implements Listener {
         final InventoryAction action = event.getAction();
 
         return isSwapAction(action)
-            && (clickedInventory == null || clickedInventory.getType() != InventoryType.PLAYER)
-            && inventory.getType() != InventoryType.PLAYER;
+                && (clickedInventory == null || clickedInventory.getType() != InventoryType.PLAYER)
+                && inventory.getType() != InventoryType.PLAYER;
     }
 
     private boolean isDropItemEvent(final InventoryClickEvent event) {
@@ -184,8 +186,8 @@ public final class InteractionModifierListener implements Listener {
      *
      * @param event The InventoryDragEvent
      * @return True if the {@link InventoryDragEvent} is for dragging an item inside the GUI
-     * @since 3.0.0
      * @author SecretX
+     * @since 3.0.0
      */
     private boolean isDraggingOnGui(final InventoryDragEvent event) {
         Preconditions.checkNotNull(event, "event cannot be null");

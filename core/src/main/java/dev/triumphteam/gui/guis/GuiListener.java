@@ -100,7 +100,6 @@ public final class GuiListener implements Listener {
         // Executes the action of the item
         final GuiAction<InventoryClickEvent> itemAction = guiItem.getAction();
         if (itemAction != null) itemAction.execute(event);
-
     }
 
     /**
@@ -172,7 +171,7 @@ public final class GuiListener implements Listener {
      */
     private boolean isGuiItem(@Nullable final ItemStack currentItem, @Nullable final GuiItem guiItem) {
         if (currentItem == null || guiItem == null) return false;
-        // Checks whether or not the Item is truly a GUI Item
+        // Checks whether the Item is truly a GUI Item
         final String nbt = ItemNbt.getString(currentItem, "mf-gui");
         if (nbt == null) return false;
         return nbt.equals(guiItem.getUuid().toString());
