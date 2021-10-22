@@ -60,7 +60,7 @@ public final class InteractionModifierListener implements Listener {
         final BaseGui gui = (BaseGui) event.getInventory().getHolder();
 
         // if player is trying to do a disabled action, cancel it
-        if ((!gui.canPlaceItems() && isPlaceItemEvent(event)) || (!gui.canTakeItems() && isTakeItemEvent(event)) || (!gui.canSwapItems() && isSwapItemEvent(event)) || (!gui.canDropItems() && isDropItemEvent(event))) {
+        if ((!gui.canPlaceItems() && isPlaceItemEvent(event)) || (!gui.canTakeItems() && isTakeItemEvent(event)) || (!gui.canSwapItems() && isSwapItemEvent(event)) || (!gui.canDropItems() && isDropItemEvent(event)) || (!gui.allowsOtherActions() && isOtherEvent(event))) {
             event.setCancelled(true);
             event.setResult(Event.Result.DENY);
         }
@@ -168,6 +168,17 @@ public final class InteractionModifierListener implements Listener {
                 && (clickedInventory != null || inventory.getType() != InventoryType.PLAYER);
     }
 
+    private boolean isOtherEvent(final InventoryClickEvent event) {
+        Preconditions.checkNotNull(event, "event cannot be null");
+
+        final Inventory inventory = event.getInventory();
+        final Inventory clickedInventory = event.getClickedInventory();
+        final InventoryAction action = event.getAction();
+
+        return isOtherAction(action)
+                && (clickedInventory != null || inventory.getType() != InventoryType.PLAYER);
+    }
+
     /**
      * Checks if any item is being dragged on the GUI
      *
@@ -195,21 +206,36 @@ public final class InteractionModifierListener implements Listener {
 
     private boolean isSwapAction(final InventoryAction action) {
         Preconditions.checkNotNull(action, "action cannot be null");
-        return action == InventoryAction.SWAP_WITH_CURSOR;
+        return ITEM_SWAP_ACTIONS.contains(action);
     }
 
     private boolean isDropAction(final InventoryAction action) {
         Preconditions.checkNotNull(action, "action cannot be null");
-        return action == InventoryAction.DROP_ONE_SLOT || action == InventoryAction.DROP_ALL_SLOT;
+        return ITEM_DROP_ACTIONS.contains(action);
+    }
+
+    private boolean isOtherAction(final InventoryAction action) {
+        Preconditions.checkNotNull(action, "action cannot be null");
+        return action == InventoryAction.CLONE_STACK || action == InventoryAction.UNKNOWN;
     }
 
     /**
      * Holds all the actions that should be considered "take" actions
      */
-    private static final Set<InventoryAction> ITEM_TAKE_ACTIONS = Collections.unmodifiableSet(EnumSet.of(InventoryAction.PICKUP_ONE, InventoryAction.PICKUP_SOME, InventoryAction.PICKUP_HALF, InventoryAction.PICKUP_ALL, InventoryAction.COLLECT_TO_CURSOR, InventoryAction.HOTBAR_SWAP));
+    private static final Set<InventoryAction> ITEM_TAKE_ACTIONS = Collections.unmodifiableSet(EnumSet.of(InventoryAction.PICKUP_ONE, InventoryAction.PICKUP_SOME, InventoryAction.PICKUP_HALF, InventoryAction.PICKUP_ALL, InventoryAction.COLLECT_TO_CURSOR, InventoryAction.HOTBAR_SWAP, InventoryAction.MOVE_TO_OTHER_INVENTORY));
 
     /**
      * Holds all the actions that should be considered "place" actions
      */
     private static final Set<InventoryAction> ITEM_PLACE_ACTIONS = Collections.unmodifiableSet(EnumSet.of(InventoryAction.PLACE_ONE, InventoryAction.PLACE_SOME, InventoryAction.PLACE_ALL));
+
+    /**
+     * Holds all actions relating to swapping items
+     */
+    private static final Set<InventoryAction> ITEM_SWAP_ACTIONS = Collections.unmodifiableSet(EnumSet.of(InventoryAction.HOTBAR_SWAP, InventoryAction.SWAP_WITH_CURSOR, InventoryAction.HOTBAR_MOVE_AND_READD));
+
+    /**
+     * Holds all actions relating to dropping items
+     */
+    private static final Set<InventoryAction> ITEM_DROP_ACTIONS = Collections.unmodifiableSet(EnumSet.of(InventoryAction.DROP_ONE_SLOT, InventoryAction.DROP_ALL_SLOT, InventoryAction.DROP_ONE_CURSOR, InventoryAction.DROP_ALL_CURSOR));
 }

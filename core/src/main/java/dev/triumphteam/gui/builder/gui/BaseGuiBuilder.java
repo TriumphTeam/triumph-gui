@@ -128,6 +128,19 @@ public abstract class BaseGuiBuilder<G extends BaseGui, B extends BaseGuiBuilder
     }
 
     /**
+     * Disable other GUI actions
+     * This option pretty much disables creating a clone stack of the item
+     *
+     * @return The builder
+     * @since 3.0.4
+     */
+    @Contract(" -> this")
+    public B disableOtherActions() {
+        interactionModifiers.add(InteractionModifier.PREVENT_OTHER_ACTIONS);
+        return (B) this;
+    }
+
+    /**
      * Disable all the modifications of the GUI, making it immutable by player interaction
      *
      * @return The builder
@@ -188,6 +201,19 @@ public abstract class BaseGuiBuilder<G extends BaseGui, B extends BaseGuiBuilder
     @Contract(" -> this")
     public B enableItemDrop() {
         interactionModifiers.remove(InteractionModifier.PREVENT_ITEM_DROP);
+        return (B) this;
+    }
+
+    /**
+     * Enable other GUI actions
+     * This option pretty much enables creating a clone stack of the item
+     *
+     * @return The builder
+     * @since 3.0.4
+     */
+    @Contract(" -> this")
+    public B enableOtherActions() {
+        interactionModifiers.remove(InteractionModifier.PREVENT_OTHER_ACTIONS);
         return (B) this;
     }
 

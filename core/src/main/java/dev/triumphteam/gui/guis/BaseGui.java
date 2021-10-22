@@ -578,6 +578,19 @@ public abstract class BaseGui implements InventoryHolder {
     }
 
     /**
+     * Disable other GUI actions
+     * This option pretty much disables creating a clone stack of the item
+     *
+     * @return The BaseGui
+     * @since 3.0.4
+     */
+    @Contract(" -> this")
+    public BaseGui disableOtherActions() {
+        interactionModifiers.add(InteractionModifier.PREVENT_OTHER_ACTIONS);
+        return this;
+    }
+
+    /**
      * Disable all the modifications of the GUI, making it immutable by player interaction.
      *
      * @return The BaseGui.
@@ -642,6 +655,19 @@ public abstract class BaseGui implements InventoryHolder {
     }
 
     /**
+     * Enable other GUI actions
+     * This option pretty much enables creating a clone stack of the item
+     *
+     * @return The BaseGui
+     * @since 3.0.4
+     */
+    @Contract(" -> this")
+    public BaseGui enableOtherActions() {
+        interactionModifiers.remove(InteractionModifier.PREVENT_OTHER_ACTIONS);
+        return this;
+    }
+
+    /**
      * Enable all modifications of the GUI, making it completely mutable by player interaction.
      *
      * @return The BaseGui.
@@ -695,6 +721,16 @@ public abstract class BaseGui implements InventoryHolder {
      */
     public boolean canDropItems() {
         return !interactionModifiers.contains(InteractionModifier.PREVENT_ITEM_DROP);
+    }
+
+    /**
+     * Check if any other actions are allowed in this GUI
+     *
+     * @return True if other actions are allowed
+     * @since 3.0.4
+     */
+    public boolean allowsOtherActions() {
+        return !interactionModifiers.contains(InteractionModifier.PREVENT_OTHER_ACTIONS);
     }
 
     /**
