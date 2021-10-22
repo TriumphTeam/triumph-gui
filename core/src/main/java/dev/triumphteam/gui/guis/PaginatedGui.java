@@ -407,9 +407,15 @@ public class PaginatedGui extends BaseGui {
     /**
      * Clears all previously added page items
      */
-    public void clearPageItems() {
+    public void clearPageItems(final boolean update) {
         pageItems.clear();
+        if (update) update();
     }
+
+    public void clearPageItems() {
+        clearPageItems(false);
+    }
+
 
     /**
      * Gets the page size

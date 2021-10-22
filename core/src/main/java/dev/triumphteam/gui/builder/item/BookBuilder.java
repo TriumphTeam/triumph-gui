@@ -25,7 +25,6 @@ package dev.triumphteam.gui.builder.item;
 
 import dev.triumphteam.gui.components.exception.GuiException;
 import dev.triumphteam.gui.components.util.Legacy;
-import dev.triumphteam.gui.components.util.VersionHelper;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
