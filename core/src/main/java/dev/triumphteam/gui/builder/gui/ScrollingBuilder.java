@@ -56,8 +56,8 @@ public final class ScrollingBuilder extends BaseGuiBuilder<ScrollingGui, Scrolli
      * @param scrollType Either horizontal or vertical scrolling
      * @return The current builder
      */
-    @Contract("_ -> this")
     @NotNull
+    @Contract("_ -> this")
     public ScrollingBuilder scrollType(@NotNull final ScrollType scrollType) {
         this.scrollType = scrollType;
         return this;
@@ -69,8 +69,8 @@ public final class ScrollingBuilder extends BaseGuiBuilder<ScrollingGui, Scrolli
      * @param pageSize The amount of free slots that page items should occupy
      * @return The current builder
      */
-    @Contract("_ -> this")
     @NotNull
+    @Contract("_ -> this")
     public ScrollingBuilder pageSize(final int pageSize) {
         this.pageSize = pageSize;
         return this;
@@ -81,9 +81,9 @@ public final class ScrollingBuilder extends BaseGuiBuilder<ScrollingGui, Scrolli
      *
      * @return A new {@link ScrollingGui}
      */
-    @Contract(" -> new")
     @NotNull
     @Override
+    @Contract(" -> new")
     public ScrollingGui create() {
         final ScrollingGui gui = new ScrollingGui(getRows(), pageSize, Legacy.SERIALIZER.serialize(getTitle()), scrollType, getModifiers());
 

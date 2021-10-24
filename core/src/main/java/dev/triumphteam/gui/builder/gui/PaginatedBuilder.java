@@ -43,8 +43,8 @@ public class PaginatedBuilder extends BaseGuiBuilder<PaginatedGui, PaginatedBuil
      * @param pageSize The amount of free slots that page items should occupy
      * @return The current builder
      */
-    @Contract("_ -> this")
     @NotNull
+    @Contract("_ -> this")
     public PaginatedBuilder pageSize(final int pageSize) {
         this.pageSize = pageSize;
         return this;
@@ -55,9 +55,9 @@ public class PaginatedBuilder extends BaseGuiBuilder<PaginatedGui, PaginatedBuil
      *
      * @return A new {@link PaginatedGui}
      */
-    @Contract(" -> new")
     @NotNull
     @Override
+    @Contract(" -> new")
     public PaginatedGui create() {
         final PaginatedGui gui = new PaginatedGui(getRows(), pageSize, Legacy.SERIALIZER.serialize(getTitle()), getModifiers());
 

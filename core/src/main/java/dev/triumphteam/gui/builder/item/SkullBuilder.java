@@ -78,8 +78,8 @@ public final class SkullBuilder extends BaseItemBuilder<SkullBuilder> {
      * @param texture The base64 texture
      * @return {@link SkullBuilder}
      */
-    @Contract("_ -> this")
     @NotNull
+    @Contract("_ -> this")
     public SkullBuilder texture(@NotNull final String texture) {
         if (getItemStack().getType() != SkullUtil.SKULL) return this;
 
@@ -107,8 +107,8 @@ public final class SkullBuilder extends BaseItemBuilder<SkullBuilder> {
      * @param player {@link OfflinePlayer} to set skull of
      * @return {@link SkullBuilder}
      */
-    @Contract("_ -> this")
     @NotNull
+    @Contract("_ -> this")
     public SkullBuilder owner(@NotNull final OfflinePlayer player) {
         if (getItemStack().getType() != SkullUtil.SKULL) return this;
 

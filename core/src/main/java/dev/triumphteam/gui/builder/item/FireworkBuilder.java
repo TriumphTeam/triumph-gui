@@ -62,8 +62,8 @@ public class FireworkBuilder extends BaseItemBuilder<FireworkBuilder> {
      * @throws IllegalArgumentException If any effect is null (may be thrown after changes have occurred)
      * @since 3.0.1
      */
-    @Contract("_ -> this")
     @NotNull
+    @Contract("_ -> this")
     public FireworkBuilder effect(@NotNull final FireworkEffect... effects) {
         return effect(Arrays.asList(effects));
     }
@@ -77,8 +77,8 @@ public class FireworkBuilder extends BaseItemBuilder<FireworkBuilder> {
      * @throws IllegalArgumentException If any effect is null (may be thrown after changes have occurred)
      * @since 3.0.1
      */
-    @Contract("_ -> this")
     @NotNull
+    @Contract("_ -> this")
     public FireworkBuilder effect(@NotNull final List<FireworkEffect> effects) {
         if (effects.isEmpty()) {
             return this;
@@ -108,8 +108,8 @@ public class FireworkBuilder extends BaseItemBuilder<FireworkBuilder> {
      * @throws IllegalArgumentException if {@literal height<0 or height>128}
      * @since 3.0.1
      */
-    @Contract("_ -> this")
     @NotNull
+    @Contract("_ -> this")
     public FireworkBuilder power(final int power) {
         if (getItemStack().getType() == ROCKET) {
             final FireworkMeta fireworkMeta = (FireworkMeta) getMeta();

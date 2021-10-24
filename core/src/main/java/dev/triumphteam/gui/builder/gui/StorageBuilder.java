@@ -40,9 +40,9 @@ public final class StorageBuilder extends BaseGuiBuilder<StorageGui, StorageBuil
      *
      * @return A new {@link StorageGui}
      */
-    @Contract(" -> new")
     @NotNull
     @Override
+    @Contract(" -> new")
     public StorageGui create() {
         final StorageGui gui = new StorageGui(getRows(), Legacy.SERIALIZER.serialize(getTitle()), getModifiers());
 

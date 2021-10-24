@@ -80,8 +80,8 @@ public abstract class BaseItemBuilder<B extends BaseItemBuilder<B>> implements C
      * @return {@link ItemBuilder}
      * @since 3.0.0
      */
-    @Contract("_ -> this")
     @NotNull
+    @Contract("_ -> this")
     public B name(@NotNull final Component name) {
         meta.setDisplayName(Legacy.SERIALIZER.serialize(name));
         return (B) this;
@@ -95,6 +95,7 @@ public abstract class BaseItemBuilder<B extends BaseItemBuilder<B>> implements C
      * @since 3.0.0
      */
     @NotNull
+    @Contract("_ -> this")
     public B amount(final int amount) {
         itemStack.setAmount(amount);
         return (B) this;
@@ -107,8 +108,8 @@ public abstract class BaseItemBuilder<B extends BaseItemBuilder<B>> implements C
      * @return {@link ItemBuilder}
      * @since 3.0.0
      */
-    @Contract("_ -> this")
     @NotNull
+    @Contract("_ -> this")
     public B lore(@NotNull final Component... lore) {
         return lore(Arrays.asList(lore));
     }
@@ -120,8 +121,8 @@ public abstract class BaseItemBuilder<B extends BaseItemBuilder<B>> implements C
      * @return {@link ItemBuilder}
      * @since 3.0.0
      */
-    @Contract("_ -> this")
     @NotNull
+    @Contract("_ -> this")
     public B lore(@NotNull final List<Component> lore) {
         meta.setLore(lore.stream().map(Legacy.SERIALIZER::serialize).collect(Collectors.toList()));
         return (B) this;
@@ -134,8 +135,8 @@ public abstract class BaseItemBuilder<B extends BaseItemBuilder<B>> implements C
      * @return {@link ItemBuilder}
      * @since 3.0.0
      */
-    @Contract("_ -> this")
     @NotNull
+    @Contract("_ -> this")
     public B lore(@NotNull final Consumer<List<Component>> lore) {
         final List<String> strings = meta.hasLore() ? meta.getLore() : new ArrayList<>();
         final List<Component> components = strings.stream().map(Legacy.SERIALIZER::deserialize).collect(Collectors.toList());
@@ -153,8 +154,8 @@ public abstract class BaseItemBuilder<B extends BaseItemBuilder<B>> implements C
      * @return {@link ItemBuilder}
      * @since 3.0.0
      */
-    @Contract("_, _, _ -> this")
     @NotNull
+    @Contract("_, _, _ -> this")
     public B enchant(@NotNull final Enchantment enchantment, final int level, final boolean ignoreLevelRestriction) {
         meta.addEnchant(enchantment, level, ignoreLevelRestriction);
         return (B) this;
@@ -168,8 +169,8 @@ public abstract class BaseItemBuilder<B extends BaseItemBuilder<B>> implements C
      * @return {@link ItemBuilder}
      * @since 3.0.0
      */
-    @Contract("_, _ -> this")
     @NotNull
+    @Contract("_, _ -> this")
     public B enchant(@NotNull final Enchantment enchantment, final int level) {
         return enchant(enchantment, level, true);
     }
@@ -181,8 +182,8 @@ public abstract class BaseItemBuilder<B extends BaseItemBuilder<B>> implements C
      * @return {@link ItemBuilder}
      * @since 3.0.0
      */
-    @Contract("_ -> this")
     @NotNull
+    @Contract("_ -> this")
     public B enchant(@NotNull final Enchantment enchantment) {
         return enchant(enchantment, 1, true);
     }
@@ -194,8 +195,8 @@ public abstract class BaseItemBuilder<B extends BaseItemBuilder<B>> implements C
      * @return {@link ItemBuilder}
      * @since 3.0.0
      */
-    @Contract("_ -> this")
     @NotNull
+    @Contract("_ -> this")
     public B disenchant(@NotNull final Enchantment enchantment) {
         itemStack.removeEnchantment(enchantment);
         return (B) this;
@@ -208,8 +209,8 @@ public abstract class BaseItemBuilder<B extends BaseItemBuilder<B>> implements C
      * @return {@link ItemBuilder}
      * @since 3.0.0
      */
-    @Contract("_ -> this")
     @NotNull
+    @Contract("_ -> this")
     public B flags(@NotNull final ItemFlag... flags) {
         meta.addItemFlags(flags);
         return (B) this;
@@ -221,8 +222,8 @@ public abstract class BaseItemBuilder<B extends BaseItemBuilder<B>> implements C
      * @return {@link ItemBuilder}
      * @since 3.0.0
      */
-    @Contract(" -> this")
     @NotNull
+    @Contract(" -> this")
     public B unbreakable() {
         return unbreakable(true);
     }
@@ -233,8 +234,8 @@ public abstract class BaseItemBuilder<B extends BaseItemBuilder<B>> implements C
      * @param unbreakable If should or not be unbreakable
      * @return {@link ItemBuilder}
      */
-    @Contract("_ -> this")
     @NotNull
+    @Contract("_ -> this")
     public B unbreakable(boolean unbreakable) {
         if (VersionHelper.IS_UNBREAKABLE_LEGACY) {
             return setNbt("Unbreakable", true);
@@ -250,8 +251,8 @@ public abstract class BaseItemBuilder<B extends BaseItemBuilder<B>> implements C
      * @return {@link ItemBuilder}
      * @since 3.0.0
      */
-    @Contract(" -> this")
     @NotNull
+    @Contract(" -> this")
     public B glow() {
         return glow(true);
     }
@@ -262,8 +263,8 @@ public abstract class BaseItemBuilder<B extends BaseItemBuilder<B>> implements C
      * @param glow Should the item glow
      * @return {@link ItemBuilder}
      */
-    @Contract("_ -> this")
     @NotNull
+    @Contract("_ -> this")
     public B glow(boolean glow) {
         if (glow) {
             meta.addEnchant(Enchantment.LURE, 1, false);
@@ -286,8 +287,8 @@ public abstract class BaseItemBuilder<B extends BaseItemBuilder<B>> implements C
      * @return {@link ItemBuilder}
      * @since 3.0.0
      */
-    @Contract("_ -> this")
     @NotNull
+    @Contract("_ -> this")
     public B pdc(@NotNull final Consumer<PersistentDataContainer> consumer) {
         consumer.accept(meta.getPersistentDataContainer());
         return (B) this;
@@ -301,8 +302,8 @@ public abstract class BaseItemBuilder<B extends BaseItemBuilder<B>> implements C
      * @return {@link ItemBuilder}
      * @since 3.0.0
      */
-    @Contract("_ -> this")
     @NotNull
+    @Contract("_ -> this")
     public B model(final int modelData) {
         if (VersionHelper.IS_CUSTOM_MODEL_DATA) {
             meta.setCustomModelData(modelData);
@@ -317,8 +318,8 @@ public abstract class BaseItemBuilder<B extends BaseItemBuilder<B>> implements C
      * @return {@link ItemBuilder}
      * @since 3.0.3
      */
-    @Override
     @NotNull
+    @Contract("_ -> this")
     public B color(@NotNull final Color color) {
         if (LEATHER_ARMOR.contains(itemStack.getType())) {
             final LeatherArmorMeta lam = (LeatherArmorMeta) getMeta();
@@ -337,8 +338,8 @@ public abstract class BaseItemBuilder<B extends BaseItemBuilder<B>> implements C
      * @param value The NBT value
      * @return {@link ItemBuilder}
      */
-    @Contract("_, _ -> this")
     @NotNull
+    @Contract("_, _ -> this")
     public B setNbt(@NotNull final String key, @Nullable final String value) {
         itemStack.setItemMeta(meta);
         itemStack = ItemNbt.setString(itemStack, key, value);
@@ -353,8 +354,8 @@ public abstract class BaseItemBuilder<B extends BaseItemBuilder<B>> implements C
      * @param value The NBT value
      * @return {@link ItemBuilder}
      */
-    @Contract("_, _ -> this")
     @NotNull
+    @Contract("_, _ -> this")
     public B setNbt(@NotNull final String key, final boolean value) {
         itemStack.setItemMeta(meta);
         itemStack = ItemNbt.setBoolean(itemStack, key, value);
@@ -368,8 +369,8 @@ public abstract class BaseItemBuilder<B extends BaseItemBuilder<B>> implements C
      * @param key The NBT key
      * @return {@link ItemBuilder}
      */
-    @Contract("_ -> this")
     @NotNull
+    @Contract("_ -> this")
     public B removeNbt(@NotNull final String key) {
         itemStack.setItemMeta(meta);
         itemStack = ItemNbt.removeTag(itemStack, key);
@@ -393,8 +394,8 @@ public abstract class BaseItemBuilder<B extends BaseItemBuilder<B>> implements C
      *
      * @return A {@link GuiItem} with no {@link GuiAction}
      */
-    @Contract(" -> new")
     @NotNull
+    @Contract(" -> new")
     public GuiItem asGuiItem() {
         return new GuiItem(build());
     }
@@ -405,8 +406,8 @@ public abstract class BaseItemBuilder<B extends BaseItemBuilder<B>> implements C
      * @param action The {@link GuiAction} to apply to the item
      * @return A {@link GuiItem} with {@link GuiAction}
      */
-    @Contract("_ -> new")
     @NotNull
+    @Contract("_ -> new")
     public GuiItem asGuiItem(@NotNull final GuiAction<InventoryClickEvent> action) {
         return new GuiItem(build(), action);
     }
