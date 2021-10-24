@@ -241,6 +241,7 @@ public class PaginatedGui extends BaseGui {
      * @return The GUI for easier use when declaring, works like a builder
      */
     @Override
+    @NotNull
     public BaseGui updateTitle(@NotNull final String title) {
         setUpdating(true);
 
@@ -262,7 +263,8 @@ public class PaginatedGui extends BaseGui {
      *
      * @return The {@link Map} with all the {@link #currentPage}
      */
-    public Map<Integer, GuiItem> getCurrentPageItems() {
+    @NotNull
+    public Map<@NotNull Integer, @NotNull GuiItem> getCurrentPageItems() {
         return Collections.unmodifiableMap(currentPage);
     }
 
@@ -271,7 +273,8 @@ public class PaginatedGui extends BaseGui {
      *
      * @return The  {@link List} with all the {@link #pageItems}
      */
-    public List<GuiItem> getPageItems() {
+    @NotNull
+    public List<@NotNull GuiItem> getPageItems() {
         return Collections.unmodifiableList(pageItems);
     }
 

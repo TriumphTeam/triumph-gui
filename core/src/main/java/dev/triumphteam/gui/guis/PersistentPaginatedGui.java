@@ -115,7 +115,7 @@ class PersistentPaginatedGui extends PaginatedGui implements Serializable {
      * @return An immutable {@link Map} with the left overs
      */
     @NotNull
-    public Map<Integer, ItemStack> addItem(@NotNull final ItemStack... items) {
+    public Map<@NotNull Integer, @NotNull ItemStack> addItem(@NotNull final ItemStack... items) {
         return addItem(1, items);
     }
 
@@ -127,7 +127,7 @@ class PersistentPaginatedGui extends PaginatedGui implements Serializable {
      * @return An immutable {@link Map} with the left overs
      */
     @NotNull
-    public Map<Integer, ItemStack> addItem(final int page, @NotNull final ItemStack... items) {
+    public Map<@NotNull Integer, @NotNull ItemStack> addItem(final int page, @NotNull final ItemStack... items) {
         int finalPage = page;
         if (page <= 0 || page > pages.size()) finalPage = 1;
 

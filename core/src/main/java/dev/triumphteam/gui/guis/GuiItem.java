@@ -56,7 +56,7 @@ public class GuiItem {
      * @param itemStack The {@link ItemStack} to be used
      * @param action    The {@link GuiAction} to run when clicking on the Item
      */
-    public GuiItem(@NotNull final ItemStack itemStack, final GuiAction<InventoryClickEvent> action) {
+    public GuiItem(@NotNull final ItemStack itemStack, @Nullable final GuiAction<@NotNull InventoryClickEvent> action) {
         Validate.notNull(itemStack, "The ItemStack for the GUI Item cannot be null!");
 
         this.action = action;
@@ -89,7 +89,7 @@ public class GuiItem {
      * @param material The {@code Material} to be used when invoking class
      * @param action   The {@link GuiAction} should be passed on {@link InventoryClickEvent}
      */
-    public GuiItem(@NotNull final Material material, @Nullable final GuiAction<InventoryClickEvent> action) {
+    public GuiItem(@NotNull final Material material, @Nullable final GuiAction<@NotNull InventoryClickEvent> action) {
         this(new ItemStack(material), action);
     }
 
@@ -108,7 +108,7 @@ public class GuiItem {
      *
      * @param action The new {@link GuiAction} to set
      */
-    public void setAction(final GuiAction<InventoryClickEvent> action) {
+    public void setAction(@Nullable final GuiAction<@NotNull InventoryClickEvent> action) {
         this.action = action;
     }
 
@@ -117,6 +117,7 @@ public class GuiItem {
      *
      * @return The {@link ItemStack}
      */
+    @NotNull
     public ItemStack getItemStack() {
         return itemStack;
     }
@@ -124,6 +125,7 @@ public class GuiItem {
     /**
      * Gets the random {@link UUID} that was generated when the GuiItem was made
      */
+    @NotNull
     UUID getUuid() {
         return uuid;
     }

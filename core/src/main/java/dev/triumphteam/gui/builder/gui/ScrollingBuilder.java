@@ -57,6 +57,7 @@ public final class ScrollingBuilder extends BaseGuiBuilder<ScrollingGui, Scrolli
      * @return The current builder
      */
     @Contract("_ -> this")
+    @NotNull
     public ScrollingBuilder scrollType(@NotNull final ScrollType scrollType) {
         this.scrollType = scrollType;
         return this;
@@ -69,6 +70,7 @@ public final class ScrollingBuilder extends BaseGuiBuilder<ScrollingGui, Scrolli
      * @return The current builder
      */
     @Contract("_ -> this")
+    @NotNull
     public ScrollingBuilder pageSize(final int pageSize) {
         this.pageSize = pageSize;
         return this;
@@ -80,6 +82,7 @@ public final class ScrollingBuilder extends BaseGuiBuilder<ScrollingGui, Scrolli
      * @return A new {@link ScrollingGui}
      */
     @Contract(" -> new")
+    @NotNull
     @Override
     public ScrollingGui create() {
         final ScrollingGui gui = new ScrollingGui(getRows(), pageSize, Legacy.SERIALIZER.serialize(getTitle()), scrollType, getModifiers());

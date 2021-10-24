@@ -67,7 +67,7 @@ public final class SimpleBuilder extends BaseGuiBuilder<Gui, SimpleBuilder> {
      */
     @Contract(" -> new")
     @Override
-    public Gui create() {
+    public @NotNull Gui create() {
         final Gui gui;
         final String title = Legacy.SERIALIZER.serialize(getTitle());
         if (guiType == null || guiType == GuiType.CHEST) {

@@ -29,6 +29,7 @@ import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.FireworkEffectMeta;
 import org.bukkit.inventory.meta.FireworkMeta;
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
@@ -61,6 +62,8 @@ public class FireworkBuilder extends BaseItemBuilder<FireworkBuilder> {
      * @throws IllegalArgumentException If any effect is null (may be thrown after changes have occurred)
      * @since 3.0.1
      */
+    @Contract("_ -> this")
+    @NotNull
     public FireworkBuilder effect(@NotNull final FireworkEffect... effects) {
         return effect(Arrays.asList(effects));
     }
@@ -74,6 +77,8 @@ public class FireworkBuilder extends BaseItemBuilder<FireworkBuilder> {
      * @throws IllegalArgumentException If any effect is null (may be thrown after changes have occurred)
      * @since 3.0.1
      */
+    @Contract("_ -> this")
+    @NotNull
     public FireworkBuilder effect(@NotNull final List<FireworkEffect> effects) {
         if (effects.isEmpty()) {
             return this;
@@ -103,6 +108,8 @@ public class FireworkBuilder extends BaseItemBuilder<FireworkBuilder> {
      * @throws IllegalArgumentException if {@literal height<0 or height>128}
      * @since 3.0.1
      */
+    @Contract("_ -> this")
+    @NotNull
     public FireworkBuilder power(final int power) {
         if (getItemStack().getType() == ROCKET) {
             final FireworkMeta fireworkMeta = (FireworkMeta) getMeta();

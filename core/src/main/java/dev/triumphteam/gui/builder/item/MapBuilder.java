@@ -29,6 +29,7 @@ import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.MapMeta;
 import org.bukkit.map.MapView;
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -63,6 +64,8 @@ public class MapBuilder extends BaseItemBuilder<MapBuilder> implements Colorable
      * @return {@link MapBuilder}
      * @since 3.0.1
      */
+    @Contract("_ -> this")
+    @NotNull
     @Override
     public MapBuilder color(@Nullable final Color color) {
         final MapMeta mapMeta = (MapMeta) getMeta();
@@ -80,6 +83,8 @@ public class MapBuilder extends BaseItemBuilder<MapBuilder> implements Colorable
      * @return {@link MapMeta}
      * @since 3.0.1
      */
+    @Contract("_ -> this")
+    @NotNull
     public MapBuilder locationName(@Nullable final String name) {
         final MapMeta mapMeta = (MapMeta) getMeta();
 
@@ -95,6 +100,8 @@ public class MapBuilder extends BaseItemBuilder<MapBuilder> implements Colorable
      * @return {@link MapMeta}
      * @since 3.0.1
      */
+    @Contract("_ -> this")
+    @NotNull
     public MapBuilder scaling(final boolean scaling) {
         final MapMeta mapMeta = (MapMeta) getMeta();
 
@@ -115,6 +122,8 @@ public class MapBuilder extends BaseItemBuilder<MapBuilder> implements Colorable
      * @return {@link MapBuilder}
      * @since 3.0.1
      */
+    @Contract("_ -> this")
+    @NotNull
     public MapBuilder view(@NotNull final MapView view) {
         final MapMeta mapMeta = (MapMeta) getMeta();
 

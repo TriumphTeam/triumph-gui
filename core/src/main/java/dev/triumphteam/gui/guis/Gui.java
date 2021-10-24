@@ -109,6 +109,7 @@ public class Gui extends BaseGui {
      * @since 3.0.0
      */
     @Contract("_ -> new")
+    @NotNull
     public static SimpleBuilder gui(@NotNull final GuiType type) {
         return new SimpleBuilder(type);
     }
@@ -120,6 +121,7 @@ public class Gui extends BaseGui {
      * @since 3.0.0
      */
     @Contract(" -> new")
+    @NotNull
     public static SimpleBuilder gui() {
         return gui(GuiType.CHEST);
     }
@@ -131,6 +133,7 @@ public class Gui extends BaseGui {
      * @since 3.0.0.
      */
     @Contract(" -> new")
+    @NotNull
     public static StorageBuilder storage() {
         return new StorageBuilder();
     }
@@ -142,6 +145,7 @@ public class Gui extends BaseGui {
      * @since 3.0.0
      */
     @Contract(" -> new")
+    @NotNull
     public static PaginatedBuilder paginated() {
         return new PaginatedBuilder();
     }
@@ -154,6 +158,7 @@ public class Gui extends BaseGui {
      * @since 3.0.0
      */
     @Contract("_ -> new")
+    @NotNull
     public static ScrollingBuilder scrolling(@NotNull final ScrollType scrollType) {
         return new ScrollingBuilder(scrollType);
     }
@@ -165,6 +170,7 @@ public class Gui extends BaseGui {
      * @since 3.0.0
      */
     @Contract(" -> new")
+    @NotNull
     public static ScrollingBuilder scrolling() {
         return scrolling(ScrollType.VERTICAL);
     }

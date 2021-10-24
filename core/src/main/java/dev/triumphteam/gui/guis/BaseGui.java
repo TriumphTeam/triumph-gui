@@ -463,6 +463,8 @@ public abstract class BaseGui implements InventoryHolder {
      * @param title The title to set.
      * @return The GUI for easier use when declaring, works like a builder.
      */
+    @Contract("_ -> this")
+    @NotNull
     public BaseGui updateTitle(@NotNull final String title) {
         updating = true;
 
@@ -534,6 +536,7 @@ public abstract class BaseGui implements InventoryHolder {
      * @since 3.0.0.
      */
     @Contract(" -> this")
+    @NotNull
     public BaseGui disableItemPlace() {
         interactionModifiers.add(InteractionModifier.PREVENT_ITEM_PLACE);
         return this;
@@ -547,6 +550,7 @@ public abstract class BaseGui implements InventoryHolder {
      * @since 3.0.0.
      */
     @Contract(" -> this")
+    @NotNull
     public BaseGui disableItemTake() {
         interactionModifiers.add(InteractionModifier.PREVENT_ITEM_TAKE);
         return this;
@@ -560,6 +564,7 @@ public abstract class BaseGui implements InventoryHolder {
      * @since 3.0.0.
      */
     @Contract(" -> this")
+    @NotNull
     public BaseGui disableItemSwap() {
         interactionModifiers.add(InteractionModifier.PREVENT_ITEM_SWAP);
         return this;
@@ -572,6 +577,7 @@ public abstract class BaseGui implements InventoryHolder {
      * @since 3.0.3.
      */
     @Contract(" -> this")
+    @NotNull
     public BaseGui disableItemDrop() {
         interactionModifiers.add(InteractionModifier.PREVENT_ITEM_DROP);
         return this;
@@ -585,6 +591,7 @@ public abstract class BaseGui implements InventoryHolder {
      * @since 3.0.4
      */
     @Contract(" -> this")
+    @NotNull
     public BaseGui disableOtherActions() {
         interactionModifiers.add(InteractionModifier.PREVENT_OTHER_ACTIONS);
         return this;
@@ -598,6 +605,7 @@ public abstract class BaseGui implements InventoryHolder {
      * @since 3.0.0.
      */
     @Contract(" -> this")
+    @NotNull
     public BaseGui disableAllInteractions() {
         interactionModifiers.addAll(InteractionModifier.VALUES);
         return this;
@@ -611,6 +619,7 @@ public abstract class BaseGui implements InventoryHolder {
      * @since 3.0.0.
      */
     @Contract(" -> this")
+    @NotNull
     public BaseGui enableItemPlace() {
         interactionModifiers.remove(InteractionModifier.PREVENT_ITEM_PLACE);
         return this;
@@ -624,6 +633,7 @@ public abstract class BaseGui implements InventoryHolder {
      * @since 3.0.0.
      */
     @Contract(" -> this")
+    @NotNull
     public BaseGui enableItemTake() {
         interactionModifiers.remove(InteractionModifier.PREVENT_ITEM_TAKE);
         return this;
@@ -637,6 +647,7 @@ public abstract class BaseGui implements InventoryHolder {
      * @since 3.0.0.
      */
     @Contract(" -> this")
+    @NotNull
     public BaseGui enableItemSwap() {
         interactionModifiers.remove(InteractionModifier.PREVENT_ITEM_SWAP);
         return this;
@@ -649,6 +660,7 @@ public abstract class BaseGui implements InventoryHolder {
      * @since 3.0.3
      */
     @Contract(" -> this")
+    @NotNull
     public BaseGui enableItemDrop() {
         interactionModifiers.remove(InteractionModifier.PREVENT_ITEM_DROP);
         return this;
@@ -662,6 +674,7 @@ public abstract class BaseGui implements InventoryHolder {
      * @since 3.0.4
      */
     @Contract(" -> this")
+    @NotNull
     public BaseGui enableOtherActions() {
         interactionModifiers.remove(InteractionModifier.PREVENT_OTHER_ACTIONS);
         return this;
@@ -675,6 +688,7 @@ public abstract class BaseGui implements InventoryHolder {
      * @since 3.0.0.
      */
     @Contract(" -> this")
+    @NotNull
     public BaseGui enableAllInteractions() {
         interactionModifiers.clear();
         return this;
@@ -748,7 +762,8 @@ public abstract class BaseGui implements InventoryHolder {
      *
      * @return The {@link Map} with all the {@link #guiItems}.
      */
-    public Map<Integer, GuiItem> getGuiItems() {
+    @NotNull
+    public Map<@NotNull Integer, @NotNull GuiItem> getGuiItems() {
         return guiItems;
     }
 
@@ -777,6 +792,7 @@ public abstract class BaseGui implements InventoryHolder {
      *
      * @return The {@link GuiType}.
      */
+    @NotNull
     public GuiType guiType() {
         return guiType;
     }

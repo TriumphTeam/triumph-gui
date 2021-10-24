@@ -58,6 +58,7 @@ public abstract class BaseGuiBuilder<G extends BaseGui, B extends BaseGuiBuilder
      * @return The builder
      */
     @Contract("_ -> this")
+    @NotNull
     public B rows(final int rows) {
         this.rows = rows;
         return (B) this;
@@ -71,6 +72,7 @@ public abstract class BaseGuiBuilder<G extends BaseGui, B extends BaseGuiBuilder
      * @return The builder
      */
     @Contract("_ -> this")
+    @NotNull
     public B title(@NotNull final Component title) {
         this.title = title;
         return (B) this;
@@ -84,6 +86,7 @@ public abstract class BaseGuiBuilder<G extends BaseGui, B extends BaseGuiBuilder
      * @author SecretX
      */
     @Contract(" -> this")
+    @NotNull
     public B disableItemPlace() {
         interactionModifiers.add(InteractionModifier.PREVENT_ITEM_PLACE);
         return (B) this;
@@ -97,6 +100,7 @@ public abstract class BaseGuiBuilder<G extends BaseGui, B extends BaseGuiBuilder
      * @author SecretX
      */
     @Contract(" -> this")
+    @NotNull
     public B disableItemTake() {
         interactionModifiers.add(InteractionModifier.PREVENT_ITEM_TAKE);
         return (B) this;
@@ -110,6 +114,7 @@ public abstract class BaseGuiBuilder<G extends BaseGui, B extends BaseGuiBuilder
      * @author SecretX
      */
     @Contract(" -> this")
+    @NotNull
     public B disableItemSwap() {
         interactionModifiers.add(InteractionModifier.PREVENT_ITEM_SWAP);
         return (B) this;
@@ -122,6 +127,7 @@ public abstract class BaseGuiBuilder<G extends BaseGui, B extends BaseGuiBuilder
      * @since 3.0.3
      */
     @Contract(" -> this")
+    @NotNull
     public B disableItemDrop() {
         interactionModifiers.add(InteractionModifier.PREVENT_ITEM_DROP);
         return (B) this;
@@ -135,6 +141,7 @@ public abstract class BaseGuiBuilder<G extends BaseGui, B extends BaseGuiBuilder
      * @since 3.0.4
      */
     @Contract(" -> this")
+    @NotNull
     public B disableOtherActions() {
         interactionModifiers.add(InteractionModifier.PREVENT_OTHER_ACTIONS);
         return (B) this;
@@ -148,6 +155,7 @@ public abstract class BaseGuiBuilder<G extends BaseGui, B extends BaseGuiBuilder
      * @author SecretX
      */
     @Contract(" -> this")
+    @NotNull
     public B disableAllInteractions() {
         interactionModifiers.addAll(InteractionModifier.VALUES);
         return (B) this;
@@ -161,6 +169,7 @@ public abstract class BaseGuiBuilder<G extends BaseGui, B extends BaseGuiBuilder
      * @author SecretX
      */
     @Contract(" -> this")
+    @NotNull
     public B enableItemPlace() {
         interactionModifiers.remove(InteractionModifier.PREVENT_ITEM_PLACE);
         return (B) this;
@@ -174,6 +183,7 @@ public abstract class BaseGuiBuilder<G extends BaseGui, B extends BaseGuiBuilder
      * @author SecretX
      */
     @Contract(" -> this")
+    @NotNull
     public B enableItemTake() {
         interactionModifiers.remove(InteractionModifier.PREVENT_ITEM_TAKE);
         return (B) this;
@@ -187,6 +197,7 @@ public abstract class BaseGuiBuilder<G extends BaseGui, B extends BaseGuiBuilder
      * @author SecretX
      */
     @Contract(" -> this")
+    @NotNull
     public B enableItemSwap() {
         interactionModifiers.remove(InteractionModifier.PREVENT_ITEM_SWAP);
         return (B) this;
@@ -199,6 +210,7 @@ public abstract class BaseGuiBuilder<G extends BaseGui, B extends BaseGuiBuilder
      * @since 3.0.3
      */
     @Contract(" -> this")
+    @NotNull
     public B enableItemDrop() {
         interactionModifiers.remove(InteractionModifier.PREVENT_ITEM_DROP);
         return (B) this;
@@ -212,6 +224,7 @@ public abstract class BaseGuiBuilder<G extends BaseGui, B extends BaseGuiBuilder
      * @since 3.0.4
      */
     @Contract(" -> this")
+    @NotNull
     public B enableOtherActions() {
         interactionModifiers.remove(InteractionModifier.PREVENT_OTHER_ACTIONS);
         return (B) this;
@@ -225,6 +238,7 @@ public abstract class BaseGuiBuilder<G extends BaseGui, B extends BaseGuiBuilder
      * @author SecretX
      */
     @Contract(" -> this")
+    @NotNull
     public B enableAllInteractions() {
         interactionModifiers.clear();
         return (B) this;
@@ -238,6 +252,7 @@ public abstract class BaseGuiBuilder<G extends BaseGui, B extends BaseGuiBuilder
      * @return The builder
      */
     @Contract("_ -> this")
+    @NotNull
     public B apply(@NotNull final Consumer<G> consumer) {
         this.consumer = consumer;
         return (B) this;
@@ -250,6 +265,7 @@ public abstract class BaseGuiBuilder<G extends BaseGui, B extends BaseGuiBuilder
      * @return The new {@link BaseGui}
      */
     @Contract(" -> new")
+    @NotNull
     public abstract G create();
 
     /**
@@ -292,6 +308,7 @@ public abstract class BaseGuiBuilder<G extends BaseGui, B extends BaseGuiBuilder
      * @since 3.0.0
      * @author SecretX
      */
+    @NotNull
     protected Set<InteractionModifier> getModifiers() {
         return interactionModifiers;
     }
