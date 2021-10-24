@@ -59,7 +59,7 @@ import java.util.stream.Collectors;
 @SuppressWarnings("unchecked")
 public abstract class BaseItemBuilder<B extends BaseItemBuilder<B>> implements ColorableBuilder<B> {
 
-    private static final EnumSet<Material> LETHER_ARMOR = EnumSet.of(
+    private static final EnumSet<Material> LEATHER_ARMOR = EnumSet.of(
             Material.LEATHER_HELMET, Material.LEATHER_CHESTPLATE, Material.LEATHER_LEGGINGS, Material.LEATHER_BOOTS
     );
 
@@ -319,8 +319,8 @@ public abstract class BaseItemBuilder<B extends BaseItemBuilder<B>> implements C
      */
     @Override
     @NotNull
-    public B color(@NotNull Color color) {
-        if (LETHER_ARMOR.contains(itemStack.getType())) {
+    public B color(@NotNull final Color color) {
+        if (LEATHER_ARMOR.contains(itemStack.getType())) {
             final LeatherArmorMeta lam = (LeatherArmorMeta) getMeta();
 
             lam.setColor(color);
