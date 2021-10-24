@@ -26,6 +26,7 @@ package dev.triumphteam.gui.builder.gui;
 import dev.triumphteam.gui.components.util.Legacy;
 import dev.triumphteam.gui.guis.PaginatedGui;
 import org.jetbrains.annotations.Contract;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.function.Consumer;
 
@@ -42,6 +43,7 @@ public class PaginatedBuilder extends BaseGuiBuilder<PaginatedGui, PaginatedBuil
      * @param pageSize The amount of free slots that page items should occupy
      * @return The current builder
      */
+    @NotNull
     @Contract("_ -> this")
     public PaginatedBuilder pageSize(final int pageSize) {
         this.pageSize = pageSize;
@@ -53,8 +55,9 @@ public class PaginatedBuilder extends BaseGuiBuilder<PaginatedGui, PaginatedBuil
      *
      * @return A new {@link PaginatedGui}
      */
-    @Contract(" -> new")
+    @NotNull
     @Override
+    @Contract(" -> new")
     public PaginatedGui create() {
         final PaginatedGui gui = new PaginatedGui(getRows(), pageSize, Legacy.SERIALIZER.serialize(getTitle()), getModifiers());
 

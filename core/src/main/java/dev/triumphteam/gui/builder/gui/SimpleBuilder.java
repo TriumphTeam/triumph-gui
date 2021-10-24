@@ -54,6 +54,7 @@ public final class SimpleBuilder extends BaseGuiBuilder<Gui, SimpleBuilder> {
      * @param guiType The {@link GuiType}
      * @return The current builder
      */
+    @NotNull
     @Contract("_ -> this")
     public SimpleBuilder type(@NotNull final GuiType guiType) {
         this.guiType = guiType;
@@ -65,8 +66,9 @@ public final class SimpleBuilder extends BaseGuiBuilder<Gui, SimpleBuilder> {
      *
      * @return A new {@link Gui}
      */
-    @Contract(" -> new")
+    @NotNull
     @Override
+    @Contract(" -> new")
     public Gui create() {
         final Gui gui;
         final String title = Legacy.SERIALIZER.serialize(getTitle());

@@ -78,7 +78,8 @@ public class StorageGui extends BaseGui {
      * @param items Varargs with {@link ItemStack}s
      * @return An immutable {@link Map} with the left overs
      */
-    public Map<Integer, ItemStack> addItem(@NotNull final ItemStack... items) {
+    @NotNull
+    public Map<@NotNull Integer, @NotNull ItemStack> addItem(@NotNull final ItemStack... items) {
         return Collections.unmodifiableMap(getInventory().addItem(items));
     }
 
@@ -88,7 +89,7 @@ public class StorageGui extends BaseGui {
      * @param items Varargs with {@link ItemStack}s
      * @return An immutable {@link Map} with the left overs
      */
-    public Map<Integer, ItemStack> addItem(@NotNull final List<ItemStack> items) {
+    public Map<@NotNull Integer, @NotNull ItemStack> addItem(@NotNull final List<ItemStack> items) {
         return addItem(items.toArray(new ItemStack[0]));
     }
 

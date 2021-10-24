@@ -29,6 +29,7 @@ import net.kyori.adventure.text.Component;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.BookMeta;
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -60,6 +61,8 @@ public class BookBuilder extends BaseItemBuilder<BookBuilder> {
      * @return {@link BookBuilder}
      * @since 3.0.1
      */
+    @NotNull
+    @Contract("_ -> this")
     public BookBuilder author(@Nullable final Component author) {
         final BookMeta bookMeta = (BookMeta) getMeta();
 
@@ -81,6 +84,8 @@ public class BookBuilder extends BaseItemBuilder<BookBuilder> {
      * @return {@link BookBuilder}
      * @since 3.0.1
      */
+    @NotNull
+    @Contract("_ -> this")
     public BookBuilder generation(@Nullable final BookMeta.Generation generation) {
         final BookMeta bookMeta = (BookMeta) getMeta();
 
@@ -97,6 +102,8 @@ public class BookBuilder extends BaseItemBuilder<BookBuilder> {
      * @return {@link BookBuilder}
      * @since 3.0.1
      */
+    @NotNull
+    @Contract("_ -> this")
     public BookBuilder page(@NotNull final Component... pages) {
         return page(Arrays.asList(pages));
     }
@@ -109,6 +116,8 @@ public class BookBuilder extends BaseItemBuilder<BookBuilder> {
      * @return {@link BookBuilder}
      * @since 3.0.1
      */
+    @NotNull
+    @Contract("_ -> this")
     public BookBuilder page(@NotNull final List<Component> pages) {
         final BookMeta bookMeta = (BookMeta) getMeta();
 
@@ -134,6 +143,8 @@ public class BookBuilder extends BaseItemBuilder<BookBuilder> {
      * @return {@link BookBuilder}
      * @since 3.0.1
      */
+    @NotNull
+    @Contract("_, _ -> this")
     public BookBuilder page(final int page, @NotNull final Component data) {
         final BookMeta bookMeta = (BookMeta) getMeta();
 
@@ -151,6 +162,8 @@ public class BookBuilder extends BaseItemBuilder<BookBuilder> {
      * @return {@link BookBuilder}
      * @since 3.0.1
      */
+    @NotNull
+    @Contract("_ -> this")
     public BookBuilder title(@Nullable Component title) {
         final BookMeta bookMeta = (BookMeta) getMeta();
 

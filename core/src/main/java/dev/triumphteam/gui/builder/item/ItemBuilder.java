@@ -34,6 +34,7 @@ import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.SkullMeta;
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
 import java.lang.reflect.Field;
@@ -63,6 +64,8 @@ public class ItemBuilder extends BaseItemBuilder<ItemBuilder> {
      * @param itemStack The {@link ItemStack} you want to edit
      * @return A new {@link ItemBuilder}
      */
+    @NotNull
+    @Contract("_ -> new")
     public static ItemBuilder from(@NotNull final ItemStack itemStack) {
         return new ItemBuilder(itemStack);
     }
@@ -74,6 +77,8 @@ public class ItemBuilder extends BaseItemBuilder<ItemBuilder> {
      * @param material The {@link Material} you want to create an item from
      * @return A new {@link ItemBuilder}
      */
+    @NotNull
+    @Contract("_ -> new")
     public static ItemBuilder from(@NotNull final Material material) {
         return new ItemBuilder(new ItemStack(material));
     }
@@ -84,6 +89,8 @@ public class ItemBuilder extends BaseItemBuilder<ItemBuilder> {
      * @return A new {@link BannerBuilder}
      * @since 3.0.1
      */
+    @NotNull
+    @Contract("_ -> new")
     public static BannerBuilder banner() {
         return new BannerBuilder();
     }
@@ -96,6 +103,8 @@ public class ItemBuilder extends BaseItemBuilder<ItemBuilder> {
      * @throws dev.triumphteam.gui.components.exception.GuiException if the item is not a BANNER
      * @since 3.0.1
      */
+    @NotNull
+    @Contract("_ -> new")
     public static BannerBuilder banner(@NotNull final ItemStack itemStack) {
         return new BannerBuilder(itemStack);
     }
@@ -110,6 +119,8 @@ public class ItemBuilder extends BaseItemBuilder<ItemBuilder> {
      *                                                               or {@link Material#WRITTEN_BOOK}
      * @since 3.0.1
      */
+    @NotNull
+    @Contract("_ -> new")
     public static BookBuilder book(@NotNull final ItemStack itemStack) {
         return new BookBuilder(itemStack);
     }
@@ -120,6 +131,8 @@ public class ItemBuilder extends BaseItemBuilder<ItemBuilder> {
      * @return A new {@link FireworkBuilder}
      * @since 3.0.1
      */
+    @NotNull
+    @Contract("_ -> new")
     public static FireworkBuilder firework() {
         return new FireworkBuilder(new ItemStack(Material.FIREWORK_ROCKET));
     }
@@ -132,6 +145,8 @@ public class ItemBuilder extends BaseItemBuilder<ItemBuilder> {
      * @throws dev.triumphteam.gui.components.exception.GuiException if the item type is not {@link Material#FIREWORK_ROCKET}
      * @since 3.0.1
      */
+    @NotNull
+    @Contract("_ -> new")
     public static FireworkBuilder firework(@NotNull final ItemStack itemStack) {
         return new FireworkBuilder(itemStack);
     }
@@ -142,6 +157,8 @@ public class ItemBuilder extends BaseItemBuilder<ItemBuilder> {
      * @return A new {@link MapBuilder}
      * @since 3.0.1
      */
+    @NotNull
+    @Contract("_ -> new")
     public static MapBuilder map() {
         return new MapBuilder();
     }
@@ -154,6 +171,8 @@ public class ItemBuilder extends BaseItemBuilder<ItemBuilder> {
      * @throws dev.triumphteam.gui.components.exception.GuiException if the item type is not {@link Material#MAP}
      * @since 3.0.1
      */
+    @NotNull
+    @Contract("_ -> new")
     public static MapBuilder map(@NotNull final ItemStack itemStack) {
         return new MapBuilder(itemStack);
     }
@@ -163,6 +182,8 @@ public class ItemBuilder extends BaseItemBuilder<ItemBuilder> {
      *
      * @return A new {@link SkullBuilder}
      */
+    @NotNull
+    @Contract("_ -> new")
     public static SkullBuilder skull() {
         return new SkullBuilder();
     }
@@ -174,6 +195,8 @@ public class ItemBuilder extends BaseItemBuilder<ItemBuilder> {
      * @return A new {@link SkullBuilder}
      * @throws dev.triumphteam.gui.components.exception.GuiException if the item is not a player head
      */
+    @NotNull
+    @Contract("_ -> new")
     public static SkullBuilder skull(@NotNull final ItemStack itemStack) {
         return new SkullBuilder(itemStack);
     }
@@ -184,6 +207,8 @@ public class ItemBuilder extends BaseItemBuilder<ItemBuilder> {
      * @return A new {@link FireworkBuilder}
      * @since 3.0.1
      */
+    @NotNull
+    @Contract("_ -> new")
     public static FireworkBuilder star() {
         return new FireworkBuilder(new ItemStack(Material.FIREWORK_STAR));
     }
@@ -196,6 +221,8 @@ public class ItemBuilder extends BaseItemBuilder<ItemBuilder> {
      * @throws dev.triumphteam.gui.components.exception.GuiException if the item type is not {@link Material#FIREWORK_STAR}
      * @since 3.0.1
      */
+    @NotNull
+    @Contract("_ -> new")
     public static FireworkBuilder star(@NotNull final ItemStack itemStack) {
         return new FireworkBuilder(itemStack);
     }

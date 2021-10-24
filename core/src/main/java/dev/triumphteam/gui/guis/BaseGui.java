@@ -298,7 +298,7 @@ public abstract class BaseGui implements InventoryHolder {
      *
      * @param defaultClickAction {@link GuiAction} to resolve when any item is clicked.
      */
-    public void setDefaultClickAction(@Nullable final GuiAction<InventoryClickEvent> defaultClickAction) {
+    public void setDefaultClickAction(@Nullable final GuiAction<@NotNull InventoryClickEvent> defaultClickAction) {
         this.defaultClickAction = defaultClickAction;
     }
 
@@ -309,11 +309,11 @@ public abstract class BaseGui implements InventoryHolder {
      *
      * @param defaultTopClickAction {@link GuiAction} to resolve when clicking on the top inventory.
      */
-    public void setDefaultTopClickAction(@Nullable final GuiAction<InventoryClickEvent> defaultTopClickAction) {
+    public void setDefaultTopClickAction(@Nullable final GuiAction<@NotNull InventoryClickEvent> defaultTopClickAction) {
         this.defaultTopClickAction = defaultTopClickAction;
     }
 
-    public void setPlayerInventoryAction(@Nullable final GuiAction<InventoryClickEvent> playerInventoryAction) {
+    public void setPlayerInventoryAction(@Nullable final GuiAction<@NotNull InventoryClickEvent> playerInventoryAction) {
         this.playerInventoryAction = playerInventoryAction;
     }
 
@@ -323,7 +323,7 @@ public abstract class BaseGui implements InventoryHolder {
      *
      * @param outsideClickAction {@link GuiAction} to resolve when clicking outside of the inventory.
      */
-    public void setOutsideClickAction(@Nullable final GuiAction<InventoryClickEvent> outsideClickAction) {
+    public void setOutsideClickAction(@Nullable final GuiAction<@NotNull InventoryClickEvent> outsideClickAction) {
         this.outsideClickAction = outsideClickAction;
     }
 
@@ -333,7 +333,7 @@ public abstract class BaseGui implements InventoryHolder {
      *
      * @param dragAction {@link GuiAction} to resolve.
      */
-    public void setDragAction(@Nullable final GuiAction<InventoryDragEvent> dragAction) {
+    public void setDragAction(@Nullable final GuiAction<@NotNull InventoryDragEvent> dragAction) {
         this.dragAction = dragAction;
     }
 
@@ -343,7 +343,7 @@ public abstract class BaseGui implements InventoryHolder {
      *
      * @param closeGuiAction {@link GuiAction} to resolve when the inventory is closed.
      */
-    public void setCloseGuiAction(@Nullable final GuiAction<InventoryCloseEvent> closeGuiAction) {
+    public void setCloseGuiAction(@Nullable final GuiAction<@NotNull InventoryCloseEvent> closeGuiAction) {
         this.closeGuiAction = closeGuiAction;
     }
 
@@ -353,7 +353,7 @@ public abstract class BaseGui implements InventoryHolder {
      *
      * @param openGuiAction {@link GuiAction} to resolve when opening the inventory.
      */
-    public void setOpenGuiAction(@Nullable final GuiAction<InventoryOpenEvent> openGuiAction) {
+    public void setOpenGuiAction(@Nullable final GuiAction<@NotNull InventoryOpenEvent> openGuiAction) {
         this.openGuiAction = openGuiAction;
     }
 
@@ -364,7 +364,7 @@ public abstract class BaseGui implements InventoryHolder {
      * @param slot       The slot that will trigger the {@link GuiAction}.
      * @param slotAction {@link GuiAction} to resolve when clicking on specific slots.
      */
-    public void addSlotAction(final int slot, @Nullable final GuiAction<InventoryClickEvent> slotAction) {
+    public void addSlotAction(final int slot, @Nullable final GuiAction<@NotNull InventoryClickEvent> slotAction) {
         validateSlot(slot);
         slotActions.put(slot, slotAction);
     }
@@ -377,7 +377,7 @@ public abstract class BaseGui implements InventoryHolder {
      * @param col        The column of the slot.
      * @param slotAction {@link GuiAction} to resolve when clicking on the slot.
      */
-    public void addSlotAction(final int row, final int col, @Nullable final GuiAction<InventoryClickEvent> slotAction) {
+    public void addSlotAction(final int row, final int col, @Nullable final GuiAction<@NotNull InventoryClickEvent> slotAction) {
         addSlotAction(getSlotFromRowCol(row, col), slotAction);
     }
 
@@ -463,6 +463,8 @@ public abstract class BaseGui implements InventoryHolder {
      * @param title The title to set.
      * @return The GUI for easier use when declaring, works like a builder.
      */
+    @Contract("_ -> this")
+    @NotNull
     public BaseGui updateTitle(@NotNull final String title) {
         updating = true;
 
@@ -533,6 +535,7 @@ public abstract class BaseGui implements InventoryHolder {
      * @author SecretX.
      * @since 3.0.0.
      */
+    @NotNull
     @Contract(" -> this")
     public BaseGui disableItemPlace() {
         interactionModifiers.add(InteractionModifier.PREVENT_ITEM_PLACE);
@@ -546,6 +549,7 @@ public abstract class BaseGui implements InventoryHolder {
      * @author SecretX.
      * @since 3.0.0.
      */
+    @NotNull
     @Contract(" -> this")
     public BaseGui disableItemTake() {
         interactionModifiers.add(InteractionModifier.PREVENT_ITEM_TAKE);
@@ -559,6 +563,7 @@ public abstract class BaseGui implements InventoryHolder {
      * @author SecretX.
      * @since 3.0.0.
      */
+    @NotNull
     @Contract(" -> this")
     public BaseGui disableItemSwap() {
         interactionModifiers.add(InteractionModifier.PREVENT_ITEM_SWAP);
@@ -571,6 +576,7 @@ public abstract class BaseGui implements InventoryHolder {
      * @return The BaseGui
      * @since 3.0.3.
      */
+    @NotNull
     @Contract(" -> this")
     public BaseGui disableItemDrop() {
         interactionModifiers.add(InteractionModifier.PREVENT_ITEM_DROP);
@@ -584,6 +590,7 @@ public abstract class BaseGui implements InventoryHolder {
      * @return The BaseGui
      * @since 3.0.4
      */
+    @NotNull
     @Contract(" -> this")
     public BaseGui disableOtherActions() {
         interactionModifiers.add(InteractionModifier.PREVENT_OTHER_ACTIONS);
@@ -597,6 +604,7 @@ public abstract class BaseGui implements InventoryHolder {
      * @author SecretX.
      * @since 3.0.0.
      */
+    @NotNull
     @Contract(" -> this")
     public BaseGui disableAllInteractions() {
         interactionModifiers.addAll(InteractionModifier.VALUES);
@@ -610,6 +618,7 @@ public abstract class BaseGui implements InventoryHolder {
      * @author SecretX.
      * @since 3.0.0.
      */
+    @NotNull
     @Contract(" -> this")
     public BaseGui enableItemPlace() {
         interactionModifiers.remove(InteractionModifier.PREVENT_ITEM_PLACE);
@@ -623,6 +632,7 @@ public abstract class BaseGui implements InventoryHolder {
      * @author SecretX.
      * @since 3.0.0.
      */
+    @NotNull
     @Contract(" -> this")
     public BaseGui enableItemTake() {
         interactionModifiers.remove(InteractionModifier.PREVENT_ITEM_TAKE);
@@ -636,6 +646,7 @@ public abstract class BaseGui implements InventoryHolder {
      * @author SecretX.
      * @since 3.0.0.
      */
+    @NotNull
     @Contract(" -> this")
     public BaseGui enableItemSwap() {
         interactionModifiers.remove(InteractionModifier.PREVENT_ITEM_SWAP);
@@ -648,6 +659,7 @@ public abstract class BaseGui implements InventoryHolder {
      * @return The BaseGui
      * @since 3.0.3
      */
+    @NotNull
     @Contract(" -> this")
     public BaseGui enableItemDrop() {
         interactionModifiers.remove(InteractionModifier.PREVENT_ITEM_DROP);
@@ -661,6 +673,7 @@ public abstract class BaseGui implements InventoryHolder {
      * @return The BaseGui
      * @since 3.0.4
      */
+    @NotNull
     @Contract(" -> this")
     public BaseGui enableOtherActions() {
         interactionModifiers.remove(InteractionModifier.PREVENT_OTHER_ACTIONS);
@@ -674,6 +687,7 @@ public abstract class BaseGui implements InventoryHolder {
      * @author SecretX.
      * @since 3.0.0.
      */
+    @NotNull
     @Contract(" -> this")
     public BaseGui enableAllInteractions() {
         interactionModifiers.clear();
@@ -748,7 +762,8 @@ public abstract class BaseGui implements InventoryHolder {
      *
      * @return The {@link Map} with all the {@link #guiItems}.
      */
-    public Map<Integer, GuiItem> getGuiItems() {
+    @NotNull
+    public Map<@NotNull Integer, @NotNull GuiItem> getGuiItems() {
         return guiItems;
     }
 
@@ -777,6 +792,7 @@ public abstract class BaseGui implements InventoryHolder {
      *
      * @return The {@link GuiType}.
      */
+    @NotNull
     public GuiType guiType() {
         return guiType;
     }

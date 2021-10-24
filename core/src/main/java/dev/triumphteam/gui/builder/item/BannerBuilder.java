@@ -32,6 +32,7 @@ import org.bukkit.block.banner.Pattern;
 import org.bukkit.block.banner.PatternType;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.BannerMeta;
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
@@ -78,6 +79,8 @@ public final class BannerBuilder extends BaseItemBuilder<BannerBuilder> {
      * @return {@link BannerBuilder}
      * @since 3.0.1
      */
+    @NotNull
+    @Contract("_ -> this")
     public BannerBuilder baseColor(@NotNull final DyeColor color) {
         final BannerMeta bannerMeta = (BannerMeta) getMeta();
 
@@ -94,6 +97,8 @@ public final class BannerBuilder extends BaseItemBuilder<BannerBuilder> {
      * @return {@link BannerBuilder}
      * @since 3.0.1
      */
+    @NotNull
+    @Contract("_, _ -> this")
     public BannerBuilder pattern(@NotNull final DyeColor color, @NotNull final PatternType pattern) {
         final BannerMeta bannerMeta = (BannerMeta) getMeta();
 
@@ -109,6 +114,8 @@ public final class BannerBuilder extends BaseItemBuilder<BannerBuilder> {
      * @return {@link BannerBuilder}
      * @since 3.0.1
      */
+    @NotNull
+    @Contract("_ -> this")
     public BannerBuilder pattern(@NotNull final Pattern... pattern) {
         return pattern(Arrays.asList(pattern));
     }
@@ -120,6 +127,8 @@ public final class BannerBuilder extends BaseItemBuilder<BannerBuilder> {
      * @return {@link BannerBuilder}
      * @since 3.0.1
      */
+    @NotNull
+    @Contract("_ -> this")
     public BannerBuilder pattern(@NotNull final List<Pattern> patterns) {
         final BannerMeta bannerMeta = (BannerMeta) getMeta();
 
@@ -141,6 +150,8 @@ public final class BannerBuilder extends BaseItemBuilder<BannerBuilder> {
      * @throws IndexOutOfBoundsException when index is not in [0, {@link BannerMeta#numberOfPatterns()}) range
      * @since 3.0.1
      */
+    @NotNull
+    @Contract("_, _, _ -> this")
     public BannerBuilder pattern(final int index, @NotNull final DyeColor color, @NotNull final PatternType pattern) {
         return pattern(index, new Pattern(color, pattern));
     }
@@ -154,6 +165,8 @@ public final class BannerBuilder extends BaseItemBuilder<BannerBuilder> {
      * @throws IndexOutOfBoundsException when index is not in [0, {@link BannerMeta#numberOfPatterns()}) range
      * @since 3.0.1
      */
+    @NotNull
+    @Contract("_, _ -> this")
     public BannerBuilder pattern(final int index, @NotNull final Pattern pattern) {
         final BannerMeta bannerMeta = (BannerMeta) getMeta();
 
@@ -169,6 +182,8 @@ public final class BannerBuilder extends BaseItemBuilder<BannerBuilder> {
      * @return {@link BannerBuilder}
      * @since 3.0.1
      */
+    @NotNull
+    @Contract("_ -> this")
     public BannerBuilder setPatterns(@NotNull List<@NotNull Pattern> patterns) {
         final BannerMeta bannerMeta = (BannerMeta) getMeta();
 
