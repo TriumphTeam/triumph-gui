@@ -85,10 +85,10 @@ public abstract class BaseGui implements InventoryHolder {
     private GuiType guiType = GuiType.CHEST;
 
     // Contains all items the GUI will have.
-    private final Map<Integer, GuiItem> guiItems = new LinkedHashMap<>();
+    private final Map<Integer, GuiItem> guiItems;
 
     // Actions for specific slots.
-    private final Map<Integer, GuiAction<InventoryClickEvent>> slotActions = new LinkedHashMap<>();
+    private final Map<Integer, GuiAction<InventoryClickEvent>> slotActions;
     // Interaction modifiers.
     private final Set<InteractionModifier> interactionModifiers;
     // Action to execute when clicking on any item.
@@ -127,7 +127,10 @@ public abstract class BaseGui implements InventoryHolder {
         this.rows = finalRows;
         this.interactionModifiers = safeCopyOf(interactionModifiers);
         this.title = title;
-        inventory = Bukkit.createInventory(this, this.rows * 9, title);
+        int inventorySize = this.rows * 9;
+        this.inventory = Bukkit.createInventory(this, inventorySize, title);
+        this.slotActions = new LinkedHashMap<>(inventorySize);
+        this.guiItems = new LinkedHashMap<>(inventorySize);
     }
 
     /**
@@ -142,7 +145,10 @@ public abstract class BaseGui implements InventoryHolder {
         this.guiType = guiType;
         this.interactionModifiers = safeCopyOf(interactionModifiers);
         this.title = title;
-        inventory = Bukkit.createInventory(this, guiType.getInventoryType(), title);
+        int inventorySize = this.rows * 9;
+        this.inventory = Bukkit.createInventory(this, inventorySize, title);
+        this.slotActions = new LinkedHashMap<>(inventorySize);
+        this.guiItems = new LinkedHashMap<>(inventorySize);
     }
 
     /**
@@ -173,6 +179,8 @@ public abstract class BaseGui implements InventoryHolder {
         this.title = title;
 
         inventory = Bukkit.createInventory(this, this.rows * 9, title);
+        slotActions = new LinkedHashMap<>();
+        guiItems = new LinkedHashMap<>();
     }
 
     /**
@@ -189,6 +197,8 @@ public abstract class BaseGui implements InventoryHolder {
         this.title = title;
 
         inventory = Bukkit.createInventory(this, this.guiType.getInventoryType(), title);
+        slotActions = new LinkedHashMap<>();
+        guiItems = new LinkedHashMap<>();
     }
 
     /**

@@ -47,7 +47,7 @@ public class PaginatedGui extends BaseGui {
     // List with all the page items
     private final List<GuiItem> pageItems = new ArrayList<>();
     // Saves the current page items and it's slot
-    private final Map<Integer, GuiItem> currentPage = new LinkedHashMap<>();
+    private final Map<Integer, GuiItem> currentPage;
 
     private int pageSize;
     private int pageNum = 1;
@@ -65,6 +65,8 @@ public class PaginatedGui extends BaseGui {
     public PaginatedGui(final int rows, final int pageSize, @NotNull final String title, @NotNull final Set<InteractionModifier> interactionModifiers) {
         super(rows, title, interactionModifiers);
         this.pageSize = pageSize;
+        int inventorySize = rows * 9;
+        this.currentPage = new LinkedHashMap<>(inventorySize);
     }
 
     /**
@@ -79,6 +81,8 @@ public class PaginatedGui extends BaseGui {
     public PaginatedGui(final int rows, final int pageSize, @NotNull final String title) {
         super(rows, title);
         this.pageSize = pageSize;
+        int inventorySize = rows * 9;
+        this.currentPage = new LinkedHashMap<>(inventorySize);
     }
 
     /**
