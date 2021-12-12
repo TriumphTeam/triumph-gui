@@ -495,8 +495,4 @@ public class PaginatedGui extends BaseGui {
         return counter;
     }
 
-    private void test() {
-        Gui.paginated().create().setPageChangeAction(event -> event.getViewers().forEach(player -> player.sendMessage("page change action!")));
-    }
-
 }
