@@ -385,7 +385,7 @@ public class PaginatedGui extends BaseGui {
         // Adds the paginated items to the page
         for (final GuiItem guiItem : getPageNum(pageNum)) {
             for (int slot = 0; slot < getRows() * 9; slot++) {
-                if (getInventory().getItem(slot) != null) continue;
+                if (getGuiItem(slot) != null || getInventory().getItem(slot) != null) continue;
                 currentPage.put(slot, guiItem);
                 getInventory().setItem(slot, guiItem.getItemStack());
                 break;
