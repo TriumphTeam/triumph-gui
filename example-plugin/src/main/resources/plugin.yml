@@ -1,0 +1,8 @@
+name: ExampleGuiPlugin
+description: Example GUI plugin
+version: 1.0
+api-version: 1.13
+main: dev.triumphteam.gui.example.ExamplePlugin
+commands:
+  opengui:
+    description: Open the GUI

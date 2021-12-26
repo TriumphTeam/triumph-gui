@@ -22,22 +22,19 @@
  * SOFTWARE.
  */
 
-package dev.triumphteam.gui.animations.impl;
+package dev.triumphteam.gui.example;
 
-import dev.triumphteam.gui.animations.Frame;
+import dev.triumphteam.gui.example.command.ExampleCommand;
+import org.bukkit.plugin.java.JavaPlugin;
 
-import java.util.List;
+import java.util.Objects;
 
-public class InfiniteAnimation extends BaseAnimation {
-
-    public InfiniteAnimation(int delay, List<Frame> frames) {
-        super(delay, frames);
-    }
+public class ExamplePlugin extends JavaPlugin {
 
     @Override
-    public Frame onFinish() {
-        this.reset();
-
-        return this.frames.get(current).apply(gui);
+    public void onEnable() {
+        Objects.requireNonNull(this.getCommand("opengui")).setExecutor(new ExampleCommand());
     }
+
+
 }

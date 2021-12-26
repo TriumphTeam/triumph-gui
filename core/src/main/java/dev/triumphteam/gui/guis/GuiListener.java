@@ -23,6 +23,7 @@
  */
 package dev.triumphteam.gui.guis;
 
+import dev.triumphteam.gui.animations.Animation;
 import dev.triumphteam.gui.components.GuiAction;
 import dev.triumphteam.gui.components.util.ItemNbt;
 import org.bukkit.event.EventHandler;
@@ -135,6 +136,8 @@ public final class GuiListener implements Listener {
         if (gui instanceof PersistentPaginatedGui) {
             ((PersistentPaginatedGui) gui).savePage();
         }
+
+        gui.getAnimations().forEach(Animation::stop);
 
         // The GUI action for closing
         final GuiAction<InventoryCloseEvent> closeAction = gui.getCloseGuiAction();

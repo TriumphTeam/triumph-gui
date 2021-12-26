@@ -1,3 +1,27 @@
+/*
+ * MIT License
+ *
+ * Copyright (c) 2021 TriumphTeam
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ */
+
 package dev.triumphteam.gui.animations.impl;
 
 import dev.triumphteam.gui.animations.Animation;
@@ -14,18 +38,13 @@ public abstract class BaseAnimation implements Animation {
     protected BaseGui gui;
     protected AnimationRunner runner;
     protected final int delay;
-    protected final List<Frame> frames;
+    protected List<Frame> frames;
 
     public BaseAnimation(int delay, List<Frame> frames) {
         this.delay = delay;
         this.frames = frames;
 
         this.reset();
-    }
-
-    public void to(BaseGui gui) {
-        Validate.notNull(gui, "Gui cannot be null");
-        this.gui = gui;
     }
 
     @Override
@@ -35,7 +54,7 @@ public abstract class BaseAnimation implements Animation {
 
     @Override
     public @Nullable Frame nextFrame() {
-        Validate.notNull(gui, "Gui has not been linked to this animation. Please link it by calling the to(BaseGui) method");
+        Validate.notNull(gui, "Gui has not been linked to this animation.");
         current++;
 
         if (frames.size() == current) {
@@ -46,8 +65,9 @@ public abstract class BaseAnimation implements Animation {
     }
 
     @Override
-    public void start() {
-        Validate.notNull(gui, "Gui has not been linked to this animation. Please link it by calling the to(BaseGui) method");
+    public void start(BaseGui gui) {
+        Validate.notNull(gui, "Gui cannot be null.");
+        this.gui = gui;
 
         this.reset();
         frames.get(current).apply(gui);
@@ -66,8 +86,23 @@ public abstract class BaseAnimation implements Animation {
     }
 
     @Override
+    public BaseGui getGui() {
+        return gui;
+    }
+
+    @Override
     public AnimationRunner getRunnable() {
         return runner;
+    }
+
+    @Override
+    public void stop() {
+        Validate.notNull(gui, "Gui has not been linked to this animation. Please link it by calling the to(BaseGui) method");
+
+        if (this.runner != null && !this.runner.isCancelled()) {
+            this.runner.cancel();
+        }
+        frames.get(0).fallback(gui);
     }
 
     /**

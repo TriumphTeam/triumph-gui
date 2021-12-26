@@ -1,5 +1,6 @@
 rootProject.name = "triumph-gui"
 
+include("example-plugin")
 include("core")
 findProject(":core")?.name = "triumph-gui"
 

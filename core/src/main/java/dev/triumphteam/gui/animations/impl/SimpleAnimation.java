@@ -28,16 +28,17 @@ import dev.triumphteam.gui.animations.Frame;
 
 import java.util.List;
 
-public class InfiniteAnimation extends BaseAnimation {
+public class SimpleAnimation extends BaseAnimation {
 
-    public InfiniteAnimation(int delay, List<Frame> frames) {
+    public SimpleAnimation(int delay, List<Frame> frames) {
         super(delay, frames);
     }
 
     @Override
     public Frame onFinish() {
-        this.reset();
+        this.stop();
 
-        return this.frames.get(current).apply(gui);
+        return null;
     }
+
 }
