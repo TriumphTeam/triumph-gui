@@ -26,6 +26,7 @@ package dev.triumphteam.gui.animations;
 
 import dev.triumphteam.gui.guis.BaseGui;
 import dev.triumphteam.gui.guis.GuiItem;
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
@@ -74,5 +75,24 @@ public class Frame {
         return "Frame{" +
                 "items=" + items +
                 '}';
+    }
+
+    @Contract(value = " -> new", pure = true)
+    public static @NotNull Builder builder() {
+        return new Builder();
+    }
+
+    public static class Builder {
+        private final Map<Integer,GuiItem> items = new HashMap<>();
+
+        public Builder addItem(int slot, GuiItem item) {
+            items.put(slot, item);
+            return this;
+        }
+
+        @Contract(value = " -> new", pure = true)
+        public @NotNull Frame build() {
+            return new Frame(items);
+        }
     }
 }
