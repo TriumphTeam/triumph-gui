@@ -39,7 +39,7 @@ import org.jetbrains.annotations.Nullable;
  * @author GabyTM <a href="https://github.com/iGabyTM">https://github.com/iGabyTM</a>
  * @since 3.0.1
  */
-public class MapBuilder extends BaseItemBuilder<MapBuilder> implements ColorableBuilder<MapBuilder> {
+public class MapBuilder extends BaseItemBuilder<MapBuilder> {
 
     private static final Material MAP = Material.MAP;
 

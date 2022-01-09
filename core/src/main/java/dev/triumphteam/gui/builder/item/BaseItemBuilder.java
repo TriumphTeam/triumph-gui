@@ -59,7 +59,7 @@ import java.util.stream.Collectors;
  * @param <B> The ItemBuilder type so the methods can cast to the subtype
  */
 @SuppressWarnings("unchecked")
-public abstract class BaseItemBuilder<B extends BaseItemBuilder<B>> implements ColorableBuilder<B> {
+public abstract class BaseItemBuilder<B extends BaseItemBuilder<B>> {
 
     private static final EnumSet<Material> LEATHER_ARMOR = EnumSet.of(
             Material.LEATHER_HELMET, Material.LEATHER_CHESTPLATE, Material.LEATHER_LEGGINGS, Material.LEATHER_BOOTS
