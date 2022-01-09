@@ -26,23 +26,15 @@ package dev.triumphteam.gui.builder.item;
 import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.properties.Property;
 import dev.triumphteam.gui.components.util.SkullUtil;
-import net.kyori.adventure.text.Component;
 import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
-import org.bukkit.enchantments.Enchantment;
-import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.SkullMeta;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
 import java.lang.reflect.Field;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 import java.util.UUID;
-import java.util.function.Consumer;
 
 /**
  * Main ItemBuilder
@@ -90,7 +82,7 @@ public class ItemBuilder extends BaseItemBuilder<ItemBuilder> {
      * @since 3.0.1
      */
     @NotNull
-    @Contract("_ -> new")
+    @Contract(" -> new")
     public static BannerBuilder banner() {
         return new BannerBuilder();
     }
@@ -132,7 +124,7 @@ public class ItemBuilder extends BaseItemBuilder<ItemBuilder> {
      * @since 3.0.1
      */
     @NotNull
-    @Contract("_ -> new")
+    @Contract(" -> new")
     public static FireworkBuilder firework() {
         return new FireworkBuilder(new ItemStack(Material.FIREWORK_ROCKET));
     }
@@ -158,7 +150,7 @@ public class ItemBuilder extends BaseItemBuilder<ItemBuilder> {
      * @since 3.0.1
      */
     @NotNull
-    @Contract("_ -> new")
+    @Contract(" -> new")
     public static MapBuilder map() {
         return new MapBuilder();
     }
@@ -183,7 +175,7 @@ public class ItemBuilder extends BaseItemBuilder<ItemBuilder> {
      * @return A new {@link SkullBuilder}
      */
     @NotNull
-    @Contract("_ -> new")
+    @Contract(" -> new")
     public static SkullBuilder skull() {
         return new SkullBuilder();
     }
@@ -208,7 +200,7 @@ public class ItemBuilder extends BaseItemBuilder<ItemBuilder> {
      * @since 3.0.1
      */
     @NotNull
-    @Contract("_ -> new")
+    @Contract(" -> new")
     public static FireworkBuilder star() {
         return new FireworkBuilder(new ItemStack(Material.FIREWORK_STAR));
     }
@@ -227,165 +219,6 @@ public class ItemBuilder extends BaseItemBuilder<ItemBuilder> {
         return new FireworkBuilder(itemStack);
     }
 
-    // DEPRECATED, TO BE REMOVED METHODS
-    // TODO Remove deprecated methods
-
-    /**
-     * Set display name of the item
-     *
-     * @param name the display name of the item
-     * @return {@link ItemBuilder}
-     * @deprecated In favor of {@link ItemBuilder#name(Component)}, will be removed in 3.0.1
-     */
-    @Deprecated
-    public ItemBuilder setName(@NotNull final String name) {
-        getMeta().setDisplayName(name);
-        return this;
-    }
-
-    /**
-     * Sets the amount of items
-     *
-     * @param amount the amount of items
-     * @return {@link ItemBuilder}
-     * @deprecated In favor of {@link ItemBuilder#amount(int)}, nothing changed just the name, will be removed in 3.0.1
-     */
-    @Deprecated
-    public ItemBuilder setAmount(final int amount) {
-        getItemStack().setAmount(amount);
-        return this;
-    }
-
-    /**
-     * Add lore lines of an item
-     *
-     * @param lore the lore lines to add
-     * @return {@link ItemBuilder}
-     * @deprecated In favor of {@link ItemBuilder#lore(Consumer)}, will be removed in 3.0.1
-     */
-    @Deprecated
-    public ItemBuilder addLore(@NotNull final String... lore) {
-        return addLore(Arrays.asList(lore));
-    }
-
-    /**
-     * Set lore lines of an item
-     *
-     * @param lore A {@link List} with the lore lines to add
-     * @return {@link ItemBuilder}
-     * @deprecated In favor of {@link ItemBuilder#lore(Consumer)}, will be removed in 3.0.1
-     */
-    @Deprecated
-    public ItemBuilder addLore(@NotNull final List<String> lore) {
-        final List<String> newLore = getMeta().hasLore() ? getMeta().getLore() : new ArrayList<>();
-
-        newLore.addAll(lore);
-        return setLore(newLore);
-    }
-
-    /**
-     * Set the lore lines of an item
-     *
-     * @param lore the lore lines to set
-     * @return {@link ItemBuilder}
-     * @deprecated In favor of {@link ItemBuilder#lore(Component...)}, will be removed in 3.0.1
-     */
-    @Deprecated
-    public ItemBuilder setLore(@NotNull final String... lore) {
-        return setLore(Arrays.asList(lore));
-    }
-
-    /**
-     * Set the lore lines of an item
-     *
-     * @param lore A {@link List} with the lore lines
-     * @return {@link ItemBuilder}
-     * @deprecated In favor of {@link ItemBuilder#lore(List)}, will be removed in 3.0.1
-     */
-    @Deprecated
-    public ItemBuilder setLore(@NotNull final List<String> lore) {
-        getMeta().setLore(lore);
-        return this;
-    }
-
-    /**
-     * Add enchantment to an item
-     *
-     * @param enchantment            the {@link Enchantment} to add
-     * @param level                  the level of the {@link Enchantment}
-     * @param ignoreLevelRestriction If should or not ignore it
-     * @return {@link ItemBuilder}
-     * @deprecated In favor of {@link ItemBuilder#enchant(Enchantment, int, boolean)}, nothing changed just the name, will be removed in 3.0.1
-     */
-    @Deprecated
-    public ItemBuilder addEnchantment(@NotNull final Enchantment enchantment, final int level, final boolean ignoreLevelRestriction) {
-        getMeta().addEnchant(enchantment, level, ignoreLevelRestriction);
-        return this;
-    }
-
-    /**
-     * Add enchantment to an item
-     *
-     * @param enchantment the {@link Enchantment} to add
-     * @param level       the level of the {@link Enchantment}
-     * @return {@link ItemBuilder}
-     * @deprecated In favor of {@link ItemBuilder#enchant(Enchantment, int)}, nothing changed just the name, will be removed in 3.0.1
-     */
-    @Deprecated
-    public ItemBuilder addEnchantment(@NotNull final Enchantment enchantment, final int level) {
-        return addEnchantment(enchantment, level, true);
-    }
-
-    /**
-     * Add enchantment to an item
-     *
-     * @param enchantment the {@link Enchantment} to add
-     * @return {@link ItemBuilder}
-     * @deprecated In favor of {@link ItemBuilder#enchant(Enchantment)}, nothing changed just the name, will be removed in 3.0.1
-     */
-    @Deprecated
-    public ItemBuilder addEnchantment(@NotNull final Enchantment enchantment) {
-        return addEnchantment(enchantment, 1, true);
-    }
-
-    /**
-     * Removes a certain {@link Enchantment} from the item
-     *
-     * @param enchantment The {@link Enchantment} to remove
-     * @return {@link ItemBuilder}
-     * @deprecated In favor of {@link ItemBuilder#disenchant(Enchantment)}, nothing changed just the name, will be removed in 3.0.1
-     */
-    @Deprecated
-    public ItemBuilder removeEnchantment(@NotNull final Enchantment enchantment) {
-        getItemStack().removeEnchantment(enchantment);
-        return this;
-    }
-
-    /**
-     * Add a custom {@link ItemFlag} to the item
-     *
-     * @param flags the {@link ItemFlag} to add
-     * @return {@link ItemBuilder}
-     * @deprecated In favor of {@link ItemBuilder#flags(ItemFlag...)}, nothing changed just the name, will be removed in 3.0.1
-     */
-    @Deprecated
-    public ItemBuilder addItemFlags(@NotNull final ItemFlag... flags) {
-        getMeta().addItemFlags(flags);
-        return this;
-    }
-
-    /**
-     * Sets the item as unbreakable
-     *
-     * @param unbreakable If should or not be unbreakable
-     * @return {@link ItemBuilder}
-     * @deprecated In favor of {@link ItemBuilder#unbreakable()}, nothing changed just the name, will be removed in 3.0.1
-     */
-    @Deprecated
-    public ItemBuilder setUnbreakable(boolean unbreakable) {
-        return unbreakable(unbreakable);
-    }
-
     /**
      * Sets the skull texture
      *
@@ -397,10 +230,10 @@ public class ItemBuilder extends BaseItemBuilder<ItemBuilder> {
     public ItemBuilder setSkullTexture(@NotNull final String texture) {
         if (getItemStack().getType() != SkullUtil.SKULL) return this;
 
-        SkullMeta skullMeta = (SkullMeta) getMeta();
-        GameProfile profile = new GameProfile(UUID.randomUUID(), null);
+        final SkullMeta skullMeta = (SkullMeta) getMeta();
+        final GameProfile profile = new GameProfile(UUID.randomUUID(), null);
         profile.getProperties().put("textures", new Property("textures", texture));
-        Field profileField;
+        final Field profileField;
 
         try {
             profileField = skullMeta.getClass().getDeclaredField("profile");
