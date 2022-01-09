@@ -515,7 +515,7 @@ public abstract class BaseItemBuilder<B extends BaseItemBuilder<B>> implements C
      */
     @Deprecated
     public B setLore(@NotNull final String... lore) {
-        return (B) setLore(Arrays.asList(lore));
+        return setLore(Arrays.asList(lore));
     }
 
     /**

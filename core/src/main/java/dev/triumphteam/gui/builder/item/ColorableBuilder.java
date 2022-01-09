@@ -39,6 +39,7 @@ public interface ColorableBuilder<B extends BaseItemBuilder<B>> {
      * @since 3.0.3
      */
     @NotNull
+    @Contract("_ -> this")
     B color(@NotNull final Color color);
 
 }
