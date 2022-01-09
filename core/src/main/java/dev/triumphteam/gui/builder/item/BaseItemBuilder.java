@@ -238,7 +238,7 @@ public abstract class BaseItemBuilder<B extends BaseItemBuilder<B>> implements C
     @Contract("_ -> this")
     public B unbreakable(boolean unbreakable) {
         if (VersionHelper.IS_UNBREAKABLE_LEGACY) {
-            return setNbt("Unbreakable", true);
+            return setNbt("Unbreakable", unbreakable);
         }
 
         meta.setUnbreakable(unbreakable);
