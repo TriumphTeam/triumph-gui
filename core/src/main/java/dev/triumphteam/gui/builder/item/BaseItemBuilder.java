@@ -1,18 +1,18 @@
 /**
  * MIT License
- *
+ * <p>
  * Copyright (c) 2021 TriumphTeam
- *
+ * <p>
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- *
+ * <p>
  * The above copyright notice and this permission notice shall be included in all
  * copies or substantial portions of the Software.
- *
+ * <p>
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -24,11 +24,12 @@
 package dev.triumphteam.gui.builder.item;
 
 import dev.triumphteam.gui.components.GuiAction;
+import dev.triumphteam.gui.components.exception.GuiException;
 import dev.triumphteam.gui.components.util.ItemNbt;
-import dev.triumphteam.gui.components.util.Legacy;
 import dev.triumphteam.gui.components.util.VersionHelper;
 import dev.triumphteam.gui.guis.GuiItem;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
 import org.apache.commons.lang.Validate;
 import org.bukkit.Bukkit;
 import org.bukkit.Color;
@@ -44,6 +45,7 @@ import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.EnumSet;
@@ -62,6 +64,25 @@ public abstract class BaseItemBuilder<B extends BaseItemBuilder<B>> implements C
     private static final EnumSet<Material> LEATHER_ARMOR = EnumSet.of(
             Material.LEATHER_HELMET, Material.LEATHER_CHESTPLATE, Material.LEATHER_LEGGINGS, Material.LEATHER_BOOTS
     );
+
+    private static final GsonComponentSerializer GSON = GsonComponentSerializer.gson();
+    private static final Field DISPLAY_NAME_FIELD;
+    private static final Field LORE_FIELD;
+
+    static {
+        try {
+            final Class<?> metaClass = VersionHelper.craftClass("inventory.CraftMetaItem");
+
+            DISPLAY_NAME_FIELD = metaClass.getDeclaredField("displayName");
+            DISPLAY_NAME_FIELD.setAccessible(true);
+
+            LORE_FIELD = metaClass.getDeclaredField("lore");
+            LORE_FIELD.setAccessible(true);
+        } catch (NoSuchFieldException | ClassNotFoundException exception) {
+            exception.printStackTrace();
+            throw new GuiException("Could not retrieve displayName nor lore field for ItemBuilder.");
+        }
+    }
 
     private ItemStack itemStack;
     private ItemMeta meta;
@@ -83,7 +104,12 @@ public abstract class BaseItemBuilder<B extends BaseItemBuilder<B>> implements C
     @NotNull
     @Contract("_ -> this")
     public B name(@NotNull final Component name) {
-        meta.setDisplayName(Legacy.SERIALIZER.serialize(name));
+        try {
+            DISPLAY_NAME_FIELD.set(meta, GSON.serialize(name));
+        } catch (IllegalAccessException exception) {
+            exception.printStackTrace();
+        }
+
         return (B) this;
     }
 
@@ -124,7 +150,14 @@ public abstract class BaseItemBuilder<B extends BaseItemBuilder<B>> implements C
     @NotNull
     @Contract("_ -> this")
     public B lore(@NotNull final List<Component> lore) {
-        meta.setLore(lore.stream().map(Legacy.SERIALIZER::serialize).collect(Collectors.toList()));
+        final List<String> jsonLore = lore.stream().map(GSON::serialize).collect(Collectors.toList());
+
+        try {
+            LORE_FIELD.set(meta, jsonLore);
+        } catch (IllegalAccessException exception) {
+            exception.printStackTrace();
+        }
+
         return (B) this;
     }
 
@@ -138,11 +171,17 @@ public abstract class BaseItemBuilder<B extends BaseItemBuilder<B>> implements C
     @NotNull
     @Contract("_ -> this")
     public B lore(@NotNull final Consumer<List<Component>> lore) {
-        final List<String> strings = meta.hasLore() ? meta.getLore() : new ArrayList<>();
-        final List<Component> components = strings.stream().map(Legacy.SERIALIZER::deserialize).collect(Collectors.toList());
+        if (meta == null) return (B) this;
+        try {
+            final List<String> jsonLore = (List<String>) LORE_FIELD.get(meta);
+            final List<Component> components = jsonLore.stream().map(GSON::deserialize).collect(Collectors.toList());
+            lore.accept(components);
+            return lore(components);
+        } catch (IllegalAccessException exception) {
+            exception.printStackTrace();
+        }
 
-        lore.accept(components);
-        return lore(components);
+        return (B) this;
     }
 
     /**
@@ -314,6 +353,7 @@ public abstract class BaseItemBuilder<B extends BaseItemBuilder<B>> implements C
 
     /**
      * {@inheritDoc}
+     *
      * @param color color
      * @return {@link ItemBuilder}
      * @since 3.0.3
@@ -322,10 +362,10 @@ public abstract class BaseItemBuilder<B extends BaseItemBuilder<B>> implements C
     @Contract("_ -> this")
     public B color(@NotNull final Color color) {
         if (LEATHER_ARMOR.contains(itemStack.getType())) {
-            final LeatherArmorMeta lam = (LeatherArmorMeta) getMeta();
+            final LeatherArmorMeta leatherArmorMeta = (LeatherArmorMeta) getMeta();
 
-            lam.setColor(color);
-            setMeta(lam);
+            leatherArmorMeta.setColor(color);
+            setMeta(leatherArmorMeta);
         }
 
         return (B) this;
