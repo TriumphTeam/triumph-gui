@@ -41,7 +41,7 @@ public final class VersionHelper {
 
     // Unbreakable change
     private static final int V1_11 = 1110;
-    // Material change
+    // Material and components on items change
     private static final int V1_13 = 1130;
     // PDC and customModelData
     private static final int V1_14 = 1140;

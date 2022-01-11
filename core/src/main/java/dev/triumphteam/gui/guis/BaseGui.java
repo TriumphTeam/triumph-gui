@@ -106,10 +106,10 @@ public abstract class BaseGui implements InventoryHolder {
     // Action to execute when clicked outside the GUI.
     private GuiAction<InventoryClickEvent> outsideClickAction;
 
-    // Whether or not the GUI is updating.
+    // Whether the GUI is updating.
     private boolean updating;
 
-    // Whether or not should run the actions from the close and open methods.
+    // Whether should run the actions from the close and open methods.
     private boolean runCloseAction = true;
     private boolean runOpenAction = true;
 

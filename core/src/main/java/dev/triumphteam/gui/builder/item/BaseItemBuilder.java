@@ -26,6 +26,7 @@ package dev.triumphteam.gui.builder.item;
 import dev.triumphteam.gui.components.GuiAction;
 import dev.triumphteam.gui.components.exception.GuiException;
 import dev.triumphteam.gui.components.util.ItemNbt;
+import dev.triumphteam.gui.components.util.Legacy;
 import dev.triumphteam.gui.components.util.VersionHelper;
 import dev.triumphteam.gui.guis.GuiItem;
 import net.kyori.adventure.text.Component;
@@ -50,6 +51,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.EnumSet;
 import java.util.List;
+import java.util.Objects;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
@@ -104,6 +106,13 @@ public abstract class BaseItemBuilder<B extends BaseItemBuilder<B>> {
     @NotNull
     @Contract("_ -> this")
     public B name(@NotNull final Component name) {
+        if (meta == null) return (B) this;
+
+        if (VersionHelper.IS_ITEM_LEGACY) {
+            meta.setDisplayName(Legacy.SERIALIZER.serialize(name));
+            return (B) this;
+        }
+
         try {
             DISPLAY_NAME_FIELD.set(meta, GSON.serialize(name));
         } catch (IllegalAccessException exception) {
@@ -136,7 +145,7 @@ public abstract class BaseItemBuilder<B extends BaseItemBuilder<B>> {
      */
     @NotNull
     @Contract("_ -> this")
-    public B lore(@NotNull final Component... lore) {
+    public B lore(@Nullable final Component @NotNull ... lore) {
         return lore(Arrays.asList(lore));
     }
 
@@ -149,8 +158,15 @@ public abstract class BaseItemBuilder<B extends BaseItemBuilder<B>> {
      */
     @NotNull
     @Contract("_ -> this")
-    public B lore(@NotNull final List<Component> lore) {
-        final List<String> jsonLore = lore.stream().map(GSON::serialize).collect(Collectors.toList());
+    public B lore(@NotNull final List<@Nullable Component> lore) {
+        if (meta == null) return (B) this;
+
+        if (VersionHelper.IS_ITEM_LEGACY) {
+            meta.setLore(lore.stream().filter(Objects::nonNull).map(Legacy.SERIALIZER::serialize).collect(Collectors.toList()));
+            return (B) this;
+        }
+
+        final List<String> jsonLore = lore.stream().filter(Objects::nonNull).map(GSON::serialize).collect(Collectors.toList());
 
         try {
             LORE_FIELD.set(meta, jsonLore);
@@ -170,18 +186,26 @@ public abstract class BaseItemBuilder<B extends BaseItemBuilder<B>> {
      */
     @NotNull
     @Contract("_ -> this")
-    public B lore(@NotNull final Consumer<List<Component>> lore) {
+    public B lore(@NotNull final Consumer<List<@Nullable Component>> lore) {
         if (meta == null) return (B) this;
-        try {
-            final List<String> jsonLore = (List<String>) LORE_FIELD.get(meta);
-            final List<Component> components = jsonLore.stream().map(GSON::deserialize).collect(Collectors.toList());
-            lore.accept(components);
-            return lore(components);
-        } catch (IllegalAccessException exception) {
-            exception.printStackTrace();
+
+        List<Component> components;
+        if (VersionHelper.IS_ITEM_LEGACY) {
+            final List<String> stringLore = meta.getLore();
+            if (stringLore == null) return (B) this;
+            components = stringLore.stream().map(Legacy.SERIALIZER::deserialize).collect(Collectors.toList());
+        } else {
+            try {
+                final List<String> jsonLore = (List<String>) LORE_FIELD.get(meta);
+                components = jsonLore.stream().map(GSON::deserialize).collect(Collectors.toList());
+            } catch (IllegalAccessException exception) {
+                components = new ArrayList<>();
+                exception.printStackTrace();
+            }
         }
 
-        return (B) this;
+        lore.accept(components);
+        return lore(components);
     }
 
     /**
