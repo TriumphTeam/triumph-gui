@@ -1,18 +1,18 @@
 /**
  * MIT License
- *
+ * <p>
  * Copyright (c) 2021 TriumphTeam
- *
+ * <p>
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- *
+ * <p>
  * The above copyright notice and this permission notice shall be included in all
  * copies or substantial portions of the Software.
- *
+ * <p>
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -36,6 +36,7 @@ import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 
 /**
@@ -201,6 +202,26 @@ public class PaginatedGui extends BaseGui {
      */
     public void updatePageItem(final int row, final int col, @NotNull final GuiItem item) {
         updateItem(getSlotFromRowCol(row, col), item);
+    }
+
+    /**
+     * Removes a given {@link GuiItem} from the page.
+     *
+     * @param item The {@link GuiItem} to remove.
+     */
+    public void removePageItem(@NotNull final GuiItem item) {
+        pageItems.remove(item);
+        updatePage();
+    }
+
+    /**
+     * Removes a given {@link ItemStack} from the page.
+     *
+     * @param item The {@link ItemStack} to remove.
+     */
+    public void removePageItem(@NotNull final ItemStack item) {
+        final Optional<GuiItem> guiItem = pageItems.stream().filter(it -> it.getItemStack().equals(item)).findFirst();
+        guiItem.ifPresent(this::removePageItem);
     }
 
     /**
