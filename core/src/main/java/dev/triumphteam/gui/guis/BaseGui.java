@@ -534,10 +534,14 @@ public abstract class BaseGui implements InventoryHolder {
      * @param itemStack The {@link ItemStack} to replace in the original one in the {@link GuiItem}.
      */
     public void updateItem(final int slot, @NotNull final ItemStack itemStack) {
-        if (!guiItems.containsKey(slot)) return;
         final GuiItem guiItem = guiItems.get(slot);
-        guiItem.setItemStack(itemStack);
-        inventory.setItem(slot, guiItem.getItemStack());
+
+        if (guiItem == null) {
+            updateItem(slot, new GuiItem(itemStack));
+            return;
+        }
+
+        updateItem(slot, guiItem);
     }
 
     /**
@@ -558,7 +562,6 @@ public abstract class BaseGui implements InventoryHolder {
      * @param item The {@link GuiItem} to replace in the original.
      */
     public void updateItem(final int slot, @NotNull final GuiItem item) {
-        if (!guiItems.containsKey(slot)) return;
         guiItems.put(slot, item);
         inventory.setItem(slot, item.getItemStack());
     }
