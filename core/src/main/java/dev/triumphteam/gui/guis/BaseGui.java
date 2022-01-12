@@ -28,6 +28,8 @@ import dev.triumphteam.gui.components.GuiType;
 import dev.triumphteam.gui.components.InteractionModifier;
 import dev.triumphteam.gui.components.exception.GuiException;
 import dev.triumphteam.gui.components.util.GuiFiller;
+import dev.triumphteam.gui.components.util.Legacy;
+import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
@@ -200,6 +202,27 @@ public abstract class BaseGui implements InventoryHolder {
         inventory = Bukkit.createInventory(this, this.guiType.getInventoryType(), title);
         slotActions = new LinkedHashMap<>();
         guiItems = new LinkedHashMap<>();
+    }
+
+    /**
+     * Gets the GUI's title as string.
+     *
+     * @return The GUI's title.
+     */
+    @NotNull
+    @Deprecated
+    public String getTitle() {
+        return title;
+    }
+
+    /**
+     * Gets the GUI title as a {@link Component}.
+     *
+     * @return The GUI title {@link Component}.
+     */
+    @NotNull
+    public Component title() {
+        return Legacy.SERIALIZER.deserialize(title);
     }
 
     /**
