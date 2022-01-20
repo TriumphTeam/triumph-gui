@@ -19,7 +19,7 @@ subprojects {
     }
 
     group = "dev.triumphteam"
-    version = "3.1.0"
+    version = "3.1.1"
 
     dependencies {
         compileOnly("org.jetbrains:annotations:21.0.1")
