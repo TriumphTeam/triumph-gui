@@ -1,18 +1,18 @@
 /**
  * MIT License
- * <p>
+ *
  * Copyright (c) 2021 TriumphTeam
- * <p>
+ *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * <p>
+ *
  * The above copyright notice and this permission notice shall be included in all
  * copies or substantial portions of the Software.
- * <p>
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -514,165 +514,6 @@ public abstract class BaseItemBuilder<B extends BaseItemBuilder<B>> {
      */
     protected void setMeta(@NotNull final ItemMeta meta) {
         this.meta = meta;
-    }
-
-    // DEPRECATED, TO BE REMOVED METHODS
-    // TODO Remove deprecated methods
-
-    /**
-     * Set display name of the item
-     *
-     * @param name the display name of the item
-     * @return {@link ItemBuilder}
-     * @deprecated In favor of {@link BaseItemBuilder#name(Component)}, will be removed in 3.0.1
-     */
-    @Deprecated
-    public B setName(@NotNull final String name) {
-        getMeta().setDisplayName(name);
-        return (B) this;
-    }
-
-    /**
-     * Sets the amount of items
-     *
-     * @param amount the amount of items
-     * @return {@link ItemBuilder}
-     * @deprecated In favor of {@link BaseItemBuilder#amount(int)}, nothing changed just the name, will be removed in 3.0.1
-     */
-    @Deprecated
-    public B setAmount(final int amount) {
-        getItemStack().setAmount(amount);
-        return (B) this;
-    }
-
-    /**
-     * Add lore lines of an item
-     *
-     * @param lore the lore lines to add
-     * @return {@link ItemBuilder}
-     * @deprecated In favor of {@link ItemBuilder#lore(Consumer)}, will be removed in 3.0.1
-     */
-    @Deprecated
-    public B addLore(@NotNull final String... lore) {
-        return addLore(Arrays.asList(lore));
-    }
-
-    /**
-     * Set lore lines of an item
-     *
-     * @param lore A {@link List} with the lore lines to add
-     * @return {@link ItemBuilder}
-     * @deprecated In favor of {@link ItemBuilder#lore(Consumer)}, will be removed in 3.0.1
-     */
-    @Deprecated
-    public B addLore(@NotNull final List<String> lore) {
-        final List<String> newLore = getMeta().hasLore() ? getMeta().getLore() : new ArrayList<>();
-
-        newLore.addAll(lore);
-        return setLore(newLore);
-    }
-
-    /**
-     * Set the lore lines of an item
-     *
-     * @param lore the lore lines to set
-     * @return {@link ItemBuilder}
-     * @deprecated In favor of {@link ItemBuilder#lore(Component...)}, will be removed in 3.0.1
-     */
-    @Deprecated
-    public B setLore(@NotNull final String... lore) {
-        return setLore(Arrays.asList(lore));
-    }
-
-    /**
-     * Set the lore lines of an item
-     *
-     * @param lore A {@link List} with the lore lines
-     * @return {@link ItemBuilder}
-     * @deprecated In favor of {@link ItemBuilder#lore(List)}, will be removed in 3.0.1
-     */
-    @Deprecated
-    public B setLore(@NotNull final List<String> lore) {
-        getMeta().setLore(lore);
-        return (B) this;
-    }
-
-    /**
-     * Add enchantment to an item
-     *
-     * @param enchantment            the {@link Enchantment} to add
-     * @param level                  the level of the {@link Enchantment}
-     * @param ignoreLevelRestriction If should or not ignore it
-     * @return {@link ItemBuilder}
-     * @deprecated In favor of {@link ItemBuilder#enchant(Enchantment, int, boolean)}, nothing changed just the name, will be removed in 3.0.1
-     */
-    @Deprecated
-    public B addEnchantment(@NotNull final Enchantment enchantment, final int level, final boolean ignoreLevelRestriction) {
-        getMeta().addEnchant(enchantment, level, ignoreLevelRestriction);
-        return (B) this;
-    }
-
-    /**
-     * Add enchantment to an item
-     *
-     * @param enchantment the {@link Enchantment} to add
-     * @param level       the level of the {@link Enchantment}
-     * @return {@link ItemBuilder}
-     * @deprecated In favor of {@link ItemBuilder#enchant(Enchantment, int)}, nothing changed just the name, will be removed in 3.0.1
-     */
-    @Deprecated
-    public B addEnchantment(@NotNull final Enchantment enchantment, final int level) {
-        return addEnchantment(enchantment, level, true);
-    }
-
-    /**
-     * Add enchantment to an item
-     *
-     * @param enchantment the {@link Enchantment} to add
-     * @return {@link ItemBuilder}
-     * @deprecated In favor of {@link ItemBuilder#enchant(Enchantment)}, nothing changed just the name, will be removed in 3.0.1
-     */
-    @Deprecated
-    public B addEnchantment(@NotNull final Enchantment enchantment) {
-        return addEnchantment(enchantment, 1, true);
-    }
-
-    /**
-     * Removes a certain {@link Enchantment} from the item
-     *
-     * @param enchantment The {@link Enchantment} to remove
-     * @return {@link ItemBuilder}
-     * @deprecated In favor of {@link ItemBuilder#disenchant(Enchantment)}, nothing changed just the name, will be removed in 3.0.1
-     */
-    @Deprecated
-    public B removeEnchantment(@NotNull final Enchantment enchantment) {
-        getItemStack().removeEnchantment(enchantment);
-        return (B) this;
-    }
-
-    /**
-     * Add a custom {@link ItemFlag} to the item
-     *
-     * @param flags the {@link ItemFlag} to add
-     * @return {@link ItemBuilder}
-     * @deprecated In favor of {@link ItemBuilder#flags(ItemFlag...)}, nothing changed just the name, will be removed in 3.0.1
-     */
-    @Deprecated
-    public B addItemFlags(@NotNull final ItemFlag... flags) {
-        getMeta().addItemFlags(flags);
-        return (B) this;
-    }
-
-    /**
-     * Sets the item as unbreakable
-     *
-     * @param unbreakable If should or not be unbreakable
-     * @return {@link ItemBuilder}
-     * @deprecated In favor of {@link ItemBuilder#unbreakable()}, nothing changed just the name, will be removed in 3.0.1
-     */
-    @Deprecated
-    public B setUnbreakable(boolean unbreakable) {
-        return unbreakable(unbreakable);
     }
 
 }
