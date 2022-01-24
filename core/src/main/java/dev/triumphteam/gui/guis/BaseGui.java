@@ -1,18 +1,18 @@
 /**
  * MIT License
- * <p>
+ *
  * Copyright (c) 2021 TriumphTeam
- * <p>
+ *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * <p>
+ *
  * The above copyright notice and this permission notice shall be included in all
  * copies or substantial portions of the Software.
- * <p>
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -149,7 +149,14 @@ public abstract class BaseGui implements InventoryHolder {
         this.interactionModifiers = safeCopyOf(interactionModifiers);
         this.title = title;
         int inventorySize = this.rows * 9;
-        this.inventory = Bukkit.createInventory(this, inventorySize, title);
+
+        if (guiType == GuiType.CHEST)
+            this.inventory = Bukkit.createInventory(this, inventorySize, title);
+        else {
+            inventorySize = guiType.getLimit();
+            this.inventory = Bukkit.createInventory(this, guiType.getInventoryType(), title);
+        }
+
         this.slotActions = new LinkedHashMap<>(inventorySize);
         this.guiItems = new LinkedHashMap<>(inventorySize);
     }
@@ -333,12 +340,16 @@ public abstract class BaseGui implements InventoryHolder {
      *                     and there are more items to be added
      */
     public void addItem(final boolean expandIfFull, @NotNull final GuiItem... items) {
+        if (expandIfFull && guiType != GuiType.CHEST)
+            throw new IllegalStateException("Cannot expand non-chest guis!");
+
         final List<GuiItem> notAddedItems = new ArrayList<>();
+        int tempMaxSlot = guiType == GuiType.CHEST ? rows * 9 : guiType.getLimit();
 
         for (final GuiItem guiItem : items) {
-            for (int slot = 0; slot < rows * 9; slot++) {
+            for (int slot = 0; slot < tempMaxSlot; slot++) {
                 if (guiItems.get(slot) != null) {
-                    if (slot == rows * 9 - 1) {
+                    if (slot == tempMaxSlot - 1) {
                         notAddedItems.add(guiItem);
                     }
                     continue;
@@ -350,8 +361,7 @@ public abstract class BaseGui implements InventoryHolder {
         }
 
         if (!expandIfFull || this.rows >= 6 ||
-                notAddedItems.isEmpty() ||
-                (this.guiType != null && this.guiType != GuiType.CHEST)) {
+                notAddedItems.isEmpty()) {
             return;
         }
 
@@ -539,7 +549,10 @@ public abstract class BaseGui implements InventoryHolder {
 
         final List<HumanEntity> viewers = new ArrayList<>(inventory.getViewers());
 
-        inventory = Bukkit.createInventory(this, inventory.getSize(), title);
+        if (guiType == GuiType.CHEST)
+            inventory = Bukkit.createInventory(this, inventory.getSize(), title);
+        else
+            inventory = Bukkit.createInventory(this, guiType.getInventoryType(), title);
 
         for (final HumanEntity player : viewers) {
             open(player);
@@ -564,6 +577,7 @@ public abstract class BaseGui implements InventoryHolder {
             return;
         }
 
+        guiItem.setItemStack(itemStack);
         updateItem(slot, guiItem);
     }
 
