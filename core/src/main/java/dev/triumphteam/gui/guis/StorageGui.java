@@ -34,7 +34,7 @@ import java.util.Map;
 import java.util.Set;
 
 /**
- * GUI that does not clear it's items once it's closed
+ * GUI that does not clear its items once it's closed
  */
 @SuppressWarnings("unused")
 public class StorageGui extends BaseGui {

@@ -24,15 +24,17 @@
 package dev.triumphteam.gui.guis;
 
 import dev.triumphteam.gui.components.Serializable;
-import org.apache.commons.codec.binary.Base64;
-import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * GUI that does not clear it's items once it's closed
@@ -252,7 +254,7 @@ class PersistentPaginatedGui extends PaginatedGui implements Serializable {
 
         for (final Page page : pages) {
             yamlConfiguration.set("inventory", page.getContent(inventorySize));
-            pageItems.add(Base64.encodeBase64String(yamlConfiguration.saveToString().getBytes()));
+            //pageItems.add(Base64.encodeBase64String(yamlConfiguration.saveToString().getBytes()));
         }
 
         return pageItems;
@@ -265,17 +267,13 @@ class PersistentPaginatedGui extends PaginatedGui implements Serializable {
      */
     @Override
     public void decodeGui(@NotNull final List<String> encodedItem) {
-        try {
-            for (int i = 0; i < pages.size(); i++) {
-                final Page page = pages.get(i);
-                yamlConfiguration.loadFromString(new String(Base64.decodeBase64(encodedItem.get(i))));
-                //noinspection unchecked
-                final List<ItemStack> content = (List<ItemStack>) yamlConfiguration.get("inventory");
-                if (content == null) continue;
-                page.loadPageContent(content, getInventory().getSize());
-            }
-        } catch (InvalidConfigurationException e) {
-            e.printStackTrace();
+        for (int i = 0; i < pages.size(); i++) {
+            final Page page = pages.get(i);
+            //yamlConfiguration.loadFromString(new String(Base64.decodeBase64(encodedItem.get(i))));
+            //noinspection unchecked
+            final List<ItemStack> content = (List<ItemStack>) yamlConfiguration.get("inventory");
+            if (content == null) continue;
+            page.loadPageContent(content, getInventory().getSize());
         }
     }
 

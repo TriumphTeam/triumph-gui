@@ -29,6 +29,8 @@ import dev.triumphteam.gui.components.GuiType;
 import dev.triumphteam.gui.components.InteractionModifier;
 import dev.triumphteam.gui.components.exception.GuiException;
 import dev.triumphteam.gui.components.util.GuiFiller;
+import dev.triumphteam.gui.components.util.Legacy;
+import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
@@ -50,6 +52,7 @@ import java.util.EnumSet;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 
 
@@ -110,10 +113,10 @@ public abstract class BaseGui implements InventoryHolder {
     // Action to execute when clicked outside the GUI.
     private GuiAction<InventoryClickEvent> outsideClickAction;
 
-    // Whether or not the GUI is updating.
+    // Whether the GUI is updating.
     private boolean updating;
 
-    // Whether or not should run the actions from the close and open methods.
+    // Whether should run the actions from the close and open methods.
     private boolean runCloseAction = true;
     private boolean runOpenAction = true;
 
@@ -206,6 +209,27 @@ public abstract class BaseGui implements InventoryHolder {
     }
 
     /**
+     * Gets the GUI's title as string.
+     *
+     * @return The GUI's title.
+     */
+    @NotNull
+    @Deprecated
+    public String getTitle() {
+        return title;
+    }
+
+    /**
+     * Gets the GUI title as a {@link Component}.
+     *
+     * @return The GUI title {@link Component}.
+     */
+    @NotNull
+    public Component title() {
+        return Legacy.SERIALIZER.deserialize(title);
+    }
+
+    /**
      * Sets the {@link GuiItem} to a specific slot on the GUI.
      *
      * @param slot    The GUI slot.
@@ -217,6 +241,40 @@ public abstract class BaseGui implements InventoryHolder {
     }
 
     /**
+     * Removes the given {@link GuiItem} from the GUI.
+     *
+     * @param item The item to remove.
+     */
+    public void removeItem(@NotNull final GuiItem item) {
+        final Optional<Map.Entry<Integer, GuiItem>> entry = guiItems.entrySet()
+                .stream()
+                .filter(it -> it.getValue().equals(item))
+                .findFirst();
+
+        entry.ifPresent(it -> {
+            guiItems.remove(it.getKey());
+            inventory.remove(it.getValue().getItemStack());
+        });
+    }
+
+    /**
+     * Removes the given {@link ItemStack} from the GUI.
+     *
+     * @param item The item to remove.
+     */
+    public void removeItem(@NotNull final ItemStack item) {
+        final Optional<Map.Entry<Integer, GuiItem>> entry = guiItems.entrySet()
+                .stream()
+                .filter(it -> it.getValue().getItemStack().equals(item))
+                .findFirst();
+
+        entry.ifPresent(it -> {
+            guiItems.remove(it.getKey());
+            inventory.remove(item);
+        });
+    }
+
+    /**
      * Removes the {@link GuiItem} in the specific slot.
      *
      * @param slot The GUI slot.
@@ -224,6 +282,7 @@ public abstract class BaseGui implements InventoryHolder {
     public void removeItem(final int slot) {
         validateSlot(slot);
         guiItems.remove(slot);
+        inventory.setItem(slot, null);
     }
 
     /**
@@ -273,7 +332,7 @@ public abstract class BaseGui implements InventoryHolder {
      * Adds {@link GuiItem}s to the GUI without specific slot.
      * It'll set the item to the next empty slot available.
      *
-     * @param items Varargs for specifying the {@link GuiItem}s.
+     * @param items        Varargs for specifying the {@link GuiItem}s.
      * @param expandIfFull If true, expands the gui if it is full
      *                     and there are more items to be added
      */
@@ -283,7 +342,7 @@ public abstract class BaseGui implements InventoryHolder {
         for (final GuiItem guiItem : items) {
             for (int slot = 0; slot < rows * 9; slot++) {
                 if (guiItems.get(slot) != null) {
-                    if (slot == rows * 9 -1) {
+                    if (slot == rows * 9 - 1) {
                         notAddedItems.add(guiItem);
                     }
                     continue;
@@ -513,10 +572,15 @@ public abstract class BaseGui implements InventoryHolder {
      * @param itemStack The {@link ItemStack} to replace in the original one in the {@link GuiItem}.
      */
     public void updateItem(final int slot, @NotNull final ItemStack itemStack) {
-        if (!guiItems.containsKey(slot)) return;
         final GuiItem guiItem = guiItems.get(slot);
+
+        if (guiItem == null) {
+            updateItem(slot, new GuiItem(itemStack));
+            return;
+        }
+
         guiItem.setItemStack(itemStack);
-        inventory.setItem(slot, guiItem.getItemStack());
+        updateItem(slot, guiItem);
     }
 
     /**
@@ -537,7 +601,6 @@ public abstract class BaseGui implements InventoryHolder {
      * @param item The {@link GuiItem} to replace in the original.
      */
     public void updateItem(final int slot, @NotNull final GuiItem item) {
-        if (!guiItems.containsKey(slot)) return;
         guiItems.put(slot, item);
         inventory.setItem(slot, item.getItemStack());
     }

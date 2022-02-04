@@ -43,7 +43,6 @@ import java.util.UUID;
  */
 public final class SkullBuilder extends BaseItemBuilder<SkullBuilder> {
 
-    private static final int V1_12 = 1120;
     private static final Field PROFILE_FIELD;
 
     static {

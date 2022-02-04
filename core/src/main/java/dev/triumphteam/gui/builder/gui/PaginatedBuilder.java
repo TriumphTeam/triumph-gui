@@ -38,7 +38,7 @@ public class PaginatedBuilder extends BaseGuiBuilder<PaginatedGui, PaginatedBuil
     private int pageSize = 0;
 
     /**
-     * Sets the desirable page size, most of the times this isn't needed
+     * Sets the desirable page size, most of the time this isn't needed
      *
      * @param pageSize The amount of free slots that page items should occupy
      * @return The current builder
