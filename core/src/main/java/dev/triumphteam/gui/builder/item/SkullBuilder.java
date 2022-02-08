@@ -75,11 +75,12 @@ public final class SkullBuilder extends BaseItemBuilder<SkullBuilder> {
      * Sets the skull texture using a BASE64 string
      *
      * @param texture The base64 texture
+     * @param profileId The unique id of the profile
      * @return {@link SkullBuilder}
      */
     @NotNull
-    @Contract("_ -> this")
-    public SkullBuilder texture(@NotNull final String texture) {
+    @Contract("_, _ -> this")
+    public SkullBuilder texture(@NotNull final String texture, @NotNull final UUID profileId) {
         if (getItemStack().getType() != SkullUtil.SKULL) return this;
 
         if (PROFILE_FIELD == null) {
@@ -87,7 +88,7 @@ public final class SkullBuilder extends BaseItemBuilder<SkullBuilder> {
         }
 
         final SkullMeta skullMeta = (SkullMeta) getMeta();
-        final GameProfile profile = new GameProfile(UUID.randomUUID(), null);
+        final GameProfile profile = new GameProfile(profileId, null);
         profile.getProperties().put("textures", new Property("textures", texture));
 
         try {
@@ -98,6 +99,18 @@ public final class SkullBuilder extends BaseItemBuilder<SkullBuilder> {
 
         setMeta(skullMeta);
         return this;
+    }
+
+    /**
+     * Sets the skull texture using a BASE64 string
+     *
+     * @param texture The base64 texture
+     * @return {@link SkullBuilder}
+     */
+    @NotNull
+    @Contract("_ -> this")
+    public SkullBuilder texture(@NotNull final String texture) {
+        return texture(texture, UUID.randomUUID());
     }
 
     /**
