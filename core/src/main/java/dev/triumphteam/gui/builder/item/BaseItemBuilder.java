@@ -406,7 +406,7 @@ public abstract class BaseItemBuilder<B extends BaseItemBuilder<B>> {
      */
     @NotNull
     @Contract("_, _ -> this")
-    public B setNbt(@NotNull final String key, @Nullable final String value) {
+    public B setNbt(@NotNull final String key, @NotNull final String value) {
         itemStack.setItemMeta(meta);
         itemStack = ItemNbt.setString(itemStack, key, value);
         meta = itemStack.getItemMeta();
