@@ -148,8 +148,8 @@ public abstract class BaseGui implements InventoryHolder {
         this.guiType = guiType;
         this.interactionModifiers = safeCopyOf(interactionModifiers);
         this.title = title;
-        int inventorySize = this.rows * 9;
-        this.inventory = Bukkit.createInventory(this, inventorySize, title);
+        int inventorySize = guiType.getLimit();
+        this.inventory = Bukkit.createInventory(this, guiType.getInventoryType(), title);
         this.slotActions = new LinkedHashMap<>(inventorySize);
         this.guiItems = new LinkedHashMap<>(inventorySize);
     }
