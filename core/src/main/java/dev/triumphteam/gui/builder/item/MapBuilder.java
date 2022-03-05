@@ -43,6 +43,9 @@ public class MapBuilder extends BaseItemBuilder<MapBuilder> {
 
     private static final Material MAP = Material.MAP;
 
+    /**
+     * Creates a {@link MapBuilder} with the Material {@link Material#MAP}
+     */
     MapBuilder() {
         super(new ItemStack(MAP));
     }

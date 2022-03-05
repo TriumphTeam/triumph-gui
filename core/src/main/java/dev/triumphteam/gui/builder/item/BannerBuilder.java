@@ -61,6 +61,9 @@ public final class BannerBuilder extends BaseItemBuilder<BannerBuilder> {
         }
     }
 
+    /**
+     * Creates a standard banner builder with the default banner
+     */
     BannerBuilder() {
         super(new ItemStack(DEFAULT_BANNER));
     }
