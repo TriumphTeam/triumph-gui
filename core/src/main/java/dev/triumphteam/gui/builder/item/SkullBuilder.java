@@ -60,10 +60,17 @@ public final class SkullBuilder extends BaseItemBuilder<SkullBuilder> {
         PROFILE_FIELD = field;
     }
 
+    /**
+     * Creates a {@link SkullBuilder} from a generic player skull
+     */
     SkullBuilder() {
         super(SkullUtil.skull());
     }
 
+    /**
+     * Creates a {@link SkullBuilder} from a skull item
+     * @param itemStack the skull item to create the builder from
+     */
     SkullBuilder(final @NotNull ItemStack itemStack) {
         super(itemStack);
         if (!SkullUtil.isPlayerSkull(itemStack)) {

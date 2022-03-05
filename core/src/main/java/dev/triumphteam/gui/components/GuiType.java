@@ -23,32 +23,63 @@
  */
 package dev.triumphteam.gui.components;
 
+import dev.triumphteam.gui.guis.Gui;
 import org.bukkit.event.inventory.InventoryType;
 import org.jetbrains.annotations.NotNull;
 
-// TODO COMMENTS
+/**
+ * Possible types for a {@link Gui} - similar to {@link InventoryType}
+ */
 public enum GuiType {
 
+    /**
+     * Standard chest inventory
+     */
     CHEST(InventoryType.CHEST, 9),
+    /**
+     * Standard workbench inventory
+     */
     WORKBENCH(InventoryType.WORKBENCH, 9),
+    /**
+     * Standard hopper inventory
+     */
     HOPPER(InventoryType.HOPPER, 5),
+    /**
+     * Standard dispenser inventory
+     */
     DISPENSER(InventoryType.DISPENSER, 8),
+    /**
+     * Standard brewing stand inventory
+     */
     BREWING(InventoryType.BREWING, 4);
 
     @NotNull
     private final InventoryType inventoryType;
     private final int limit;
 
+    /**
+     * Creates a new {@link GuiType}
+     * @param inventoryType the {@link InventoryType}
+     * @param limit the amount of slots across a chest or limits for a unique inventory type
+     */
     GuiType(@NotNull final InventoryType inventoryType, final int limit) {
         this.inventoryType = inventoryType;
         this.limit = limit;
     }
 
+    /**
+     * Gets the {@link InventoryType} of this {@link GuiType}
+     * @return the {@link InventoryType}
+     */
     @NotNull
     public InventoryType getInventoryType() {
         return inventoryType;
     }
 
+    /**
+     * Gets the amount of slots across a chest or limits for a unique inventory type
+     * @return the limit of the {@link GuiType}
+     */
     public int getLimit() {
         return limit;
     }

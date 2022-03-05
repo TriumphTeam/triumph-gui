@@ -30,7 +30,13 @@ import dev.triumphteam.gui.guis.ScrollingGui;
  */
 public enum ScrollType {
 
+    /**
+     * Scrolling moves from left to right
+     */
     HORIZONTAL,
+    /**
+     * Scrolling moves from top to bottom
+     */
     VERTICAL
 
 }
