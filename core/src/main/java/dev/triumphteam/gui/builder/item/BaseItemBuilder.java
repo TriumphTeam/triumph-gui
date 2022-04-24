@@ -51,6 +51,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.EnumSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
@@ -249,6 +250,37 @@ public abstract class BaseItemBuilder<B extends BaseItemBuilder<B>> {
     @Contract("_ -> this")
     public B enchant(@NotNull final Enchantment enchantment) {
         return enchant(enchantment, 1, true);
+    }
+
+    /**
+     * Enchants the {@link ItemStack} with the specified map where the value
+     * is the level of the key's enchantment
+     *
+     * @param enchantments Enchantments to add
+     * @param ignoreLevelRestriction If level restriction should be ignored
+     * @return {@link ItemBuilder}
+     * @since 3.1.2
+     */
+    @NotNull
+    @Contract("_, _ -> this")
+    public B enchant(@NotNull final Map<Enchantment, Integer> enchantments, boolean ignoreLevelRestriction) {
+        enchantments.forEach((enchantment, level) -> this.enchant(enchantment, level, ignoreLevelRestriction));
+        return (B) this;
+    }
+
+    /**
+     * Enchants the {@link ItemStack} with the specified map where the value
+     * is the level of the key's enchantment
+     *
+     * @param enchantments Enchantments to add
+     * @return {@link ItemBuilder}
+     * @since 3.1.2
+     */
+    @NotNull
+    @Contract("_ -> this")
+    public B enchant(@NotNull final Map<Enchantment, Integer> enchantments) {
+        enchantments.forEach((enchantment, level) -> this.enchant(enchantment, level, false));
+        return (B) this;
     }
 
     /**
