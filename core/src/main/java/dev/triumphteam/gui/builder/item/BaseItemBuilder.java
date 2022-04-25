@@ -263,7 +263,7 @@ public abstract class BaseItemBuilder<B extends BaseItemBuilder<B>> {
      */
     @NotNull
     @Contract("_, _ -> this")
-    public B enchant(@NotNull final Map<Enchantment, Integer> enchantments, boolean ignoreLevelRestriction) {
+    public B enchant(@NotNull final Map<Enchantment, Integer> enchantments, final boolean ignoreLevelRestriction) {
         enchantments.forEach((enchantment, level) -> this.enchant(enchantment, level, ignoreLevelRestriction));
         return (B) this;
     }
