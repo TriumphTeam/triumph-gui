@@ -279,8 +279,7 @@ public abstract class BaseItemBuilder<B extends BaseItemBuilder<B>> {
     @NotNull
     @Contract("_ -> this")
     public B enchant(@NotNull final Map<Enchantment, Integer> enchantments) {
-        enchant(enchantments, true);
-        return (B) this;
+        return enchant(enchantments, true);
     }
 
     /**
