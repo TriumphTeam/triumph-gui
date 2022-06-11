@@ -193,12 +193,12 @@ public abstract class BaseItemBuilder<B extends BaseItemBuilder<B>> {
         List<Component> components;
         if (VersionHelper.IS_ITEM_LEGACY) {
             final List<String> stringLore = meta.getLore();
-            if (stringLore == null) return (B) this;
-            components = stringLore.stream().map(Legacy.SERIALIZER::deserialize).collect(Collectors.toList());
+            components = (stringLore == null) ? new ArrayList<>() : stringLore.stream().map(Legacy.SERIALIZER::deserialize).collect(Collectors.toList());
         } else {
             try {
                 final List<String> jsonLore = (List<String>) LORE_FIELD.get(meta);
-                components = jsonLore.stream().map(GSON::deserialize).collect(Collectors.toList());
+                // The field is null by default ._.
+                components = (jsonLore == null) ? new ArrayList<>() : jsonLore.stream().map(GSON::deserialize).collect(Collectors.toList());
             } catch (IllegalAccessException exception) {
                 components = new ArrayList<>();
                 exception.printStackTrace();
