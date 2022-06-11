@@ -24,9 +24,11 @@ subprojects {
     dependencies {
         compileOnly("org.jetbrains:annotations:21.0.1")
         compileOnly("org.spigotmc:spigot-api:1.18.1-R0.1-SNAPSHOT")
-        api("net.kyori:adventure-api:4.9.2")
-        api("net.kyori:adventure-text-serializer-legacy:4.9.2")
-        api("net.kyori:adventure-text-serializer-gson:4.9.2")
+
+        val adventureVersion = "4.11.0"
+        api("net.kyori:adventure-api:$adventureVersion")
+        api("net.kyori:adventure-text-serializer-legacy:$adventureVersion")
+        api("net.kyori:adventure-text-serializer-gson:$adventureVersion")
     }
 
     license {
