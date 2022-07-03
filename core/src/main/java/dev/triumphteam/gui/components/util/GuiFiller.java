@@ -111,11 +111,10 @@ public final class GuiFiller {
         final List<GuiItem> items = repeatList(guiItems, rows * 9);
 
         for (int i = 0; i < rows * 9; i++) {
-            if ((i <= 8) || (i >= (rows * 9) - 9)
-                    || i == 9 || i == 18
-                    || i == 27 || i == 36
-                    || i == 17 || i == 26
-                    || i == 35 || i == 44)
+            if ((i <= 8)
+                    || (i >= (rows * 9) - 8) && (i <= (rows * 9) - 2)
+                    || i % 9 == 0
+                    || i % 9 == 8) 
                 gui.setItem(i, items.get(i));
 
         }
