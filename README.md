@@ -2,7 +2,7 @@
 <h1 align="center">Welcome to triumph-gui 👋</h1>
 <p>
   <img src="https://img.shields.io/github/license/TriumphTeam/triumph-gui?color=blue&style=flat-square"  alt="license"/>
-  <img src="https://img.shields.io/github/v/release/TriumphTeam/triumph-gui?color=green&style=flat-square" alt="release">
+  <a href="https://search.maven.org/artifact/dev.triumphteam/triumph-gui"><img src="https://img.shields.io/github/v/release/TriumphTeam/triumph-gui?color=green&style=flat-square" alt="release"></a>
 <a href="https://mattstudios.me/discord"><img src="https://img.shields.io/discord/493380790718038028?label=discord&style=flat-square"  alt="language"/></a>
 </p>
 
@@ -13,6 +13,7 @@
 👤 **TriumphTeam**
 
 * Documentation: https://mf.mattstudios.me/triumph-gui/
+* Maven Central: https://search.maven.org/artifact/dev.triumphteam/triumph-gui
 * Github: [@ipsk](https://github.com/ipsk)
 
 ## 🤝 Contributing
