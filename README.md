@@ -12,7 +12,7 @@
 
 👤 **TriumphTeam**
 
-* Documentation: https://mf.mattstudios.me/triumph-gui/
+* Documentation: https://triumphteam.dev/library/triumph-gui 🚧 **work in progress**
 * Maven Central: https://search.maven.org/artifact/dev.triumphteam/triumph-gui
 * Github: [@ipsk](https://github.com/ipsk)
 
