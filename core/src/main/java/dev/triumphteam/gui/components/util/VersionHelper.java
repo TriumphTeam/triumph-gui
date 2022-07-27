@@ -80,7 +80,7 @@ public final class VersionHelper {
      * Checks if the version doesn't have {@link org.bukkit.inventory.meta.SkullMeta#setOwningPlayer(OfflinePlayer)} and
      * {@link org.bukkit.inventory.meta.SkullMeta#setOwner(String)} should be used instead
      */
-    public static final boolean IS_SKULL_OWNER_LEGACY = CURRENT_VERSION < V1_12;
+    public static final boolean IS_SKULL_OWNER_LEGACY = CURRENT_VERSION <= V1_12;
 
     /**
      * Checks if the version has {@link org.bukkit.inventory.meta.ItemMeta#setCustomModelData(Integer)}
