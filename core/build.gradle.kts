@@ -85,8 +85,8 @@ tasks {
                 }
 
                 credentials {
-                    username = System.getenv("OSSRH_USER")
-                    password = System.getenv("OSSRH_PASS")
+                    username = System.getenv("SONATYPE_USER")
+                    password = System.getenv("SONATYPE_PASSWORD")
                 }
 
                 url = uri("https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/")
