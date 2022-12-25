@@ -56,10 +56,9 @@ public final class VersionHelper {
 
     /**
      * Checks if the version supports Components or not
-     * Paper versions above 1.16.5 would be true
      * Spigot always false
      */
-    public static final boolean IS_COMPONENT_LEGACY = !IS_PAPER || CURRENT_VERSION < V1_16_5;
+    public static final boolean IS_COMPONENT_LEGACY = CURRENT_VERSION < V1_16_5;
 
     /**
      * Checks if the version is lower than 1.13 due to the item changes

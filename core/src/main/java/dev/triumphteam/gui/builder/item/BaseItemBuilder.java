@@ -109,7 +109,7 @@ public abstract class BaseItemBuilder<B extends BaseItemBuilder<B>> {
     public B name(@NotNull final Component name) {
         if (meta == null) return (B) this;
 
-        if (VersionHelper.IS_ITEM_LEGACY) {
+        if (VersionHelper.IS_COMPONENT_LEGACY) {
             meta.setDisplayName(Legacy.SERIALIZER.serialize(name));
             return (B) this;
         }
@@ -162,7 +162,7 @@ public abstract class BaseItemBuilder<B extends BaseItemBuilder<B>> {
     public B lore(@NotNull final List<@Nullable Component> lore) {
         if (meta == null) return (B) this;
 
-        if (VersionHelper.IS_ITEM_LEGACY) {
+        if (VersionHelper.IS_COMPONENT_LEGACY) {
             meta.setLore(lore.stream().filter(Objects::nonNull).map(Legacy.SERIALIZER::serialize).collect(Collectors.toList()));
             return (B) this;
         }
@@ -191,7 +191,7 @@ public abstract class BaseItemBuilder<B extends BaseItemBuilder<B>> {
         if (meta == null) return (B) this;
 
         List<Component> components;
-        if (VersionHelper.IS_ITEM_LEGACY) {
+        if (VersionHelper.IS_COMPONENT_LEGACY) {
             final List<String> stringLore = meta.getLore();
             components = (stringLore == null) ? new ArrayList<>() : stringLore.stream().map(Legacy.SERIALIZER::deserialize).collect(Collectors.toList());
         } else {
