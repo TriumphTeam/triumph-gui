@@ -267,7 +267,7 @@ public class ScrollingGui extends PaginatedGui {
      */
     private void putItemVertically(final GuiItem guiItem) {
         for (int slot = 0; slot < getRows() * 9; slot++) {
-            if (getInventory().getItem(slot) != null) continue;
+            if (getGuiItem(slot) != null || getInventory().getItem(slot) != null) continue;
             getMutableCurrentPageItems().put(slot, guiItem);
             getInventory().setItem(slot, guiItem.getItemStack());
             break;
@@ -283,8 +283,7 @@ public class ScrollingGui extends PaginatedGui {
         for (int col = 1; col < 10; col++) {
             for (int row = 1; row <= getRows(); row++) {
                 final int slot = getSlotFromRowCol(row, col);
-                if (getInventory().getItem(slot) != null) continue;
-
+                if (getGuiItem(slot) != null || getInventory().getItem(slot) != null) continue;
                 getMutableCurrentPageItems().put(slot, guiItem);
                 getInventory().setItem(slot, guiItem.getItemStack());
                 return;
