@@ -48,7 +48,7 @@ public final class VersionHelper {
     // Paper adventure changes
     private static final int V1_16_5 = 1165;
     // SkullMeta#setOwningPlayer was added
-    private static final int V1_12 = 1120;
+    private static final int V1_12_1 = 1121;
 
     private static final int CURRENT_VERSION = getCurrentVersion();
 
@@ -56,10 +56,9 @@ public final class VersionHelper {
 
     /**
      * Checks if the version supports Components or not
-     * Paper versions above 1.16.5 would be true
      * Spigot always false
      */
-    public static final boolean IS_COMPONENT_LEGACY = !IS_PAPER || CURRENT_VERSION < V1_16_5;
+    public static final boolean IS_COMPONENT_LEGACY = CURRENT_VERSION < V1_16_5;
 
     /**
      * Checks if the version is lower than 1.13 due to the item changes
@@ -80,7 +79,7 @@ public final class VersionHelper {
      * Checks if the version doesn't have {@link org.bukkit.inventory.meta.SkullMeta#setOwningPlayer(OfflinePlayer)} and
      * {@link org.bukkit.inventory.meta.SkullMeta#setOwner(String)} should be used instead
      */
-    public static final boolean IS_SKULL_OWNER_LEGACY = CURRENT_VERSION < V1_12;
+    public static final boolean IS_SKULL_OWNER_LEGACY = CURRENT_VERSION < V1_12_1;
 
     /**
      * Checks if the version has {@link org.bukkit.inventory.meta.ItemMeta#setCustomModelData(Integer)}

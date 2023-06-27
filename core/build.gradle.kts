@@ -1,5 +1,6 @@
 plugins {
-    id("maven-publish")
+    `maven-publish`
+    signing
 }
 
 repositories {
@@ -43,7 +44,7 @@ tasks {
                 }
                 pom {
                     name.set("Triumph GUI")
-                    description.set("Lib for easy creation of GUIs for Bukkit plugins.")
+                    description.set("Library for easy creation of GUIs for Bukkit plugins.")
                     url.set("https://github.com/TriumphTeam/triumph-gui")
 
                     licenses {
@@ -57,6 +58,8 @@ tasks {
                         developer {
                             id.set("matt")
                             name.set("Mateus Moreira")
+                            organization.set("TriumphTeam")
+                            organizationUrl.set("https://github.com/TriumphTeam")
                         }
                     }
 
@@ -71,15 +74,34 @@ tasks {
 
         repositories {
             maven {
-                credentials {
-                    username = System.getenv("REPO_USER")
-                    password = System.getenv("REPO_PASS")
+                if (version.toString().contains("SNAPSHOT")) {
+                    credentials {
+                        username = System.getenv("REPO_USER")
+                        password = System.getenv("REPO_PASS")
+                    }
+
+                    url = uri("https://repo.mattstudios.me/artifactory/public-snapshot/")
+                    return@maven
                 }
 
-                url = uri("https://repo.mattstudios.me/artifactory/public")
+                credentials {
+                    username = System.getenv("SONATYPE_USER")
+                    password = System.getenv("SONATYPE_PASSWORD")
+                }
+
+                url = uri("https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/")
             }
         }
 
+    }
+
+    signing {
+        /*useGpgCmd()
+        val signingKey = System.getenv("GPG_KEY")
+        val signingPassword = System.getenv("GPG_PASS")
+        val secretKey = System.getenv("GPG_SECRET_KEY")
+        useInMemoryPgpKeys(signingKey, secretKey, signingPassword)*/
+        sign(publishing.publications["maven"])
     }
 
 }

@@ -39,7 +39,7 @@ import java.util.function.Consumer;
 public final class ScrollingBuilder extends BaseGuiBuilder<ScrollingGui, ScrollingBuilder> {
 
     private ScrollType scrollType;
-    private int pageSize = -1;
+    private int pageSize = 0;
 
     /**
      * Main constructor

@@ -228,7 +228,7 @@ public class ItemBuilder extends BaseItemBuilder<ItemBuilder> {
      */
     @Deprecated
     public ItemBuilder setSkullTexture(@NotNull final String texture) {
-        if (getItemStack().getType() != SkullUtil.SKULL) return this;
+        if (!SkullUtil.isPlayerSkull(getItemStack())) return this;
 
         final SkullMeta skullMeta = (SkullMeta) getMeta();
         final GameProfile profile = new GameProfile(UUID.randomUUID(), null);
@@ -256,7 +256,7 @@ public class ItemBuilder extends BaseItemBuilder<ItemBuilder> {
      */
     @Deprecated
     public ItemBuilder setSkullOwner(@NotNull final OfflinePlayer player) {
-        if (getItemStack().getType() != SkullUtil.SKULL) return this;
+        if (!SkullUtil.isPlayerSkull(getItemStack())) return this;
 
         final SkullMeta skullMeta = (SkullMeta) getMeta();
         skullMeta.setOwningPlayer(player);

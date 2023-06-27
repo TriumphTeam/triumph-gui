@@ -49,7 +49,7 @@ public final class SkullBuilder extends BaseItemBuilder<SkullBuilder> {
         Field field;
 
         try {
-            final SkullMeta skullMeta = (SkullMeta) new ItemStack(SkullUtil.SKULL).getItemMeta();
+            final SkullMeta skullMeta = (SkullMeta) SkullUtil.skull().getItemMeta();
             field = skullMeta.getClass().getDeclaredField("profile");
             field.setAccessible(true);
         } catch (NoSuchFieldException e) {
@@ -61,12 +61,12 @@ public final class SkullBuilder extends BaseItemBuilder<SkullBuilder> {
     }
 
     SkullBuilder() {
-        super(new ItemStack(SkullUtil.SKULL));
+        super(SkullUtil.skull());
     }
 
     SkullBuilder(final @NotNull ItemStack itemStack) {
         super(itemStack);
-        if (itemStack.getType() != SkullUtil.SKULL) {
+        if (!SkullUtil.isPlayerSkull(itemStack)) {
             throw new GuiException("SkullBuilder requires the material to be a PLAYER_HEAD/SKULL_ITEM!");
         }
     }
@@ -75,19 +75,20 @@ public final class SkullBuilder extends BaseItemBuilder<SkullBuilder> {
      * Sets the skull texture using a BASE64 string
      *
      * @param texture The base64 texture
+     * @param profileId The unique id of the profile
      * @return {@link SkullBuilder}
      */
     @NotNull
-    @Contract("_ -> this")
-    public SkullBuilder texture(@NotNull final String texture) {
-        if (getItemStack().getType() != SkullUtil.SKULL) return this;
+    @Contract("_, _ -> this")
+    public SkullBuilder texture(@NotNull final String texture, @NotNull final UUID profileId) {
+        if (!SkullUtil.isPlayerSkull(getItemStack())) return this;
 
         if (PROFILE_FIELD == null) {
             return this;
         }
 
         final SkullMeta skullMeta = (SkullMeta) getMeta();
-        final GameProfile profile = new GameProfile(UUID.randomUUID(), null);
+        final GameProfile profile = new GameProfile(profileId, null);
         profile.getProperties().put("textures", new Property("textures", texture));
 
         try {
@@ -101,6 +102,18 @@ public final class SkullBuilder extends BaseItemBuilder<SkullBuilder> {
     }
 
     /**
+     * Sets the skull texture using a BASE64 string
+     *
+     * @param texture The base64 texture
+     * @return {@link SkullBuilder}
+     */
+    @NotNull
+    @Contract("_ -> this")
+    public SkullBuilder texture(@NotNull final String texture) {
+        return texture(texture, UUID.randomUUID());
+    }
+
+    /**
      * Sets skull owner via bukkit methods
      *
      * @param player {@link OfflinePlayer} to set skull of
@@ -109,7 +122,7 @@ public final class SkullBuilder extends BaseItemBuilder<SkullBuilder> {
     @NotNull
     @Contract("_ -> this")
     public SkullBuilder owner(@NotNull final OfflinePlayer player) {
-        if (getItemStack().getType() != SkullUtil.SKULL) return this;
+        if (!SkullUtil.isPlayerSkull(getItemStack())) return this;
 
         final SkullMeta skullMeta = (SkullMeta) getMeta();
 

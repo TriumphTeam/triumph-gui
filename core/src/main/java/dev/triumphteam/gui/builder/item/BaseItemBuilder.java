@@ -51,6 +51,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.EnumSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
@@ -108,7 +109,7 @@ public abstract class BaseItemBuilder<B extends BaseItemBuilder<B>> {
     public B name(@NotNull final Component name) {
         if (meta == null) return (B) this;
 
-        if (VersionHelper.IS_ITEM_LEGACY) {
+        if (VersionHelper.IS_COMPONENT_LEGACY) {
             meta.setDisplayName(Legacy.SERIALIZER.serialize(name));
             return (B) this;
         }
@@ -161,7 +162,7 @@ public abstract class BaseItemBuilder<B extends BaseItemBuilder<B>> {
     public B lore(@NotNull final List<@Nullable Component> lore) {
         if (meta == null) return (B) this;
 
-        if (VersionHelper.IS_ITEM_LEGACY) {
+        if (VersionHelper.IS_COMPONENT_LEGACY) {
             meta.setLore(lore.stream().filter(Objects::nonNull).map(Legacy.SERIALIZER::serialize).collect(Collectors.toList()));
             return (B) this;
         }
@@ -190,14 +191,14 @@ public abstract class BaseItemBuilder<B extends BaseItemBuilder<B>> {
         if (meta == null) return (B) this;
 
         List<Component> components;
-        if (VersionHelper.IS_ITEM_LEGACY) {
+        if (VersionHelper.IS_COMPONENT_LEGACY) {
             final List<String> stringLore = meta.getLore();
-            if (stringLore == null) return (B) this;
-            components = stringLore.stream().map(Legacy.SERIALIZER::deserialize).collect(Collectors.toList());
+            components = (stringLore == null) ? new ArrayList<>() : stringLore.stream().map(Legacy.SERIALIZER::deserialize).collect(Collectors.toList());
         } else {
             try {
                 final List<String> jsonLore = (List<String>) LORE_FIELD.get(meta);
-                components = jsonLore.stream().map(GSON::deserialize).collect(Collectors.toList());
+                // The field is null by default ._.
+                components = (jsonLore == null) ? new ArrayList<>() : jsonLore.stream().map(GSON::deserialize).collect(Collectors.toList());
             } catch (IllegalAccessException exception) {
                 components = new ArrayList<>();
                 exception.printStackTrace();
@@ -249,6 +250,36 @@ public abstract class BaseItemBuilder<B extends BaseItemBuilder<B>> {
     @Contract("_ -> this")
     public B enchant(@NotNull final Enchantment enchantment) {
         return enchant(enchantment, 1, true);
+    }
+
+    /**
+     * Enchants the {@link ItemStack} with the specified map where the value
+     * is the level of the key's enchantment
+     *
+     * @param enchantments Enchantments to add
+     * @param ignoreLevelRestriction If level restriction should be ignored
+     * @return {@link ItemBuilder}
+     * @since 3.1.2
+     */
+    @NotNull
+    @Contract("_, _ -> this")
+    public B enchant(@NotNull final Map<Enchantment, Integer> enchantments, final boolean ignoreLevelRestriction) {
+        enchantments.forEach((enchantment, level) -> this.enchant(enchantment, level, ignoreLevelRestriction));
+        return (B) this;
+    }
+
+    /**
+     * Enchants the {@link ItemStack} with the specified map where the value
+     * is the level of the key's enchantment
+     *
+     * @param enchantments Enchantments to add
+     * @return {@link ItemBuilder}
+     * @since 3.1.2
+     */
+    @NotNull
+    @Contract("_ -> this")
+    public B enchant(@NotNull final Map<Enchantment, Integer> enchantments) {
+        return enchant(enchantments, true);
     }
 
     /**
@@ -406,7 +437,7 @@ public abstract class BaseItemBuilder<B extends BaseItemBuilder<B>> {
      */
     @NotNull
     @Contract("_, _ -> this")
-    public B setNbt(@NotNull final String key, @Nullable final String value) {
+    public B setNbt(@NotNull final String key, @NotNull final String value) {
         itemStack.setItemMeta(meta);
         itemStack = ItemNbt.setString(itemStack, key, value);
         meta = itemStack.getItemMeta();
