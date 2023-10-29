@@ -49,6 +49,8 @@ public final class VersionHelper {
     private static final int V1_16_5 = 1165;
     // SkullMeta#setOwningPlayer was added
     private static final int V1_12_1 = 1121;
+    // PlayerProfile API
+    private static final int V1_20_1 = 1201;
 
     private static final int CURRENT_VERSION = getCurrentVersion();
 
@@ -85,6 +87,11 @@ public final class VersionHelper {
      * Checks if the version has {@link org.bukkit.inventory.meta.ItemMeta#setCustomModelData(Integer)}
      */
     public static final boolean IS_CUSTOM_MODEL_DATA = CURRENT_VERSION >= V1_14;
+
+    /**
+     * Checks if the version has {@link org.bukkit.profile.PlayerProfile}
+     */
+    public static final boolean IS_PLAYER_PROFILE_API = CURRENT_VERSION >= V1_20_1;
 
     /**
      * Check if the server has access to the Paper API

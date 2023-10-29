@@ -23,6 +23,7 @@
  */
 package dev.triumphteam.gui.builder.item;
 
+import com.google.common.base.Preconditions;
 import dev.triumphteam.gui.components.GuiAction;
 import dev.triumphteam.gui.components.exception.GuiException;
 import dev.triumphteam.gui.components.util.ItemNbt;
@@ -31,7 +32,6 @@ import dev.triumphteam.gui.components.util.VersionHelper;
 import dev.triumphteam.gui.guis.GuiItem;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
-import org.apache.commons.lang.Validate;
 import org.bukkit.Bukkit;
 import org.bukkit.Color;
 import org.bukkit.Material;
@@ -91,7 +91,7 @@ public abstract class BaseItemBuilder<B extends BaseItemBuilder<B>> {
     private ItemMeta meta;
 
     protected BaseItemBuilder(@NotNull final ItemStack itemStack) {
-        Validate.notNull(itemStack, "Item can't be null!");
+        Preconditions.checkNotNull(itemStack, "Item can't be null!");
 
         this.itemStack = itemStack;
         meta = itemStack.hasItemMeta() ? itemStack.getItemMeta() : Bukkit.getItemFactory().getItemMeta(itemStack.getType());
