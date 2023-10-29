@@ -30,7 +30,6 @@ import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
-import java.net.URL;
 import java.util.Base64;
 
 public final class SkullUtil {
