@@ -19,13 +19,13 @@ subprojects {
     }
 
     group = "dev.triumphteam"
-    version = "3.1.5"
+    version = "3.1.6"
 
     dependencies {
         compileOnly("org.jetbrains:annotations:21.0.1")
-        compileOnly("org.spigotmc:spigot-api:1.18.1-R0.1-SNAPSHOT")
+        compileOnly("org.spigotmc:spigot-api:1.20.1-R0.1-SNAPSHOT")
 
-        val adventureVersion = "4.11.0"
+        val adventureVersion = "4.14.0"
         api("net.kyori:adventure-api:$adventureVersion")
         api("net.kyori:adventure-text-serializer-legacy:$adventureVersion")
         api("net.kyori:adventure-text-serializer-gson:$adventureVersion")

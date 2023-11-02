@@ -5,12 +5,11 @@ plugins {
 
 repositories {
     mavenCentral()
-    maven("https://repo.mattstudios.me/artifactory/public/")
     maven("https://libraries.minecraft.net/")
 }
 
 dependencies {
-    compileOnly("com.mojang:authlib:1.5.21")
+    compileOnly("com.mojang:authlib:1.5.25")
 }
 
 val javaComponent: SoftwareComponent = components["java"]

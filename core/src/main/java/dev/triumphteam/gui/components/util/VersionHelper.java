@@ -1,18 +1,18 @@
 /**
  * MIT License
- * <p>
+ *
  * Copyright (c) 2021 TriumphTeam
- * <p>
+ *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * <p>
+ *
  * The above copyright notice and this permission notice shall be included in all
  * copies or substantial portions of the Software.
- * <p>
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -49,6 +49,8 @@ public final class VersionHelper {
     private static final int V1_16_5 = 1165;
     // SkullMeta#setOwningPlayer was added
     private static final int V1_12_1 = 1121;
+    // PlayerProfile API
+    private static final int V1_20_1 = 1201;
 
     private static final int CURRENT_VERSION = getCurrentVersion();
 
@@ -85,6 +87,11 @@ public final class VersionHelper {
      * Checks if the version has {@link org.bukkit.inventory.meta.ItemMeta#setCustomModelData(Integer)}
      */
     public static final boolean IS_CUSTOM_MODEL_DATA = CURRENT_VERSION >= V1_14;
+
+    /**
+     * Checks if the version has {@link org.bukkit.profile.PlayerProfile}
+     */
+    public static final boolean IS_PLAYER_PROFILE_API = CURRENT_VERSION >= V1_20_1;
 
     /**
      * Check if the server has access to the Paper API
