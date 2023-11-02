@@ -99,9 +99,8 @@ public class GuiItem {
      * @param itemStack The new {@link ItemStack}
      */
     public void setItemStack(@NotNull final ItemStack itemStack) {
-        this.itemStack = ItemNbt.setString(itemStack.clone(), "mf-gui", uuid.toString());
         Preconditions.checkNotNull(itemStack, "The ItemStack for the GUI Item cannot be null!");
-        this.itemStack = ItemNbt.setString(itemStack, "mf-gui", uuid.toString());
+        this.itemStack = ItemNbt.setString(itemStack.clone(), "mf-gui", uuid.toString());
     }
 
     /**
@@ -138,5 +137,4 @@ public class GuiItem {
     GuiAction<InventoryClickEvent> getAction() {
         return action;
     }
-
 }

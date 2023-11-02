@@ -239,8 +239,9 @@ public final class GuiFiller {
         return (col + (row - 1) * 9) - 1;
     }
 
-    private enum Side {
-        LEFT, RIGHT, BOTH
+    public enum Side {
+        LEFT,
+        RIGHT,
+        BOTH
     }
-
 }
