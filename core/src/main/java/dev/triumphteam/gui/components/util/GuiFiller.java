@@ -199,6 +199,23 @@ public final class GuiFiller {
     }
 
     /**
+     * Fills specified side of the GUI with a GuiItem
+     *
+     * @param guiItems GuiItem
+     */
+    public void fillSide(@NotNull final Side side, @NotNull final List<GuiItem> guiItems) {
+        switch (side) {
+            case LEFT:
+                this.fillBetweenPoints(1, 1, gui.getRows(), 1, guiItems);
+            case RIGHT:
+                this.fillBetweenPoints(1, 9, gui.getRows(), 9, guiItems);
+            case BOTH:
+                this.fillBetweenPoints(1, 1, gui.getRows(), 1, guiItems);
+                this.fillBetweenPoints(1, 9, gui.getRows(), 9, guiItems);
+        }
+    }
+
+    /**
      * Repeats a list of items. Allows for alternating items
      * Stores references to existing objects -> Does not create new objects
      *
@@ -220,6 +237,10 @@ public final class GuiFiller {
      */
     private int getSlotFromRowCol(final int row, final int col) {
         return (col + (row - 1) * 9) - 1;
+    }
+
+    private enum Side {
+        LEFT, RIGHT, BOTH
     }
 
 }
