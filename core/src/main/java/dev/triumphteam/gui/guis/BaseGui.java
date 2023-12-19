@@ -327,24 +327,21 @@ public abstract class BaseGui implements InventoryHolder {
      *                     and there are more items to be added
      */
     public void addItem(final boolean expandIfFull, @NotNull final GuiItem... items) {
-        final List<GuiItem> notAddedItems = new ArrayList<>();
+        final List<GuiItem> notAddedItems = new ArrayList<>(items.length);
 
+        int slot = 0;
         for (final GuiItem guiItem : items) {
-            for (int slot = 0; slot < rows * 9; slot++) {
-                if (guiItems.get(slot) != null) {
-                    if (slot == rows * 9 - 1) {
-                        notAddedItems.add(guiItem);
-                    }
-                    continue;
-                }
-
-                guiItems.put(slot, guiItem);
-                break;
+            if (slot >= size) {
+                if (rows == 6) return; // our work is done
+                notAddedItems.add(guiItem);
+                continue;
             }
+
+            while (this.guiItems.containsKey(slot)) slot++;
+            this.guiItems.put(slot, guiItem);
         }
 
-        if (!expandIfFull || this.rows >= 6 ||
-                notAddedItems.isEmpty() ||
+        if (!expandIfFull || notAddedItems.isEmpty() ||
                 (this.guiType != null && this.guiType != GuiType.CHEST)) {
             return;
         }
