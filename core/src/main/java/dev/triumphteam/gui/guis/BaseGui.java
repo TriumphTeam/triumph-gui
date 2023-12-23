@@ -187,16 +187,40 @@ public abstract class BaseGui implements InventoryHolder {
     }
 
     /**
+     * Utility Methods
+     */
+
+    /**
      * Copy a set into an EnumSet, required because {@link EnumSet#copyOf(EnumSet)} throws an exception if the collection passed as argument is empty.
      *
      * @param set The set to be copied.
      * @return An EnumSet with the provided elements from the original set.
      */
     @NotNull
-    private Set<InteractionModifier> safeCopyOf(@NotNull final Set<InteractionModifier> set) {
+    private static Set<InteractionModifier> safeCopyOf(@NotNull final Set<InteractionModifier> set) {
         if (set.isEmpty()) return EnumSet.noneOf(InteractionModifier.class);
         else return EnumSet.copyOf(set);
     }
+
+    private static boolean sizing(List<GuiItem> items, GuiItem item, int rows) {
+        return (rows == 6) ? false : items.add(item);
+    }
+
+    private static int getValidSlot(final Map<Integer, GuiItem> guiItems, final int beginningIndex, final boolean check) {
+        int slot = beginningIndex;
+        while (guiItems.containsKey(slot)) slot++;
+
+        if (!check) return slot;
+        if (slot >= size) {
+            boolean isResizable = sizing(notAddedItems, guiItem, rows);
+            if (isResizable) continue;
+            return -1;
+        }
+    }
+
+    /**
+     * Instance Methods
+     */
 
     /**
      * Gets the GUI's title as string.
@@ -329,15 +353,15 @@ public abstract class BaseGui implements InventoryHolder {
     public void addItem(final boolean expandIfFull, @NotNull final GuiItem... items) {
         final List<GuiItem> notAddedItems = new ArrayList<>(items.length);
 
-        int slot = 0;
+        int slot = getValidSlot(this.guiItems, slot, false);
         for (final GuiItem guiItem : items) {
             if (slot >= size) {
-                if (rows == 6) return; // our work is done
-                notAddedItems.add(guiItem);
-                continue;
+                boolean isResizable = sizing(notAddedItems, guiItem, rows);
+                if (isResizable) continue;
+                return;
             }
 
-            while (this.guiItems.containsKey(slot)) slot++;
+            slot = getValidSlot(this.guiItems, slot, true);
             this.guiItems.put(slot, guiItem);
         }
 
