@@ -12,7 +12,6 @@ allprojects {
 }
 
 subprojects {
-
     apply {
         plugin("java-library")
         plugin("com.github.hierynomus.license")
@@ -45,5 +44,4 @@ subprojects {
             options.encoding = "UTF-8"
         }
     }
-
 }
