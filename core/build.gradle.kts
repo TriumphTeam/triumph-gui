@@ -15,7 +15,6 @@ dependencies {
 val javaComponent: SoftwareComponent = components["java"]
 
 tasks {
-
     val sourcesJar by creating(Jar::class) {
         archiveClassifier.set("sources")
         from(sourceSets.main.get().allSource)
@@ -102,5 +101,4 @@ tasks {
         useInMemoryPgpKeys(signingKey, secretKey, signingPassword)*/
         sign(publishing.publications["maven"])
     }
-
 }
