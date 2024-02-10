@@ -71,6 +71,7 @@ public abstract class BaseGui implements InventoryHolder {
         Bukkit.getPluginManager().registerEvents(new GuiListener(), plugin);
         // TODO might join these two
         Bukkit.getPluginManager().registerEvents(new InteractionModifierListener(), plugin);
+        new Task(plugin);
     }
 
     // Gui filler.
@@ -105,6 +106,7 @@ public abstract class BaseGui implements InventoryHolder {
 
     // Whether the GUI is updating.
     private boolean updating;
+    private boolean autoUpdate = false;
 
     // Whether should run the actions from the close and open methods.
     private boolean runCloseAction = true;
@@ -401,6 +403,15 @@ public abstract class BaseGui implements InventoryHolder {
     }
 
     /**
+     * Checks if AutoUpdate is enabled
+     *
+     * @return AutoUpdate status
+     */
+    public boolean isAutoUpdate() {
+        return autoUpdate;
+    }
+
+    /**
      * Sets the updating status of the GUI.
      *
      * @param updating Sets the GUI to the updating status.
@@ -610,6 +621,20 @@ public abstract class BaseGui implements InventoryHolder {
     @Contract(" -> this")
     public BaseGui disableAllInteractions() {
         interactionModifiers.addAll(InteractionModifier.VALUES);
+        return this;
+    }
+
+    /**
+     * Enable auto update for the GUI
+     *
+     * @return The BaseGui
+     * @author thomaz_05
+     * @since 3.0.4
+     */
+    @NotNull
+    @Contract(" -> this")
+    public BaseGui enableAutoUpdate() {
+        autoUpdate = true;
         return this;
     }
 
@@ -948,7 +973,9 @@ public abstract class BaseGui implements InventoryHolder {
      */
     void populateGui() {
         for (final Map.Entry<Integer, GuiItem> entry : guiItems.entrySet()) {
-            inventory.setItem(entry.getKey(), entry.getValue().getItemStack());
+            GuiItem guiItem = entry.getValue();
+            if (guiItem.getUpdateConsumer() != null) guiItem.getUpdateConsumer().accept(guiItem);
+            inventory.setItem(entry.getKey(), guiItem.getItemStack());
         }
     }
 
