@@ -115,6 +115,17 @@ public class GuiItem {
         this.action = action;
     }
 
+
+    /**
+     * Applies when the GUI is updated
+     *
+     * @return GuiItem
+     */
+    public GuiItem update(Consumer<GuiItem> updateConsumer){
+        this.updateConsumer = updateConsumer;
+        return this;
+    }
+
     /**
      * Gets the GuiItem's {@link ItemStack}
      *
