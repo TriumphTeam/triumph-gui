@@ -34,6 +34,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.UUID;
+import java.util.function.Consumer;
 
 /**
  * GuiItem represents the {@link ItemStack} on the {@link Inventory}
@@ -43,6 +44,8 @@ public class GuiItem {
 
     // Action to do when clicking on the item
     private GuiAction<InventoryClickEvent> action;
+
+    private Consumer<GuiItem> updateConsumer;
 
     // The ItemStack of the GuiItem
     private ItemStack itemStack;
@@ -112,6 +115,17 @@ public class GuiItem {
         this.action = action;
     }
 
+
+    /**
+     * Applies when the GUI is updated
+     *
+     * @return GuiItem
+     */
+    public GuiItem update(Consumer<GuiItem> updateConsumer){
+        this.updateConsumer = updateConsumer;
+        return this;
+    }
+
     /**
      * Gets the GuiItem's {@link ItemStack}
      *
@@ -136,5 +150,10 @@ public class GuiItem {
     @Nullable
     GuiAction<InventoryClickEvent> getAction() {
         return action;
+    }
+
+    @Nullable
+    Consumer<GuiItem> getUpdateConsumer(){
+        return updateConsumer;
     }
 }
