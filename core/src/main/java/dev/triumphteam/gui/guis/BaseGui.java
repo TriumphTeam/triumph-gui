@@ -188,16 +188,40 @@ public abstract class BaseGui implements InventoryHolder {
     }
 
     /**
+     * Utility Methods
+     */
+
+    /**
      * Copy a set into an EnumSet, required because {@link EnumSet#copyOf(EnumSet)} throws an exception if the collection passed as argument is empty.
      *
      * @param set The set to be copied.
      * @return An EnumSet with the provided elements from the original set.
      */
     @NotNull
-    private Set<InteractionModifier> safeCopyOf(@NotNull final Set<InteractionModifier> set) {
+    private static Set<InteractionModifier> safeCopyOf(@NotNull final Set<InteractionModifier> set) {
         if (set.isEmpty()) return EnumSet.noneOf(InteractionModifier.class);
         else return EnumSet.copyOf(set);
     }
+
+    private static boolean sizing(List<GuiItem> items, GuiItem item, int rows) {
+        return (rows == 6) ? false : items.add(item);
+    }
+
+    private static int getValidSlot(final Map<Integer, GuiItem> guiItems, final int beginningIndex, final boolean check) {
+        int slot = beginningIndex;
+        while (guiItems.containsKey(slot)) slot++;
+
+        if (!check) return slot;
+        if (slot >= size) {
+            boolean isResizable = sizing(notAddedItems, guiItem, rows);
+            if (isResizable) continue;
+            return -1;
+        }
+    }
+
+    /**
+     * Instance Methods
+     */
 
     /**
      * Gets the GUI's title as string.
@@ -328,24 +352,21 @@ public abstract class BaseGui implements InventoryHolder {
      *                     and there are more items to be added
      */
     public void addItem(final boolean expandIfFull, @NotNull final GuiItem... items) {
-        final List<GuiItem> notAddedItems = new ArrayList<>();
+        final List<GuiItem> notAddedItems = new ArrayList<>(items.length);
 
+        int slot = getValidSlot(this.guiItems, slot, false);
         for (final GuiItem guiItem : items) {
-            for (int slot = 0; slot < rows * 9; slot++) {
-                if (guiItems.get(slot) != null) {
-                    if (slot == rows * 9 - 1) {
-                        notAddedItems.add(guiItem);
-                    }
-                    continue;
-                }
-
-                guiItems.put(slot, guiItem);
-                break;
+            if (slot >= size) {
+                boolean isResizable = sizing(notAddedItems, guiItem, rows);
+                if (isResizable) continue;
+                return;
             }
+
+            slot = getValidSlot(this.guiItems, slot, true);
+            this.guiItems.put(slot, guiItem);
         }
 
-        if (!expandIfFull || this.rows >= 6 ||
-                notAddedItems.isEmpty() ||
+        if (!expandIfFull || notAddedItems.isEmpty() ||
                 (this.guiType != null && this.guiType != GuiType.CHEST)) {
             return;
         }
