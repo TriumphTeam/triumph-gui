@@ -114,8 +114,8 @@ public final class VersionHelper {
     }
 
     /**
-     * Check if the server has access to the Paper API
-     * Taken from <a href="https://github.com/PaperMC/PaperLib">PaperLib</a>
+     * Check if the server has access to the Folia API
+     * Taken from <a href="https://github.com/PaperMC/Folia">Folia</a>
      *
      * @return True if on Paper server (or forks), false anything else
      */
