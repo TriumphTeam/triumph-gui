@@ -445,13 +445,14 @@ public abstract class BaseGui implements InventoryHolder {
                 player.closeInventory();
                 this.runCloseAction = true;
             }, null, 2L);
-        } else {
-            Bukkit.getScheduler().runTaskLater(plugin, () -> {
-                this.runCloseAction = runCloseAction;
-                player.closeInventory();
-                this.runCloseAction = true;
-            }, 2L);
+            return;
         }
+
+        Bukkit.getScheduler().runTaskLater(plugin, () -> {
+            this.runCloseAction = runCloseAction;
+            player.closeInventory();
+            this.runCloseAction = true;
+        }, 2L);
     }
 
     /**
