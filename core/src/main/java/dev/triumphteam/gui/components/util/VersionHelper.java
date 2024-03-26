@@ -117,7 +117,7 @@ public final class VersionHelper {
      * Check if the server has access to the Folia API
      * Taken from <a href="https://github.com/PaperMC/Folia">Folia</a>
      *
-     * @return True if on Paper server (or forks), false anything else
+     * @return True if on Folia server (or forks), false anything else
      */
     private static boolean checkFolia() {
         try {
