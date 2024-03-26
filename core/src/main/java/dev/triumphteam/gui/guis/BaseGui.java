@@ -29,6 +29,7 @@ import dev.triumphteam.gui.components.InteractionModifier;
 import dev.triumphteam.gui.components.exception.GuiException;
 import dev.triumphteam.gui.components.util.GuiFiller;
 import dev.triumphteam.gui.components.util.Legacy;
+import dev.triumphteam.gui.components.util.VersionHelper;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.HumanEntity;
@@ -110,9 +111,6 @@ public abstract class BaseGui implements InventoryHolder {
     private boolean runCloseAction = true;
     private boolean runOpenAction = true;
 
-    // Is this a Folia server?
-    private boolean folia = false;
-
     /**
      * The main constructor, using {@link String}.
      *
@@ -122,7 +120,6 @@ public abstract class BaseGui implements InventoryHolder {
      * @since 3.0.0.
      */
     public BaseGui(final int rows, @NotNull final String title, @NotNull final Set<InteractionModifier> interactionModifiers) {
-        this.folia = this.checkFolia();
         int finalRows = rows;
         if (!(rows >= 1 && rows <= 6)) finalRows = 1;
         this.rows = finalRows;
@@ -143,7 +140,6 @@ public abstract class BaseGui implements InventoryHolder {
      * @since 3.0.0
      */
     public BaseGui(@NotNull final GuiType guiType, @NotNull final String title, @NotNull final Set<InteractionModifier> interactionModifiers) {
-        this.folia = this.checkFolia();
         this.guiType = guiType;
         this.interactionModifiers = safeCopyOf(interactionModifiers);
         this.title = title;
@@ -162,7 +158,6 @@ public abstract class BaseGui implements InventoryHolder {
      */
     @Deprecated
     public BaseGui(final int rows, @NotNull final String title) {
-        this.folia = this.checkFolia();
         int finalRows = rows;
         if (!(rows >= 1 && rows <= 6)) finalRows = 1;
         this.rows = finalRows;
@@ -183,7 +178,6 @@ public abstract class BaseGui implements InventoryHolder {
      */
     @Deprecated
     public BaseGui(@NotNull final GuiType guiType, @NotNull final String title) {
-        this.folia = this.checkFolia();
         this.guiType = guiType;
         this.interactionModifiers = EnumSet.noneOf(InteractionModifier.class);
         this.title = title;
@@ -191,15 +185,6 @@ public abstract class BaseGui implements InventoryHolder {
         inventory = Bukkit.createInventory(this, this.guiType.getInventoryType(), title);
         slotActions = new LinkedHashMap<>();
         guiItems = new LinkedHashMap<>();
-    }
-
-    private boolean checkFolia() {
-        try {
-            Class.forName("io.papermc.paper.threadedregions.RegionizedServer");
-            return true;
-        } catch (ClassNotFoundException ignored) {
-            return false;
-        }
     }
 
     /**
@@ -454,7 +439,7 @@ public abstract class BaseGui implements InventoryHolder {
      * @param runCloseAction If should or not run the close action.
      */
     public void close(@NotNull final HumanEntity player, final boolean runCloseAction) {
-        if (this.folia) {
+        if (VersionHelper.IS_FOLIA) {
             player.getScheduler().runDelayed(plugin, task -> {
                 this.runCloseAction = runCloseAction;
                 player.closeInventory();
