@@ -7,7 +7,7 @@ allprojects {
     repositories {
         mavenLocal()
         mavenCentral()
-        maven("https://hub.spigotmc.org/nexus/content/groups/public/")
+        maven("https://repo.papermc.io/repository/maven-public/")
     }
 }
 
@@ -23,7 +23,7 @@ subprojects {
 
     dependencies {
         compileOnly("org.jetbrains:annotations:21.0.1")
-        compileOnly("org.spigotmc:spigot-api:1.20.1-R0.1-SNAPSHOT")
+        compileOnly("io.papermc.paper:paper-api:1.20.4-R0.1-SNAPSHOT")
 
         val adventureVersion = "4.14.0"
         api("net.kyori:adventure-api:$adventureVersion")
