@@ -23,12 +23,16 @@
  */
 package dev.triumphteam.gui.guis;
 
+import com.google.common.collect.ImmutableMap;
+import dev.triumphteam.gui.components.GuiAction;
 import dev.triumphteam.gui.components.InteractionModifier;
+import dev.triumphteam.gui.event.GuiPageChangeEvent;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -49,6 +53,8 @@ public class PaginatedGui extends BaseGui {
     private final List<GuiItem> pageItems = new ArrayList<>();
     // Saves the current page items and it's slot
     private final Map<Integer, GuiItem> currentPage;
+
+    private GuiAction<GuiPageChangeEvent> pageChangeAction;
 
     private int pageSize;
     private int pageNum = 1;
@@ -284,6 +290,23 @@ public class PaginatedGui extends BaseGui {
     }
 
     /**
+     * Set a default action to execute when the page changes
+     * @param action The action to execute
+     */
+    public void setPageChangeAction(final @Nullable GuiAction<@NotNull GuiPageChangeEvent> action) {
+        this.pageChangeAction = action;
+    }
+
+    /**
+     * Get the default action which is used when a page changes
+     * @return the action when a page changes
+     */
+    @Nullable
+    GuiAction<@NotNull GuiPageChangeEvent> getPageChangeAction() {
+        return pageChangeAction;
+    }
+
+    /**
      * Gets an immutable {@link Map} with all the current pages items
      *
      * @return The {@link Map} with all the {@link #currentPage}
@@ -302,7 +325,6 @@ public class PaginatedGui extends BaseGui {
     public List<@NotNull GuiItem> getPageItems() {
         return Collections.unmodifiableList(pageItems);
     }
-
 
     /**
      * Gets the current page number
@@ -476,8 +498,11 @@ public class PaginatedGui extends BaseGui {
      * Updates the page content
      */
     void updatePage() {
+        final Map<Integer, GuiItem> previousPage = ImmutableMap.copyOf(currentPage);
         clearPage();
         populatePage();
+        final GuiPageChangeEvent event = new GuiPageChangeEvent(previousPage, currentPage, this);
+        if (pageChangeAction != null) pageChangeAction.execute(event);
     }
 
     /**
