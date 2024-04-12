@@ -1,0 +1,32 @@
+[versions]
+# kotlin
+kotlin = "1.8.10"
+coroutines = "1.6.4"
+
+license = "0.16.1"
+
+# Core
+annotations = "23.0.0"
+
+# Minecraft
+spigot = "1.18.2-R0.1-SNAPSHOT"
+
+[libraries]
+# Core
+annotations = { module = "org.jetbrains:annotations", version.ref = "annotations" }
+
+# Minecraft
+spigot = { module = "org.spigotmc:spigot-api", version.ref = "spigot" }
+
+# Kotlin
+coroutines = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "coroutines" }
+
+# build
+build-kotlin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
+build-license = { module = "gradle.plugin.com.hierynomus.gradle.plugins:license-gradle-plugin", version.ref = "license" }
+
+[bundles]
+build = [
+    "build-kotlin",
+    "build-license",
+]

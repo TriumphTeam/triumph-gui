@@ -1,9 +1,24 @@
+dependencyResolutionManagement {
+    includeBuild("build-logic")
+    repositories.gradlePluginPortal()
+}
+
+enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
+
 rootProject.name = "triumph-gui"
 
-include("core")
-findProject(":core")?.name = "triumph-gui"
+listOf("core", "bukkit").forEach(::includeProject)
 
-listOf("kotlin").forEach {
-    include(it)
-    findProject(":$it")?.name = "triumph-gui-$it"
+fun includeProject(name: String) {
+    include(name) {
+        this.name = "${rootProject.name}-$name"
+    }
 }
+
+fun include(name: String, block: ProjectDescriptor.() -> Unit) {
+    include(name)
+    project(":$name").apply(block)
+}
+
+//include("fabric-test")
+// include("test-plugin")
