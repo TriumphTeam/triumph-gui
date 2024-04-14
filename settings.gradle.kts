@@ -21,4 +21,4 @@ fun include(name: String, block: ProjectDescriptor.() -> Unit) {
 }
 
 //include("fabric-test")
-// include("test-plugin")
+include("test-plugin")
