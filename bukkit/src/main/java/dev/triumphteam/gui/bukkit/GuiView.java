@@ -2,32 +2,33 @@ package dev.triumphteam.gui.bukkit;
 
 import dev.triumphteam.gui.BaseGuiView;
 import dev.triumphteam.gui.component.FinalComponent;
-import dev.triumphteam.gui.container.Container;
+import dev.triumphteam.gui.container.MapBackedContainer;
+import dev.triumphteam.gui.item.RenderedItem;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
+import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
-public final class GuiView extends BaseGuiView<Player, GuiView> implements InventoryHolder {
+public final class GuiView extends BaseGuiView<Player, ItemStack> implements InventoryHolder {
 
     private final Inventory inventory;
 
     public GuiView(
         final @NotNull Player player,
-        final @Nullable GuiView parent,
-        final @NotNull List<FinalComponent<Player, GuiView>> componentRenderers
+        final @NotNull List<FinalComponent<Player, ItemStack>> componentRenderers
     ) {
-        super(player, parent, componentRenderers);
-        this.inventory = Bukkit.createInventory(this, 6, "Gui");
+        super(player, componentRenderers);
+        this.inventory = Bukkit.createInventory(this, 54, "Gui");
     }
 
     @Override
     public void open() {
         getViewer().openInventory(inventory);
+        setup();
     }
 
     @Override
@@ -42,7 +43,13 @@ public final class GuiView extends BaseGuiView<Player, GuiView> implements Inven
     }
 
     @Override
-    protected void populateInventory(final @NotNull Container container) {
-        inventory.addItem()
+    protected void populateInventory(final @NotNull MapBackedContainer<ItemStack> container) {
+        inventory.clear();
+        container.getBacking().forEach((slot, baseGuiItem) -> {
+            final var rendered = baseGuiItem.render();
+            final var inventorySlot = slot.asRealSlot();
+            temporaryCache.put(inventorySlot, new RenderedItem<>(rendered, baseGuiItem.getClickAction()));
+            inventory.setItem(inventorySlot, rendered);
+        });
     }
 }

@@ -1,9 +1,20 @@
 package dev.triumphteam.gui;
 
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
-public interface BaseGui<P, V extends BaseGuiView<P, V>> {
+/**
+ * Representation of a simple GUI.
+ * The GUI itself does nothing other than be a blue-print for multiple {@link BaseGuiView} views,
+ * for {@link P} players to interact with.
+ *
+ * @param <P> A player.
+ */
+public interface BaseGui<P> {
 
-    @NotNull V open(final @NotNull P player, final @Nullable V parent);
+    /**
+     * Opens a {@link BaseGuiView} of this GUI for the {@link P} player.
+     *
+     * @param player The player to show the view to.
+     */
+    void open(final @NotNull P player);
 }

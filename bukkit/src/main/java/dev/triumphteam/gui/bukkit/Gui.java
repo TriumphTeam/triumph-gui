@@ -1,27 +1,31 @@
 package dev.triumphteam.gui.bukkit;
 
 import dev.triumphteam.gui.BaseGui;
-import dev.triumphteam.gui.component.SimpleGuiComponentRenderer;
+import dev.triumphteam.gui.component.FinalComponent;
+import dev.triumphteam.gui.component.SimpleFunctionalGuiComponent;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
-public final class Gui implements BaseGui<Player, GuiView> {
+public final class Gui implements BaseGui<Player> {
 
-    private final List<SimpleGuiComponentRenderer<Player>> componentRenderers;
+    private final List<FinalComponent<Player, ItemStack>> components;
+
+    static {
+        GuiBukkitListener.register();
+    }
 
     public Gui(
-        final @NotNull List<SimpleGuiComponentRenderer<Player>> componentRenderers
+        final @NotNull List<SimpleFunctionalGuiComponent<Player, ItemStack>> componentRenderers
     ) {
-        this.componentRenderers = componentRenderers;
+        this.components = componentRenderers.stream().map(SimpleFunctionalGuiComponent::createComponent).toList();
     }
 
     @Override
-    public @NotNull GuiView open(final @NotNull Player player, final @Nullable GuiView parent) {
-        final var view = new GuiView(player, parent);
+    public void open(final @NotNull Player player) {
+        final var view = new GuiView(player, components);
         view.open();
-        return view;
     }
 }

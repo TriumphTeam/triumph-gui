@@ -1,15 +1,15 @@
 package dev.triumphteam.gui.component;
 
-import dev.triumphteam.gui.BaseGuiView;
-import dev.triumphteam.gui.container.Container;
+import dev.triumphteam.gui.container.GuiContainer;
+import dev.triumphteam.gui.state.State;
 import org.jetbrains.annotations.NotNull;
 
-@FunctionalInterface
-public interface GuiComponent<P, V extends BaseGuiView<P, V>> {
+import java.util.List;
 
-    void render(
-        final @NotNull Container container,
-        final @NotNull P player,
-        final @NotNull V view
-    );
+public interface GuiComponent<P, I> {
+
+    @NotNull
+    List<@NotNull State> states();
+
+    void render(final @NotNull GuiContainer<@NotNull I> container, final @NotNull P player);
 }

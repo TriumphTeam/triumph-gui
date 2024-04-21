@@ -1,8 +1,8 @@
 package dev.triumphteam.gui.slot;
 
-public record Slot(int row, int col) {
+public record Slot(int slot) {
 
     public int asRealSlot() {
-        return 0;
+        return slot;
     }
 }

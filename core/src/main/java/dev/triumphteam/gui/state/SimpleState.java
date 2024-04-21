@@ -3,7 +3,7 @@ package dev.triumphteam.gui.state;
 import dev.triumphteam.gui.BaseGuiView;
 import org.jetbrains.annotations.NotNull;
 
-public final class SimpleState<T> implements State<T> {
+public final class SimpleState<T> implements MutableState<T> {
 
     private final StateMap stateMap = new StateMap();
     private T value;
@@ -20,11 +20,11 @@ public final class SimpleState<T> implements State<T> {
     @Override
     public void setValue(final T value) {
         this.value = value;
-        force();
+        trigger();
     }
 
     @Override
-    public void force() {
+    public void trigger() {
         stateMap.run();
     }
 
