@@ -1,35 +1,17 @@
 package dev.triumphteam.gui.state;
 
-import dev.triumphteam.gui.BaseGuiView;
+import dev.triumphteam.gui.state.policy.StateMutationPolicy;
 import org.jetbrains.annotations.NotNull;
 
-public final class SimpleState<T> implements MutableState<T> {
+/**
+ * The simplest implementation of {@link MutableState}.
+ *
+ * @param <T> The type of the value.
+ * @see BaseMutableState For the implementation.
+ */
+public final class SimpleState<T> extends BaseMutableState<T> {
 
-    private final StateMap stateMap = new StateMap();
-    private T value;
-
-    public SimpleState(final T value) {
-        this.value = value;
-    }
-
-    @Override
-    public T getValue() {
-        return value;
-    }
-
-    @Override
-    public void setValue(final T value) {
-        this.value = value;
-        trigger();
-    }
-
-    @Override
-    public void trigger() {
-        stateMap.run();
-    }
-
-    @Override
-    public void addListener(final @NotNull BaseGuiView<?, ?> view, final @NotNull Runnable runnable) {
-        stateMap.put(view, runnable);
+    public SimpleState(final T value, final @NotNull StateMutationPolicy mutationPolicy) {
+        super(value, mutationPolicy);
     }
 }

@@ -7,6 +7,10 @@ import org.jetbrains.annotations.NotNull;
  * A representation of a "state" in the GUI.
  * A state doesn't necessarily need to hold any value.
  * Its sole purpose is to trigger updates on the GUI.
+ *
+ * @see MutableState
+ * @see BaseMutableState
+ * @see SimpleState
  */
 public interface State {
 
