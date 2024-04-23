@@ -1,4 +1,4 @@
-package dev.triumphteam.gui.item;
+package dev.triumphteam.gui.element;
 
 @FunctionalInterface
 public interface ItemClickAction {

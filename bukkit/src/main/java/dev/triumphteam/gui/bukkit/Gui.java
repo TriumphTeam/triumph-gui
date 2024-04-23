@@ -2,7 +2,7 @@ package dev.triumphteam.gui.bukkit;
 
 import dev.triumphteam.gui.BaseGui;
 import dev.triumphteam.gui.component.FinalComponent;
-import dev.triumphteam.gui.component.SimpleFunctionalGuiComponent;
+import dev.triumphteam.gui.component.functional.SimpleFunctionalGuiComponent;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;

@@ -1,4 +1,4 @@
-package dev.triumphteam.gui.item;
+package dev.triumphteam.gui.element;
 
 public record RenderedItem<I>(I item, ItemClickAction action) {
 }

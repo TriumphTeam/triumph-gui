@@ -4,7 +4,7 @@ import org.jetbrains.annotations.NotNull;
 
 /**
  * Representation of a simple GUI.
- * The GUI itself does nothing other than be a blue-print for multiple {@link BaseGuiView} views,
+ * The GUI itself does nothing other than be a blue-print for multiple {@link GuiView} views,
  * for {@link P} players to interact with.
  *
  * @param <P> A player.
@@ -12,7 +12,7 @@ import org.jetbrains.annotations.NotNull;
 public interface BaseGui<P> {
 
     /**
-     * Opens a {@link BaseGuiView} of this GUI for the {@link P} player.
+     * Opens a {@link GuiView} of this GUI for the {@link P} player.
      *
      * @param player The player to show the view to.
      */

@@ -7,16 +7,18 @@ license = "0.16.1"
 
 # Core
 annotations = "23.0.0"
+caffeine = "3.1.8"
 
 # Minecraft
-spigot = "1.18.2-R0.1-SNAPSHOT"
+paper = "1.16.5-R0.1-SNAPSHOT"
 
 [libraries]
 # Core
 annotations = { module = "org.jetbrains:annotations", version.ref = "annotations" }
+caffeine = { module = "com.github.ben-manes.caffeine:caffeine", version.ref = "caffeine" }
 
 # Minecraft
-spigot = { module = "org.spigotmc:spigot-api", version.ref = "spigot" }
+paper = { module = "org.spigotmc:spigot-api", version.ref = "paper" }
 
 # Kotlin
 coroutines = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "coroutines" }

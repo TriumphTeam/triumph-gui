@@ -1,45 +1,55 @@
 package dev.triumphteam.gui.state;
 
-import dev.triumphteam.gui.BaseGuiView;
+import com.github.benmanes.caffeine.cache.Cache;
+import com.github.benmanes.caffeine.cache.Caffeine;
+import dev.triumphteam.gui.GuiView;
 import org.jetbrains.annotations.NotNull;
 
-import java.lang.ref.WeakReference;
-import java.util.Set;
-import java.util.WeakHashMap;
-import java.util.concurrent.ConcurrentHashMap;
+import java.util.Map;
+import java.util.Queue;
+import java.util.concurrent.ConcurrentLinkedQueue;
 
 /**
  * A map backed container for state listeners.
- * This container uses a {@link WeakHashMap}, so instances of the {@link BaseGuiView} can prevent
+ * This container uses a map with weak keys, so instances of the {@link GuiView} can prevent
  * values from being garbage collected correctly.
  */
 public final class StateListenerContainer {
 
-    private final Set<Pair> listeners = ConcurrentHashMap.newKeySet();
+    /**
+     * Listeners cache.
+     * The keys of the map are weak.
+     * The value of the map is a {@link ConcurrentLinkedQueue}.
+     */
+    private final Map<GuiView<?, ?>, Queue<Runnable>> listeners = createListenerMap();
 
     /**
-     * Adds listener tied to the {@link BaseGuiView} lifecycle.
+     * Creates a map to be used for the listeners.
+     *
+     * @return A {@link java.util.concurrent.ConcurrentMap} with weak keys.
+     */
+    private static Map<GuiView<?, ?>, Queue<Runnable>> createListenerMap() {
+        final Cache<GuiView<?, ?>, Queue<Runnable>> cache = Caffeine.newBuilder()
+            .weakKeys()
+            .build();
+
+        return cache.asMap();
+    }
+
+    /**
+     * Adds listener tied to the {@link GuiView} lifecycle.
      *
      * @param view     The view to be used as the reference.
      * @param listener The listener to run when a state is triggered.
      */
-    public void addListener(final @NotNull BaseGuiView<?, ?> view, final @NotNull Runnable listener) {
-        listeners.add(new Pair(new WeakReference<>(view), listener));
+    public void addListener(final @NotNull GuiView<?, ?> view, final @NotNull Runnable listener) {
+        listeners.computeIfAbsent(view, ignored -> new ConcurrentLinkedQueue<>()).add(listener);
     }
 
     /**
      * Triggers all listeners that this state uses.
      */
     public void triggerAll() {
-        listeners.forEach(pair -> pair.listener.run());
+        listeners.values().forEach(listeners -> listeners.forEach(Runnable::run));
     }
-
-    /**
-     * Simple pair only used by this class.
-     * Simply used to hold a weak reference of the view and a listener.
-     *
-     * @param weakView The weak reference of view.
-     * @param listener The listener to run when a state is triggered.
-     */
-    private record Pair(WeakReference<BaseGuiView<?, ?>> weakView, Runnable listener) {}
 }

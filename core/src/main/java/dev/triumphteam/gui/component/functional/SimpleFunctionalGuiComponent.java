@@ -1,7 +1,10 @@
-package dev.triumphteam.gui.component;
+package dev.triumphteam.gui.component.functional;
 
+import dev.triumphteam.gui.component.FinalComponent;
+import dev.triumphteam.gui.component.ReactiveGuiComponent;
+import dev.triumphteam.gui.exception.GuiException;
 import dev.triumphteam.gui.state.MutableState;
-import dev.triumphteam.gui.state.SimpleState;
+import dev.triumphteam.gui.state.builtin.SimpleState;
 import dev.triumphteam.gui.state.State;
 import dev.triumphteam.gui.state.policy.StateMutationPolicy;
 import org.jetbrains.annotations.NotNull;
@@ -56,11 +59,11 @@ public final class SimpleFunctionalGuiComponent<P, I> implements FunctionalGuiCo
         this.component = component;
     }
 
-    /*public @NotNull FinalComponent<P, I> createComponent() {
+    public @NotNull ReactiveGuiComponent<P, I> asGuiComponent() {
         if (component == null) {
             throw new GuiException("TODO");
         }
 
         return new FinalComponent<>(states, component);
-    }*/
+    }
 }

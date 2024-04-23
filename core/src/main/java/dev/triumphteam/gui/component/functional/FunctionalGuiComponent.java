@@ -1,6 +1,8 @@
-package dev.triumphteam.gui.component;
+package dev.triumphteam.gui.component.functional;
 
 import dev.triumphteam.gui.builder.BaseGuiBuilder;
+import dev.triumphteam.gui.component.GuiComponent;
+import dev.triumphteam.gui.component.ReactiveGuiComponent;
 import dev.triumphteam.gui.container.GuiContainer;
 import dev.triumphteam.gui.state.MutableState;
 import dev.triumphteam.gui.state.State;
@@ -9,8 +11,8 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 /**
- * Similar to a {@link GuiComponent} this component will take in states and render a component.
- * Unlike {@link GuiComponent} it is not meant to be extended upon and is only used by the {@link BaseGuiBuilder}.
+ * Similar to a {@link ReactiveGuiComponent} this component will take in states and render a component.
+ * Unlike {@link ReactiveGuiComponent} it is not meant to be extended upon and is only used by the {@link BaseGuiBuilder}.
  *
  * @param <P> The player type.
  * @param <I> The item type.

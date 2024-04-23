@@ -1,6 +1,6 @@
 package dev.triumphteam.gui.container;
 
-import dev.triumphteam.gui.item.GuiItem;
+import dev.triumphteam.gui.element.GuiElement;
 import dev.triumphteam.gui.slot.Slot;
 import org.jetbrains.annotations.NotNull;
 
@@ -9,25 +9,25 @@ import java.util.Map;
 
 public final class MapBackedContainer<I> implements GuiContainer<I> {
 
-    private final Map<Slot, GuiItem<I>> backing = new HashMap<>(100);
+    private final Map<Slot, GuiElement<I>> backing = new HashMap<>(100);
 
     @Override
-    public void set(final int slot, final @NotNull GuiItem<@NotNull I> guiItem) {
-        set(new Slot(slot), guiItem);
+    public void set(final int slot, final @NotNull GuiElement<@NotNull I> guiElement) {
+        set(new Slot(slot), guiElement);
     }
 
     @Override
-    public void set(final int row, final int column, final @NotNull GuiItem<@NotNull I> guiItem) {
+    public void set(final int row, final int column, final @NotNull GuiElement<@NotNull I> guiElement) {
         // TODO(matt): This
-        set(new Slot(0), guiItem);
+        set(new Slot(0), guiElement);
     }
 
     @Override
-    public void set(final @NotNull Slot slot, final @NotNull GuiItem<@NotNull I> guiItem) {
-        backing.put(slot, guiItem);
+    public void set(final @NotNull Slot slot, final @NotNull GuiElement<@NotNull I> guiElement) {
+        backing.put(slot, guiElement);
     }
 
-    public @NotNull Map<Slot, GuiItem<I>> getBacking() {
+    public @NotNull Map<Slot, GuiElement<I>> getBacking() {
         return backing;
     }
 }

@@ -1,9 +1,8 @@
 package dev.triumphteam.gui.bukkit;
 
-import dev.triumphteam.gui.BaseGuiView;
 import dev.triumphteam.gui.component.FinalComponent;
 import dev.triumphteam.gui.container.MapBackedContainer;
-import dev.triumphteam.gui.item.RenderedItem;
+import dev.triumphteam.gui.element.RenderedItem;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
@@ -13,7 +12,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
-public final class GuiView extends BaseGuiView<Player, ItemStack> implements InventoryHolder {
+public final class GuiView extends dev.triumphteam.gui.GuiView<Player, ItemStack> implements InventoryHolder {
 
     private final Inventory inventory;
 

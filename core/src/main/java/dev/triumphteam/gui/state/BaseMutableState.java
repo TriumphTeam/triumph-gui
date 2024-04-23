@@ -1,6 +1,7 @@
 package dev.triumphteam.gui.state;
 
-import dev.triumphteam.gui.BaseGuiView;
+import dev.triumphteam.gui.GuiView;
+import dev.triumphteam.gui.state.builtin.SimpleState;
 import dev.triumphteam.gui.state.policy.StateMutationPolicy;
 import org.jetbrains.annotations.NotNull;
 
@@ -13,8 +14,9 @@ import org.jetbrains.annotations.NotNull;
  */
 public abstract class BaseMutableState<T> implements MutableState<T> {
 
-    private final StateMutationPolicy mutationPolicy;
     private final StateListenerContainer listenerContainer = new StateListenerContainer();
+
+    private final StateMutationPolicy mutationPolicy;
     private T value;
 
     public BaseMutableState(final T value, final @NotNull StateMutationPolicy mutationPolicy) {
@@ -47,7 +49,7 @@ public abstract class BaseMutableState<T> implements MutableState<T> {
     }
 
     @Override
-    public void addListener(final @NotNull BaseGuiView<?, ?> view, final @NotNull Runnable listener) {
+    public void addListener(final @NotNull GuiView<?, ?> view, final @NotNull Runnable listener) {
         listenerContainer.addListener(view, listener);
     }
 }

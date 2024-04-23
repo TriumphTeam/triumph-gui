@@ -1,6 +1,7 @@
 package dev.triumphteam.gui.state;
 
-import dev.triumphteam.gui.BaseGuiView;
+import dev.triumphteam.gui.GuiView;
+import dev.triumphteam.gui.state.builtin.SimpleState;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -22,13 +23,13 @@ public interface State {
     /**
      * Adds a new listener to the state.
      * Avoid calling this method manually if you don't know what you are doing,
-     * this is mostly done internally by the {@link BaseGuiView}.
+     * this is mostly done internally by the {@link GuiView}.
      * <p>
-     * The listener is tied to the lifecycle of the {@link BaseGuiView},
+     * The listener is tied to the lifecycle of the {@link GuiView},
      * so avoid holding the view if it is no longer needed.
      *
-     * @param view     The {@link BaseGuiView} which will be handling this state.
+     * @param view     The {@link GuiView} which will be handling this state.
      * @param listener The listener to be called when a state is triggered.
      */
-    void addListener(final @NotNull BaseGuiView<?, ?> view, final @NotNull Runnable listener);
+    void addListener(final @NotNull GuiView<?, ?> view, final @NotNull Runnable listener);
 }

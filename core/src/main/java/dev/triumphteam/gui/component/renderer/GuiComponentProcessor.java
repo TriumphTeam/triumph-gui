@@ -1,4 +1,4 @@
-package dev.triumphteam.gui.component;
+package dev.triumphteam.gui.component.renderer;
 
 public interface GuiComponentProcessor<P, I> {
 

@@ -2,8 +2,8 @@ package dev.triumphteam.gui;
 
 import dev.triumphteam.gui.component.FinalComponent;
 import dev.triumphteam.gui.container.MapBackedContainer;
-import dev.triumphteam.gui.item.ItemClickAction;
-import dev.triumphteam.gui.item.RenderedItem;
+import dev.triumphteam.gui.element.ItemClickAction;
+import dev.triumphteam.gui.element.RenderedItem;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -11,9 +11,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public abstract class BaseGuiView<P, I> {
+public abstract class BaseGuiView<P, I> implements GuiView<P, I> {
 
     protected final Map<Integer, RenderedItem<I>> temporaryCache = new HashMap<>();
+
     private final P viewer;
     private final List<FinalComponent<P, I>> components;
 
@@ -28,10 +29,6 @@ public abstract class BaseGuiView<P, I> {
     public @NotNull P getViewer() {
         return viewer;
     }
-
-    public abstract void open();
-
-    public abstract void close();
 
     protected void setup() {
         components.forEach(renderer -> renderer.states().forEach(state -> state.addListener(this, () -> renderComponent(renderer))));

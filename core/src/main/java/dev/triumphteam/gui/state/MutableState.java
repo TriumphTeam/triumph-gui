@@ -1,5 +1,6 @@
 package dev.triumphteam.gui.state;
 
+import dev.triumphteam.gui.state.builtin.SimpleState;
 import dev.triumphteam.gui.state.policy.StateMutationPolicy;
 import org.jetbrains.annotations.NotNull;
 

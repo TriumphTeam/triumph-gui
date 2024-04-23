@@ -1,4 +1,4 @@
-package dev.triumphteam.gui.component;
+package dev.triumphteam.gui.component.functional;
 
 import dev.triumphteam.gui.container.GuiContainer;
 import org.jetbrains.annotations.NotNull;

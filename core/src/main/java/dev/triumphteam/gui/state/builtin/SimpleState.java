@@ -1,5 +1,7 @@
-package dev.triumphteam.gui.state;
+package dev.triumphteam.gui.state.builtin;
 
+import dev.triumphteam.gui.state.BaseMutableState;
+import dev.triumphteam.gui.state.MutableState;
 import dev.triumphteam.gui.state.policy.StateMutationPolicy;
 import org.jetbrains.annotations.NotNull;
 
