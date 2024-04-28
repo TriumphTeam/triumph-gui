@@ -1,7 +1,7 @@
 package dev.triumphteam.gui.state;
 
 import dev.triumphteam.gui.GuiView;
-import dev.triumphteam.gui.state.builtin.SimpleState;
+import dev.triumphteam.gui.state.builtin.SimpleMutableState;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -10,8 +10,8 @@ import org.jetbrains.annotations.NotNull;
  * Its sole purpose is to trigger updates on the GUI.
  *
  * @see MutableState
- * @see BaseMutableState
- * @see SimpleState
+ * @see AbstractMutableState
+ * @see SimpleMutableState
  */
 public interface State {
 

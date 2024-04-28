@@ -1,7 +1,7 @@
 package dev.triumphteam.gui.bukkit;
 
 import dev.triumphteam.gui.BaseGui;
-import dev.triumphteam.gui.component.FinalComponent;
+import dev.triumphteam.gui.component.GuiComponent;
 import dev.triumphteam.gui.component.functional.SimpleFunctionalGuiComponent;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -11,7 +11,7 @@ import java.util.List;
 
 public final class Gui implements BaseGui<Player> {
 
-    private final List<FinalComponent<Player, ItemStack>> components;
+    private final List<GuiComponent<Player, ItemStack>> components;
 
     static {
         GuiBukkitListener.register();
@@ -20,12 +20,12 @@ public final class Gui implements BaseGui<Player> {
     public Gui(
         final @NotNull List<SimpleFunctionalGuiComponent<Player, ItemStack>> componentRenderers
     ) {
-        this.components = componentRenderers.stream().map(SimpleFunctionalGuiComponent::createComponent).toList();
+        this.components = componentRenderers.stream().map(SimpleFunctionalGuiComponent::asGuiComponent).toList();
     }
 
     @Override
     public void open(final @NotNull Player player) {
-        final var view = new GuiView(player, components);
+        final var view = new BukkitGuiView(player, components);
         view.open();
     }
 }

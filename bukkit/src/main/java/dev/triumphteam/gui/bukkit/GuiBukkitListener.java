@@ -18,7 +18,7 @@ public final class GuiBukkitListener implements Listener {
     @EventHandler
     public void onGuiClick(final InventoryClickEvent event) {
         final var holder = event.getInventory().getHolder();
-        if (!(holder instanceof final GuiView view)) {
+        if (!(holder instanceof final BukkitGuiView view)) {
             return;
         }
 

@@ -1,8 +1,8 @@
-package dev.triumphteam.gui.element;
+package dev.triumphteam.gui.item;
 
 import org.jetbrains.annotations.NotNull;
 
-public interface GuiElement<I> {
+public interface GuiItem<I> {
 
     @NotNull
     I render();

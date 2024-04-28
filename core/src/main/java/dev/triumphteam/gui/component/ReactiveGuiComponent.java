@@ -1,12 +1,9 @@
 package dev.triumphteam.gui.component;
 
-import dev.triumphteam.gui.state.State;
+import dev.triumphteam.gui.container.GuiContainer;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.List;
+public interface ReactiveGuiComponent<P, I> extends StatefulGuiComponent<P, I> {
 
-public interface ReactiveGuiComponent {
-
-    @NotNull
-    List<State> states();
+    void render(final @NotNull GuiContainer<@NotNull I> container, final @NotNull P player);
 }

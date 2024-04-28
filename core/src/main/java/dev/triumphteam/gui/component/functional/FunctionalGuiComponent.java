@@ -1,8 +1,8 @@
 package dev.triumphteam.gui.component.functional;
 
 import dev.triumphteam.gui.builder.BaseGuiBuilder;
-import dev.triumphteam.gui.component.GuiComponent;
 import dev.triumphteam.gui.component.ReactiveGuiComponent;
+import dev.triumphteam.gui.component.GuiComponent;
 import dev.triumphteam.gui.container.GuiContainer;
 import dev.triumphteam.gui.state.MutableState;
 import dev.triumphteam.gui.state.State;
@@ -11,13 +11,16 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 /**
- * Similar to a {@link ReactiveGuiComponent} this component will take in states and render a component.
- * Unlike {@link ReactiveGuiComponent} it is not meant to be extended upon and is only used by the {@link BaseGuiBuilder}.
+ * Similar to a {@link GuiComponent} this component will take in states and render a component.
+ * Unlike {@link GuiComponent} it is not meant to be extended upon and is only used by the {@link BaseGuiBuilder}.
  *
  * @param <P> The player type.
  * @param <I> The item type.
  */
 public interface FunctionalGuiComponent<P, I> {
+
+    @NotNull
+    State state();
 
     /**
      * Associate a {@link State} to the component.
@@ -26,7 +29,7 @@ public interface FunctionalGuiComponent<P, I> {
      * @return The same state passed.
      */
     @NotNull
-    State state(final @NotNull State state);
+    <S extends State> S state(final @NotNull S state);
 
     /**
      * Create a new state with the given default value.
@@ -78,7 +81,7 @@ public interface FunctionalGuiComponent<P, I> {
 
     /**
      * A component render function.
-     * The function inside works the same as a normal {@link GuiComponent#render(GuiContainer, Object)} would.
+     * The function inside works the same as a normal {@link ReactiveGuiComponent#render(GuiContainer, Object)} would.
      *
      * @param render The component render.
      */

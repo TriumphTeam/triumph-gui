@@ -26,10 +26,6 @@ public interface StateMutationPolicy {
 
         public static final StateMutationPolicy INSTANCE = new ReferenceEquality();
 
-        private ReferenceEquality() {
-            throw new AssertionError("Should not be instantiated");
-        }
-
         @Override
         public boolean equivalent(final @Nullable Object a, final @Nullable Object b) {
             return a == b;
@@ -43,10 +39,6 @@ public interface StateMutationPolicy {
     final class StructuralEquality implements StateMutationPolicy {
 
         public static final StateMutationPolicy INSTANCE = new StructuralEquality();
-
-        private StructuralEquality() {
-            throw new AssertionError("Should not be instantiated");
-        }
 
         @Override
         public boolean equivalent(final @Nullable Object a, final @Nullable Object b) {
@@ -62,10 +54,6 @@ public interface StateMutationPolicy {
     final class NeverEqual implements StateMutationPolicy {
 
         public static final StateMutationPolicy INSTANCE = new NeverEqual();
-
-        private NeverEqual() {
-            throw new AssertionError("Should not be instantiated");
-        }
 
         @Override
         public boolean equivalent(final @Nullable Object a, final @Nullable Object b) {

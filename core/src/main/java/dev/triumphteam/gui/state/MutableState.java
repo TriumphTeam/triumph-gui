@@ -1,6 +1,6 @@
 package dev.triumphteam.gui.state;
 
-import dev.triumphteam.gui.state.builtin.SimpleState;
+import dev.triumphteam.gui.state.builtin.SimpleMutableState;
 import dev.triumphteam.gui.state.policy.StateMutationPolicy;
 import org.jetbrains.annotations.NotNull;
 
@@ -12,8 +12,8 @@ import org.jetbrains.annotations.NotNull;
  * Same for the nullability of the value.
  *
  * @param <T> The type the state accepts.
- * @see BaseMutableState
- * @see SimpleState
+ * @see AbstractMutableState
+ * @see SimpleMutableState
  */
 public interface MutableState<T> extends State {
 

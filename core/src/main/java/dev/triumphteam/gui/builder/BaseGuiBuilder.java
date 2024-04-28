@@ -1,7 +1,7 @@
 package dev.triumphteam.gui.builder;
 
 import dev.triumphteam.gui.BaseGui;
-import dev.triumphteam.gui.component.ReactiveGuiComponent;
+import dev.triumphteam.gui.component.GuiComponent;
 import dev.triumphteam.gui.component.functional.GuiComponentBuilder;
 import dev.triumphteam.gui.component.functional.SimpleFunctionalGuiComponent;
 import org.jetbrains.annotations.Contract;
@@ -24,7 +24,7 @@ public abstract class BaseGuiBuilder<B extends BaseGuiBuilder<B, P, G, I>, P, G 
     }
 
     @Contract("_ -> this")
-    public @NotNull B component(final @NotNull ReactiveGuiComponent<P, I> component) {
+    public @NotNull B component(final @NotNull GuiComponent<P, I> component) {
         // TODO(matt): Yeah
         return (B) this;
     }
