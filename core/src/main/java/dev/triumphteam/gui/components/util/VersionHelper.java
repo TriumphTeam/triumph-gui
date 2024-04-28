@@ -101,11 +101,6 @@ public final class VersionHelper {
     public static final boolean IS_ITEM_NAME_COMPONENT = CURRENT_VERSION >= V1_20_5;
 
     /**
-     * Checks if the server is Folia
-     */
-    public static final boolean IS_FOLIA = checkFolia();
-
-    /**
      * Check if the server has access to the Paper API
      * Taken from <a href="https://github.com/PaperMC/PaperLib">PaperLib</a>
      *
@@ -114,21 +109,6 @@ public final class VersionHelper {
     private static boolean checkPaper() {
         try {
             Class.forName("com.destroystokyo.paper.PaperConfig");
-            return true;
-        } catch (ClassNotFoundException ignored) {
-            return false;
-        }
-    }
-
-    /**
-     * Check if the server has access to the Folia API
-     * Taken from <a href="https://github.com/PaperMC/Folia">Folia</a>
-     *
-     * @return True if on Folia server (or forks), false anything else
-     */
-    private static boolean checkFolia() {
-        try {
-            Class.forName("io.papermc.paper.threadedregions.RegionizedServer");
             return true;
         } catch (ClassNotFoundException ignored) {
             return false;

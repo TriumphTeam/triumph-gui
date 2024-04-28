@@ -29,7 +29,6 @@ import dev.triumphteam.gui.components.InteractionModifier;
 import dev.triumphteam.gui.components.exception.GuiException;
 import dev.triumphteam.gui.components.util.GuiFiller;
 import dev.triumphteam.gui.components.util.Legacy;
-import dev.triumphteam.gui.components.util.VersionHelper;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.HumanEntity;
@@ -439,15 +438,6 @@ public abstract class BaseGui implements InventoryHolder {
      * @param runCloseAction If should or not run the close action.
      */
     public void close(@NotNull final HumanEntity player, final boolean runCloseAction) {
-        if (VersionHelper.IS_FOLIA) {
-            player.getScheduler().runDelayed(plugin, task -> {
-                this.runCloseAction = runCloseAction;
-                player.closeInventory();
-                this.runCloseAction = true;
-            }, null, 2L);
-            return;
-        }
-
         Bukkit.getScheduler().runTaskLater(plugin, () -> {
             this.runCloseAction = runCloseAction;
             player.closeInventory();
