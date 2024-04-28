@@ -118,11 +118,11 @@ public final class VersionHelper {
     /**
      * Gets the current server version
      *
-     * @return A protocol like number representing the version, for example 1.16.5 - 1165
+     * @return A protocol like number representing the version, for example, 1.16.5 -> 1165
      */
     private static int getCurrentVersion() {
         // No need to cache since will only run once
-        final Matcher matcher = Pattern.compile("(?<version>\\d+\\.\\d+)(?<patch>\\.\\d+)?").matcher(getGameVersion());
+        final Matcher matcher = Pattern.compile("(?<version>\\d+\\.\\d+)(?<patch>\\.\\d+)?").matcher(Bukkit.getBukkitVersion());
 
         final StringBuilder stringBuilder = new StringBuilder();
         if (matcher.find()) {
@@ -139,16 +139,6 @@ public final class VersionHelper {
         if (version == null) throw new GuiException("Could not retrieve server version!");
 
         return version;
-    }
-
-    private static String getGameVersion() {
-        try {
-            // Paper method that was added in 2020
-            return Bukkit.getServer().getMinecraftVersion();
-        } catch (NoSuchMethodError ignored) {
-            final String version = Bukkit.getServer().getClass().getPackage().getName();
-            return version.substring(version.lastIndexOf('.') + 1);
-        }
     }
 
     public static Class<?> craftClass(@NotNull final String name) throws ClassNotFoundException {
