@@ -27,6 +27,7 @@ import com.google.common.primitives.Ints;
 import dev.triumphteam.gui.components.exception.GuiException;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.regex.Matcher;
@@ -37,7 +38,7 @@ import java.util.regex.Pattern;
  */
 public final class VersionHelper {
 
-    private static final String NMS_VERSION = getNmsVersion();
+    private static final String CRAFTBUKKIT_PACKAGE = Bukkit.getServer().getClass().getPackage().getName();
 
     // Unbreakable change
     private static final int V1_11 = 1110;
@@ -51,6 +52,7 @@ public final class VersionHelper {
     private static final int V1_12_1 = 1121;
     // PlayerProfile API
     private static final int V1_20_1 = 1201;
+    private static final int V1_20_5 = 1205;
 
     private static final int CURRENT_VERSION = getCurrentVersion();
 
@@ -94,6 +96,11 @@ public final class VersionHelper {
     public static final boolean IS_PLAYER_PROFILE_API = CURRENT_VERSION >= V1_20_1;
 
     /**
+     * Starting with version 1.20.5 the internal field referenced by {@link ItemMeta#getDisplayName()} is no longer a string
+     */
+    public static final boolean IS_ITEM_NAME_COMPONENT = CURRENT_VERSION >= V1_20_5;
+
+    /**
      * Checks if the server is Folia
      */
     public static final boolean IS_FOLIA = checkFolia();
@@ -135,7 +142,7 @@ public final class VersionHelper {
      */
     private static int getCurrentVersion() {
         // No need to cache since will only run once
-        final Matcher matcher = Pattern.compile("(?<version>\\d+\\.\\d+)(?<patch>\\.\\d+)?").matcher(Bukkit.getBukkitVersion());
+        final Matcher matcher = Pattern.compile("(?<version>\\d+\\.\\d+)(?<patch>\\.\\d+)?").matcher(getGameVersion());
 
         final StringBuilder stringBuilder = new StringBuilder();
         if (matcher.find()) {
@@ -154,13 +161,18 @@ public final class VersionHelper {
         return version;
     }
 
-    private static String getNmsVersion() {
-        final String version = Bukkit.getServer().getClass().getPackage().getName();
-        return version.substring(version.lastIndexOf('.') + 1);
+    private static String getGameVersion() {
+        try {
+            // Paper method that was added in 2020
+            return Bukkit.getServer().getMinecraftVersion();
+        } catch (NoSuchMethodError ignored) {
+            final String version = Bukkit.getServer().getClass().getPackage().getName();
+            return version.substring(version.lastIndexOf('.') + 1);
+        }
     }
 
     public static Class<?> craftClass(@NotNull final String name) throws ClassNotFoundException {
-        return Class.forName("org.bukkit.craftbukkit." + NMS_VERSION + "." + name);
+        return Class.forName(CRAFTBUKKIT_PACKAGE + "." + name);
     }
 
 }

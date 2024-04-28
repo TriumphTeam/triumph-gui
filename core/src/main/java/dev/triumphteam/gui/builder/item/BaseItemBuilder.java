@@ -1,18 +1,18 @@
 /**
  * MIT License
- *
+ * <p>
  * Copyright (c) 2021 TriumphTeam
- *
+ * <p>
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- *
+ * <p>
  * The above copyright notice and this permission notice shall be included in all
  * copies or substantial portions of the Software.
- *
+ * <p>
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -30,6 +30,7 @@ import dev.triumphteam.gui.components.util.ItemNbt;
 import dev.triumphteam.gui.components.util.Legacy;
 import dev.triumphteam.gui.components.util.VersionHelper;
 import dev.triumphteam.gui.guis.GuiItem;
+import net.kyori.adventure.platform.bukkit.MinecraftComponentSerializer;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
 import org.bukkit.Bukkit;
@@ -65,10 +66,9 @@ import java.util.stream.Collectors;
 public abstract class BaseItemBuilder<B extends BaseItemBuilder<B>> {
 
     private static final EnumSet<Material> LEATHER_ARMOR = EnumSet.of(
-            Material.LEATHER_HELMET, Material.LEATHER_CHESTPLATE, Material.LEATHER_LEGGINGS, Material.LEATHER_BOOTS
+        Material.LEATHER_HELMET, Material.LEATHER_CHESTPLATE, Material.LEATHER_LEGGINGS, Material.LEATHER_BOOTS
     );
 
-    private static final GsonComponentSerializer GSON = GsonComponentSerializer.gson();
     private static final Field DISPLAY_NAME_FIELD;
     private static final Field LORE_FIELD;
 
@@ -98,6 +98,36 @@ public abstract class BaseItemBuilder<B extends BaseItemBuilder<B>> {
     }
 
     /**
+     * Serializes the component with the right {@link net.kyori.adventure.text.serializer.ComponentSerializer} for the current MC version
+     *
+     * @param component component to serialize
+     * @return the serialized representation of the component
+     */
+    protected @NotNull Object serializeComponent(@NotNull final Component component) {
+        if (VersionHelper.IS_ITEM_NAME_COMPONENT) {
+            //noinspection UnstableApiUsage
+            return MinecraftComponentSerializer.get().serialize(component);
+        } else {
+            return GsonComponentSerializer.gson().serialize(component);
+        }
+    }
+
+    /**
+     * Deserializes the object with the right {@link net.kyori.adventure.text.serializer.ComponentSerializer} for the current MC version
+     *
+     * @param obj object to deserialize
+     * @return the component
+     */
+    protected @NotNull Component deserializeComponent(@NotNull final Object obj) {
+        if (VersionHelper.IS_ITEM_NAME_COMPONENT) {
+            //noinspection UnstableApiUsage
+            return MinecraftComponentSerializer.get().deserialize(obj);
+        } else {
+            return GsonComponentSerializer.gson().deserialize((String) obj);
+        }
+    }
+
+    /**
      * Sets the display name of the item using {@link Component}
      *
      * @param name The {@link Component} name
@@ -115,7 +145,7 @@ public abstract class BaseItemBuilder<B extends BaseItemBuilder<B>> {
         }
 
         try {
-            DISPLAY_NAME_FIELD.set(meta, GSON.serialize(name));
+            DISPLAY_NAME_FIELD.set(meta, this.serializeComponent(name));
         } catch (IllegalAccessException exception) {
             exception.printStackTrace();
         }
@@ -167,7 +197,10 @@ public abstract class BaseItemBuilder<B extends BaseItemBuilder<B>> {
             return (B) this;
         }
 
-        final List<String> jsonLore = lore.stream().filter(Objects::nonNull).map(GSON::serialize).collect(Collectors.toList());
+        final List<Object> jsonLore = lore.stream()
+            .filter(Objects::nonNull)
+            .map(this::serializeComponent)
+            .collect(Collectors.toList());
 
         try {
             LORE_FIELD.set(meta, jsonLore);
@@ -196,9 +229,9 @@ public abstract class BaseItemBuilder<B extends BaseItemBuilder<B>> {
             components = (stringLore == null) ? new ArrayList<>() : stringLore.stream().map(Legacy.SERIALIZER::deserialize).collect(Collectors.toList());
         } else {
             try {
-                final List<String> jsonLore = (List<String>) LORE_FIELD.get(meta);
+                final List<Object> jsonLore = (List<Object>) LORE_FIELD.get(meta);
                 // The field is null by default ._.
-                components = (jsonLore == null) ? new ArrayList<>() : jsonLore.stream().map(GSON::deserialize).collect(Collectors.toList());
+                components = (jsonLore == null) ? new ArrayList<>() : jsonLore.stream().map(this::deserializeComponent).collect(Collectors.toList());
             } catch (IllegalAccessException exception) {
                 components = new ArrayList<>();
                 exception.printStackTrace();
@@ -256,7 +289,7 @@ public abstract class BaseItemBuilder<B extends BaseItemBuilder<B>> {
      * Enchants the {@link ItemStack} with the specified map where the value
      * is the level of the key's enchantment
      *
-     * @param enchantments Enchantments to add
+     * @param enchantments           Enchantments to add
      * @param ignoreLevelRestriction If level restriction should be ignored
      * @return {@link ItemBuilder}
      * @since 3.1.2
