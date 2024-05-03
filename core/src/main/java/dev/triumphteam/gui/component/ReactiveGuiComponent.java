@@ -5,5 +5,5 @@ import org.jetbrains.annotations.NotNull;
 
 public interface ReactiveGuiComponent<P, I> extends StatefulGuiComponent<P, I> {
 
-    void render(final @NotNull GuiContainer<@NotNull I> container, final @NotNull P player);
+    void render(final @NotNull GuiContainer<@NotNull P, @NotNull I> container, final @NotNull P player);
 }

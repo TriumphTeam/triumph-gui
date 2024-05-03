@@ -1,6 +1,6 @@
 package dev.triumphteam.gui.builder;
 
-import dev.triumphteam.gui.BaseGui;
+import dev.triumphteam.gui.Gui;
 import dev.triumphteam.gui.component.GuiComponent;
 import dev.triumphteam.gui.component.functional.GuiComponentBuilder;
 import dev.triumphteam.gui.component.functional.SimpleFunctionalGuiComponent;
@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @SuppressWarnings({"unchecked", "UnusedReturnValue"})
-public abstract class BaseGuiBuilder<B extends BaseGuiBuilder<B, P, G, I>, P, G extends BaseGui<P>, I> {
+public abstract class BaseGuiBuilder<B extends BaseGuiBuilder<B, P, G, I>, P, G extends Gui<P>, I> {
 
     protected final List<SimpleFunctionalGuiComponent<P, I>> componentRenderers = new ArrayList<>();
 

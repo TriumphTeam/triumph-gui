@@ -9,9 +9,9 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
-public final class MapBackedContainer<I> implements GuiContainer<I> {
+public final class MapBackedContainer<P, I> implements GuiContainer<P, I> {
 
-    private final Map<Slot, RenderedGuiItem<I>> backing = new HashMap<>(100);
+    private final Map<Slot, RenderedGuiItem<P, I>> backing = new HashMap<>(100);
 
     @Override
     public @NotNull GuiContainerType containerType() {
@@ -19,25 +19,24 @@ public final class MapBackedContainer<I> implements GuiContainer<I> {
     }
 
     @Override
-    public void set(final int slot, final @NotNull GuiItem<@NotNull I> guiItem) {
+    public void set(final int slot, final @NotNull GuiItem<@NotNull P,@NotNull I> guiItem) {
         set(new Slot(slot), guiItem);
     }
 
     @Override
-    public void set(final int row, final int column, final @NotNull GuiItem<@NotNull I> guiItem) {
-        // TODO(matt): This
-        set(new Slot(0), guiItem);
+    public void set(final int row, final int column, final @NotNull GuiItem<@NotNull P,@NotNull I> guiItem) {
+        set(Slot.fromRowCol(row, column), guiItem);
     }
 
     @Override
-    public void set(final @NotNull Slot slot, final @NotNull GuiItem<@NotNull I> guiItem) {
+    public void set(final @NotNull Slot slot, final @NotNull GuiItem<@NotNull P, @NotNull I> guiItem) {
         // Render item
         final var renderedItem = new RenderedGuiItem<>(guiItem.render(), guiItem.getClickAction());
         // Add rendered to backing
         backing.put(slot, renderedItem);
     }
 
-    public @NotNull Map<Slot, RenderedGuiItem<I>> complete() {
+    public @NotNull Map<Slot, RenderedGuiItem<P, I>> complete() {
         return Collections.unmodifiableMap(backing);
     }
 }

@@ -1,6 +1,6 @@
 package dev.triumphteam.gui.component.renderer;
 
-import dev.triumphteam.gui.BaseGuiView;
+import dev.triumphteam.gui.AbstractGuiView;
 import dev.triumphteam.gui.component.ReactiveGuiComponent;
 import dev.triumphteam.gui.component.GuiComponent;
 import dev.triumphteam.gui.component.RenderedComponent;
@@ -13,7 +13,7 @@ public final class DefaultGuiComponentRenderer<P, I> implements GuiComponentRend
     public void renderComponent(
         final @NotNull P player,
         final @NotNull GuiComponent<P, I> component,
-        final @NotNull BaseGuiView<P, I> view
+        final @NotNull AbstractGuiView<P, I> view
     ) {
 
         final var container = new MapBackedContainer<I>();

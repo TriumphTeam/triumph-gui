@@ -1,6 +1,6 @@
 package dev.triumphteam.gui.bukkit;
 
-import dev.triumphteam.gui.BaseGuiView;
+import dev.triumphteam.gui.AbstractGuiView;
 import dev.triumphteam.gui.component.GuiComponent;
 import dev.triumphteam.gui.component.renderer.DefaultGuiComponentRenderer;
 import dev.triumphteam.gui.item.RenderedGuiItem;
@@ -15,7 +15,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.List;
 import java.util.Map;
 
-public final class BukkitGuiView extends BaseGuiView<Player, ItemStack> implements InventoryHolder {
+public final class BukkitGuiView extends AbstractGuiView<Player, ItemStack> implements InventoryHolder {
 
     private final Inventory inventory;
 
