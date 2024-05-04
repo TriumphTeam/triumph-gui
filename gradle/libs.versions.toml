@@ -6,8 +6,9 @@ coroutines = "1.6.4"
 license = "0.16.1"
 
 # Core
-annotations = "23.0.0"
+annotations = "24.1.0"
 caffeine = "3.1.8"
+logger = "2.0.13"
 
 # Minecraft
 paper = "1.20.4-R0.1-SNAPSHOT"
@@ -16,6 +17,7 @@ paper = "1.20.4-R0.1-SNAPSHOT"
 # Core
 annotations = { module = "org.jetbrains:annotations", version.ref = "annotations" }
 caffeine = { module = "com.github.ben-manes.caffeine:caffeine", version.ref = "caffeine" }
+logger = { module = "org.slf4j:slf4j-api", version.ref = "logger" }
 
 # Minecraft
 paper = { module = "io.papermc.paper:paper-api", version.ref = "paper" }
