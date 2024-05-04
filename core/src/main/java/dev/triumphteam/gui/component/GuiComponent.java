@@ -1,3 +1,12 @@
 package dev.triumphteam.gui.component;
 
-public interface GuiComponent<P, I> {}
+import dev.triumphteam.gui.click.handler.ClickHandler;
+import org.jetbrains.annotations.Nullable;
+
+public interface GuiComponent<P, I> {
+
+    @Nullable
+    default ClickHandler<P> clickHandler() {
+        return null;
+    }
+}

@@ -3,16 +3,20 @@ package dev.triumphteam.gui.click.processor;
 import com.github.benmanes.caffeine.cache.Cache;
 import com.github.benmanes.caffeine.cache.Caffeine;
 import dev.triumphteam.gui.AbstractGuiView;
-import dev.triumphteam.gui.click.handler.ClickHandler;
+import dev.triumphteam.gui.click.ClickContext;
+import dev.triumphteam.gui.click.completable.DeferredClick;
 import kotlin.Unit;
 import org.jetbrains.annotations.NotNull;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.function.Supplier;
 
 public final class ClickProcessor<P, I> {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(ClickProcessor.class);
 
     private final Cache<UUID, Unit> spamPrevention = Caffeine.newBuilder()
         .expireAfterWrite(200L, TimeUnit.MILLISECONDS)
@@ -20,13 +24,11 @@ public final class ClickProcessor<P, I> {
 
     private final AtomicBoolean isProcessing = new AtomicBoolean(false);
 
-    public void processClick(
-        final int slot,
-        final @NotNull UUID clickerUuid,
-        final @NotNull AbstractGuiView<P, I> view
-    ) {
+    public void processClick(final int slot, final @NotNull AbstractGuiView<P, I> view) {
 
-        if (canClick(clickerUuid)) {
+        final var viewerUuid = view.viewerUuid();
+
+        if (canClick(viewerUuid)) {
             return;
         }
 
@@ -34,11 +36,31 @@ public final class ClickProcessor<P, I> {
             return;
         }
 
-        // context
+        final var clickContext = new ClickContext();
 
-        final var action = view.getAction(slot);
-        final var handler = clickHandlerSupplier.get();
-        handler.handle(action);
+        final var renderedItem = view.getItem(slot);
+        if (renderedItem == null) return;
+
+        final var handler = renderedItem.clickHandler();
+
+        final var deferredClick = new DeferredClick((ignored, throwable) -> {
+            if (throwable != null) {
+                LOGGER.error(
+                    "An exception occurred while processing click for '{}' on slot '{}'.",
+                    view.viewerName(),
+                    slot,
+                    throwable
+                );
+            }
+
+            this.isProcessing.compareAndSet(true, false);
+        });
+
+        handler.handle(view.viewer(), clickContext, renderedItem.action(), deferredClick);
+
+        if (!deferredClick.completingLater()) {
+            deferredClick.complete(null);
+        }
     }
 
     private boolean canClick(final @NotNull UUID clickerUuid) {

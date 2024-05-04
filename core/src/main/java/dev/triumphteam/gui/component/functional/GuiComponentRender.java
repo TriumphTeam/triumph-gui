@@ -7,7 +7,7 @@ import org.jetbrains.annotations.NotNull;
 public interface GuiComponentRender<P, I> {
 
     void render(
-        final @NotNull GuiContainer<I> container,
+        final @NotNull GuiContainer<@NotNull P, @NotNull I> container,
         final @NotNull P player
     );
 }

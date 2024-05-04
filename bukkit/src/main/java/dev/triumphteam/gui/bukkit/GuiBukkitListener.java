@@ -23,8 +23,7 @@ public final class GuiBukkitListener implements Listener {
         }
 
         event.setCancelled(true);
-        final var action = view.getAction(event.getSlot());
-        if (action == null) return;
-        action.click();
+
+        view.getClickProcessor().processClick(event.getSlot(), view);
     }
 }

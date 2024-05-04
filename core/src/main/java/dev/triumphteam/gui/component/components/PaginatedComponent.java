@@ -21,10 +21,7 @@ public final class PaginatedComponent<P, I> implements ReactiveGuiComponent<P, I
     }
 
     @Override
-    public void render(final @NotNull GuiContainer<I> container, final @NotNull  P player) {
-        container.set(22, );
-        container.set(23, );
-
+    public void render(final @NotNull GuiContainer<P, I> container, @NotNull final P player) {
 
     }
 }
