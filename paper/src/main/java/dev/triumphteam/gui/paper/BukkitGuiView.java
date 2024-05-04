@@ -1,4 +1,4 @@
-package dev.triumphteam.gui.bukkit;
+package dev.triumphteam.gui.paper;
 
 import dev.triumphteam.gui.AbstractGuiView;
 import dev.triumphteam.gui.click.handler.SimpleClickHandler;

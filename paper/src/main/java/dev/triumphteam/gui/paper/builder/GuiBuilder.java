@@ -1,7 +1,7 @@
-package dev.triumphteam.gui.bukkit.builder;
+package dev.triumphteam.gui.paper.builder;
 
 import dev.triumphteam.gui.builder.BaseGuiBuilder;
-import dev.triumphteam.gui.bukkit.Gui;
+import dev.triumphteam.gui.paper.Gui;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 

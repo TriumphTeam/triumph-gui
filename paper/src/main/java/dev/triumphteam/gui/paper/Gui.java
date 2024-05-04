@@ -1,4 +1,4 @@
-package dev.triumphteam.gui.bukkit;
+package dev.triumphteam.gui.paper;
 
 import dev.triumphteam.gui.component.GuiComponent;
 import dev.triumphteam.gui.component.functional.SimpleFunctionalGuiComponent;

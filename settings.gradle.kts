@@ -7,7 +7,7 @@ enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
 
 rootProject.name = "triumph-gui"
 
-listOf("core", "bukkit").forEach(::includeProject)
+listOf("core", "paper").forEach(::includeProject)
 
 fun includeProject(name: String) {
     include(name) {

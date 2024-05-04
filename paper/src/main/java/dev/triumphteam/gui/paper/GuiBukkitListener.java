@@ -1,4 +1,4 @@
-package dev.triumphteam.gui.bukkit;
+package dev.triumphteam.gui.paper;
 
 import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
