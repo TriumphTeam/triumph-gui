@@ -5,11 +5,11 @@ import com.github.benmanes.caffeine.cache.Caffeine;
 import dev.triumphteam.gui.AbstractGuiView;
 import dev.triumphteam.gui.click.ClickContext;
 import dev.triumphteam.gui.click.completable.DeferredClick;
-import kotlin.Unit;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.time.LocalTime;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -18,7 +18,7 @@ public final class ClickProcessor<P, I> {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ClickProcessor.class);
 
-    private final Cache<UUID, Unit> spamPrevention = Caffeine.newBuilder()
+    private final Cache<UUID, LocalTime> spamPrevention = Caffeine.newBuilder()
         .expireAfterWrite(200L, TimeUnit.MILLISECONDS)
         .build();
 
@@ -28,7 +28,7 @@ public final class ClickProcessor<P, I> {
 
         final var viewerUuid = view.viewerUuid();
 
-        if (canClick(viewerUuid)) {
+        if (!canClick(viewerUuid)) {
             return;
         }
 
@@ -69,8 +69,8 @@ public final class ClickProcessor<P, I> {
         }
 
         final var spamming = spamPrevention.getIfPresent(clickerUuid);
-        if (spamming != null) {
-            spamPrevention.put(clickerUuid, spamming);
+        if (spamming == null) {
+            spamPrevention.put(clickerUuid, LocalTime.now());
             return true;
         }
 

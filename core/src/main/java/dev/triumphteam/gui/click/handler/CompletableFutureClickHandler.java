@@ -9,12 +9,16 @@ import org.jetbrains.annotations.NotNull;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.TimeUnit;
 
-public final class FutureClickHandler<P> implements ClickHandler<P> {
+public final class CompletableFutureClickHandler<P> implements ClickHandler<P> {
 
     private final long timeout;
     private final TimeUnit unit;
 
-    public FutureClickHandler(final long timeout, final @NotNull TimeUnit unit) {
+    public CompletableFutureClickHandler() {
+        this(6, TimeUnit.SECONDS);
+    }
+
+    public CompletableFutureClickHandler(final long timeout, final @NotNull TimeUnit unit) {
         this.timeout = timeout;
         this.unit = unit;
     }

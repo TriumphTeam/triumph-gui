@@ -1,4 +1,4 @@
-package dev.triumphteam.gui.paper.builder;
+package dev.triumphteam.gui.paper.builder.gui;
 
 import dev.triumphteam.gui.builder.BaseGuiBuilder;
 import dev.triumphteam.gui.paper.Gui;

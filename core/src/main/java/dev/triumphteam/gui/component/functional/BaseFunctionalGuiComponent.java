@@ -1,5 +1,6 @@
 package dev.triumphteam.gui.component.functional;
 
+import dev.triumphteam.gui.click.handler.ClickHandler;
 import dev.triumphteam.gui.state.MutableState;
 import dev.triumphteam.gui.state.State;
 import dev.triumphteam.gui.state.builtin.EmptyState;
@@ -7,7 +8,9 @@ import dev.triumphteam.gui.state.policy.StateMutationPolicy;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-interface FunctionalStateContainer {
+import java.util.concurrent.TimeUnit;
+
+interface BaseFunctionalGuiComponent<P> {
 
     /**
      * Associate am empty {@link State} to the component.
@@ -73,4 +76,16 @@ interface FunctionalStateContainer {
         final @Nullable T value,
         final @NotNull StateMutationPolicy mutationPolicy
     );
+
+    /**
+     * TODO
+     * @param clickHandler
+     */
+    void withClickHandler(final @Nullable ClickHandler<P> clickHandler);
+
+    void withSimpleClickHandler();
+
+    void withCompletableFutureClickHandler();
+
+    void withCompletableFutureClickHandler(final long timeout, final @NotNull TimeUnit unit);
 }

@@ -8,7 +8,7 @@ import java.util.function.BiConsumer;
 
 public final class DeferredClick implements CompletableClick {
 
-    private final CompletableFuture<Boolean> deferred = CompletableFuture.completedFuture(null);
+    private final CompletableFuture<Boolean> deferred = new CompletableFuture<>();
     private boolean completingLater = false;
 
     public DeferredClick(final @NotNull BiConsumer<Boolean, ? super Throwable> onComplete) {

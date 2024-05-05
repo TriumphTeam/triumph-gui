@@ -11,7 +11,7 @@ caffeine = "3.1.8"
 logger = "2.0.13"
 
 # Minecraft
-paper = "1.20.4-R0.1-SNAPSHOT"
+paper = "1.16.5-R0.1-SNAPSHOT"
 
 [libraries]
 # Core
@@ -20,7 +20,7 @@ caffeine = { module = "com.github.ben-manes.caffeine:caffeine", version.ref = "c
 logger = { module = "org.slf4j:slf4j-api", version.ref = "logger" }
 
 # Minecraft
-paper = { module = "io.papermc.paper:paper-api", version.ref = "paper" }
+paper = { module = "com.destroystokyo.paper:paper-api", version.ref = "paper" }
 
 # Kotlin
 coroutines = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "coroutines" }

@@ -1,5 +1,8 @@
 package dev.triumphteam.gui.component.functional;
 
+import dev.triumphteam.gui.click.handler.ClickHandler;
+import dev.triumphteam.gui.click.handler.CompletableFutureClickHandler;
+import dev.triumphteam.gui.click.handler.SimpleClickHandler;
 import dev.triumphteam.gui.state.MutableState;
 import dev.triumphteam.gui.state.State;
 import dev.triumphteam.gui.state.builtin.EmptyState;
@@ -10,10 +13,12 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
-public abstract class AbstractFunctionalStateContainer implements FunctionalStateContainer {
+public abstract class AbstractFunctionalGuiComponent<P> implements BaseFunctionalGuiComponent<P> {
 
     private final List<State> states = new ArrayList<>();
+    private ClickHandler<P> clickHandler = null;
 
     @Override
     public @NotNull State state() {
@@ -54,6 +59,30 @@ public abstract class AbstractFunctionalStateContainer implements FunctionalStat
         var state = new SimpleMutableState<>(value, mutationPolicy);
         states.add(state);
         return state;
+    }
+
+    @Override
+    public void withClickHandler(final @Nullable ClickHandler<P> clickHandler) {
+        this.clickHandler = clickHandler;
+    }
+
+    @Override
+    public void withSimpleClickHandler() {
+        this.clickHandler = new SimpleClickHandler<>();
+    }
+
+    @Override
+    public void withCompletableFutureClickHandler() {
+        this.clickHandler = new CompletableFutureClickHandler<>();
+    }
+
+    @Override
+    public void withCompletableFutureClickHandler(final long timeout, final @NotNull TimeUnit unit) {
+        this.clickHandler = new CompletableFutureClickHandler<>(timeout, unit);
+    }
+
+    public @Nullable ClickHandler<P> getClickHandler() {
+        return clickHandler;
     }
 
     protected @NotNull List<State> getStates() {

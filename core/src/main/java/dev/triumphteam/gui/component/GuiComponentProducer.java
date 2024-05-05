@@ -1,6 +1,5 @@
-package dev.triumphteam.gui.component.functional;
+package dev.triumphteam.gui.component;
 
-import dev.triumphteam.gui.component.GuiComponent;
 import org.jetbrains.annotations.NotNull;
 
 public interface GuiComponentProducer<P, I> {

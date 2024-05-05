@@ -2,6 +2,7 @@ package dev.triumphteam.gui.component.functional;
 
 import dev.triumphteam.gui.click.handler.ClickHandler;
 import dev.triumphteam.gui.component.GuiComponent;
+import dev.triumphteam.gui.component.GuiComponentProducer;
 import dev.triumphteam.gui.component.ReactiveGuiComponent;
 import dev.triumphteam.gui.container.GuiContainer;
 import dev.triumphteam.gui.exception.GuiException;
@@ -11,18 +12,12 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
-public final class SimpleFunctionalGuiComponent<P, I> extends AbstractFunctionalStateContainer implements FunctionalGuiComponent<P, I>, GuiComponentProducer<P, I> {
+public final class SimpleFunctionalGuiComponent<P, I> extends AbstractFunctionalGuiComponent<P> implements FunctionalGuiComponent<P, I>, GuiComponentProducer<P, I> {
 
-    private GuiComponentRender<P, I> component = null;
-    private ClickHandler<P> clickHandler;
-
-    @Override
-    public void clickHandler(final @Nullable ClickHandler<P> clickHandler) {
-        this.clickHandler = clickHandler;
-    }
+    private FunctionalGuiComponentRender<P, I> component = null;
 
     @Override
-    public void render(final @NotNull GuiComponentRender<P, I> component) {
+    public void render(final @NotNull FunctionalGuiComponentRender<P, I> component) {
         this.component = component;
     }
 
@@ -36,7 +31,7 @@ public final class SimpleFunctionalGuiComponent<P, I> extends AbstractFunctional
 
             @Override
             public @Nullable ClickHandler<P> clickHandler() {
-                return clickHandler;
+                return getClickHandler();
             }
 
             @Override

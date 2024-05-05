@@ -10,15 +10,13 @@ import java.util.List;
 
 public final class Gui implements dev.triumphteam.gui.Gui<Player> {
 
-    private final List<GuiComponent<Player, ItemStack>> components;
-
     static {
         GuiBukkitListener.register();
     }
 
-    public Gui(
-        final @NotNull List<SimpleFunctionalGuiComponent<Player, ItemStack>> componentRenderers
-    ) {
+    private final List<GuiComponent<Player, ItemStack>> components;
+
+    public Gui(final @NotNull List<SimpleFunctionalGuiComponent<Player, ItemStack>> componentRenderers) {
         this.components = componentRenderers.stream().map(SimpleFunctionalGuiComponent::asGuiComponent).toList();
     }
 
