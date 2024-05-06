@@ -9,6 +9,6 @@ public final class GuiBuilder extends BaseGuiBuilder<GuiBuilder, Player, Gui, It
 
     @Override
     public Gui build() {
-        return new Gui(componentRenderers);
+        return new Gui(components);
     }
 }

@@ -5,7 +5,7 @@ import dev.triumphteam.gui.component.GuiComponent;
 import dev.triumphteam.gui.component.GuiComponentProducer;
 import dev.triumphteam.gui.component.ReactiveGuiComponent;
 import dev.triumphteam.gui.container.GuiContainer;
-import dev.triumphteam.gui.exception.GuiException;
+import dev.triumphteam.gui.exception.TriumphGuiException;
 import dev.triumphteam.gui.state.State;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -24,7 +24,7 @@ public final class SimpleFunctionalGuiComponent<P, I> extends AbstractFunctional
     @Override
     public @NotNull GuiComponent<P, I> asGuiComponent() {
         if (component == null) {
-            throw new GuiException("TODO");
+            throw new TriumphGuiException("TODO");
         }
 
         return new ReactiveGuiComponent<>() {

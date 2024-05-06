@@ -2,7 +2,10 @@ package dev.triumphteam.gui.click.completable;
 
 import org.jetbrains.annotations.Nullable;
 
-public interface CompletableClick {
+/**
+ * TODO
+ */
+public interface ClickController {
 
     boolean isDone();
 

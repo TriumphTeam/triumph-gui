@@ -6,12 +6,15 @@ import org.jetbrains.annotations.Nullable;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.BiConsumer;
 
-public final class DeferredClick implements CompletableClick {
+/**
+ * TODO
+ */
+public final class DefaultClickController implements ClickController {
 
     private final CompletableFuture<Boolean> deferred = new CompletableFuture<>();
     private boolean completingLater = false;
 
-    public DeferredClick(final @NotNull BiConsumer<Boolean, ? super Throwable> onComplete) {
+    public DefaultClickController(final @NotNull BiConsumer<Boolean, ? super Throwable> onComplete) {
         deferred.whenComplete(onComplete);
     }
 
