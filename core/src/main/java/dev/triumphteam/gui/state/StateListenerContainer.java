@@ -1,7 +1,7 @@
 package dev.triumphteam.gui.state;
 
-import com.github.benmanes.caffeine.cache.Cache;
-import com.github.benmanes.caffeine.cache.Caffeine;
+import com.google.common.cache.Cache;
+import com.google.common.cache.CacheBuilder;
 import dev.triumphteam.gui.GuiView;
 import org.jetbrains.annotations.NotNull;
 
@@ -29,7 +29,7 @@ public final class StateListenerContainer {
      * @return A {@link java.util.concurrent.ConcurrentMap} with weak keys.
      */
     private static Map<GuiView<?, ?>, Queue<Runnable>> createListenerMap() {
-        final Cache<GuiView<?, ?>, Queue<Runnable>> cache = Caffeine.newBuilder()
+        final Cache<GuiView<?, ?>, Queue<Runnable>> cache = CacheBuilder.newBuilder()
             .weakKeys()
             .build();
 

@@ -1,11 +1,11 @@
 package dev.triumphteam.gui.click.processor;
 
-import com.github.benmanes.caffeine.cache.Cache;
-import com.github.benmanes.caffeine.cache.Caffeine;
+import com.google.common.cache.Cache;
+import com.google.common.cache.CacheBuilder;
 import dev.triumphteam.gui.AbstractGuiView;
 import dev.triumphteam.gui.click.ClickContext;
 import dev.triumphteam.gui.click.action.EmptyGuiClickAction;
-import dev.triumphteam.gui.click.completable.DefaultClickController;
+import dev.triumphteam.gui.click.controller.DefaultClickController;
 import dev.triumphteam.gui.click.handler.ClickHandler;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
@@ -17,7 +17,7 @@ import java.util.concurrent.TimeUnit;
 
 /**
  * The job of the click processor is to handle everything related to a player clicking on a GUI.
- * The processor will only allow one click to go through per time, if a click is taking too long it'll block
+ * The processor will only allow one click to go through per time, if a click is taking too long, it'll block
  * all other clicks from happening.
  * This is to prevent unwanted interactions.
  * <p>
@@ -39,7 +39,7 @@ public final class ClickProcessor<P, I> {
     public ClickProcessor(final long spamPreventionDuration) {
         // Cache for spam prevention
         this.spamPreventionDuration = spamPreventionDuration;
-        this.spamPrevention = Caffeine.newBuilder()
+        this.spamPrevention = CacheBuilder.newBuilder()
             .expireAfterWrite(spamPreventionDuration, TimeUnit.MILLISECONDS)
             .build();
     }
@@ -79,7 +79,7 @@ public final class ClickProcessor<P, I> {
 
         // Prepare the controller with the whenComplete handler
         final var clickController = new DefaultClickController((ignored, throwable) -> {
-            // If something went wrong with the click log the error and stop processing
+            // If something went wrong with the click log, the error and stop processing
             if (throwable != null) {
                 LOGGER.error(
                     "An exception occurred while processing click for '{}' on slot '{}'.",
@@ -96,7 +96,7 @@ public final class ClickProcessor<P, I> {
         // The exception is passed to the controller and still logged
         Exception handledException = null;
         try {
-            handler.handle(view.viewer(), clickContext, renderedItem.action(), clickController);
+            handler.handle(view.viewer(), clickContext, action, clickController);
         } catch (final Exception exception) {
             handledException = exception;
         }

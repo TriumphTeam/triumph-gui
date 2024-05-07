@@ -2,7 +2,7 @@ package dev.triumphteam.gui.click.handler;
 
 import dev.triumphteam.gui.click.ClickContext;
 import dev.triumphteam.gui.click.action.GuiClickAction;
-import dev.triumphteam.gui.click.completable.ClickController;
+import dev.triumphteam.gui.click.controller.ClickController;
 import org.jetbrains.annotations.NotNull;
 
 /**

@@ -3,6 +3,8 @@ plugins {
 }
 
 dependencies {
-    implementation(libs.caffeine)
-    compileOnly(libs.logger)
+    compileOnlyApi(libs.guava)
+    compileOnlyApi(libs.adventure.api)
+
+    compileOnlyApi(libs.logger)
 }

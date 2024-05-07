@@ -18,7 +18,8 @@ public final class DefaultGuiComponentRenderer<P, I> implements GuiComponentRend
 
         final var componentClickHandler = component.clickHandler();
         final var container = new MapBackedContainer<P, I>(
-            componentClickHandler == null ? view.getDefaultClickHandler() : componentClickHandler
+            componentClickHandler == null ? view.getDefaultClickHandler() : componentClickHandler,
+            view.getContainerType()
         );
 
         if (component instanceof ReactiveGuiComponent) {

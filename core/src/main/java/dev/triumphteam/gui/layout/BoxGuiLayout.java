@@ -10,10 +10,10 @@ public final class BoxGuiLayout implements GuiLayout {
 
     private final List<Slot> slots = new ArrayList<>();
 
-    public BoxGuiLayout(final int minRow, final int minCol, final int maxRow, final int maxCol) {
-        for (int row = minRow; row <= maxRow; row++) {
-            for (int col = minCol; col <= maxCol; col++) {
-                slots.add(new Slot(Slot.fromRowCol(row, col)));
+    public BoxGuiLayout(final @NotNull Slot min, final @NotNull Slot max) {
+        for (int row = min.row(); row <= max.row(); row++) {
+            for (int col = min.column(); col <= max.column(); col++) {
+                slots.add(Slot.of(row, col));
             }
         }
     }

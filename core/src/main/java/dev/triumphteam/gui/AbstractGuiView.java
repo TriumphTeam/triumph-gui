@@ -6,8 +6,8 @@ import dev.triumphteam.gui.component.GuiComponent;
 import dev.triumphteam.gui.component.RenderedComponent;
 import dev.triumphteam.gui.component.StatefulGuiComponent;
 import dev.triumphteam.gui.component.renderer.GuiComponentRenderer;
+import dev.triumphteam.gui.container.type.GuiContainerType;
 import dev.triumphteam.gui.item.RenderedGuiItem;
-import dev.triumphteam.gui.slot.Slot;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -22,24 +22,29 @@ public abstract class AbstractGuiView<P, I> implements GuiView<P, I> {
     private final List<GuiComponent<P, I>> components;
     private final GuiComponentRenderer<P, I> renderer;
     private final ClickHandler<P> defaultClickHandler;
+    private final GuiContainerType containerType;
 
     // Click processor
-    private final ClickProcessor<P, I> clickProcessor = new ClickProcessor<>();
+    private final ClickProcessor<P, I> clickProcessor;
     // Cache of rendered components
     private final Map<GuiComponent<P, I>, RenderedComponent<P, I>> renderedComponents = new ConcurrentHashMap<>();
     // All the gui items that have been rendered and are in the inventory
-    private final Map<Slot, RenderedGuiItem<P, I>> allRenderedItems = new ConcurrentHashMap<>();
+    private final Map<Integer, RenderedGuiItem<P, I>> allRenderedItems = new ConcurrentHashMap<>();
 
     public AbstractGuiView(
         final @NotNull P viewer,
         final @NotNull List<@NotNull GuiComponent<P, I>> components,
+        final @NotNull GuiContainerType containerType,
         final @NotNull GuiComponentRenderer<P, I> renderer,
-        final @NotNull ClickHandler<P> defaultClickHandler
+        final @NotNull ClickHandler<P> defaultClickHandler,
+        final @NotNull ClickProcessor<P, I> clickProcessor
     ) {
         this.viewer = viewer;
         this.components = components;
+        this.containerType = containerType;
         this.renderer = renderer;
         this.defaultClickHandler = defaultClickHandler;
+        this.clickProcessor = clickProcessor;
     }
 
     public @NotNull P viewer() {
@@ -50,9 +55,9 @@ public abstract class AbstractGuiView<P, I> implements GuiView<P, I> {
 
     public abstract @NotNull UUID viewerUuid();
 
-    protected abstract void clearSlot(final @NotNull Slot slot);
+    protected abstract void clearSlot(final int slot);
 
-    protected abstract void populateInventory(final @NotNull Map<@NotNull Slot, @NotNull RenderedGuiItem<P, I>> renderedItems);
+    protected abstract void populateInventory(final @NotNull Map<Integer, @NotNull RenderedGuiItem<P, I>> renderedItems);
 
     protected void setup() {
         components.forEach(component -> {
@@ -94,10 +99,14 @@ public abstract class AbstractGuiView<P, I> implements GuiView<P, I> {
     }
 
     public @Nullable RenderedGuiItem<P, I> getItem(final int slot) {
-        return allRenderedItems.get(new Slot(slot));
+        return allRenderedItems.get(slot);
     }
 
     public @NotNull ClickHandler<P> getDefaultClickHandler() {
         return defaultClickHandler;
+    }
+
+    public @NotNull GuiContainerType getContainerType() {
+        return containerType;
     }
 }

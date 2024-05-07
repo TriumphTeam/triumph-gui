@@ -1,8 +1,8 @@
 package dev.triumphteam.gui.slot;
 
-public record Slot(int slot) {
+public record Slot(int row, int column) {
 
-    public static int fromRowCol(final int row, final int column) {
-        return (column + (row - 1) * 9) - 1;
+    public static Slot of(final int row, final int column) {
+        return new Slot(row, column);
     }
 }

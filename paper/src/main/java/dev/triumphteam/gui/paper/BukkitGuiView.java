@@ -1,12 +1,13 @@
 package dev.triumphteam.gui.paper;
 
 import dev.triumphteam.gui.AbstractGuiView;
-import dev.triumphteam.gui.click.handler.SimpleClickHandler;
+import dev.triumphteam.gui.click.handler.ClickHandler;
+import dev.triumphteam.gui.click.processor.ClickProcessor;
 import dev.triumphteam.gui.component.GuiComponent;
-import dev.triumphteam.gui.component.renderer.DefaultGuiComponentRenderer;
+import dev.triumphteam.gui.component.renderer.GuiComponentRenderer;
 import dev.triumphteam.gui.item.RenderedGuiItem;
-import dev.triumphteam.gui.slot.Slot;
-import org.bukkit.Bukkit;
+import dev.triumphteam.gui.paper.container.type.PaperContainerType;
+import net.kyori.adventure.text.Component;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
@@ -23,12 +24,15 @@ public final class BukkitGuiView extends AbstractGuiView<Player, ItemStack> impl
 
     public BukkitGuiView(
         final @NotNull Player player,
-        final @NotNull List<GuiComponent<Player, ItemStack>> components
+        final @NotNull Component title,
+        final @NotNull PaperContainerType containerType,
+        final @NotNull List<GuiComponent<Player, ItemStack>> components,
+        final @NotNull GuiComponentRenderer<Player, ItemStack> componentRenderer,
+        final @NotNull ClickHandler<Player> clickHandler,
+        final long spamPreventionDuration
     ) {
-        // TODO(matt): Renderer from constructor
-        super(player, components, new DefaultGuiComponentRenderer<>(), new SimpleClickHandler<>());
-
-        this.inventory = Bukkit.createInventory(this, 54, "Gui");
+        super(player, components, containerType, componentRenderer, clickHandler, new ClickProcessor<>(spamPreventionDuration));
+        this.inventory = containerType.createInventory(this, title);
     }
 
     @Override
@@ -49,8 +53,8 @@ public final class BukkitGuiView extends AbstractGuiView<Player, ItemStack> impl
     }
 
     @Override
-    protected void clearSlot(final @NotNull Slot slot) {
-        inventory.clear(slot.slot());
+    protected void clearSlot(final int slot) {
+        inventory.clear(slot);
     }
 
     @Override
@@ -64,7 +68,7 @@ public final class BukkitGuiView extends AbstractGuiView<Player, ItemStack> impl
     }
 
     @Override
-    protected void populateInventory(final @NotNull Map<Slot, RenderedGuiItem<Player, ItemStack>> renderedItems) {
-        renderedItems.forEach((slot, item) -> inventory.setItem(slot.slot(), item.item()));
+    protected void populateInventory(final @NotNull Map<Integer, RenderedGuiItem<Player, ItemStack>> renderedItems) {
+        renderedItems.forEach((slot, item) -> inventory.setItem(slot, item.item()));
     }
 }

@@ -7,20 +7,22 @@ license = "0.16.1"
 
 # Core
 annotations = "24.1.0"
-caffeine = "3.1.8"
+guava = "33.2.0-jre"
 logger = "2.0.13"
 
 # Minecraft
+adventure = "4.16.0"
 paper = "1.16.5-R0.1-SNAPSHOT"
 
 [libraries]
 # Core
 annotations = { module = "org.jetbrains:annotations", version.ref = "annotations" }
-caffeine = { module = "com.github.ben-manes.caffeine:caffeine", version.ref = "caffeine" }
+guava = { module = "com.google.guava:guava", version.ref = "guava" }
 logger = { module = "org.slf4j:slf4j-api", version.ref = "logger" }
 
 # Minecraft
 paper = { module = "com.destroystokyo.paper:paper-api", version.ref = "paper" }
+adventure-api = { module = "net.kyori:adventure-api", version.ref = "adventure" }
 
 # Kotlin
 coroutines = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "coroutines" }

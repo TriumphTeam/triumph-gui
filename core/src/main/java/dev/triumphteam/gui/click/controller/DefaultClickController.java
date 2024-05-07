@@ -1,4 +1,4 @@
-package dev.triumphteam.gui.click.completable;
+package dev.triumphteam.gui.click.controller;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
