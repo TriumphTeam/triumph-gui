@@ -19,7 +19,7 @@ subprojects {
     }
 
     group = "dev.triumphteam"
-    version = "3.1.7"
+    version = "3.1.8-SNAPSHOT"
 
     dependencies {
         compileOnly("org.jetbrains:annotations:21.0.1")
@@ -41,8 +41,8 @@ subprojects {
 
     tasks {
         withType<JavaCompile> {
-            sourceCompatibility = "1.8"
-            targetCompatibility = "1.8"
+            /*sourceCompatibility = "1.8"
+            targetCompatibility = "1.8"*/
             options.encoding = "UTF-8"
         }
     }

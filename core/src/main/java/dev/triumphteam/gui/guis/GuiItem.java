@@ -1,18 +1,18 @@
 /**
  * MIT License
- *
+ * <p>
  * Copyright (c) 2021 TriumphTeam
- *
+ * <p>
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- *
+ * <p>
  * The above copyright notice and this permission notice shall be included in all
  * copies or substantial portions of the Software.
- *
+ * <p>
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -41,14 +41,12 @@ import java.util.UUID;
 @SuppressWarnings("unused")
 public class GuiItem {
 
-    // Action to do when clicking on the item
-    private GuiAction<InventoryClickEvent> action;
-
-    // The ItemStack of the GuiItem
-    private ItemStack itemStack;
-
     // Random UUID to identify the item when clicking
     private final UUID uuid = UUID.randomUUID();
+    // Action to do when clicking on the item
+    private GuiAction<InventoryClickEvent> action;
+    // The ItemStack of the GuiItem
+    private ItemStack itemStack;
 
     /**
      * Main constructor of the GuiItem
@@ -62,7 +60,7 @@ public class GuiItem {
         this.action = action;
 
         // Sets the UUID to an NBT tag to be identifiable later
-        this.itemStack = ItemNbt.setString(itemStack.clone(), "mf-gui", uuid.toString());
+        setItemStack(itemStack);
     }
 
     /**
@@ -94,25 +92,6 @@ public class GuiItem {
     }
 
     /**
-     * Replaces the {@link ItemStack} of the GUI Item
-     *
-     * @param itemStack The new {@link ItemStack}
-     */
-    public void setItemStack(@NotNull final ItemStack itemStack) {
-        Preconditions.checkNotNull(itemStack, "The ItemStack for the GUI Item cannot be null!");
-        this.itemStack = ItemNbt.setString(itemStack.clone(), "mf-gui", uuid.toString());
-    }
-
-    /**
-     * Replaces the {@link GuiAction} of the current GUI Item
-     *
-     * @param action The new {@link GuiAction} to set
-     */
-    public void setAction(@Nullable final GuiAction<@NotNull InventoryClickEvent> action) {
-        this.action = action;
-    }
-
-    /**
      * Gets the GuiItem's {@link ItemStack}
      *
      * @return The {@link ItemStack}
@@ -120,6 +99,20 @@ public class GuiItem {
     @NotNull
     public ItemStack getItemStack() {
         return itemStack;
+    }
+
+    /**
+     * Replaces the {@link ItemStack} of the GUI Item
+     *
+     * @param itemStack The new {@link ItemStack}
+     */
+    public void setItemStack(@NotNull final ItemStack itemStack) {
+        Preconditions.checkNotNull(itemStack, "The ItemStack for the GUI Item cannot be null!");
+        if (itemStack.getType() != Material.AIR) {
+            this.itemStack = ItemNbt.setString(itemStack.clone(), "mf-gui", uuid.toString());
+        } else {
+            this.itemStack = itemStack.clone();
+        }
     }
 
     /**
@@ -136,5 +129,14 @@ public class GuiItem {
     @Nullable
     GuiAction<InventoryClickEvent> getAction() {
         return action;
+    }
+
+    /**
+     * Replaces the {@link GuiAction} of the current GUI Item
+     *
+     * @param action The new {@link GuiAction} to set
+     */
+    public void setAction(@Nullable final GuiAction<@NotNull InventoryClickEvent> action) {
+        this.action = action;
     }
 }

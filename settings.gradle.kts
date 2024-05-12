@@ -7,3 +7,5 @@ listOf("kotlin").forEach {
     include(it)
     findProject(":$it")?.name = "triumph-gui-$it"
 }
+
+include("test-plugin")

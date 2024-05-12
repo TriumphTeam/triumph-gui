@@ -79,7 +79,7 @@ tasks {
                         password = System.getenv("REPO_PASS")
                     }
 
-                    url = uri("https://repo.mattstudios.me/artifactory/public-snapshot/")
+                    url = uri("https://repo.triumphteam.dev/snapshots/")
                     return@maven
                 }
 
