@@ -1,18 +1,25 @@
 package dev.triumphteam.gui.paper;
 
-import dev.triumphteam.gui.Gui;
+import dev.triumphteam.gui.BaseGui;
 import dev.triumphteam.gui.click.handler.ClickHandler;
 import dev.triumphteam.gui.component.GuiComponent;
 import dev.triumphteam.gui.component.renderer.GuiComponentRenderer;
+import dev.triumphteam.gui.container.type.GuiContainerType;
+import dev.triumphteam.gui.paper.builder.gui.GuiBuilder;
+import dev.triumphteam.gui.paper.container.type.ChestContainerType;
 import dev.triumphteam.gui.paper.container.type.PaperContainerType;
 import net.kyori.adventure.text.Component;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
-public final class PaperGui implements Gui<Player> {
+/**
+ * The GUI implementation for Paper servers.
+ */
+public final class Gui implements BaseGui<Player> {
 
     static {
         GuiBukkitListener.register();
@@ -25,7 +32,7 @@ public final class PaperGui implements Gui<Player> {
     private final ClickHandler<Player> clickHandler;
     private final long spamPreventionDuration;
 
-    public PaperGui(
+    public Gui(
         final @NotNull Component title,
         final @NotNull List<GuiComponent<Player, ItemStack>> components,
         final @NotNull PaperContainerType containerType,
@@ -39,6 +46,29 @@ public final class PaperGui implements Gui<Player> {
         this.componentRenderer = componentRenderer;
         this.clickHandler = clickHandler;
         this.spamPreventionDuration = spamPreventionDuration;
+    }
+
+    /**
+     * Create a new {@link GuiBuilder} to create a new {@link Gui}.
+     *
+     * @param type The {@link GuiContainerType} to be used.
+     * @return A new {@link GuiBuilder}.
+     */
+    @Contract("_ -> new")
+    public static GuiBuilder of(final @NotNull GuiContainerType type) {
+        return new GuiBuilder(type);
+    }
+
+    /**
+     * Create a new {@link GuiBuilder} to create a new {@link Gui}.
+     * This factory will default to using a {@link ChestContainerType}.
+     *
+     * @param rows The rows of the {@link ChestContainerType}.
+     * @return A new {@link GuiBuilder}.
+     */
+    @Contract("_ -> new")
+    public static GuiBuilder of(final int rows) {
+        return new GuiBuilder(new ChestContainerType(rows));
     }
 
     @Override

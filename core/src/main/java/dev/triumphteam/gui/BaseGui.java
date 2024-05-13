@@ -9,7 +9,7 @@ import org.jetbrains.annotations.NotNull;
  *
  * @param <P> A player.
  */
-public interface Gui<P> {
+public interface BaseGui<P> {
 
     /**
      * Opens a {@link GuiView} of this GUI for the {@link P} player.

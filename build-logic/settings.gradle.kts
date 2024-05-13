@@ -1,3 +1,6 @@
+import dev.triumphteam.root.localLibs
+import dev.triumphteam.root.releasesRepo
+
 rootProject.name = "build-logic"
 
 dependencyResolutionManagement {
@@ -5,11 +8,24 @@ dependencyResolutionManagement {
     repositories {
         gradlePluginPortal()
         mavenCentral()
+        releasesRepo()
     }
 
     versionCatalogs {
+
         register("libs") {
-            from(files("../gradle/libs.versions.toml")) // include from parent project
+            from(files(localLibs))
         }
     }
+}
+
+pluginManagement {
+    repositories {
+        gradlePluginPortal()
+        maven("https://repo.triumphteam.dev/releases")
+    }
+}
+
+plugins {
+    id("dev.triumphteam.root.settings") version "0.0.6"
 }

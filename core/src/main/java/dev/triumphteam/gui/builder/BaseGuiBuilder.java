@@ -1,6 +1,6 @@
 package dev.triumphteam.gui.builder;
 
-import dev.triumphteam.gui.Gui;
+import dev.triumphteam.gui.BaseGui;
 import dev.triumphteam.gui.GuiView;
 import dev.triumphteam.gui.click.handler.ClickHandler;
 import dev.triumphteam.gui.component.GuiComponent;
@@ -26,11 +26,11 @@ import java.util.concurrent.TimeUnit;
  *
  * @param <B> The implementation of this {@link BaseGuiBuilder}.
  * @param <P> The player type.
- * @param <G> The {@link Gui} type.
+ * @param <G> The {@link BaseGui} type.
  * @param <I> The item type.
  */
 @SuppressWarnings({"unchecked", "UnusedReturnValue"})
-public abstract class BaseGuiBuilder<B extends BaseGuiBuilder<B, P, G, I>, P, G extends Gui<P>, I> {
+public abstract class BaseGuiBuilder<B extends BaseGuiBuilder<B, P, G, I>, P, G extends BaseGui<P>, I> {
 
     private final GuiSettings<P, I, ?> guiSettings;
     private final GuiContainerType containerType;
@@ -74,7 +74,7 @@ public abstract class BaseGuiBuilder<B extends BaseGuiBuilder<B, P, G, I>, P, G 
     }
 
     /**
-     * Sets the {@link GuiComponentRenderer} to be used by the {@link Gui}.
+     * Sets the {@link GuiComponentRenderer} to be used by the {@link BaseGui}.
      *
      * @param componentRenderer The {@link GuiComponentRenderer} to use.
      * @return The {@link B} instance of the {@link BaseGuiBuilder}.
@@ -103,11 +103,11 @@ public abstract class BaseGuiBuilder<B extends BaseGuiBuilder<B, P, G, I>, P, G 
     }
 
     /**
-     * Adds a {@link GuiComponent} to the {@link Gui}.
+     * Adds a {@link GuiComponent} to the {@link BaseGui}.
      * <p>
      * The {@link FunctionalGuiComponentBuilder} will create a {@link FunctionalGuiComponent},
      * which by itself is <b>NOT</b> a {@link GuiComponent} but instead a {@link GuiComponentProducer}.<p>
-     * This will in turn build a real {@link GuiComponent} before being added to the {@link Gui}.
+     * This will in turn build a real {@link GuiComponent} before being added to the {@link BaseGui}.
      *
      * @param builder The functional component builder.
      * @return The {@link B} instance of the {@link BaseGuiBuilder}.
@@ -121,7 +121,7 @@ public abstract class BaseGuiBuilder<B extends BaseGuiBuilder<B, P, G, I>, P, G 
     }
 
     /**
-     * Adds a {@link GuiComponent} to the {@link Gui}.
+     * Adds a {@link GuiComponent} to the {@link BaseGui}.
      *
      * @param component Any type of {@link GuiComponent}.
      * @return The {@link B} instance of the {@link BaseGuiBuilder}.
@@ -133,9 +133,9 @@ public abstract class BaseGuiBuilder<B extends BaseGuiBuilder<B, P, G, I>, P, G 
     }
 
     /**
-     * Finalizes the builder and creates a {@link G} instance of {@link Gui} depending on the platform.
+     * Finalizes the builder and creates a {@link G} instance of {@link BaseGui} depending on the platform.
      *
-     * @return {@link G} which is a {@link Gui}.
+     * @return {@link G} which is a {@link BaseGui}.
      */
     public abstract G build();
 

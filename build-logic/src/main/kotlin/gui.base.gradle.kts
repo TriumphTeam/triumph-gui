@@ -6,6 +6,7 @@ val libs = the<LibrariesForLibs>()
 plugins {
     `java-library`
     kotlin("jvm")
+    id("dev.triumphteam.root")
     id("com.github.hierynomus.license")
 }
 

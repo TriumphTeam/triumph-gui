@@ -1,5 +1,6 @@
 plugins {
     id("gui.base")
+    id("gui.library")
 }
 
 repositories {

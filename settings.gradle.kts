@@ -1,24 +1,24 @@
+import dev.triumphteam.root.includeProject
+
 dependencyResolutionManagement {
     includeBuild("build-logic")
     repositories.gradlePluginPortal()
 }
 
-enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
-
-rootProject.name = "triumph-gui"
-
-listOf("core", "paper").forEach(::includeProject)
-
-fun includeProject(name: String) {
-    include(name) {
-        this.name = "${rootProject.name}-$name"
+pluginManagement {
+    repositories {
+        gradlePluginPortal()
+        maven("https://repo.triumphteam.dev/releases")
     }
 }
 
-fun include(name: String, block: ProjectDescriptor.() -> Unit) {
-    include(name)
-    project(":$name").apply(block)
+rootProject.name = "triumph-gui"
+
+enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
+
+plugins {
+    id("dev.triumphteam.root.settings") version "0.0.6"
 }
 
-//include("fabric-test")
+listOf("core", "paper").forEach(::includeProject)
 include("test-plugin")
