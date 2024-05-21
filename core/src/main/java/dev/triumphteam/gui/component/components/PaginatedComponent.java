@@ -30,10 +30,10 @@ import dev.triumphteam.gui.item.GuiItem;
 import dev.triumphteam.gui.item.items.SimpleGuiItem;
 import dev.triumphteam.gui.layout.GuiLayout;
 import dev.triumphteam.gui.slot.Slot;
-import dev.triumphteam.gui.state.MutableState;
-import dev.triumphteam.gui.state.State;
-import dev.triumphteam.gui.state.builtin.SimpleMutableState;
-import dev.triumphteam.gui.state.policy.StateMutationPolicy;
+import dev.triumphteam.nova.MutableState;
+import dev.triumphteam.nova.State;
+import dev.triumphteam.nova.builtin.SimpleMutableState;
+import dev.triumphteam.nova.policy.StateMutationPolicy;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;

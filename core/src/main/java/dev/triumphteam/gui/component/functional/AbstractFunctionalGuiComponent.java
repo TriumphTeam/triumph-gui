@@ -26,11 +26,11 @@ package dev.triumphteam.gui.component.functional;
 import dev.triumphteam.gui.click.handler.ClickHandler;
 import dev.triumphteam.gui.click.handler.CompletableFutureClickHandler;
 import dev.triumphteam.gui.click.handler.SimpleClickHandler;
-import dev.triumphteam.gui.state.MutableState;
-import dev.triumphteam.gui.state.State;
-import dev.triumphteam.gui.state.builtin.EmptyState;
-import dev.triumphteam.gui.state.builtin.SimpleMutableState;
-import dev.triumphteam.gui.state.policy.StateMutationPolicy;
+import dev.triumphteam.nova.MutableState;
+import dev.triumphteam.nova.State;
+import dev.triumphteam.nova.builtin.EmptyState;
+import dev.triumphteam.nova.builtin.SimpleMutableState;
+import dev.triumphteam.nova.policy.StateMutationPolicy;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 

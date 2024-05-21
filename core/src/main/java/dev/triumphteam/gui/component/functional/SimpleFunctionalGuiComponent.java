@@ -29,7 +29,7 @@ import dev.triumphteam.gui.component.GuiComponentProducer;
 import dev.triumphteam.gui.component.ReactiveGuiComponent;
 import dev.triumphteam.gui.container.GuiContainer;
 import dev.triumphteam.gui.exception.TriumphGuiException;
-import dev.triumphteam.gui.state.State;
+import dev.triumphteam.nova.State;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 

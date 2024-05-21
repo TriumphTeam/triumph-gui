@@ -31,6 +31,7 @@ import dev.triumphteam.gui.component.StatefulGuiComponent;
 import dev.triumphteam.gui.component.renderer.GuiComponentRenderer;
 import dev.triumphteam.gui.container.type.GuiContainerType;
 import dev.triumphteam.gui.item.RenderedGuiItem;
+import dev.triumphteam.nova.Stateful;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -39,7 +40,7 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
-public abstract class AbstractGuiView<P, I> implements GuiView<P, I> {
+public abstract class AbstractGuiView<P, I> implements GuiView<P, I>, Stateful {
 
     private final P viewer;
     private final List<GuiComponent<P, I>> components;
