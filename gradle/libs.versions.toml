@@ -1,0 +1,41 @@
+[versions]
+# kotlin
+kotlin = "1.8.10"
+coroutines = "1.6.4"
+
+license = "0.16.1"
+
+# Core
+annotations = "24.1.0"
+guava = "33.2.0-jre"
+logger = "2.0.13"
+nova = "1.0.0-SNAPSHOT"
+
+# Minecraft
+adventure = "4.16.0"
+paper = "1.16.5-R0.1-SNAPSHOT"
+
+[libraries]
+# Core
+annotations = { module = "org.jetbrains:annotations", version.ref = "annotations" }
+guava = { module = "com.google.guava:guava", version.ref = "guava" }
+logger = { module = "org.slf4j:slf4j-api", version.ref = "logger" }
+nova = { module = "dev.triumphteam:nova", version.ref = "nova" }
+nova-kotlin = { module = "dev.triumphteam:nova-kotlin", version.ref = "nova" }
+
+# Minecraft
+paper = { module = "com.destroystokyo.paper:paper-api", version.ref = "paper" }
+adventure-api = { module = "net.kyori:adventure-api", version.ref = "adventure" }
+
+# Kotlin
+coroutines = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "coroutines" }
+
+# build
+build-kotlin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
+build-license = { module = "gradle.plugin.com.hierynomus.gradle.plugins:license-gradle-plugin", version.ref = "license" }
+
+[bundles]
+build = [
+    "build-kotlin",
+    "build-license",
+]

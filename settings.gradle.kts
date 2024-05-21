@@ -1,9 +1,24 @@
+import dev.triumphteam.root.includeProject
+
+dependencyResolutionManagement {
+    includeBuild("build-logic")
+    repositories.gradlePluginPortal()
+}
+
+pluginManagement {
+    repositories {
+        gradlePluginPortal()
+        maven("https://repo.triumphteam.dev/releases")
+    }
+}
+
 rootProject.name = "triumph-gui"
 
-include("core")
-findProject(":core")?.name = "triumph-gui"
+enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
 
-listOf("kotlin").forEach {
-    include(it)
-    findProject(":$it")?.name = "triumph-gui-$it"
+plugins {
+    id("dev.triumphteam.root.settings") version "0.0.6"
 }
+
+listOf("core", "paper").forEach(::includeProject)
+include("test-plugin")
