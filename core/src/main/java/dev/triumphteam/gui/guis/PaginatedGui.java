@@ -468,7 +468,7 @@ public class PaginatedGui extends BaseGui {
      *
      * @param pageNum Sets the current page to be the specified number
      */
-    void setPageNum(final int pageNum) {
+    public void setPageNum(final int pageNum) {
         this.pageNum = pageNum;
     }
 
