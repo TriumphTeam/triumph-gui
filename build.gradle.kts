@@ -7,7 +7,8 @@ allprojects {
     repositories {
         mavenLocal()
         mavenCentral()
-        maven("https://repo.papermc.io/repository/maven-public/")
+        maven("https://hub.spigotmc.org/nexus/content/groups/public/")
+        maven("https://s01.oss.sonatype.org/content/repositories/snapshots/")
     }
 }
 
@@ -19,16 +20,17 @@ subprojects {
     }
 
     group = "dev.triumphteam"
-    version = "3.1.7"
+    version = "3.1.8"
 
     dependencies {
         compileOnly("org.jetbrains:annotations:21.0.1")
-        compileOnly("io.papermc.paper:paper-api:1.20.4-R0.1-SNAPSHOT")
+        compileOnly("org.spigotmc:spigot-api:1.20.2-R0.1-SNAPSHOT")
 
-        val adventureVersion = "4.14.0"
+        val adventureVersion = "4.17.0"
         api("net.kyori:adventure-api:$adventureVersion")
         api("net.kyori:adventure-text-serializer-legacy:$adventureVersion")
         api("net.kyori:adventure-text-serializer-gson:$adventureVersion")
+        api("net.kyori:adventure-platform-bukkit:4.3.3-SNAPSHOT")
     }
 
     license {
@@ -40,10 +42,9 @@ subprojects {
 
     tasks {
         withType<JavaCompile> {
-            sourceCompatibility = "1.8"
-            targetCompatibility = "1.8"
+            sourceCompatibility = JavaVersion.VERSION_1_8.toString()
+            targetCompatibility = JavaVersion.VERSION_1_8.toString()
             options.encoding = "UTF-8"
         }
     }
-
 }

@@ -1,18 +1,18 @@
 /**
  * MIT License
- * <p>
+ *
  * Copyright (c) 2021 TriumphTeam
- * <p>
+ *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * <p>
+ *
  * The above copyright notice and this permission notice shall be included in all
  * copies or substantial portions of the Software.
- * <p>
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -32,6 +32,7 @@ import dev.triumphteam.gui.components.util.Legacy;
 import dev.triumphteam.gui.components.util.VersionHelper;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
@@ -47,6 +48,8 @@ import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.LinkedHashMap;
@@ -67,8 +70,19 @@ public abstract class BaseGui implements InventoryHolder {
     // The plugin instance for registering the event and for the close delay.
     private static final Plugin plugin = JavaPlugin.getProvidingPlugin(BaseGui.class);
 
+
+    private static Method GET_SCHEDULER_METHOD = null;
+    private static Method EXECUTE_METHOD = null;
+
     // Registering the listener class.
     static {
+        try {
+            GET_SCHEDULER_METHOD = Entity.class.getMethod("getScheduler");
+            final Class<?> entityScheduler = Class.forName("io.papermc.paper.threadedregions.scheduler.EntityScheduler");
+            EXECUTE_METHOD = entityScheduler.getMethod("execute", Plugin.class, Runnable.class, Runnable.class, long.class);
+        } catch (NoSuchMethodException | ClassNotFoundException ignored) {
+        }
+
         Bukkit.getPluginManager().registerEvents(new GuiListener(), plugin);
         // TODO might join these two
         Bukkit.getPluginManager().registerEvents(new InteractionModifierListener(), plugin);
@@ -238,9 +252,9 @@ public abstract class BaseGui implements InventoryHolder {
      */
     public void removeItem(@NotNull final GuiItem item) {
         final Optional<Map.Entry<Integer, GuiItem>> entry = guiItems.entrySet()
-                .stream()
-                .filter(it -> it.getValue().equals(item))
-                .findFirst();
+            .stream()
+            .filter(it -> it.getValue().equals(item))
+            .findFirst();
 
         entry.ifPresent(it -> {
             guiItems.remove(it.getKey());
@@ -255,9 +269,9 @@ public abstract class BaseGui implements InventoryHolder {
      */
     public void removeItem(@NotNull final ItemStack item) {
         final Optional<Map.Entry<Integer, GuiItem>> entry = guiItems.entrySet()
-                .stream()
-                .filter(it -> it.getValue().getItemStack().equals(item))
-                .findFirst();
+            .stream()
+            .filter(it -> it.getValue().getItemStack().equals(item))
+            .findFirst();
 
         entry.ifPresent(it -> {
             guiItems.remove(it.getKey());
@@ -345,8 +359,8 @@ public abstract class BaseGui implements InventoryHolder {
         }
 
         if (!expandIfFull || this.rows >= 6 ||
-                notAddedItems.isEmpty() ||
-                (this.guiType != null && this.guiType != GuiType.CHEST)) {
+            notAddedItems.isEmpty() ||
+            (this.guiType != null && this.guiType != GuiType.CHEST)) {
             return;
         }
 
@@ -439,20 +453,26 @@ public abstract class BaseGui implements InventoryHolder {
      * @param runCloseAction If should or not run the close action.
      */
     public void close(@NotNull final HumanEntity player, final boolean runCloseAction) {
-        if (VersionHelper.IS_FOLIA) {
-            player.getScheduler().runDelayed(plugin, task -> {
-                this.runCloseAction = runCloseAction;
-                player.closeInventory();
-                this.runCloseAction = true;
-            }, null, 2L);
-            return;
-        }
-
-        Bukkit.getScheduler().runTaskLater(plugin, () -> {
+        Runnable task = () -> {
             this.runCloseAction = runCloseAction;
             player.closeInventory();
             this.runCloseAction = true;
-        }, 2L);
+        };
+
+        if (VersionHelper.IS_FOLIA) {
+            if (GET_SCHEDULER_METHOD == null || EXECUTE_METHOD == null) {
+                throw new GuiException("Could not find Folia Scheduler methods.");
+            }
+
+            try {
+                EXECUTE_METHOD.invoke(GET_SCHEDULER_METHOD.invoke(player), plugin, task, null, 2L);
+            } catch (IllegalAccessException | InvocationTargetException e) {
+                throw new GuiException("Could not invoke Folia task.", e);
+            }
+            return;
+        }
+
+        Bukkit.getScheduler().runTaskLater(plugin, task, 2L);
     }
 
     /**

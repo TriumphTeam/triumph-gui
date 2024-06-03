@@ -404,13 +404,15 @@ public class PaginatedGui extends BaseGui {
      */
     private void populatePage() {
         // Adds the paginated items to the page
+        int slot = 0;
         for (final GuiItem guiItem : getPageNum(pageNum)) {
-            for (int slot = 0; slot < getRows() * 9; slot++) {
-                if (getGuiItem(slot) != null || getInventory().getItem(slot) != null) continue;
-                currentPage.put(slot, guiItem);
-                getInventory().setItem(slot, guiItem.getItemStack());
-                break;
+            if (getGuiItem(slot) != null || getInventory().getItem(slot) != null) {
+                slot++;
+                continue;
             }
+            currentPage.put(slot, guiItem);
+            getInventory().setItem(slot, guiItem.getItemStack());
+            slot++;
         }
     }
 
