@@ -14,6 +14,11 @@ dependencies {
 
 val javaComponent: SoftwareComponent = components["java"]
 
+java {
+    sourceCompatibility = JavaVersion.VERSION_1_8
+    targetCompatibility = JavaVersion.VERSION_1_8
+}
+
 tasks {
 
     val sourcesJar by creating(Jar::class) {
@@ -102,5 +107,4 @@ tasks {
         useInMemoryPgpKeys(signingKey, secretKey, signingPassword)*/
         sign(publishing.publications["maven"])
     }
-
 }
