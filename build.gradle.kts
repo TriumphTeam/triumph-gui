@@ -20,7 +20,7 @@ subprojects {
     }
 
     group = "dev.triumphteam"
-    version = "3.1.8"
+    version = "3.1.9"
 
     dependencies {
         compileOnly("org.jetbrains:annotations:21.0.1")
@@ -30,7 +30,7 @@ subprojects {
         api("net.kyori:adventure-api:$adventureVersion")
         api("net.kyori:adventure-text-serializer-legacy:$adventureVersion")
         api("net.kyori:adventure-text-serializer-gson:$adventureVersion")
-        api("net.kyori:adventure-platform-bukkit:4.3.3-SNAPSHOT")
+        api("net.kyori:adventure-platform-bukkit:4.3.3")
     }
 
     license {
