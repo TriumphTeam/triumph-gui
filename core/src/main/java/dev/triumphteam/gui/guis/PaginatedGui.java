@@ -33,6 +33,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -405,11 +406,15 @@ public class PaginatedGui extends BaseGui {
     private void populatePage() {
         // Adds the paginated items to the page
         int slot = 0;
-        for (final GuiItem guiItem : getPageNum(pageNum)) {
+        final Iterator<GuiItem> iterator = getPageNum(pageNum).iterator();
+        while (iterator.hasNext()) {
             if (getGuiItem(slot) != null || getInventory().getItem(slot) != null) {
                 slot++;
                 continue;
             }
+
+            final GuiItem guiItem = iterator.next();
+
             currentPage.put(slot, guiItem);
             getInventory().setItem(slot, guiItem.getItemStack());
             slot++;
