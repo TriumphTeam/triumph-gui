@@ -28,13 +28,18 @@ import com.mojang.authlib.properties.Property;
 import dev.triumphteam.gui.components.exception.GuiException;
 import dev.triumphteam.gui.components.util.SkullUtil;
 import dev.triumphteam.gui.components.util.VersionHelper;
+import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.SkullMeta;
+import org.bukkit.profile.PlayerProfile;
+import org.bukkit.profile.PlayerTextures;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
 import java.lang.reflect.Field;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.UUID;
 
 /**
@@ -82,6 +87,30 @@ public final class SkullBuilder extends BaseItemBuilder<SkullBuilder> {
     @Contract("_, _ -> this")
     public SkullBuilder texture(@NotNull final String texture, @NotNull final UUID profileId) {
         if (!SkullUtil.isPlayerSkull(getItemStack())) return this;
+
+        if (VersionHelper.IS_PLAYER_PROFILE_API) {
+            final String textureUrl = SkullUtil.getSkinUrl(texture);
+
+            if (textureUrl == null) {
+                return this;
+            }
+
+            final SkullMeta skullMeta = (SkullMeta) getMeta();
+            final PlayerProfile profile = Bukkit.createPlayerProfile(profileId, "");
+            final PlayerTextures textures = profile.getTextures();
+
+            try {
+                textures.setSkin(new URL(textureUrl));
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+                return this;
+            }
+
+            profile.setTextures(textures);
+            skullMeta.setOwnerProfile(profile);
+            setMeta(skullMeta);
+            return this;
+        }
 
         if (PROFILE_FIELD == null) {
             return this;

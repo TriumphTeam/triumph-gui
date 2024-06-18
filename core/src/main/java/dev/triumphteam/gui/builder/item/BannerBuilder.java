@@ -83,7 +83,6 @@ public final class BannerBuilder extends BaseItemBuilder<BannerBuilder> {
     @Contract("_ -> this")
     public BannerBuilder baseColor(@NotNull final DyeColor color) {
         final BannerMeta bannerMeta = (BannerMeta) getMeta();
-
         bannerMeta.setBaseColor(color);
         setMeta(bannerMeta);
         return this;

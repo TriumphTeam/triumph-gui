@@ -27,6 +27,7 @@ import com.google.common.primitives.Ints;
 import dev.triumphteam.gui.components.exception.GuiException;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.regex.Matcher;
@@ -37,7 +38,7 @@ import java.util.regex.Pattern;
  */
 public final class VersionHelper {
 
-    private static final String NMS_VERSION = getNmsVersion();
+    private static final String CRAFTBUKKIT_PACKAGE = Bukkit.getServer().getClass().getPackage().getName();
 
     // Unbreakable change
     private static final int V1_11 = 1110;
@@ -49,42 +50,47 @@ public final class VersionHelper {
     private static final int V1_16_5 = 1165;
     // SkullMeta#setOwningPlayer was added
     private static final int V1_12_1 = 1121;
+    // PlayerProfile API
+    private static final int V1_20_1 = 1201;
+    private static final int V1_20_5 = 1205;
 
     private static final int CURRENT_VERSION = getCurrentVersion();
-
-    private static final boolean IS_PAPER = checkPaper();
-
     /**
      * Checks if the version supports Components or not
      * Spigot always false
      */
     public static final boolean IS_COMPONENT_LEGACY = CURRENT_VERSION < V1_16_5;
-
     /**
      * Checks if the version is lower than 1.13 due to the item changes
      */
     public static final boolean IS_ITEM_LEGACY = CURRENT_VERSION < V1_13;
-
     /**
      * Checks if the version supports the {@link org.bukkit.inventory.meta.ItemMeta#setUnbreakable(boolean)} method
      */
     public static final boolean IS_UNBREAKABLE_LEGACY = CURRENT_VERSION < V1_11;
-
     /**
      * Checks if the version supports {@link org.bukkit.persistence.PersistentDataContainer}
      */
     public static final boolean IS_PDC_VERSION = CURRENT_VERSION >= V1_14;
-
     /**
      * Checks if the version doesn't have {@link org.bukkit.inventory.meta.SkullMeta#setOwningPlayer(OfflinePlayer)} and
      * {@link org.bukkit.inventory.meta.SkullMeta#setOwner(String)} should be used instead
      */
     public static final boolean IS_SKULL_OWNER_LEGACY = CURRENT_VERSION < V1_12_1;
-
     /**
      * Checks if the version has {@link org.bukkit.inventory.meta.ItemMeta#setCustomModelData(Integer)}
      */
     public static final boolean IS_CUSTOM_MODEL_DATA = CURRENT_VERSION >= V1_14;
+    /**
+     * Checks if the version has {@link org.bukkit.profile.PlayerProfile}
+     */
+    public static final boolean IS_PLAYER_PROFILE_API = CURRENT_VERSION >= V1_20_1;
+    /**
+     * Starting with version 1.20.5 the internal field referenced by {@link ItemMeta#getDisplayName()} is no longer a string
+     */
+    public static final boolean IS_ITEM_NAME_COMPONENT = CURRENT_VERSION >= V1_20_5;
+    private static final boolean IS_PAPER = checkPaper();
+    public static final boolean IS_FOLIA = checkFolia();
 
     /**
      * Check if the server has access to the Paper API
@@ -102,9 +108,24 @@ public final class VersionHelper {
     }
 
     /**
+     * Check if the server has access to the Folia API
+     * Taken from <a href="https://github.com/PaperMC/Folia">Folia</a>
+     *
+     * @return True if on Folia server (or forks), false anything else
+     */
+    private static boolean checkFolia() {
+        try {
+            Class.forName("io.papermc.paper.threadedregions.RegionizedServer");
+            return true;
+        } catch (ClassNotFoundException ignored) {
+            return false;
+        }
+    }
+
+    /**
      * Gets the current server version
      *
-     * @return A protocol like number representing the version, for example 1.16.5 - 1165
+     * @return A protocol like number representing the version, for example, 1.16.5 -> 1165
      */
     private static int getCurrentVersion() {
         // No need to cache since will only run once
@@ -127,13 +148,8 @@ public final class VersionHelper {
         return version;
     }
 
-    private static String getNmsVersion() {
-        final String version = Bukkit.getServer().getClass().getPackage().getName();
-        return version.substring(version.lastIndexOf('.') + 1);
-    }
-
     public static Class<?> craftClass(@NotNull final String name) throws ClassNotFoundException {
-        return Class.forName("org.bukkit.craftbukkit." + NMS_VERSION + "." + name);
+        return Class.forName(CRAFTBUKKIT_PACKAGE + "." + name);
     }
 
 }
