@@ -23,6 +23,7 @@
  */
 package dev.triumphteam.gui.guis;
 
+import dev.triumphteam.gui.animations.Animation;
 import dev.triumphteam.gui.components.GuiAction;
 import dev.triumphteam.gui.components.GuiType;
 import dev.triumphteam.gui.components.InteractionModifier;
@@ -92,6 +93,10 @@ public abstract class BaseGui implements InventoryHolder {
     private final GuiFiller filler = new GuiFiller(this);
     // Contains all items the GUI will have.
     private final Map<Integer, GuiItem> guiItems;
+
+    private final List<Animation> animations = new ArrayList<>();
+    private boolean animationsStarted = false;
+
     // Actions for specific slots.
     private final Map<Integer, GuiAction<InventoryClickEvent>> slotActions;
     // Interaction modifiers.
@@ -370,6 +375,10 @@ public abstract class BaseGui implements InventoryHolder {
         this.addItem(true, notAddedItems.toArray(new GuiItem[0]));
     }
 
+    public void addAnimation(Animation animation) {
+        this.animations.add(animation);
+    }
+
     /**
      * Adds a {@link GuiAction} for when clicking on a specific slot.
      * See {@link InventoryClickEvent}.
@@ -435,6 +444,11 @@ public abstract class BaseGui implements InventoryHolder {
         inventory.clear();
         populateGui();
         player.openInventory(inventory);
+
+        if (!animationsStarted) {
+            animations.forEach((animation) -> animation.start(this));
+            animationsStarted = true;
+        }
     }
 
     /**
@@ -455,6 +469,8 @@ public abstract class BaseGui implements InventoryHolder {
     public void close(@NotNull final HumanEntity player, final boolean runCloseAction) {
         Runnable task = () -> {
             this.runCloseAction = runCloseAction;
+            this.animations.forEach(Animation::stop);
+            this.animationsStarted = false;
             player.closeInventory();
             this.runCloseAction = true;
         };
@@ -971,6 +987,11 @@ public abstract class BaseGui implements InventoryHolder {
     @Nullable
     GuiAction<InventoryClickEvent> getSlotAction(final int slot) {
         return slotActions.get(slot);
+    }
+
+    @NotNull
+    List<Animation> getAnimations() {
+        return animations;
     }
 
     /**
