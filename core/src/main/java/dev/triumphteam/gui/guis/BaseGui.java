@@ -324,6 +324,13 @@ public abstract class BaseGui implements InventoryHolder {
     }
 
     /**
+     * clears all of contained {@link GuiItem}.
+     */
+    public void clearItems() {
+        this.guiItems.clear();
+    }
+
+    /**
      * Adds {@link GuiItem}s to the GUI without specific slot.
      * It'll set the item to the next empty slot available.
      *
