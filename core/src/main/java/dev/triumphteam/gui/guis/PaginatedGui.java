@@ -397,6 +397,7 @@ public class PaginatedGui extends BaseGui {
      * @return The pages number
      */
     public int getPagesNum() {
+        if (pageSize == 0) pageSize = calculatePageSize();
         return (int) Math.ceil((double) pageItems.size() / pageSize);
     }
 
@@ -501,10 +502,10 @@ public class PaginatedGui extends BaseGui {
         int counter = 0;
 
         for (int slot = 0; slot < getRows() * 9; slot++) {
-            if (getInventory().getItem(slot) == null) counter++;
+            if (getGuiItem(slot) == null) counter++;
         }
 
+        if (counter == 0) return 1;
         return counter;
     }
-
 }

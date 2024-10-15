@@ -10,6 +10,7 @@ repositories {
 
 dependencies {
     compileOnly("com.mojang:authlib:1.5.25")
+    compileOnly("org.spigotmc:spigot-api:1.20.2-R0.1-SNAPSHOT")
 }
 
 val javaComponent: SoftwareComponent = components["java"]
@@ -106,5 +107,11 @@ tasks {
         val secretKey = System.getenv("GPG_SECRET_KEY")
         useInMemoryPgpKeys(signingKey, secretKey, signingPassword)*/
         sign(publishing.publications["maven"])
+    }
+
+    withType<JavaCompile> {
+        sourceCompatibility = JavaVersion.VERSION_1_8.toString()
+        targetCompatibility = JavaVersion.VERSION_1_8.toString()
+        options.encoding = "UTF-8"
     }
 }
