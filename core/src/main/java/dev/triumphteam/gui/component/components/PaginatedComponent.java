@@ -71,7 +71,7 @@ public final class PaginatedComponent<P, I> implements ReactiveGuiComponent<P, I
     }
 
     @Override
-    public void render(final @NotNull GuiContainer<P, I> container, @NotNull final P player) {
+    public void render(final @NotNull GuiContainer<P, I> container) {
         final var page = pageState.getValue();
 
         container.set(back, new SimpleGuiItem<>(backItem, (RunnableGuiClickAction<P>) (ignored, context) -> pageState.setValue(page - 1)));

@@ -46,7 +46,7 @@ public final class DefaultGuiComponentRenderer<P, I> implements GuiComponentRend
         );
 
         if (component instanceof ReactiveGuiComponent) {
-            ((ReactiveGuiComponent<P, I>) component).render(container, player);
+            ((ReactiveGuiComponent<P, I>) component).render(container);
         }
 
         final var renderedItems = container.complete();
