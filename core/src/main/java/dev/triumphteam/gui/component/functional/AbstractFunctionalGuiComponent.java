@@ -1,18 +1,18 @@
 /**
  * MIT License
- *
+ * <p>
  * Copyright (c) 2024 TriumphTeam
- *
+ * <p>
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- *
+ * <p>
  * The above copyright notice and this permission notice shall be included in all
  * copies or substantial portions of the Software.
- *
+ * <p>
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -26,63 +26,15 @@ package dev.triumphteam.gui.component.functional;
 import dev.triumphteam.gui.click.handler.ClickHandler;
 import dev.triumphteam.gui.click.handler.CompletableFutureClickHandler;
 import dev.triumphteam.gui.click.handler.SimpleClickHandler;
-import dev.triumphteam.nova.MutableState;
-import dev.triumphteam.nova.State;
-import dev.triumphteam.nova.builtin.EmptyState;
-import dev.triumphteam.nova.builtin.SimpleMutableState;
-import dev.triumphteam.nova.policy.StateMutationPolicy;
+import dev.triumphteam.nova.holder.AbstractStateHolder;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.concurrent.TimeUnit;
 
-public abstract class AbstractFunctionalGuiComponent<P> implements BaseFunctionalGuiComponent<P> {
+public abstract class AbstractFunctionalGuiComponent<P> extends AbstractStateHolder implements BaseFunctionalGuiComponent<P> {
 
-    private final List<State> states = new ArrayList<>();
     private ClickHandler<P> clickHandler = null;
-
-    @Override
-    public @NotNull State state() {
-        return state(new EmptyState());
-    }
-
-    @Override
-    public <S extends State> @NotNull S state(final @NotNull S state) {
-        states.add(state);
-        return state;
-    }
-
-    @Override
-    public @NotNull <T> MutableState<@NotNull T> state(@NotNull final T value) {
-        return state(value, StateMutationPolicy.StructuralEquality.INSTANCE);
-    }
-
-    @Override
-    public @NotNull <T> MutableState<@NotNull T> state(
-        final @NotNull T value,
-        final @NotNull StateMutationPolicy mutationPolicy
-    ) {
-        var state = new SimpleMutableState<>(value, mutationPolicy);
-        states.add(state);
-        return state;
-    }
-
-    @Override
-    public @NotNull <T> MutableState<@Nullable T> nullableState(final @Nullable T value) {
-        return nullableState(value, StateMutationPolicy.StructuralEquality.INSTANCE);
-    }
-
-    @Override
-    public @NotNull <T> MutableState<@Nullable T> nullableState(
-        final @Nullable T value,
-        final @NotNull StateMutationPolicy mutationPolicy
-    ) {
-        var state = new SimpleMutableState<>(value, mutationPolicy);
-        states.add(state);
-        return state;
-    }
 
     @Override
     public void withClickHandler(final @Nullable ClickHandler<P> clickHandler) {
@@ -106,9 +58,5 @@ public abstract class AbstractFunctionalGuiComponent<P> implements BaseFunctiona
 
     public @Nullable ClickHandler<P> getClickHandler() {
         return clickHandler;
-    }
-
-    protected @NotNull List<State> getStates() {
-        return states;
     }
 }

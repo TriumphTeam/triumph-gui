@@ -1,6 +1,6 @@
 [versions]
 # kotlin
-kotlin = "1.8.10"
+kotlin = "2.0.21"
 coroutines = "1.6.4"
 
 license = "0.16.1"

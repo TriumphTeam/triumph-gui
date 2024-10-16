@@ -29,8 +29,5 @@ import org.jetbrains.annotations.NotNull;
 @FunctionalInterface
 public interface FunctionalGuiComponentRender<P, I> {
 
-    void render(
-        final @NotNull GuiContainer<@NotNull P, @NotNull I> container,
-        final @NotNull P player
-    );
+    void render(final @NotNull GuiContainer<@NotNull P, @NotNull I> container);
 }

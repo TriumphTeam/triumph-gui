@@ -1,18 +1,18 @@
 /**
  * MIT License
- *
+ * <p>
  * Copyright (c) 2024 TriumphTeam
- *
+ * <p>
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- *
+ * <p>
  * The above copyright notice and this permission notice shall be included in all
  * copies or substantial portions of the Software.
- *
+ * <p>
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -28,8 +28,10 @@ import dev.triumphteam.gui.GuiView;
 import dev.triumphteam.gui.click.handler.ClickHandler;
 import dev.triumphteam.gui.component.GuiComponent;
 import dev.triumphteam.gui.component.GuiComponentProducer;
+import dev.triumphteam.gui.component.SimpleGuiComponent;
 import dev.triumphteam.gui.component.functional.FunctionalGuiComponent;
 import dev.triumphteam.gui.component.functional.FunctionalGuiComponentBuilder;
+import dev.triumphteam.gui.component.functional.FunctionalGuiComponentRender;
 import dev.triumphteam.gui.component.functional.SimpleFunctionalGuiComponent;
 import dev.triumphteam.gui.component.renderer.GuiComponentRenderer;
 import dev.triumphteam.gui.container.type.GuiContainerType;
@@ -40,6 +42,7 @@ import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -141,6 +144,18 @@ public abstract class BaseGuiBuilder<B extends BaseGuiBuilder<B, P, G, I>, P, G 
         builder.accept(componentRenderer);
         components.add(componentRenderer.asGuiComponent());
         return (B) this;
+    }
+
+    /**
+     * For faster creation of components that don't require states.
+     * Use this for components you don't need to update, aka static items.
+     *
+     * @param render The component render.
+     * @return The {@link B} instance of the {@link BaseGuiBuilder}.
+     */
+    @Contract("_ -> this")
+    public @NotNull B statelessComponent(final @NotNull FunctionalGuiComponentRender<P, I> render) {
+        return component(new SimpleGuiComponent<>(render, Collections.emptyList()));
     }
 
     /**

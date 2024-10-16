@@ -27,6 +27,7 @@ import dev.triumphteam.gui.click.handler.ClickHandler;
 import dev.triumphteam.gui.container.type.GuiContainerType;
 import dev.triumphteam.gui.item.GuiItem;
 import dev.triumphteam.gui.item.RenderedGuiItem;
+import dev.triumphteam.gui.layout.GuiLayout;
 import dev.triumphteam.gui.slot.Slot;
 import org.jetbrains.annotations.NotNull;
 
@@ -70,6 +71,11 @@ public final class MapBackedContainer<P, I> implements GuiContainer<P, I> {
         final var renderedItem = new RenderedGuiItem<>(guiItem.render(), clickHandler, guiItem.getClickAction());
         // Add rendered to backing
         backing.put(slot, renderedItem);
+    }
+
+    @Override
+    public void fill(final @NotNull GuiLayout layout, final @NotNull GuiItem<@NotNull P, @NotNull I> guiItem) {
+        layout.generatePositions().forEach(position -> set(position, guiItem));
     }
 
     public @NotNull Map<Integer, RenderedGuiItem<P, I>> complete() {

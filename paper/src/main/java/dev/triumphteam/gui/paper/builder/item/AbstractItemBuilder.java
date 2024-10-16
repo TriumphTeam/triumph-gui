@@ -24,6 +24,7 @@
 package dev.triumphteam.gui.paper.builder.item;
 
 import com.google.common.base.Preconditions;
+import dev.triumphteam.gui.click.action.EmptyGuiClickAction;
 import dev.triumphteam.gui.click.action.GuiClickAction;
 import dev.triumphteam.gui.click.action.RunnableGuiClickAction;
 import dev.triumphteam.gui.item.GuiItem;
@@ -134,5 +135,11 @@ public abstract class AbstractItemBuilder<B extends AbstractItemBuilder<B>> {
     @Contract("_ -> new")
     public GuiItem<Player, ItemStack> asGuiItem(final @NotNull GuiClickAction<Player> action) {
         return new SimpleGuiItem<>(asItemStack(), action);
+    }
+
+    @NotNull
+    @Contract(" -> new")
+    public GuiItem<Player, ItemStack> asGuiItem() {
+        return new SimpleGuiItem<>(asItemStack(), new EmptyGuiClickAction<>());
     }
 }

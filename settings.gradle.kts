@@ -20,5 +20,5 @@ plugins {
     id("dev.triumphteam.root.settings") version "0.0.6"
 }
 
-listOf("core", "paper").forEach(::includeProject)
+listOf("core", "paper", "kotlin").forEach(::includeProject)
 include("test-plugin")
