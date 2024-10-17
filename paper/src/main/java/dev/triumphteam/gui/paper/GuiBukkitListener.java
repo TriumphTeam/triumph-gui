@@ -56,7 +56,6 @@ public final class GuiBukkitListener implements Listener {
         }
 
         if (!view.isFirstOpen()) {
-            System.out.println("Not first open");
             event.titleOverride(view.getTitle());
         }
     }

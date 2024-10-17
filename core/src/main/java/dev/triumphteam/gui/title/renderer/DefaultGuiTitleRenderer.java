@@ -16,12 +16,11 @@ public final class DefaultGuiTitleRenderer implements GuiTitleRenderer {
         final @NotNull Consumer<Component> thenRun
     ) {
 
-        if ((title instanceof ReactiveGuiTitle reactiveGuiTitle)) {
-            final var component = reactiveGuiTitle.render();
-            thenRun.accept(component);
-            return;
+        if (!(title instanceof ReactiveGuiTitle reactiveGuiTitle)) {
+            throw new TriumphGuiException("Could not render title as it is not supported by the current renderer.");
         }
 
-        throw new TriumphGuiException("Could not render title as it is not supported by the current renderer.");
+        final var component = reactiveGuiTitle.render();
+        thenRun.accept(component);
     }
 }

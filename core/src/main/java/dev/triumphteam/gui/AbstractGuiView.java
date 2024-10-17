@@ -122,9 +122,9 @@ public abstract class AbstractGuiView<P, I> implements GuiView<P, I> {
     protected void setup() {
         components.forEach(component -> {
 
-            if (component instanceof StatefulGuiComponent<P, I>) {
+            if (component instanceof StatefulGuiComponent<P, I> statefulComponent) {
                 // Add listener to used states
-                ((StatefulGuiComponent<P, I>) component).states().forEach(state -> {
+                statefulComponent.states().forEach(state -> {
                     state.addListener(this, () -> renderer.renderComponent(viewer, component, this));
                 });
             }

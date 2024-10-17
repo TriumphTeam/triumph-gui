@@ -48,11 +48,11 @@ public final class SimpleClickHandler<P> implements ClickHandler<P> {
         final @NotNull ClickController controller
     ) {
         // Only accept runnable actions
-        if (!(action instanceof RunnableGuiClickAction<P>)) {
+        if (!(action instanceof RunnableGuiClickAction<P> runnableAction)) {
             throw new TriumphGuiException("The click action type '" + action.getClass().getName() + "' is supported by the 'CompletableFutureClickHandler'.");
         }
 
         // Run the action
-        ((RunnableGuiClickAction<P>) action).run(player, context);
+        runnableAction.run(player, context);
     }
 }

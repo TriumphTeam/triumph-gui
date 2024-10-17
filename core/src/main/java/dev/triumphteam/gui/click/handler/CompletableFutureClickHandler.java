@@ -60,7 +60,7 @@ public final class CompletableFutureClickHandler<P> implements ClickHandler<P> {
         final @NotNull ClickController controller
     ) {
         // Only accept runnable actions
-        if (!(action instanceof RunnableGuiClickAction<P>)) {
+        if (!(action instanceof RunnableGuiClickAction<P> runnableAction)) {
             throw new TriumphGuiException("The click action type '" + action.getClass().getName() + "' is supported by the 'CompletableFutureClickHandler'.");
         }
 
@@ -68,7 +68,7 @@ public final class CompletableFutureClickHandler<P> implements ClickHandler<P> {
         controller.completingLater(true);
 
         // Run the action async and complete click when finished
-        CompletableFuture.runAsync(() -> ((RunnableGuiClickAction<P>) action).run(player, context))
+        CompletableFuture.runAsync(() -> runnableAction.run(player, context))
             .orTimeout(timeout, unit)
             .whenComplete((unused, throwable) -> controller.complete(throwable));
     }
