@@ -27,16 +27,18 @@ import dev.triumphteam.gui.BaseGui;
 import dev.triumphteam.gui.GuiView;
 import dev.triumphteam.gui.click.handler.ClickHandler;
 import dev.triumphteam.gui.component.GuiComponent;
-import dev.triumphteam.gui.component.GuiComponentProducer;
 import dev.triumphteam.gui.component.SimpleGuiComponent;
 import dev.triumphteam.gui.component.functional.FunctionalGuiComponent;
-import dev.triumphteam.gui.component.functional.FunctionalGuiComponentBuilder;
 import dev.triumphteam.gui.component.functional.FunctionalGuiComponentRender;
 import dev.triumphteam.gui.component.functional.SimpleFunctionalGuiComponent;
 import dev.triumphteam.gui.component.renderer.GuiComponentRenderer;
 import dev.triumphteam.gui.container.type.GuiContainerType;
 import dev.triumphteam.gui.exception.TriumphGuiException;
 import dev.triumphteam.gui.settings.GuiSettings;
+import dev.triumphteam.gui.title.functional.FunctionalGuiTitle;
+import dev.triumphteam.gui.title.GuiTitle;
+import dev.triumphteam.gui.title.functional.SimpleFunctionalGuiTitle;
+import dev.triumphteam.gui.title.SimpleGuiTitle;
 import net.kyori.adventure.text.Component;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
@@ -45,6 +47,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
+import java.util.function.Consumer;
 
 /**
  * Main builder for all GUIs.
@@ -64,7 +67,7 @@ public abstract class BaseGuiBuilder<B extends BaseGuiBuilder<B, P, G, I>, P, G 
 
     private ClickHandler<P> clickHandler = null;
     private GuiComponentRenderer<P, I> componentRenderer = null;
-    private Component title = null;
+    private GuiTitle title = null;
     private long spamPreventionDuration = -1;
 
     public BaseGuiBuilder(
@@ -83,7 +86,14 @@ public abstract class BaseGuiBuilder<B extends BaseGuiBuilder<B, P, G, I>, P, G 
      */
     @Contract("_ -> this")
     public @NotNull B title(final @NotNull Component title) {
-        this.title = title;
+        this.title = new SimpleGuiTitle(() -> title, Collections.emptyList());
+        return (B) this;
+    }
+
+    public @NotNull B title(final @NotNull Consumer<@NotNull FunctionalGuiTitle> title) {
+        final var simpleTitle = new SimpleFunctionalGuiTitle();
+        title.accept(simpleTitle);
+        this.title = simpleTitle.asGuiTitle();
         return (B) this;
     }
 
@@ -131,18 +141,18 @@ public abstract class BaseGuiBuilder<B extends BaseGuiBuilder<B, P, G, I>, P, G 
     /**
      * Adds a {@link GuiComponent} to the {@link BaseGui}.
      * <p>
-     * The {@link FunctionalGuiComponentBuilder} will create a {@link FunctionalGuiComponent},
-     * which by itself is <b>NOT</b> a {@link GuiComponent} but instead a {@link GuiComponentProducer}.<p>
+     * The {@link Consumer} will create a {@link FunctionalGuiComponent},
+     * which by itself is <b>NOT</b> a {@link GuiComponent}.<p>
      * This will in turn build a real {@link GuiComponent} before being added to the {@link BaseGui}.
      *
-     * @param builder The functional component builder.
+     * @param component The functional component builder.
      * @return The {@link B} instance of the {@link BaseGuiBuilder}.
      */
     @Contract("_ -> this")
-    public @NotNull B component(final @NotNull FunctionalGuiComponentBuilder<P, I> builder) {
-        final var componentRenderer = new SimpleFunctionalGuiComponent<P, I>();
-        builder.accept(componentRenderer);
-        components.add(componentRenderer.asGuiComponent());
+    public @NotNull B component(final @NotNull Consumer<@NotNull FunctionalGuiComponent<P, I>> component) {
+        final var simpleComponent = new SimpleFunctionalGuiComponent<P, I>();
+        component.accept(simpleComponent);
+        components.add(simpleComponent.asGuiComponent());
         return (B) this;
     }
 
@@ -203,7 +213,7 @@ public abstract class BaseGuiBuilder<B extends BaseGuiBuilder<B, P, G, I>, P, G 
         return componentRenderer;
     }
 
-    protected @NotNull Component getTitle() {
+    protected @NotNull GuiTitle getTitle() {
         if (title == null) {
             throw new TriumphGuiException("Cannot create GUI with empty title!");
         }

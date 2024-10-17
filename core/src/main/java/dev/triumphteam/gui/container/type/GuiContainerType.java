@@ -30,5 +30,5 @@ public interface GuiContainerType {
 
     int mapSlot(final @NotNull Slot slot);
 
-    Slot mapSlot(final int slot);
+    @NotNull Slot mapSlot(final int slot);
 }

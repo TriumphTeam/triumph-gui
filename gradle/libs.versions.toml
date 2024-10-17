@@ -13,7 +13,7 @@ nova = "1.0.0-SNAPSHOT"
 
 # Minecraft
 adventure = "4.16.0"
-paper = "1.16.5-R0.1-SNAPSHOT"
+paper = "1.21.1-R0.1-SNAPSHOT"
 
 [libraries]
 # Core
@@ -24,7 +24,7 @@ nova = { module = "dev.triumphteam:nova", version.ref = "nova" }
 nova-kotlin = { module = "dev.triumphteam:nova-kotlin", version.ref = "nova" }
 
 # Minecraft
-paper = { module = "com.destroystokyo.paper:paper-api", version.ref = "paper" }
+paper = { module = "io.papermc.paper:paper-api", version.ref = "paper" }
 adventure-api = { module = "net.kyori:adventure-api", version.ref = "adventure" }
 
 # Kotlin

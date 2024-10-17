@@ -1,18 +1,18 @@
 /**
  * MIT License
- *
+ * <p>
  * Copyright (c) 2024 TriumphTeam
- *
+ * <p>
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- *
+ * <p>
  * The above copyright notice and this permission notice shall be included in all
  * copies or substantial portions of the Software.
- *
+ * <p>
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -31,7 +31,7 @@ import dev.triumphteam.gui.container.type.GuiContainerType;
 import dev.triumphteam.gui.paper.builder.gui.GuiBuilder;
 import dev.triumphteam.gui.paper.container.type.ChestContainerType;
 import dev.triumphteam.gui.paper.container.type.PaperContainerType;
-import net.kyori.adventure.text.Component;
+import dev.triumphteam.gui.title.GuiTitle;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.Contract;
@@ -48,7 +48,7 @@ public final class Gui implements BaseGui<Player> {
         GuiBukkitListener.register();
     }
 
-    private final Component title;
+    private final GuiTitle title;
     private final List<GuiComponent<Player, ItemStack>> components;
     private final PaperContainerType containerType;
     private final GuiComponentRenderer<Player, ItemStack> componentRenderer;
@@ -56,7 +56,7 @@ public final class Gui implements BaseGui<Player> {
     private final long spamPreventionDuration;
 
     public Gui(
-        final @NotNull Component title,
+        final @NotNull GuiTitle title,
         final @NotNull List<GuiComponent<Player, ItemStack>> components,
         final @NotNull PaperContainerType containerType,
         final @NotNull GuiComponentRenderer<Player, ItemStack> componentRenderer,

@@ -24,12 +24,11 @@
 package dev.triumphteam.gui.component.functional;
 
 import dev.triumphteam.gui.component.GuiComponent;
-import dev.triumphteam.gui.component.GuiComponentProducer;
 import dev.triumphteam.gui.component.SimpleGuiComponent;
 import dev.triumphteam.gui.exception.TriumphGuiException;
 import org.jetbrains.annotations.NotNull;
 
-public final class SimpleFunctionalGuiComponent<P, I> extends AbstractFunctionalGuiComponent<P> implements FunctionalGuiComponent<P, I>, GuiComponentProducer<P, I> {
+public final class SimpleFunctionalGuiComponent<P, I> extends AbstractFunctionalGuiComponent<P> implements FunctionalGuiComponent<P, I> {
 
     private FunctionalGuiComponentRender<P, I> component = null;
 
@@ -38,7 +37,6 @@ public final class SimpleFunctionalGuiComponent<P, I> extends AbstractFunctional
         this.component = component;
     }
 
-    @Override
     public @NotNull GuiComponent<P, I> asGuiComponent() {
         if (component == null) {
             throw new TriumphGuiException("TODO");
