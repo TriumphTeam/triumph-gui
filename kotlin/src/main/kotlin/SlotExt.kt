@@ -6,8 +6,3 @@ public operator fun Slot.component1(): Int = row
 public operator fun Slot.component2(): Int = column
 
 public fun slot(row: Int, column: Int): Slot = Slot(row, column)
-
-public fun main() {
-
-    val (row, column) = Slot.of(1, 2)
-}

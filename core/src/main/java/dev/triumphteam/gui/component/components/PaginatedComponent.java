@@ -70,10 +70,10 @@ public final class PaginatedComponent<P, I> implements ReactiveGuiComponent<P, I
 
     @Override
     public void render(final @NotNull GuiContainer<P, I> container) {
-        final var page = pageState.getValue();
+        final var page = pageState.get();
 
-        container.set(back, new SimpleGuiItem<>(backItem, (RunnableGuiClickAction<P>) (ignored, context) -> pageState.setValue(page - 1)));
-        container.set(forward, new SimpleGuiItem<>(forwardItem, (RunnableGuiClickAction<P>) (ignored, context) -> pageState.setValue(page + 1)));
+        container.setItem(back, new SimpleGuiItem<>(backItem, (RunnableGuiClickAction<P>) (ignored, context) -> pageState.set(page - 1)));
+        container.setItem(forward, new SimpleGuiItem<>(forwardItem, (RunnableGuiClickAction<P>) (ignored, context) -> pageState.set(page + 1)));
 
         final var slots = layout.generatePositions();
         final var size = slots.size();
@@ -90,7 +90,7 @@ public final class PaginatedComponent<P, I> implements ReactiveGuiComponent<P, I
             final var slot = slots.get(i);
             final var item = items.get(offsetSlot);
 
-            container.set(slot, item);
+            container.setItem(slot, item);
         }
     }
 }

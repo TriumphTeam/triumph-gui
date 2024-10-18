@@ -34,11 +34,11 @@ public interface GuiContainer<P, I> {
     @NotNull
     GuiContainerType containerType();
 
-    void set(final int slot, final @NotNull GuiItem<@NotNull P, @NotNull I> guiItem);
+    void setItem(final int slot, final @NotNull GuiItem<@NotNull P, @NotNull I> guiItem);
 
-    void set(final int row, final int column, final @NotNull GuiItem<@NotNull P, @NotNull I> guiItem);
+    void setItem(final int row, final int column, final @NotNull GuiItem<@NotNull P, @NotNull I> guiItem);
 
-    void set(final @NotNull Slot slot, final @NotNull GuiItem<@NotNull P, @NotNull I> guiItem);
+    void setItem(final @NotNull Slot slot, final @NotNull GuiItem<@NotNull P, @NotNull I> guiItem);
 
     void fill(final @NotNull GuiLayout layout, final @NotNull GuiItem<@NotNull P, @NotNull I> guiItem);
 }

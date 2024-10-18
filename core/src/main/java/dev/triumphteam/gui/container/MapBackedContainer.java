@@ -55,17 +55,17 @@ public final class MapBackedContainer<P, I> implements GuiContainer<P, I> {
     }
 
     @Override
-    public void set(final int row, final int column, final @NotNull GuiItem<@NotNull P, @NotNull I> guiItem) {
-        set(containerType.mapSlot(Slot.of(row, column)), guiItem);
+    public void setItem(final int row, final int column, final @NotNull GuiItem<@NotNull P, @NotNull I> guiItem) {
+        setItem(containerType.mapSlot(Slot.of(row, column)), guiItem);
     }
 
     @Override
-    public void set(final @NotNull Slot slot, final @NotNull GuiItem<@NotNull P, @NotNull I> guiItem) {
-        set(containerType.mapSlot(slot), guiItem);
+    public void setItem(final @NotNull Slot slot, final @NotNull GuiItem<@NotNull P, @NotNull I> guiItem) {
+        setItem(containerType.mapSlot(slot), guiItem);
     }
 
     @Override
-    public void set(final int slot, final @NotNull GuiItem<@NotNull P, @NotNull I> guiItem) {
+    public void setItem(final int slot, final @NotNull GuiItem<@NotNull P, @NotNull I> guiItem) {
         // TODO VALIDATE SLOT HERE TOO
         // Render item
         final var renderedItem = new RenderedGuiItem<>(guiItem.render(), clickHandler, guiItem.getClickAction());
@@ -75,7 +75,7 @@ public final class MapBackedContainer<P, I> implements GuiContainer<P, I> {
 
     @Override
     public void fill(final @NotNull GuiLayout layout, final @NotNull GuiItem<@NotNull P, @NotNull I> guiItem) {
-        layout.generatePositions().forEach(position -> set(position, guiItem));
+        layout.generatePositions().forEach(position -> setItem(position, guiItem));
     }
 
     public @NotNull Map<Integer, RenderedGuiItem<P, I>> complete() {
