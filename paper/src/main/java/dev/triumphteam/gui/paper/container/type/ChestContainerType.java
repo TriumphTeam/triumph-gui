@@ -61,7 +61,7 @@ public final class ChestContainerType implements PaperContainerType {
     }
 
     @Override
-    public Slot mapSlot(final int slot) {
+    public @NotNull Slot mapSlot(final int slot) {
         return Slot.of(slot / 9 + 1, slot % 9 + 1);
     }
 

@@ -49,7 +49,7 @@ public final class PaperGuiSettings extends GuiSettings<Player, ItemStack, Paper
         if (this.listenerRegistered) return this;
 
         this.plugin = plugin;
-        Bukkit.getServer().getPluginManager().registerEvents(new GuiBukkitListener(), plugin);
+        Bukkit.getServer().getPluginManager().registerEvents(new PaperGuiListener(), plugin);
         this.listenerRegistered = true;
         return this;
     }

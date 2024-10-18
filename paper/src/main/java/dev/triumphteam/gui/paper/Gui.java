@@ -45,7 +45,7 @@ import java.util.List;
 public final class Gui implements BaseGui<Player> {
 
     static {
-        GuiBukkitListener.register();
+        PaperGuiListener.register();
     }
 
     private final GuiTitle title;
@@ -96,7 +96,7 @@ public final class Gui implements BaseGui<Player> {
 
     @Override
     public void open(final @NotNull Player player) {
-        final var view = new BukkitGuiView(
+        final var view = new PaperGuiView(
             player,
             title,
             containerType,

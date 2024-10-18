@@ -26,37 +26,50 @@ package dev.triumphteam.gui.paper;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.inventory.InventoryDragEvent;
 import org.bukkit.event.inventory.InventoryOpenEvent;
+import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
-public final class GuiBukkitListener implements Listener {
+public final class PaperGuiListener implements Listener {
 
     public static void register() {
         // Auto-register listener if none was registered yet
-        PaperGuiSettings.get().register(JavaPlugin.getProvidingPlugin(GuiBukkitListener.class));
+        PaperGuiSettings.get().register(JavaPlugin.getProvidingPlugin(PaperGuiListener.class));
     }
 
     @EventHandler
     public void onGuiClick(final @NotNull InventoryClickEvent event) {
-        final var holder = event.getInventory().getHolder();
-        if (!(holder instanceof final BukkitGuiView view)) {
-            return;
-        }
+        final var view = convertHolder(event.getInventory().getHolder());
+        if (view == null) return;
 
         event.setCancelled(true);
         view.getClickProcessor().processClick(event.getSlot(), view);
     }
 
     @EventHandler
-    public void onInventoryOpen(final @NotNull InventoryOpenEvent event) {
-        final var holder = event.getInventory().getHolder();
-        if (!(holder instanceof final BukkitGuiView view)) {
-            return;
-        }
+    public void onGuiDrag(final @NotNull InventoryDragEvent event) {
+        final var view = convertHolder(event.getInventory().getHolder());
+        if (view == null) return;
+
+        event.setCancelled(true);
+    }
+
+    @EventHandler
+    public void onGuiOpen(final @NotNull InventoryOpenEvent event) {
+        final var view = convertHolder(event.getInventory().getHolder());
+        if (view == null) return;
 
         if (!view.isFirstOpen()) {
             event.titleOverride(view.getTitle());
         }
+    }
+
+    private @Nullable PaperGuiView convertHolder(final @Nullable InventoryHolder holder) {
+        if (holder == null) return null;
+        if (holder instanceof PaperGuiView paperGuiView) return paperGuiView;
+        return null;
     }
 }

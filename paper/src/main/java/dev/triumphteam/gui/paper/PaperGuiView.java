@@ -42,12 +42,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
-public final class BukkitGuiView extends AbstractGuiView<Player, ItemStack> implements InventoryHolder {
+public final class PaperGuiView extends AbstractGuiView<Player, ItemStack> implements InventoryHolder {
 
     private final PaperContainerType containerType;
     private Inventory inventory = null;
 
-    public BukkitGuiView(
+    public PaperGuiView(
         final @NotNull Player player,
         final @NotNull GuiTitle title,
         final @NotNull PaperContainerType containerType,

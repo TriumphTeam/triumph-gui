@@ -32,8 +32,6 @@ import dev.triumphteam.gui.layout.GuiLayout;
 import dev.triumphteam.gui.slot.Slot;
 import dev.triumphteam.nova.MutableState;
 import dev.triumphteam.nova.State;
-import dev.triumphteam.nova.builtin.SimpleMutableState;
-import dev.triumphteam.nova.policy.StateMutationPolicy;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
@@ -47,7 +45,7 @@ public final class PaginatedComponent<P, I> implements ReactiveGuiComponent<P, I
     private final List<GuiItem<P, I>> items;
     private final GuiLayout layout;
 
-    private final MutableState<Integer> pageState = new SimpleMutableState<>(0, StateMutationPolicy.StructuralEquality.INSTANCE);
+    private final MutableState<Integer> pageState = MutableState.of(1);
 
     public PaginatedComponent(
         final @NotNull Slot back,
