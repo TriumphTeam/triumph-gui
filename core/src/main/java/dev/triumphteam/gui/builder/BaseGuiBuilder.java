@@ -24,7 +24,6 @@
 package dev.triumphteam.gui.builder;
 
 import dev.triumphteam.gui.BaseGui;
-import dev.triumphteam.gui.GuiView;
 import dev.triumphteam.gui.click.handler.ClickHandler;
 import dev.triumphteam.gui.component.GuiComponent;
 import dev.triumphteam.gui.component.SimpleGuiComponent;
@@ -35,10 +34,10 @@ import dev.triumphteam.gui.component.renderer.GuiComponentRenderer;
 import dev.triumphteam.gui.container.type.GuiContainerType;
 import dev.triumphteam.gui.exception.TriumphGuiException;
 import dev.triumphteam.gui.settings.GuiSettings;
-import dev.triumphteam.gui.title.functional.FunctionalGuiTitle;
 import dev.triumphteam.gui.title.GuiTitle;
-import dev.triumphteam.gui.title.functional.SimpleFunctionalGuiTitle;
 import dev.triumphteam.gui.title.SimpleGuiTitle;
+import dev.triumphteam.gui.title.functional.FunctionalGuiTitle;
+import dev.triumphteam.gui.title.functional.SimpleFunctionalGuiTitle;
 import net.kyori.adventure.text.Component;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
@@ -79,7 +78,7 @@ public abstract class BaseGuiBuilder<B extends BaseGuiBuilder<B, P, G, I>, P, G 
     }
 
     /**
-     * Sets the title of the {@link GuiView}.
+     * Sets the title of the {@link BaseGui}.
      *
      * @param title The title {@link Component}.
      * @return The {@link B} instance of the {@link BaseGuiBuilder}.
@@ -90,6 +89,13 @@ public abstract class BaseGuiBuilder<B extends BaseGuiBuilder<B, P, G, I>, P, G 
         return (B) this;
     }
 
+    /**
+     * Sets the title of the {@link BaseGui}.
+     * This version is reactive and will update when the provided state changes.
+     *
+     * @param title The title builder function.
+     * @return The {@link B} instance of the {@link BaseGuiBuilder}.
+     */
     public @NotNull B title(final @NotNull Consumer<@NotNull FunctionalGuiTitle> title) {
         final var simpleTitle = new SimpleFunctionalGuiTitle();
         title.accept(simpleTitle);

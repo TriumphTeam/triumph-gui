@@ -1,18 +1,18 @@
 /**
  * MIT License
- *
+ * <p>
  * Copyright (c) 2024 TriumphTeam
- *
+ * <p>
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- *
+ * <p>
  * The above copyright notice and this permission notice shall be included in all
  * copies or substantial portions of the Software.
- *
+ * <p>
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -72,10 +72,10 @@ public final class ClickProcessor<P, I> {
      * Will mark the processor as busy once the click starts then may or may not free it once it's done processing.
      * A click can be blocked for a much longer time depending on the {@link ClickHandler} being used.
      *
-     * @param slot The slot being clicked.
+     * @param context The context of the click.
      * @param view The current view.
      */
-    public void processClick(final int slot, final @NotNull AbstractGuiView<P, I> view) {
+    public void processClick(final @NotNull ClickContext context, final @NotNull AbstractGuiView<P, I> view) {
 
         final var viewerUuid = view.viewerUuid();
 
@@ -84,7 +84,7 @@ public final class ClickProcessor<P, I> {
             return;
         }
 
-        final var renderedItem = view.getItem(slot);
+        final var renderedItem = view.getItem(context.slot());
         if (renderedItem == null) return;
 
         final var action = renderedItem.action();
@@ -97,9 +97,7 @@ public final class ClickProcessor<P, I> {
 
         this.isProcessing = true;
 
-        final var clickContext = new ClickContext();
         final var handler = renderedItem.clickHandler();
-
         // Prepare the controller with the whenComplete handler
         final var clickController = new DefaultClickController((ignored, throwable) -> {
             // If something went wrong with the click log, the error and stop processing
@@ -107,7 +105,7 @@ public final class ClickProcessor<P, I> {
                 LOGGER.error(
                     "An exception occurred while processing click for '{}' on slot '{}'.",
                     view.viewerName(),
-                    slot,
+                    context.slot(),
                     throwable
                 );
             }
@@ -119,7 +117,7 @@ public final class ClickProcessor<P, I> {
         // The exception is passed to the controller and still logged
         Exception handledException = null;
         try {
-            handler.handle(view.viewer(), clickContext, action, clickController);
+            handler.handle(view.viewer(), context, action, clickController);
         } catch (final Exception exception) {
             handledException = exception;
         }

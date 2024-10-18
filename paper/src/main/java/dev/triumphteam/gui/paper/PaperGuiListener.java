@@ -23,8 +23,11 @@
  */
 package dev.triumphteam.gui.paper;
 
+import dev.triumphteam.gui.click.ClickContext;
+import dev.triumphteam.gui.click.GuiClick;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.inventory.ClickType;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryDragEvent;
 import org.bukkit.event.inventory.InventoryOpenEvent;
@@ -46,7 +49,7 @@ public final class PaperGuiListener implements Listener {
         if (view == null) return;
 
         event.setCancelled(true);
-        view.getClickProcessor().processClick(event.getSlot(), view);
+        view.processClick(new ClickContext(mapClick(event.getClick()), event.getSlot()));
     }
 
     @EventHandler
@@ -71,5 +74,24 @@ public final class PaperGuiListener implements Listener {
         if (holder == null) return null;
         if (holder instanceof PaperGuiView paperGuiView) return paperGuiView;
         return null;
+    }
+
+    private @NotNull GuiClick mapClick(final @NotNull ClickType clickType) {
+        return switch (clickType) {
+            case ClickType.LEFT -> GuiClick.LEFT;
+            case ClickType.SHIFT_LEFT -> GuiClick.SHIFT_LEFT;
+            case ClickType.RIGHT -> GuiClick.RIGHT;
+            case ClickType.SHIFT_RIGHT -> GuiClick.SHIFT_RIGHT;
+            case ClickType.WINDOW_BORDER_LEFT -> GuiClick.WINDOW_BORDER_LEFT;
+            case ClickType.WINDOW_BORDER_RIGHT -> GuiClick.WINDOW_BORDER_RIGHT;
+            case ClickType.MIDDLE -> GuiClick.MIDDLE;
+            case ClickType.NUMBER_KEY -> GuiClick.NUMBER_KEY;
+            case ClickType.DOUBLE_CLICK -> GuiClick.DOUBLE_CLICK;
+            case ClickType.DROP -> GuiClick.DROP;
+            case ClickType.CONTROL_DROP -> GuiClick.CONTROL_DROP;
+            case ClickType.CREATIVE -> GuiClick.CREATIVE;
+            case ClickType.SWAP_OFFHAND -> GuiClick.SWAP_OFFHAND;
+            case ClickType.UNKNOWN -> GuiClick.UNKNOWN;
+        };
     }
 }
