@@ -16,7 +16,7 @@ repositories {
 }
 
 dependencies {
-    compileOnlyApi(libs.annotations)
+    compileOnly(libs.annotations)
 }
 
 

@@ -6,8 +6,7 @@ plugins {
 dependencies {
     api(libs.nova)
 
-    compileOnlyApi(libs.guava)
-    compileOnlyApi(libs.adventure.api)
-
-    compileOnlyApi(libs.logger)
+    compileOnly(libs.guava)
+    compileOnly(libs.adventure.api)
+    compileOnly(libs.logger)
 }
