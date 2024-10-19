@@ -5,6 +5,8 @@ plugins {
 
 dependencies {
     api(libs.nova.kotlin)
-    implementation(kotlin("stdlib"))
-    implementation(projects.triumphGuiCore)
+    api(projects.triumphGuiCore)
+
+    compileOnly(kotlin("stdlib"))
+    compileOnly(libs.adventure.api)
 }

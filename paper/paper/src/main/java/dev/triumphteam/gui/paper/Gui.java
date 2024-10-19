@@ -27,8 +27,7 @@ import dev.triumphteam.gui.BaseGui;
 import dev.triumphteam.gui.click.handler.ClickHandler;
 import dev.triumphteam.gui.component.GuiComponent;
 import dev.triumphteam.gui.component.renderer.GuiComponentRenderer;
-import dev.triumphteam.gui.container.type.GuiContainerType;
-import dev.triumphteam.gui.paper.builder.gui.GuiBuilder;
+import dev.triumphteam.gui.paper.builder.gui.PaperGuiBuilder;
 import dev.triumphteam.gui.paper.container.type.ChestContainerType;
 import dev.triumphteam.gui.paper.container.type.PaperContainerType;
 import dev.triumphteam.gui.title.GuiTitle;
@@ -72,26 +71,26 @@ public final class Gui implements BaseGui<Player> {
     }
 
     /**
-     * Create a new {@link GuiBuilder} to create a new {@link Gui}.
+     * Create a new {@link PaperGuiBuilder} to create a new {@link Gui}.
      *
-     * @param type The {@link GuiContainerType} to be used.
-     * @return A new {@link GuiBuilder}.
+     * @param type The {@link PaperContainerType} to be used.
+     * @return A new {@link PaperGuiBuilder}.
      */
     @Contract("_ -> new")
-    public static GuiBuilder of(final @NotNull GuiContainerType type) {
-        return new GuiBuilder(type);
+    public static PaperGuiBuilder of(final @NotNull PaperContainerType type) {
+        return new PaperGuiBuilder(type);
     }
 
     /**
-     * Create a new {@link GuiBuilder} to create a new {@link Gui}.
+     * Create a new {@link PaperGuiBuilder} to create a new {@link Gui}.
      * This factory will default to using a {@link ChestContainerType}.
      *
      * @param rows The rows of the {@link ChestContainerType}.
-     * @return A new {@link GuiBuilder}.
+     * @return A new {@link PaperGuiBuilder}.
      */
     @Contract("_ -> new")
-    public static GuiBuilder of(final int rows) {
-        return new GuiBuilder(new ChestContainerType(rows));
+    public static PaperGuiBuilder of(final int rows) {
+        return new PaperGuiBuilder(new ChestContainerType(rows));
     }
 
     @Override

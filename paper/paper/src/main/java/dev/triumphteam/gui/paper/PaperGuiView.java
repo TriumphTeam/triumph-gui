@@ -66,12 +66,14 @@ public final class PaperGuiView extends AbstractGuiView<Player, ItemStack> imple
             this.inventory = containerType.createInventory(this, getTitle());
         }
 
-        viewer().openInventory(inventory);
+        final var viewer = viewer();
+        viewer.getScheduler().run(PaperGuiSettings.get().getPlugin(), (task) -> viewer.openInventory(inventory), null);
     }
 
     @Override
     public void close() {
-
+        final var viewer = viewer();
+        viewer.getScheduler().runDelayed(PaperGuiSettings.get().getPlugin(), (task) -> viewer.closeInventory(), null, 2L);
     }
 
     @Override

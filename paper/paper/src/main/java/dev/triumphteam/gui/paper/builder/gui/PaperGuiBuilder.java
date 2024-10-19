@@ -1,18 +1,18 @@
 /**
  * MIT License
- *
+ * <p>
  * Copyright (c) 2024 TriumphTeam
- *
+ * <p>
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- *
+ * <p>
  * The above copyright notice and this permission notice shall be included in all
  * copies or substantial portions of the Software.
- *
+ * <p>
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -24,7 +24,6 @@
 package dev.triumphteam.gui.paper.builder.gui;
 
 import dev.triumphteam.gui.builder.BaseGuiBuilder;
-import dev.triumphteam.gui.container.type.GuiContainerType;
 import dev.triumphteam.gui.paper.Gui;
 import dev.triumphteam.gui.paper.PaperGuiSettings;
 import dev.triumphteam.gui.paper.container.type.PaperContainerType;
@@ -32,22 +31,18 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
-public final class GuiBuilder extends BaseGuiBuilder<GuiBuilder, Player, Gui, ItemStack> {
+public final class PaperGuiBuilder extends BaseGuiBuilder<PaperGuiBuilder, Player, Gui, ItemStack, PaperContainerType> {
 
-    public GuiBuilder(final @NotNull GuiContainerType containerType) {
+    public PaperGuiBuilder(final @NotNull PaperContainerType containerType) {
         super(PaperGuiSettings.get(), containerType);
     }
 
     @Override
     public Gui build() {
-        if (!(getContainerType() instanceof final PaperContainerType paperContainerType)) {
-            throw new IllegalArgumentException("Container type provided is not supported on Paper platform!");
-        }
-
         return new Gui(
             getTitle(),
             getComponents(),
-            paperContainerType,
+            getContainerType(),
             getComponentRenderer(),
             getClickHandler(),
             getSpamPreventionDuration()

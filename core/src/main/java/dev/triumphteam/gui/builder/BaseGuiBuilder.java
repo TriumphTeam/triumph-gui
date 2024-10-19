@@ -58,12 +58,11 @@ import java.util.function.Consumer;
  * @param <I> The item type.
  */
 @SuppressWarnings({"unchecked", "UnusedReturnValue"})
-public abstract class BaseGuiBuilder<B extends BaseGuiBuilder<B, P, G, I>, P, G extends BaseGui<P>, I> {
+public abstract class BaseGuiBuilder<B extends BaseGuiBuilder<B, P, G, I, C>, P, G extends BaseGui<P>, I, C extends GuiContainerType> {
 
     private final GuiSettings<P, I, ?> guiSettings;
-    private final GuiContainerType containerType;
     private final List<GuiComponent<P, I>> components = new ArrayList<>();
-
+    private C containerType;
     private ClickHandler<P> clickHandler = null;
     private GuiComponentRenderer<P, I> componentRenderer = null;
     private GuiTitle title = null;
@@ -71,10 +70,22 @@ public abstract class BaseGuiBuilder<B extends BaseGuiBuilder<B, P, G, I>, P, G 
 
     public BaseGuiBuilder(
         final GuiSettings<P, I, ?> guiSettings,
-        final @NotNull GuiContainerType containerType
+        final @NotNull C defaultContainerType
     ) {
         this.guiSettings = guiSettings;
-        this.containerType = containerType;
+        this.containerType = defaultContainerType;
+    }
+
+    /**
+     * Sets the title of the {@link BaseGui}.
+     *
+     * @param title The title {@link GuiTitle}.
+     * @return The {@link B} instance of the {@link BaseGuiBuilder}.
+     */
+    @Contract("_ -> this")
+    public @NotNull B title(final @NotNull GuiTitle title) {
+        this.title = title;
+        return (B) this;
     }
 
     /**
@@ -85,8 +96,7 @@ public abstract class BaseGuiBuilder<B extends BaseGuiBuilder<B, P, G, I>, P, G 
      */
     @Contract("_ -> this")
     public @NotNull B title(final @NotNull Component title) {
-        this.title = new SimpleGuiTitle(() -> title, Collections.emptyList());
-        return (B) this;
+        return title(new SimpleGuiTitle(() -> title, Collections.emptyList()));
     }
 
     /**
@@ -99,7 +109,18 @@ public abstract class BaseGuiBuilder<B extends BaseGuiBuilder<B, P, G, I>, P, G 
     public @NotNull B title(final @NotNull Consumer<@NotNull FunctionalGuiTitle> title) {
         final var simpleTitle = new SimpleFunctionalGuiTitle();
         title.accept(simpleTitle);
-        this.title = simpleTitle.asGuiTitle();
+        return title(simpleTitle.asGuiTitle());
+    }
+
+    /**
+     * Sets the container type of the GUI.
+     *
+     * @param containerType The {@link GuiContainerType} to be used.
+     * @return The {@link B} instance of the {@link BaseGuiBuilder}.
+     */
+    @Contract("_ -> this")
+    public @NotNull B containerType(final @NotNull C containerType) {
+        this.containerType = containerType;
         return (B) this;
     }
 
@@ -195,7 +216,7 @@ public abstract class BaseGuiBuilder<B extends BaseGuiBuilder<B, P, G, I>, P, G 
 
     // ---------------- Internal getters ---------------- //
 
-    protected @NotNull GuiContainerType getContainerType() {
+    protected @NotNull C getContainerType() {
         return containerType;
     }
 
