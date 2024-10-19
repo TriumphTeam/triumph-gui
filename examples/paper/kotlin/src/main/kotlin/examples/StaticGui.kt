@@ -22,6 +22,10 @@ public class StaticGui : CommandExecutor {
                 rows = 6
             }
 
+            // Simple title for the gui
+            title(Component.text("Static Gui"))
+
+            // A stateless component, we don't care about the item updating, just want the click action
             statelessComponent { container ->
                 container[1, 1] = ItemBuilder.from(Material.PAPER)
                     .name(Component.text("My Paper"))
