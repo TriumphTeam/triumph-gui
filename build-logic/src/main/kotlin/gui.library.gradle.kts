@@ -1,4 +1,4 @@
-import dev.triumphteam.root.PublishConfigure
+import dev.triumphteam.root.configure.PublishConfigure
 
 plugins {
     `maven-publish`
