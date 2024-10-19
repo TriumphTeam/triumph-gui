@@ -10,7 +10,7 @@ repositories {
 }
 
 dependencies {
-    implementation(kotlin("stdlid"))
+    implementation(kotlin("stdlib"))
     implementation(projects.triumphGuiPaperKotlin)
 }
 
