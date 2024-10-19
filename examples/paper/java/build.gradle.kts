@@ -23,7 +23,9 @@ tasks {
         load = BukkitPluginYaml.PluginLoadOrder.STARTUP
         authors.add("Matt")
         apiVersion = "1.21"
-        commands.add(commands.create("example"))
+        commands.add(commands.create("gui-static"))
+        commands.add(commands.create("gui-clicker"))
+        commands.add(commands.create("gui-title"))
         foliaSupported.set(true)
     }
 }
