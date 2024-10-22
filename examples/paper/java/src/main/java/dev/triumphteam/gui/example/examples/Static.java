@@ -43,8 +43,8 @@ public final class Static implements CommandExecutor {
             .of(6)
             .title(Component.text("Static Gui")) // Simple title for the GUI
             .statelessComponent(container -> { // A stateless component, we don't care about the item updating, just want the click action
-                container.setItem(1, 1, ItemBuilder.from(Material.COOKIE)
-                    .name(Component.text("Clicked $clicks times!"))
+                container.setItem(1, 1, ItemBuilder.from(Material.PAPER)
+                    .name(Component.text("My Paper"))
                     .asGuiItem((player, context) -> {
                         player.sendMessage("You have clicked on the paper item!");
                     })
