@@ -27,6 +27,7 @@ import dev.triumphteam.gui.slot.Slot;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 public final class BoxGuiLayout implements GuiLayout {
@@ -42,7 +43,12 @@ public final class BoxGuiLayout implements GuiLayout {
     }
 
     @Override
-    public @NotNull List<@NotNull Slot> generatePositions() {
-        return slots;
+    public @NotNull Iterator<Slot> iterator() {
+        return slots.iterator();
+    }
+
+    @Override
+    public int size() {
+        return slots.size();
     }
 }

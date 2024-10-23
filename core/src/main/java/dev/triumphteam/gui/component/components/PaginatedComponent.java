@@ -75,22 +75,5 @@ public final class PaginatedComponent<P, I> implements ReactiveGuiComponent<P, I
         container.setItem(back, new SimpleGuiItem<>(backItem, (RunnableGuiClickAction<P>) (ignored, context) -> pageState.set(page - 1)));
         container.setItem(forward, new SimpleGuiItem<>(forwardItem, (RunnableGuiClickAction<P>) (ignored, context) -> pageState.set(page + 1)));
 
-        final var slots = layout.generatePositions();
-        final var size = slots.size();
-
-        final var offset = page * size;
-
-        for (int i = 0; i < size; i++) {
-            final var offsetSlot = offset + i;
-
-            /*if (offsetSlot >= items.size() || offsetSlot < 0) {
-                return;
-            }*/
-
-            final var slot = slots.get(i);
-            final var item = items.get(offsetSlot);
-
-            container.setItem(slot, item);
-        }
     }
 }

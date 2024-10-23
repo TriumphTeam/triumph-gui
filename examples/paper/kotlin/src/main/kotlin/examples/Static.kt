@@ -24,15 +24,41 @@
 package dev.triumphteam.gui.example.examples
 
 import dev.triumphteam.gui.kotlin.set
+import dev.triumphteam.gui.kotlin.slot
+import dev.triumphteam.gui.layout.GuiLayout
 import dev.triumphteam.gui.paper.builder.item.ItemBuilder
 import dev.triumphteam.gui.paper.kotlin.builder.buildGui
 import dev.triumphteam.gui.paper.kotlin.builder.chestContainer
+import dev.triumphteam.gui.slot.Slot
+import dev.triumphteam.gui.state.SimplePagerState
 import net.kyori.adventure.text.Component
 import org.bukkit.Material
 import org.bukkit.command.Command
 import org.bukkit.command.CommandExecutor
 import org.bukkit.command.CommandSender
 import org.bukkit.entity.Player
+import kotlin.time.Duration.Companion.seconds
+
+private class WeirdLayout : GuiLayout {
+
+    private val slots = buildList {
+        (3..7).forEach { add(slot(1, it)) }
+        add(slot(2, 1))
+        add(slot(2, 2))
+        add(slot(2, 5))
+        add(slot(2, 6))
+        add(slot(2, 9))
+        (5..9).forEach { add(slot(3, it)) }
+    }.toMutableList()
+
+    override fun iterator(): MutableIterator<Slot> {
+        return slots.iterator()
+    }
+
+    override fun size(): Int {
+        return slots.size
+    }
+}
 
 public class Static : CommandExecutor {
 
@@ -45,16 +71,53 @@ public class Static : CommandExecutor {
                 rows = 6
             }
 
+            spamPreventionDuration = 0.seconds
+
             // Simple title for the gui
             title(Component.text("Static Gui"))
 
-            // A stateless component, we don't care about the item updating, just want the click action
+            /*// A stateless component, we don't care about the item updating, just want the click action
             statelessComponent { container ->
                 container[1, 1] = ItemBuilder.from(Material.PAPER)
                     .name(Component.text("My Paper"))
                     .asGuiItem { player, _ ->
                         player.sendMessage("You have clicked on the paper item!")
                     }
+            }*/
+
+            component {
+
+                // Random list with all materials
+                val materials = Material.entries.filter { it.isItem && !it.isAir }.shuffled()
+
+                val pageState = remember(
+                    SimplePagerState(
+                        1, // starting on page 1
+                        materials, // list of elements
+                        WeirdLayout() // how the items should be displayed
+                    )
+                )
+
+                render { container ->
+
+                    // Loop through the current page
+                    pageState.forEach { entry ->
+                        // Create item from material in the page
+                        container[entry.slot] = ItemBuilder.from(entry.element).asGuiItem()
+                    }
+
+                    // previous button
+                    container[5, 2] = ItemBuilder.from(Material.PAPER).name(Component.text("Previous"))
+                        .asGuiItem { _, _ ->
+                            pageState.prev()
+                        }
+
+                    // next button
+                    container[5, 8] = ItemBuilder.from(Material.PAPER).name(Component.text("Next"))
+                        .asGuiItem { _, _ ->
+                            pageState.next()
+                        }
+                }
             }
         }
 

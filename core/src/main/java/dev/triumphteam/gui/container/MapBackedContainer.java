@@ -75,7 +75,7 @@ public final class MapBackedContainer<P, I> implements GuiContainer<P, I> {
 
     @Override
     public void fill(final @NotNull GuiLayout layout, final @NotNull GuiItem<@NotNull P, @NotNull I> guiItem) {
-        layout.generatePositions().forEach(position -> setItem(position, guiItem));
+        layout.forEach(position -> setItem(position, guiItem));
     }
 
     public @NotNull Map<Integer, RenderedGuiItem<P, I>> complete() {
