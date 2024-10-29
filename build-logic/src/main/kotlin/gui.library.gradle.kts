@@ -13,13 +13,13 @@ root {
             from(components["java"])
 
             snapshotsRepo(PublishConfigure.TRIUMPH_SNAPSHOTS) {
-                username = property("triumph.repo.user")
-                password = property("triumph.repo.token")
+                username = providers.gradleProperty("triumph.repo.user").orNull ?: ""
+                password = providers.gradleProperty("triumph.repo.token").orNull ?: ""
             }
 
             releasesRepo(PublishConfigure.CENTRAL) {
-                username = property("central.repo.user")
-                password = property("central.repo.password")
+                username = providers.gradleProperty("central.repo.user").orNull ?: ""
+                password = providers.gradleProperty("central.repo.password").orNull ?: ""
             }
 
             signing {
