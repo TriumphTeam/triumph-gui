@@ -5,7 +5,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
-public final class SimplePagerState<T> extends AbstractScrollableState<T> implements PagerState<T> {
+public final class SimplePagerState<T> extends AbstractScrollerState<T> implements PagerState<T> {
 
     public SimplePagerState(
         final int startPage,

@@ -24,8 +24,26 @@
 package dev.triumphteam.gui.layout;
 
 import dev.triumphteam.gui.slot.Slot;
+import org.jetbrains.annotations.NotNull;
+
+import javax.swing.*;
 
 public interface GuiLayout extends Iterable<Slot> {
+
+    static @NotNull GuiLayout box(
+            final @NotNull Slot min,
+            final @NotNull Slot max,
+            final @NotNull BoxGuiLayout.Direction direction
+    ) {
+        return new BoxGuiLayout(min, max, direction);
+    }
+
+    static @NotNull GuiLayout box(
+            final @NotNull Slot min,
+            final @NotNull Slot max
+    ) {
+        return new BoxGuiLayout(min, max);
+    }
 
     int size();
 }

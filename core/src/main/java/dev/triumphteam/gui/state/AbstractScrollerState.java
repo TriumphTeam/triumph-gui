@@ -8,9 +8,9 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-public abstract class AbstractScrollableState<T> extends AbstractState implements ScrollableState<T> {
+public abstract class AbstractScrollerState<T> extends AbstractState implements ScrollerState<T> {
 
-    private final int step;
+    private final int steps;
     private final int elementsPerView;
     private final List<T> elements;
     private final GuiLayout layout;
@@ -18,9 +18,8 @@ public abstract class AbstractScrollableState<T> extends AbstractState implement
 
     private int current;
 
-
-    public AbstractScrollableState(
-        final int step,
+    public AbstractScrollerState(
+        final int steps,
         final int startPosition,
         final @NotNull List<T> elements,
         final @NotNull GuiLayout layout
@@ -28,26 +27,26 @@ public abstract class AbstractScrollableState<T> extends AbstractState implement
         this.elementsPerView = layout.size();
 
         // If no steps we use all elements per view
-        if (step < 1) this.step = this.elementsPerView;
-        else this.step = step;
+        if (steps < 1) this.steps = this.elementsPerView;
+        else this.steps = steps;
 
         this.current = startPosition;
         this.elements = elements;
         this.layout = layout;
-        this.limit = (int) Math.ceil((double) elements.size() / step);
+        this.limit = (int) Math.ceil((double) elements.size() / steps);
     }
 
     @Override
     public void next() {
         if (current >= limit) return;
-        current += step;
+        current += steps;
         trigger();
     }
 
     @Override
     public void prev() {
         if (current <= 1) return;
-        current -= step;
+        current -= steps;
         trigger();
     }
 
@@ -68,8 +67,8 @@ public abstract class AbstractScrollableState<T> extends AbstractState implement
         return subList.iterator();
     }
 
-    protected int getStep() {
-        return step;
+    protected int getSteps() {
+        return steps;
     }
 
     protected int getElementsPerView() {

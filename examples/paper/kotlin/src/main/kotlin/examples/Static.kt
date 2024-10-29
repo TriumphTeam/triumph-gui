@@ -30,7 +30,6 @@ import dev.triumphteam.gui.paper.builder.item.ItemBuilder
 import dev.triumphteam.gui.paper.kotlin.builder.buildGui
 import dev.triumphteam.gui.paper.kotlin.builder.chestContainer
 import dev.triumphteam.gui.slot.Slot
-import dev.triumphteam.gui.state.SimplePagerState
 import net.kyori.adventure.text.Component
 import org.bukkit.Material
 import org.bukkit.command.Command
@@ -88,22 +87,20 @@ public class Static : CommandExecutor {
             component {
 
                 // Random list with all materials
-                val materials = Material.entries.filter { it.isItem && !it.isAir }.shuffled()
+                // val materials = Material.entries.filter { it.isItem && !it.isAir }.shuffled()
 
-                val pageState = remember(
-                    SimplePagerState(
-                        1, // starting on page 1
-                        materials, // list of elements
-                        WeirdLayout() // how the items should be displayed
-                    )
+                val pageState = rememberPager(
+                    (1..200).toList(),
+                    GuiLayout.box(slot(1, 2), slot(3, 8)),
                 )
 
                 render { container ->
 
                     // Loop through the current page
-                    pageState.forEach { entry ->
+                    pageState.forEach { (slot, element) ->
                         // Create item from material in the page
-                        container[entry.slot] = ItemBuilder.from(entry.element).asGuiItem()
+                        container[slot] =
+                            ItemBuilder.from(Material.PAPER).name(Component.text("Element -> $element")).asGuiItem()
                     }
 
                     // previous button
