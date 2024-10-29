@@ -22,9 +22,9 @@ root {
                 password = providers.gradleProperty("central.repo.password").orNull ?: ""
             }
 
-            signing {
+            /*signing {
                 sign(publishing.publications["maven"])
-            }
+            }*/
         }
     }
 }

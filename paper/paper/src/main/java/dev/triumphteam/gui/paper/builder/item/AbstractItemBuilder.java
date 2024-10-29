@@ -31,21 +31,19 @@ import dev.triumphteam.gui.item.GuiItem;
 import dev.triumphteam.gui.item.items.SimpleGuiItem;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
-import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataContainer;
-import org.gradle.internal.impldep.io.usethesource.capsule.Map;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Arrays;
-import java.util.EnumSet;
 import java.util.List;
+import java.util.Map;
 import java.util.function.Consumer;
 
 @SuppressWarnings("unchecked")
