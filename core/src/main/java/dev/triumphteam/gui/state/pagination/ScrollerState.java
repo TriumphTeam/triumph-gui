@@ -1,4 +1,4 @@
-package dev.triumphteam.gui.state;
+package dev.triumphteam.gui.state.pagination;
 
 import dev.triumphteam.gui.layout.GuiLayout;
 import dev.triumphteam.nova.State;

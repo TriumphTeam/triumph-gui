@@ -25,8 +25,8 @@ package dev.triumphteam.gui.component.functional;
 
 import dev.triumphteam.gui.click.handler.ClickHandler;
 import dev.triumphteam.gui.layout.GuiLayout;
-import dev.triumphteam.gui.state.PagerState;
-import dev.triumphteam.gui.state.ScrollerState;
+import dev.triumphteam.gui.state.pagination.PagerState;
+import dev.triumphteam.gui.state.pagination.ScrollerState;
 import dev.triumphteam.nova.holder.StateHolder;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;

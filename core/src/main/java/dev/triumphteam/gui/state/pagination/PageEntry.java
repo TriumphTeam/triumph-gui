@@ -1,4 +1,4 @@
-package dev.triumphteam.gui.state;
+package dev.triumphteam.gui.state.pagination;
 
 import dev.triumphteam.gui.slot.Slot;
 import org.jetbrains.annotations.NotNull;

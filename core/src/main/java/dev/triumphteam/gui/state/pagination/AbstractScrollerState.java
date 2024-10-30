@@ -1,4 +1,4 @@
-package dev.triumphteam.gui.state;
+package dev.triumphteam.gui.state.pagination;
 
 import dev.triumphteam.gui.layout.GuiLayout;
 import dev.triumphteam.nova.AbstractState;
@@ -7,6 +7,9 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+
+import static java.lang.Math.ceil;
+import static java.lang.Math.min;
 
 public abstract class AbstractScrollerState<T> extends AbstractState implements ScrollerState<T> {
 
@@ -33,7 +36,7 @@ public abstract class AbstractScrollerState<T> extends AbstractState implements 
         this.current = startPosition;
         this.elements = elements;
         this.layout = layout;
-        this.limit = (int) Math.ceil((double) elements.size() / steps);
+        this.limit = (int) ceil((double) elements.size() / steps);
     }
 
     @Override
@@ -52,8 +55,9 @@ public abstract class AbstractScrollerState<T> extends AbstractState implements 
 
     @Override
     public @NotNull Iterator<PageEntry<T>> iterator() {
+        // TODO: this should probably be on page change not on iterator call to avoid calculation when multiple calls are made
         final var from = current - 1;
-        final var to = Math.min(from + elementsPerView, elements.size());
+        final var to = min(from + elementsPerView, elements.size());
         final var subList = new ArrayList<PageEntry<T>>();
         final var layoutIterator = layout.iterator();
 
