@@ -24,6 +24,8 @@
 package dev.triumphteam.gui.example
 
 import dev.triumphteam.gui.example.examples.CookieClicker
+import dev.triumphteam.gui.example.examples.Paginated
+import dev.triumphteam.gui.example.examples.Scrolling
 import dev.triumphteam.gui.example.examples.Static
 import dev.triumphteam.gui.example.examples.UpdatingTitle
 import org.bukkit.plugin.java.JavaPlugin
@@ -34,5 +36,7 @@ public class GuiPlugin : JavaPlugin() {
         getCommand("gui-static")?.setExecutor(Static())
         getCommand("gui-clicker")?.setExecutor(CookieClicker())
         getCommand("gui-title")?.setExecutor(UpdatingTitle())
+        getCommand("gui-page")?.setExecutor(Paginated())
+        getCommand("gui-scroll")?.setExecutor(Scrolling())
     }
 }

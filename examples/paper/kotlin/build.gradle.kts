@@ -27,6 +27,8 @@ tasks {
         commands.add(commands.create("gui-static"))
         commands.add(commands.create("gui-clicker"))
         commands.add(commands.create("gui-title"))
+        commands.add(commands.create("gui-page"))
+        commands.add(commands.create("gui-scroll"))
         foliaSupported.set(true)
     }
 }
