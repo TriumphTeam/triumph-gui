@@ -24,6 +24,7 @@
 package dev.triumphteam.gui.kotlin.builder
 
 import dev.triumphteam.gui.BaseGui
+import dev.triumphteam.gui.actions.GuiCloseAction
 import dev.triumphteam.gui.builder.BaseGuiBuilder
 import dev.triumphteam.gui.click.handler.ClickHandler
 import dev.triumphteam.gui.component.functional.FunctionalGuiComponent
@@ -78,6 +79,10 @@ public abstract class AbstractKotlinGuiBuilder<B : BaseGuiBuilder<B, P, G, I, C>
 
     public inline fun component(block: FunctionalGuiComponent<P, I>.() -> Unit) {
         backing.component(SimpleFunctionalGuiComponent<P, I>().apply(block).asGuiComponent())
+    }
+
+    public fun onClose(block: GuiCloseAction) {
+        backing.onClose(block)
     }
 
     protected fun backing(): B = backing

@@ -1,18 +1,18 @@
 /**
  * MIT License
- *
+ * <p>
  * Copyright (c) 2024 TriumphTeam
- *
+ * <p>
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- *
+ * <p>
  * The above copyright notice and this permission notice shall be included in all
  * copies or substantial portions of the Software.
- *
+ * <p>
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -24,6 +24,7 @@
 package dev.triumphteam.gui.builder;
 
 import dev.triumphteam.gui.BaseGui;
+import dev.triumphteam.gui.actions.GuiCloseAction;
 import dev.triumphteam.gui.click.handler.ClickHandler;
 import dev.triumphteam.gui.component.GuiComponent;
 import dev.triumphteam.gui.component.SimpleGuiComponent;
@@ -62,6 +63,7 @@ public abstract class BaseGuiBuilder<B extends BaseGuiBuilder<B, P, G, I, C>, P,
 
     private final GuiSettings<P, I, ?> guiSettings;
     private final List<GuiComponent<P, I>> components = new ArrayList<>();
+    private final List<GuiCloseAction> closeActions = new ArrayList<>();
     private C containerType;
     private ClickHandler<P> clickHandler = null;
     private GuiComponentRenderer<P, I> componentRenderer = null;
@@ -207,6 +209,12 @@ public abstract class BaseGuiBuilder<B extends BaseGuiBuilder<B, P, G, I, C>, P,
         return (B) this;
     }
 
+    @Contract("_ -> this")
+    public @NotNull B onClose(final @NotNull GuiCloseAction closeAction) {
+        closeActions.add(closeAction);
+        return (B) this;
+    }
+
     /**
      * Finalizes the builder and creates a {@link G} instance of {@link BaseGui} depending on the platform.
      *
@@ -222,6 +230,10 @@ public abstract class BaseGuiBuilder<B extends BaseGuiBuilder<B, P, G, I, C>, P,
 
     protected @NotNull List<GuiComponent<P, I>> getComponents() {
         return components;
+    }
+
+    protected @NotNull List<GuiCloseAction> getCloseActions() {
+        return closeActions;
     }
 
     protected @NotNull ClickHandler<P> getClickHandler() {

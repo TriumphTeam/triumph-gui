@@ -24,6 +24,7 @@
 package dev.triumphteam.gui.paper;
 
 import dev.triumphteam.gui.BaseGui;
+import dev.triumphteam.gui.actions.GuiCloseAction;
 import dev.triumphteam.gui.click.handler.ClickHandler;
 import dev.triumphteam.gui.component.GuiComponent;
 import dev.triumphteam.gui.component.renderer.GuiComponentRenderer;
@@ -49,6 +50,7 @@ public final class Gui implements BaseGui<Player> {
 
     private final GuiTitle title;
     private final List<GuiComponent<Player, ItemStack>> components;
+    private final List<GuiCloseAction> closeActions;
     private final PaperContainerType containerType;
     private final GuiComponentRenderer<Player, ItemStack> componentRenderer;
     private final ClickHandler<Player> clickHandler;
@@ -57,6 +59,7 @@ public final class Gui implements BaseGui<Player> {
     public Gui(
         final @NotNull GuiTitle title,
         final @NotNull List<GuiComponent<Player, ItemStack>> components,
+        final @NotNull List<GuiCloseAction> closeActions,
         final @NotNull PaperContainerType containerType,
         final @NotNull GuiComponentRenderer<Player, ItemStack> componentRenderer,
         final @NotNull ClickHandler<Player> clickHandler,
@@ -64,6 +67,7 @@ public final class Gui implements BaseGui<Player> {
     ) {
         this.title = title;
         this.components = components;
+        this.closeActions = closeActions;
         this.containerType = containerType;
         this.componentRenderer = componentRenderer;
         this.clickHandler = clickHandler;
@@ -100,6 +104,7 @@ public final class Gui implements BaseGui<Player> {
             title,
             containerType,
             components,
+            closeActions,
             componentRenderer,
             clickHandler,
             spamPreventionDuration

@@ -1,18 +1,18 @@
 /**
  * MIT License
- *
+ * <p>
  * Copyright (c) 2024 TriumphTeam
- *
+ * <p>
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- *
+ * <p>
  * The above copyright notice and this permission notice shall be included in all
  * copies or substantial portions of the Software.
- *
+ * <p>
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -24,6 +24,7 @@
 package dev.triumphteam.gui.paper;
 
 import dev.triumphteam.gui.AbstractGuiView;
+import dev.triumphteam.gui.actions.GuiCloseAction;
 import dev.triumphteam.gui.click.handler.ClickHandler;
 import dev.triumphteam.gui.click.processor.ClickProcessor;
 import dev.triumphteam.gui.component.GuiComponent;
@@ -52,22 +53,27 @@ public final class PaperGuiView extends AbstractGuiView<Player, ItemStack> imple
         final @NotNull GuiTitle title,
         final @NotNull PaperContainerType containerType,
         final @NotNull List<GuiComponent<Player, ItemStack>> components,
+        final @NotNull List<GuiCloseAction> closeActions,
         final @NotNull GuiComponentRenderer<Player, ItemStack> componentRenderer,
         final @NotNull ClickHandler<Player> clickHandler,
         final long spamPreventionDuration
     ) {
-        super(player, title, components, containerType, componentRenderer, clickHandler, new ClickProcessor<>(spamPreventionDuration));
+        super(player, title, components, closeActions, containerType, componentRenderer, clickHandler, new ClickProcessor<>(spamPreventionDuration));
         this.containerType = containerType;
     }
 
     @Override
-    public void openInventory() {
+    public void openInventory(final boolean updating) {
         if (inventory == null) {
             this.inventory = containerType.createInventory(this, getTitle());
         }
 
         final var viewer = viewer();
-        viewer.getScheduler().run(PaperGuiSettings.get().getPlugin(), (task) -> viewer.openInventory(inventory), null);
+        viewer.getScheduler().run(PaperGuiSettings.get().getPlugin(), (task) -> {
+            setUpdating(true);
+            viewer.openInventory(inventory);
+            setUpdating(false);
+        }, null);
     }
 
     @Override

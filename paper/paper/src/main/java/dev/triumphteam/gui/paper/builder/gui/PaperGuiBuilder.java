@@ -42,6 +42,7 @@ public final class PaperGuiBuilder extends BaseGuiBuilder<PaperGuiBuilder, Playe
         return new Gui(
             getTitle(),
             getComponents(),
+            getCloseActions(),
             getContainerType(),
             getComponentRenderer(),
             getClickHandler(),
