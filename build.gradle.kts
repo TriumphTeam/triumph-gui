@@ -30,7 +30,7 @@ subprojects {
         api("net.kyori:adventure-api:$adventureVersion")
         api("net.kyori:adventure-text-serializer-legacy:$adventureVersion")
         api("net.kyori:adventure-text-serializer-gson:$adventureVersion")
-        api("net.kyori:adventure-platform-bukkit:4.3.3")
+        api("net.kyori:adventure-platform-bukkit:4.3.4")
     }
 
     license {

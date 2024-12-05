@@ -84,7 +84,6 @@ public abstract class BaseGui implements InventoryHolder {
         }
 
         Bukkit.getPluginManager().registerEvents(new GuiListener(), plugin);
-        // TODO might join these two
         Bukkit.getPluginManager().registerEvents(new InteractionModifierListener(), plugin);
     }
 
