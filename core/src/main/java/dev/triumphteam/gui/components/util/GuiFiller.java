@@ -189,7 +189,7 @@ public final class GuiFiller {
         if (type == GuiType.CHEST) {
             fill = gui.getRows() * type.getLimit();
         } else {
-            fill = type.getLimit();
+            fill = type.getFillSize();
         }
 
         final List<GuiItem> items = repeatList(guiItems);

@@ -12,9 +12,8 @@
 
 👤 **TriumphTeam**
 
-* Documentation: https://triumphteam.dev/docs/triumph-gui 🚧 **work in progress**
+* Documentation: https://triumphteam.dev/docs/triumph-gui 🚧
 * Maven Central: https://search.maven.org/artifact/dev.triumphteam/triumph-gui
-* Github: [@ipsk](https://github.com/ipsk)
 
 ## 🤝 Contributing
 
@@ -26,5 +25,5 @@ Give a ⭐️ if this project helped you!
 
 ## 📝 License
 
-Copyright © 2021 [TriumphTeam](https://github.com/ipsk).<br />
+Copyright © 2024 [TriumphTeam](https://github.com/ipsk).<br />
 This project is [MIT](https://github.com/TriumphTeam/triumph-gui/blob/master/LICENSE) licensed.

@@ -23,6 +23,7 @@
  */
 package dev.triumphteam.gui.guis;
 
+import dev.triumphteam.gui.TriumphGui;
 import dev.triumphteam.gui.components.GuiAction;
 import dev.triumphteam.gui.components.GuiType;
 import dev.triumphteam.gui.components.InteractionModifier;
@@ -43,7 +44,6 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
-import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -68,7 +68,7 @@ import java.util.Set;
 public abstract class BaseGui implements InventoryHolder {
 
     // The plugin instance for registering the event and for the close delay.
-    private static final Plugin plugin = JavaPlugin.getProvidingPlugin(BaseGui.class);
+    private static final Plugin plugin = TriumphGui.getPlugin();
 
 
     private static Method GET_SCHEDULER_METHOD = null;
