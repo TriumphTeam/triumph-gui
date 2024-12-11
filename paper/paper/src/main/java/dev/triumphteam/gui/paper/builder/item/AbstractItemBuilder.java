@@ -293,6 +293,35 @@ public abstract class AbstractItemBuilder<B extends AbstractItemBuilder<B>> {
         return (B) this;
     }
 
+    /**
+     * Sets the item meta of the item
+     *
+     * @param meta The {@link ItemMeta} to set
+     * @return {@link B}
+     */
+    @NotNull
+    @Contract("_ -> this")
+    public B meta(ItemMeta meta) {
+        this.meta = meta;
+        return (B) this;
+    }
+
+    /**
+     * Returns the {@link ItemMeta} of the item
+     *
+     * @return The {@link ItemMeta} of the item
+     */
+    @NotNull
+    @Contract(" -> new")
+    public ItemMeta meta() {
+        return meta;
+    }
+
+    /**
+     * Returns the {@link ItemStack} of the item
+     *
+     * @return The {@link ItemStack} of the item
+     */
     @NotNull
     @Contract(" -> new")
     public ItemStack asItemStack() {
@@ -300,18 +329,35 @@ public abstract class AbstractItemBuilder<B extends AbstractItemBuilder<B>> {
         return itemStack;
     }
 
+    /**
+     * Returns the {@link GuiItem} of the item
+     *
+     * @param action The {@link GuiClickAction} to set
+     * @return The {@link GuiItem} of the item
+     */
     @NotNull
     @Contract("_ -> new")
     public GuiItem<Player, ItemStack> asGuiItem(final @NotNull RunnableGuiClickAction<Player> action) {
         return new SimpleGuiItem<>(asItemStack(), action);
     }
 
+    /**
+     * Returns the {@link GuiItem} of the item
+     *
+     * @param action The {@link GuiClickAction} to set
+     * @return The {@link GuiItem} of the item
+     */
     @NotNull
     @Contract("_ -> new")
     public GuiItem<Player, ItemStack> asGuiItem(final @NotNull GuiClickAction<Player> action) {
         return new SimpleGuiItem<>(asItemStack(), action);
     }
 
+    /**
+     * Returns the {@link GuiItem} of the item
+     *
+     * @return The {@link GuiItem} of the item
+     */
     @NotNull
     @Contract(" -> new")
     public GuiItem<Player, ItemStack> asGuiItem() {
