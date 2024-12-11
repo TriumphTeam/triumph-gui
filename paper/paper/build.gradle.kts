@@ -10,4 +10,5 @@ repositories {
 dependencies {
     api(projects.triumphGuiCore)
     compileOnly(libs.paper)
+    compileOnly(libs.mojang.auth)
 }
