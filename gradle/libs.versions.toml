@@ -14,6 +14,7 @@ nova = "1.0.0-SNAPSHOT"
 # Minecraft
 adventure = "4.16.0"
 paper = "1.21.1-R0.1-SNAPSHOT"
+mojang-auth = "6.0.57"
 
 # Build
 run-paper = "2.3.1"
@@ -31,6 +32,7 @@ nova-kotlin = { module = "dev.triumphteam:nova-kotlin", version.ref = "nova" }
 # Minecraft
 paper = { module = "io.papermc.paper:paper-api", version.ref = "paper" }
 adventure-api = { module = "net.kyori:adventure-api", version.ref = "adventure" }
+mojang-auth = { module = "com.mojang:authlib", version.ref = "mojang-auth" }
 
 # Kotlin
 coroutines = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "coroutines" }
