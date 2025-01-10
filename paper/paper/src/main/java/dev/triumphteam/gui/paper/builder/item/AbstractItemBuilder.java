@@ -49,7 +49,7 @@ import java.util.function.Consumer;
 @SuppressWarnings("unchecked")
 public abstract class AbstractItemBuilder<B extends AbstractItemBuilder<B>> {
 
-    private ItemStack itemStack;
+    private final ItemStack itemStack;
     private ItemMeta meta;
 
     protected AbstractItemBuilder(final @NotNull ItemStack itemStack) {

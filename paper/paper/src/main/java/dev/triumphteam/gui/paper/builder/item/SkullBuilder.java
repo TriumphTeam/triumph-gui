@@ -30,7 +30,6 @@ public final class SkullBuilder extends AbstractItemBuilder<SkullBuilder> {
             field = skullMeta.getClass().getDeclaredField("profile");
             field.setAccessible(true);
         } catch (NoSuchFieldException e) {
-            e.printStackTrace();
             field = null;
         }
 

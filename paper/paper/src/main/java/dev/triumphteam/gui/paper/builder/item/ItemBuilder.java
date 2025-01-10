@@ -40,4 +40,8 @@ public final class ItemBuilder extends AbstractItemBuilder<ItemBuilder> {
     public static ItemBuilder from(final @NotNull Material material) {
         return new ItemBuilder(new ItemStack(material));
     }
+
+    public static SkullBuilder skull() {
+        return new SkullBuilder();
+    }
 }
