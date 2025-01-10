@@ -96,8 +96,8 @@ tasks {
             maven {
                 if (version.toString().contains("SNAPSHOT")) {
                     credentials {
-                        username = System.getenv("REPO_USER")
-                        password = System.getenv("REPO_PASS")
+                        username = project.providers.gradleProperty("triumph.repo.user").get()
+                        password = project.providers.gradleProperty("triumph.repo.token").get()
                     }
 
                     url = uri("https://repo.triumphteam.dev/snapshots/")

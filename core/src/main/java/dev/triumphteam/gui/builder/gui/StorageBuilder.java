@@ -44,7 +44,7 @@ public final class StorageBuilder extends BaseGuiBuilder<StorageGui, StorageBuil
     @Override
     @Contract(" -> new")
     public StorageGui create() {
-        final StorageGui gui = new StorageGui(getRows(), Legacy.SERIALIZER.serialize(getTitle()), getModifiers());
+        final StorageGui gui = new StorageGui(getRows(), getTitle(), getInventoryProvider(), getModifiers());
 
         final Consumer<StorageGui> consumer = getConsumer();
         if (consumer != null) consumer.accept(gui);

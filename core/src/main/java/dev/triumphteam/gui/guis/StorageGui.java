@@ -24,6 +24,8 @@
 package dev.triumphteam.gui.guis;
 
 import dev.triumphteam.gui.components.InteractionModifier;
+import dev.triumphteam.gui.components.InventoryProvider;
+import net.kyori.adventure.text.Component;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
@@ -49,6 +51,10 @@ public class StorageGui extends BaseGui {
      */
     public StorageGui(final int rows, @NotNull final String title, @NotNull final Set<InteractionModifier> interactionModifiers) {
         super(rows, title, interactionModifiers);
+    }
+
+    public StorageGui(final int rows, @NotNull final Component title, @NotNull final InventoryProvider inventoryProvider, @NotNull final Set<InteractionModifier> interactionModifiers) {
+        super(rows, title, inventoryProvider, interactionModifiers);
     }
 
     /**

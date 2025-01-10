@@ -34,7 +34,32 @@ import java.util.function.Consumer;
 /**
  * The simple GUI builder is used for creating a {@link Gui}
  */
-public final class SimpleBuilder extends BaseChestGuiBuilder<Gui, SimpleBuilder> {
+public final class NonChestGuiBuilder extends BaseGuiBuilder<Gui, NonChestGuiBuilder> {
+
+    private GuiType guiType;
+
+    /**
+     * Main constructor
+     *
+     * @param guiType The {@link GuiType} to default to
+     */
+    public NonChestGuiBuilder(@NotNull final GuiType guiType) {
+        this.guiType = guiType;
+    }
+
+    /**
+     * Sets the {@link GuiType} to use on the GUI
+     * This method is unique to the simple GUI
+     *
+     * @param guiType The {@link GuiType}
+     * @return The current builder
+     */
+    @NotNull
+    @Contract("_ -> this")
+    public NonChestGuiBuilder type(@NotNull final GuiType guiType) {
+        this.guiType = guiType;
+        return this;
+    }
 
     /**
      * Creates a new {@link Gui}
@@ -45,10 +70,10 @@ public final class SimpleBuilder extends BaseChestGuiBuilder<Gui, SimpleBuilder>
     @Override
     @Contract(" -> new")
     public Gui create() {
-        final Gui gui = new Gui(getRows(), getTitle(), getInventoryProvider(), getModifiers());
+        final Gui gui = new Gui(guiType, Legacy.SERIALIZER.serialize(getTitle()), getModifiers());
         final Consumer<Gui> consumer = getConsumer();
         if (consumer != null) consumer.accept(gui);
-
         return gui;
     }
+
 }

@@ -24,7 +24,9 @@
 package dev.triumphteam.gui.guis;
 
 import dev.triumphteam.gui.components.InteractionModifier;
+import dev.triumphteam.gui.components.InventoryProvider;
 import dev.triumphteam.gui.components.ScrollType;
+import net.kyori.adventure.text.Component;
 import org.bukkit.entity.HumanEntity;
 import org.jetbrains.annotations.NotNull;
 
@@ -54,6 +56,12 @@ public class ScrollingGui extends PaginatedGui {
      */
     public ScrollingGui(final int rows, final int pageSize, @NotNull final String title, @NotNull final ScrollType scrollType, @NotNull final Set<InteractionModifier> interactionModifiers) {
         super(rows, pageSize, title, interactionModifiers);
+
+        this.scrollType = scrollType;
+    }
+
+    public ScrollingGui(final int rows, final int pageSize, @NotNull final Component title, @NotNull final InventoryProvider inventoryProvider, @NotNull final ScrollType scrollType, @NotNull final Set<InteractionModifier> interactionModifiers) {
+        super(rows, pageSize, title, inventoryProvider, interactionModifiers);
 
         this.scrollType = scrollType;
     }

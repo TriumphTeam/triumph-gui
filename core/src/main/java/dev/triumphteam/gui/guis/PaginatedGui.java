@@ -24,6 +24,8 @@
 package dev.triumphteam.gui.guis;
 
 import dev.triumphteam.gui.components.InteractionModifier;
+import dev.triumphteam.gui.components.InventoryProvider;
+import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.event.inventory.InventoryClickEvent;
@@ -66,6 +68,13 @@ public class PaginatedGui extends BaseGui {
      */
     public PaginatedGui(final int rows, final int pageSize, @NotNull final String title, @NotNull final Set<InteractionModifier> interactionModifiers) {
         super(rows, title, interactionModifiers);
+        this.pageSize = pageSize;
+        int inventorySize = rows * 9;
+        this.currentPage = new LinkedHashMap<>(inventorySize);
+    }
+
+    public PaginatedGui(final int rows, final int pageSize, @NotNull final Component title, @NotNull InventoryProvider inventoryProvider, @NotNull final Set<InteractionModifier> interactionModifiers) {
+        super(rows, title, inventoryProvider, interactionModifiers);
         this.pageSize = pageSize;
         int inventorySize = rows * 9;
         this.currentPage = new LinkedHashMap<>(inventorySize);

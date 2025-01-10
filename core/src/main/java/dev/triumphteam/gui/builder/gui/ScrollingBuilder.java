@@ -85,7 +85,7 @@ public final class ScrollingBuilder extends BaseGuiBuilder<ScrollingGui, Scrolli
     @Override
     @Contract(" -> new")
     public ScrollingGui create() {
-        final ScrollingGui gui = new ScrollingGui(getRows(), pageSize, Legacy.SERIALIZER.serialize(getTitle()), scrollType, getModifiers());
+        final ScrollingGui gui = new ScrollingGui(getRows(), pageSize, getTitle(), getInventoryProvider(), scrollType, getModifiers());
 
         final Consumer<ScrollingGui> consumer = getConsumer();
         if (consumer != null) consumer.accept(gui);

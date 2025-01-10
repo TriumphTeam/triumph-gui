@@ -59,7 +59,7 @@ public class PaginatedBuilder extends BaseGuiBuilder<PaginatedGui, PaginatedBuil
     @Override
     @Contract(" -> new")
     public PaginatedGui create() {
-        final PaginatedGui gui = new PaginatedGui(getRows(), pageSize, Legacy.SERIALIZER.serialize(getTitle()), getModifiers());
+        final PaginatedGui gui = new PaginatedGui(getRows(), pageSize, getTitle(), getInventoryProvider(), getModifiers());
 
         final Consumer<PaginatedGui> consumer = getConsumer();
         if (consumer != null) consumer.accept(gui);

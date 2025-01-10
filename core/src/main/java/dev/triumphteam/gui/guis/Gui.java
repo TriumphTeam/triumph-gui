@@ -29,7 +29,9 @@ import dev.triumphteam.gui.builder.gui.SimpleBuilder;
 import dev.triumphteam.gui.builder.gui.StorageBuilder;
 import dev.triumphteam.gui.components.GuiType;
 import dev.triumphteam.gui.components.InteractionModifier;
+import dev.triumphteam.gui.components.InventoryProvider;
 import dev.triumphteam.gui.components.ScrollType;
+import net.kyori.adventure.text.Component;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
@@ -51,6 +53,10 @@ public class Gui extends BaseGui {
      */
     public Gui(final int rows, @NotNull final String title, @NotNull final Set<InteractionModifier> interactionModifiers) {
         super(rows, title, interactionModifiers);
+    }
+
+    public Gui(final int rows, @NotNull Component title, @NotNull final InventoryProvider inventoryProvider, @NotNull final Set<InteractionModifier> interactionModifiers) {
+        super(rows, title, inventoryProvider, interactionModifiers);
     }
 
     /**

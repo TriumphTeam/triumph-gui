@@ -1,18 +1,18 @@
 /**
  * MIT License
- *
+ * <p>
  * Copyright (c) 2021 TriumphTeam
- *
+ * <p>
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- *
+ * <p>
  * The above copyright notice and this permission notice shall be included in all
  * copies or substantial portions of the Software.
- *
+ * <p>
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -24,15 +24,21 @@
 package dev.triumphteam.gui.builder.gui;
 
 import dev.triumphteam.gui.components.InteractionModifier;
+import dev.triumphteam.gui.components.InventoryProvider;
 import dev.triumphteam.gui.components.exception.GuiException;
+import dev.triumphteam.gui.components.util.Legacy;
+import dev.triumphteam.gui.components.util.VersionHelper;
 import dev.triumphteam.gui.guis.BaseGui;
 import net.kyori.adventure.text.Component;
+import org.bukkit.Bukkit;
+import org.bukkit.inventory.Inventory;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.EnumSet;
 import java.util.Set;
+import java.util.function.BiFunction;
 import java.util.function.Consumer;
 
 /**
@@ -45,24 +51,9 @@ import java.util.function.Consumer;
 public abstract class BaseGuiBuilder<G extends BaseGui, B extends BaseGuiBuilder<G, B>> {
 
     private Component title = null;
-    private int rows = 1;
     private final EnumSet<InteractionModifier> interactionModifiers = EnumSet.noneOf(InteractionModifier.class);
 
     private Consumer<G> consumer;
-
-    /**
-     * Sets the rows for the GUI
-     * This will only work on CHEST {@link dev.triumphteam.gui.components.GuiType}
-     *
-     * @param rows The amount of rows
-     * @return The builder
-     */
-    @NotNull
-    @Contract("_ -> this")
-    public B rows(final int rows) {
-        this.rows = rows;
-        return (B) this;
-    }
 
     /**
      * Sets the title for the GUI
@@ -82,8 +73,8 @@ public abstract class BaseGuiBuilder<G extends BaseGui, B extends BaseGuiBuilder
      * Disable item placement inside the GUI
      *
      * @return The builder
-     * @since 3.0.0
      * @author SecretX
+     * @since 3.0.0
      */
     @NotNull
     @Contract(" -> this")
@@ -96,8 +87,8 @@ public abstract class BaseGuiBuilder<G extends BaseGui, B extends BaseGuiBuilder
      * Disable item retrieval inside the GUI
      *
      * @return The builder
-     * @since 3.0.0
      * @author SecretX
+     * @since 3.0.0
      */
     @NotNull
     @Contract(" -> this")
@@ -110,8 +101,8 @@ public abstract class BaseGuiBuilder<G extends BaseGui, B extends BaseGuiBuilder
      * Disable item swap inside the GUI
      *
      * @return The builder
-     * @since 3.0.0
      * @author SecretX
+     * @since 3.0.0
      */
     @NotNull
     @Contract(" -> this")
@@ -151,8 +142,8 @@ public abstract class BaseGuiBuilder<G extends BaseGui, B extends BaseGuiBuilder
      * Disable all the modifications of the GUI, making it immutable by player interaction
      *
      * @return The builder
-     * @since 3.0.0
      * @author SecretX
+     * @since 3.0.0
      */
     @NotNull
     @Contract(" -> this")
@@ -165,8 +156,8 @@ public abstract class BaseGuiBuilder<G extends BaseGui, B extends BaseGuiBuilder
      * Allows item placement inside the GUI
      *
      * @return The builder
-     * @since 3.0.0
      * @author SecretX
+     * @since 3.0.0
      */
     @NotNull
     @Contract(" -> this")
@@ -179,8 +170,8 @@ public abstract class BaseGuiBuilder<G extends BaseGui, B extends BaseGuiBuilder
      * Allow items to be taken from the GUI
      *
      * @return The builder
-     * @since 3.0.0
      * @author SecretX
+     * @since 3.0.0
      */
     @NotNull
     @Contract(" -> this")
@@ -193,8 +184,8 @@ public abstract class BaseGuiBuilder<G extends BaseGui, B extends BaseGuiBuilder
      * Allows item swap inside the GUI
      *
      * @return The builder
-     * @since 3.0.0
      * @author SecretX
+     * @since 3.0.0
      */
     @NotNull
     @Contract(" -> this")
@@ -234,8 +225,8 @@ public abstract class BaseGuiBuilder<G extends BaseGui, B extends BaseGuiBuilder
      * Enable all modifications of the GUI, making it completely mutable by player interaction
      *
      * @return The builder
-     * @since 3.0.0
      * @author SecretX
+     * @since 3.0.0
      */
     @NotNull
     @Contract(" -> this")
@@ -304,12 +295,17 @@ public abstract class BaseGuiBuilder<G extends BaseGui, B extends BaseGuiBuilder
 
     /**
      * Getter for the set of interaction modifiers
+     *
      * @return The set of {@link InteractionModifier}
-     * @since 3.0.0
      * @author SecretX
+     * @since 3.0.0
      */
     @NotNull
     protected Set<InteractionModifier> getModifiers() {
         return interactionModifiers;
+    }
+
+    protected InventoryProvider getInventoryProvider() {
+        return inventoryProvider;
     }
 }

@@ -24,9 +24,11 @@
 package dev.triumphteam.gui.guis;
 
 import dev.triumphteam.gui.TriumphGui;
+import dev.triumphteam.gui.components.ContainerType;
 import dev.triumphteam.gui.components.GuiAction;
 import dev.triumphteam.gui.components.GuiType;
 import dev.triumphteam.gui.components.InteractionModifier;
+import dev.triumphteam.gui.components.InventoryProvider;
 import dev.triumphteam.gui.components.exception.GuiException;
 import dev.triumphteam.gui.components.util.GuiFiller;
 import dev.triumphteam.gui.components.util.Legacy;
@@ -70,7 +72,6 @@ public abstract class BaseGui implements InventoryHolder {
     // The plugin instance for registering the event and for the close delay.
     private static final Plugin plugin = TriumphGui.getPlugin();
 
-
     private static Method GET_SCHEDULER_METHOD = null;
     private static Method EXECUTE_METHOD = null;
 
@@ -97,11 +98,10 @@ public abstract class BaseGui implements InventoryHolder {
     private final Set<InteractionModifier> interactionModifiers;
     // Main inventory.
     private Inventory inventory;
-    // title
-    private String title;
-    private int rows = 1;
-    // Gui type, defaults to chest.
-    private GuiType guiType = GuiType.CHEST;
+
+    // GUI control
+    private final ContainerType containerType;
+
     // Action to execute when clicking on any item.
     private GuiAction<InventoryClickEvent> defaultClickAction;
     // Action to execute when clicking on the top part of the GUI only.
@@ -124,80 +124,12 @@ public abstract class BaseGui implements InventoryHolder {
     private boolean runCloseAction = true;
     private boolean runOpenAction = true;
 
-    /**
-     * The main constructor, using {@link String}.
-     *
-     * @param rows                 The amount of rows to use.
-     * @param title                The GUI title using {@link String}.
-     * @param interactionModifiers Modifiers to select which interactions are allowed.
-     * @since 3.0.0.
-     */
-    public BaseGui(final int rows, @NotNull final String title, @NotNull final Set<InteractionModifier> interactionModifiers) {
-        int finalRows = rows;
-        if (!(rows >= 1 && rows <= 6)) finalRows = 1;
-        this.rows = finalRows;
+    public BaseGui(final @NotNull ContainerType containerType, @NotNull final Set<InteractionModifier> interactionModifiers) {
         this.interactionModifiers = safeCopyOf(interactionModifiers);
-        this.title = title;
         int inventorySize = this.rows * 9;
         this.inventory = Bukkit.createInventory(this, inventorySize, title);
         this.slotActions = new LinkedHashMap<>(inventorySize);
         this.guiItems = new LinkedHashMap<>(inventorySize);
-    }
-
-    /**
-     * Alternative constructor that takes {@link GuiType} instead of rows number.
-     *
-     * @param guiType              The {@link GuiType} to use.
-     * @param title                The GUI title using {@link String}.
-     * @param interactionModifiers Modifiers to select which interactions are allowed.
-     * @since 3.0.0
-     */
-    public BaseGui(@NotNull final GuiType guiType, @NotNull final String title, @NotNull final Set<InteractionModifier> interactionModifiers) {
-        this.guiType = guiType;
-        this.interactionModifiers = safeCopyOf(interactionModifiers);
-        this.title = title;
-        int inventorySize = guiType.getLimit();
-        this.inventory = Bukkit.createInventory(this, guiType.getInventoryType(), title);
-        this.slotActions = new LinkedHashMap<>(inventorySize);
-        this.guiItems = new LinkedHashMap<>(inventorySize);
-    }
-
-    /**
-     * Legacy constructor that takes rows and title.
-     *
-     * @param rows  The amount of rows the GUI should have.
-     * @param title The GUI title.
-     * @deprecated In favor of {@link BaseGui#BaseGui(int, String, Set)}.
-     */
-    @Deprecated
-    public BaseGui(final int rows, @NotNull final String title) {
-        int finalRows = rows;
-        if (!(rows >= 1 && rows <= 6)) finalRows = 1;
-        this.rows = finalRows;
-        this.interactionModifiers = EnumSet.noneOf(InteractionModifier.class);
-        this.title = title;
-
-        inventory = Bukkit.createInventory(this, this.rows * 9, title);
-        slotActions = new LinkedHashMap<>();
-        guiItems = new LinkedHashMap<>();
-    }
-
-    /**
-     * Alternative constructor that takes {@link GuiType} instead of rows number.
-     *
-     * @param guiType The {@link GuiType} to use.
-     * @param title   The GUI title.
-     * @deprecated In favor of {@link BaseGui#BaseGui(GuiType, String, Set)}.
-     */
-    @Deprecated
-    public BaseGui(@NotNull final GuiType guiType, @NotNull final String title) {
-        this.guiType = guiType;
-        this.interactionModifiers = EnumSet.noneOf(InteractionModifier.class);
-        this.title = title;
-
-        inventory = Bukkit.createInventory(this, this.guiType.getInventoryType(), title);
-        slotActions = new LinkedHashMap<>();
-        guiItems = new LinkedHashMap<>();
     }
 
     /**
@@ -210,17 +142,6 @@ public abstract class BaseGui implements InventoryHolder {
     private Set<InteractionModifier> safeCopyOf(@NotNull final Set<InteractionModifier> set) {
         if (set.isEmpty()) return EnumSet.noneOf(InteractionModifier.class);
         else return EnumSet.copyOf(set);
-    }
-
-    /**
-     * Gets the GUI's title as string.
-     *
-     * @return The GUI's title.
-     */
-    @NotNull
-    @Deprecated
-    public String getTitle() {
-        return title;
     }
 
     /**
