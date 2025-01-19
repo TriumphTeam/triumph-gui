@@ -30,6 +30,7 @@ import dev.triumphteam.gui.component.GuiComponent;
 import dev.triumphteam.gui.component.renderer.GuiComponentRenderer;
 import dev.triumphteam.gui.paper.builder.gui.PaperGuiBuilder;
 import dev.triumphteam.gui.paper.container.type.ChestContainerType;
+import dev.triumphteam.gui.paper.container.type.HopperContainerType;
 import dev.triumphteam.gui.paper.container.type.PaperContainerType;
 import dev.triumphteam.gui.title.GuiTitle;
 import org.bukkit.entity.Player;
@@ -95,6 +96,16 @@ public final class Gui implements BaseGui<Player> {
     @Contract("_ -> new")
     public static PaperGuiBuilder of(final int rows) {
         return new PaperGuiBuilder(new ChestContainerType(rows));
+    }
+
+    /**
+     * Create a new {@link PaperGuiBuilder} to create a new {@link Gui} using a {@link HopperContainerType}.
+     *
+     * @return  A new {@link PaperGuiBuilder}.
+     */
+    @Contract(" -> new")
+    public static PaperGuiBuilder hopper() {
+        return new PaperGuiBuilder(new HopperContainerType());
     }
 
     @Override
