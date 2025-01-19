@@ -21,7 +21,7 @@ public class HopperContainerType implements PaperContainerType {
 
     @Override
     public int mapSlot(final @NotNull Slot slot) {
-        final var realSlot = (slot.column() + (slot.row() - 1) * 9) - 1;
+        final var realSlot = (slot.column() * slot.row()) - 1;
 
         if (realSlot < LOWER_LIMIT || realSlot > UPPER_LIMIT) {
             throw new TriumphGuiException(
