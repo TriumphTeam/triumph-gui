@@ -497,7 +497,11 @@ public abstract class BaseGui implements InventoryHolder {
 
         final List<HumanEntity> viewers = new ArrayList<>(inventory.getViewers());
 
-        inventory = Bukkit.createInventory(this, inventory.getSize(), title);
+        if (this.guiType == null || this.guiType == GuiType.CHEST) {
+            inventory = Bukkit.createInventory(this, inventory.getSize(), title);
+        } else {
+            inventory = Bukkit.createInventory(this, this.guiType.getInventoryType(), title);
+        }
 
         for (final HumanEntity player : viewers) {
             open(player);
