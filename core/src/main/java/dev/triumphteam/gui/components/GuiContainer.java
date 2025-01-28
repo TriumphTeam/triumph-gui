@@ -67,7 +67,7 @@ public interface GuiContainer {
 
         @Override
         public @NotNull Inventory createInventory(final @NotNull InventoryHolder inventoryHolder) {
-            return inventoryProvider.getInventory(title, inventoryHolder, rows);
+            return inventoryProvider.getInventory(title, inventoryHolder, inventorySize());
         }
     }
 
