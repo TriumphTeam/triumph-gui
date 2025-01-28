@@ -36,6 +36,7 @@ import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
 import org.bukkit.Bukkit;
 import org.bukkit.Color;
 import org.bukkit.Material;
+import org.bukkit.NamespacedKey;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemFlag;
@@ -434,6 +435,24 @@ public abstract class BaseItemBuilder<B extends BaseItemBuilder<B>> {
     public B model(final int modelData) {
         if (VersionHelper.IS_CUSTOM_MODEL_DATA) {
             meta.setCustomModelData(modelData);
+        }
+
+        return (B) this;
+    }
+
+    /**
+     * Sets the item model of the item
+     * Added in 1.21.4
+     *
+     * @param modelKey The item model key from the resource pack
+     * @return {@link ItemBuilder}
+     * @since 3.1.12
+     */
+    @NotNull
+    @Contract("_ -> this")
+    public B model(final NamespacedKey modelKey) {
+        if (VersionHelper.IS_ITEM_MODEL) {
+            meta.setItemModel(modelKey);
         }
 
         return (B) this;

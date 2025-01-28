@@ -26,6 +26,7 @@ package dev.triumphteam.gui.components.util;
 import com.google.common.primitives.Ints;
 import dev.triumphteam.gui.components.exception.GuiException;
 import org.bukkit.Bukkit;
+import org.bukkit.NamespacedKey;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.jetbrains.annotations.NotNull;
@@ -53,6 +54,8 @@ public final class VersionHelper {
     // PlayerProfile API
     private static final int V1_20_1 = 1201;
     private static final int V1_20_5 = 1205;
+    // Item model
+    private static final int V1_21_4 = 1214;
 
     private static final int CURRENT_VERSION = getCurrentVersion();
     /**
@@ -81,6 +84,10 @@ public final class VersionHelper {
      * Checks if the version has {@link org.bukkit.inventory.meta.ItemMeta#setCustomModelData(Integer)}
      */
     public static final boolean IS_CUSTOM_MODEL_DATA = CURRENT_VERSION >= V1_14;
+    /**
+     * Check if the version has {@link org.bukkit.inventory.meta.ItemMeta#setItemModel(NamespacedKey)}
+     */
+    public static final boolean IS_ITEM_MODEL = CURRENT_VERSION >= V1_21_4;
     /**
      * Checks if the version has {@link org.bukkit.profile.PlayerProfile}
      */
