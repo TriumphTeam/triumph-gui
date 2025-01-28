@@ -19,7 +19,7 @@ public final class InventoryProvider {
     }
 
     @FunctionalInterface
-    public interface NonChest {
+    public interface Typed {
 
         @NotNull Inventory getInventory(
                 final @NotNull Component title,

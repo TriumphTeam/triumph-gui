@@ -24,7 +24,6 @@
 package dev.triumphteam.gui.builder.gui;
 
 import dev.triumphteam.gui.components.GuiType;
-import dev.triumphteam.gui.components.util.Legacy;
 import dev.triumphteam.gui.guis.Gui;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
@@ -34,18 +33,7 @@ import java.util.function.Consumer;
 /**
  * The simple GUI builder is used for creating a {@link Gui}
  */
-public final class NonChestGuiBuilder extends BaseGuiBuilder<Gui, NonChestGuiBuilder> {
-
-    private GuiType guiType;
-
-    /**
-     * Main constructor
-     *
-     * @param guiType The {@link GuiType} to default to
-     */
-    public NonChestGuiBuilder(@NotNull final GuiType guiType) {
-        this.guiType = guiType;
-    }
+public final class ChestGuiBuilder extends BaseChestGuiBuilder<Gui, ChestGuiBuilder> {
 
     /**
      * Sets the {@link GuiType} to use on the GUI
@@ -55,10 +43,9 @@ public final class NonChestGuiBuilder extends BaseGuiBuilder<Gui, NonChestGuiBui
      * @return The current builder
      */
     @NotNull
-    @Contract("_ -> this")
-    public NonChestGuiBuilder type(@NotNull final GuiType guiType) {
-        this.guiType = guiType;
-        return this;
+    @Contract("_ -> new")
+    public TypedGuiBuilder type(@NotNull final GuiType guiType) {
+        return new TypedGuiBuilder(guiType, this);
     }
 
     /**
@@ -70,10 +57,9 @@ public final class NonChestGuiBuilder extends BaseGuiBuilder<Gui, NonChestGuiBui
     @Override
     @Contract(" -> new")
     public Gui create() {
-        final Gui gui = new Gui(guiType, Legacy.SERIALIZER.serialize(getTitle()), getModifiers());
+        final Gui gui = new Gui(createContainer(), getModifiers());
         final Consumer<Gui> consumer = getConsumer();
         if (consumer != null) consumer.accept(gui);
         return gui;
     }
-
 }

@@ -23,27 +23,20 @@
  */
 package dev.triumphteam.gui.builder.gui;
 
-import dev.triumphteam.gui.components.InteractionModifier;
+import dev.triumphteam.gui.components.GuiContainer;
 import dev.triumphteam.gui.components.InventoryProvider;
-import dev.triumphteam.gui.components.exception.GuiException;
 import dev.triumphteam.gui.components.util.Legacy;
 import dev.triumphteam.gui.guis.BaseGui;
-import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
-import java.util.EnumSet;
-import java.util.Set;
-import java.util.function.Consumer;
 
 @SuppressWarnings("unchecked")
 public abstract class BaseChestGuiBuilder<G extends BaseGui, B extends BaseChestGuiBuilder<G, B>> extends BaseGuiBuilder<G, B> {
 
     private int rows = 1;
     private InventoryProvider.Chest inventoryProvider =
-            (title, ownder, rows) -> Bukkit.createInventory(ownder, rows, Legacy.SERIALIZER.serialize(title));
+            (title, owner, rows) -> Bukkit.createInventory(owner, rows, Legacy.SERIALIZER.serialize(title));
 
     /**
      * Sets the rows for the GUI
@@ -71,5 +64,13 @@ public abstract class BaseChestGuiBuilder<G extends BaseGui, B extends BaseChest
      */
     protected int getRows() {
         return rows;
+    }
+
+    protected @NotNull InventoryProvider.Chest getInventoryProvider() {
+        return inventoryProvider;
+    }
+
+    protected @NotNull GuiContainer.Chest createContainer() {
+        return new GuiContainer.Chest(getTitle(), inventoryProvider, getRows());
     }
 }

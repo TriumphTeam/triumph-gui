@@ -23,7 +23,6 @@
  */
 package dev.triumphteam.gui.builder.gui;
 
-import dev.triumphteam.gui.components.util.Legacy;
 import dev.triumphteam.gui.guis.StorageGui;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
@@ -33,7 +32,7 @@ import java.util.function.Consumer;
 /**
  * The simple GUI builder is used for creating a {@link StorageGui}
  */
-public final class StorageBuilder extends BaseGuiBuilder<StorageGui, StorageBuilder> {
+public final class StorageBuilder extends BaseChestGuiBuilder<StorageGui, StorageBuilder> {
 
     /**
      * Creates a new {@link StorageGui}
@@ -44,7 +43,7 @@ public final class StorageBuilder extends BaseGuiBuilder<StorageGui, StorageBuil
     @Override
     @Contract(" -> new")
     public StorageGui create() {
-        final StorageGui gui = new StorageGui(getRows(), getTitle(), getInventoryProvider(), getModifiers());
+        final StorageGui gui = new StorageGui(createContainer(), getModifiers());
 
         final Consumer<StorageGui> consumer = getConsumer();
         if (consumer != null) consumer.accept(gui);

@@ -23,9 +23,8 @@
  */
 package dev.triumphteam.gui.guis;
 
+import dev.triumphteam.gui.components.GuiContainer;
 import dev.triumphteam.gui.components.InteractionModifier;
-import dev.triumphteam.gui.components.InventoryProvider;
-import net.kyori.adventure.text.Component;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
@@ -41,41 +40,8 @@ import java.util.Set;
 @SuppressWarnings("unused")
 public class StorageGui extends BaseGui {
 
-    /**
-     * Main constructor for the StorageGui
-     *
-     * @param rows                 The amount of rows the GUI should have
-     * @param title                The GUI's title using {@link String}
-     * @param interactionModifiers A set containing the {@link InteractionModifier} this GUI should use
-     * @since 3.0.3
-     */
-    public StorageGui(final int rows, @NotNull final String title, @NotNull final Set<InteractionModifier> interactionModifiers) {
-        super(rows, title, interactionModifiers);
-    }
-
-    public StorageGui(final int rows, @NotNull final Component title, @NotNull final InventoryProvider inventoryProvider, @NotNull final Set<InteractionModifier> interactionModifiers) {
-        super(rows, title, inventoryProvider, interactionModifiers);
-    }
-
-    /**
-     * Main constructor of the Persistent GUI
-     *
-     * @param rows  The rows the GUI should have
-     * @param title The GUI's title
-     */
-    @Deprecated
-    public StorageGui(final int rows, @NotNull final String title) {
-        super(rows, title);
-    }
-
-    /**
-     * Alternative constructor that does not require rows
-     *
-     * @param title The GUI's title
-     */
-    @Deprecated
-    public StorageGui(@NotNull final String title) {
-        super(1, title);
+    public StorageGui(final @NotNull GuiContainer guiContainer, @NotNull final Set<InteractionModifier> interactionModifiers) {
+        super(guiContainer, interactionModifiers);
     }
 
     /**
@@ -110,5 +76,4 @@ public class StorageGui extends BaseGui {
         populateGui();
         player.openInventory(getInventory());
     }
-
 }

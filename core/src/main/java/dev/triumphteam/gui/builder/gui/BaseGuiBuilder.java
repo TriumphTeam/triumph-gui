@@ -24,21 +24,15 @@
 package dev.triumphteam.gui.builder.gui;
 
 import dev.triumphteam.gui.components.InteractionModifier;
-import dev.triumphteam.gui.components.InventoryProvider;
 import dev.triumphteam.gui.components.exception.GuiException;
-import dev.triumphteam.gui.components.util.Legacy;
-import dev.triumphteam.gui.components.util.VersionHelper;
 import dev.triumphteam.gui.guis.BaseGui;
 import net.kyori.adventure.text.Component;
-import org.bukkit.Bukkit;
-import org.bukkit.inventory.Inventory;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.EnumSet;
 import java.util.Set;
-import java.util.function.BiFunction;
 import java.util.function.Consumer;
 
 /**
@@ -274,15 +268,6 @@ public abstract class BaseGuiBuilder<G extends BaseGui, B extends BaseGuiBuilder
     }
 
     /**
-     * Getter for the rows
-     *
-     * @return The amount of rows
-     */
-    protected int getRows() {
-        return rows;
-    }
-
-    /**
      * Getter for the consumer
      *
      * @return The consumer
@@ -305,7 +290,8 @@ public abstract class BaseGuiBuilder<G extends BaseGui, B extends BaseGuiBuilder
         return interactionModifiers;
     }
 
-    protected InventoryProvider getInventoryProvider() {
-        return inventoryProvider;
+    protected void consumeBuilder(final @NotNull BaseGuiBuilder<?, ?> builder) {
+        this.title = builder.title;
+        this.interactionModifiers.addAll(builder.interactionModifiers);
     }
 }

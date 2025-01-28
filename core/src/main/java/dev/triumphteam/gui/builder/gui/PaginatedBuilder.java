@@ -23,7 +23,6 @@
  */
 package dev.triumphteam.gui.builder.gui;
 
-import dev.triumphteam.gui.components.util.Legacy;
 import dev.triumphteam.gui.guis.PaginatedGui;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
@@ -33,7 +32,7 @@ import java.util.function.Consumer;
 /**
  * GUI builder for creating a {@link PaginatedGui}
  */
-public class PaginatedBuilder extends BaseGuiBuilder<PaginatedGui, PaginatedBuilder> {
+public class PaginatedBuilder extends BaseChestGuiBuilder<PaginatedGui, PaginatedBuilder> {
 
     private int pageSize = 0;
 
@@ -59,7 +58,7 @@ public class PaginatedBuilder extends BaseGuiBuilder<PaginatedGui, PaginatedBuil
     @Override
     @Contract(" -> new")
     public PaginatedGui create() {
-        final PaginatedGui gui = new PaginatedGui(getRows(), pageSize, getTitle(), getInventoryProvider(), getModifiers());
+        final PaginatedGui gui = new PaginatedGui(createContainer(), pageSize, getModifiers());
 
         final Consumer<PaginatedGui> consumer = getConsumer();
         if (consumer != null) consumer.accept(gui);

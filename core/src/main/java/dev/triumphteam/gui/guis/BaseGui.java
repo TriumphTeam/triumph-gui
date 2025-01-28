@@ -1,18 +1,18 @@
 /**
  * MIT License
- *
+ * <p>
  * Copyright (c) 2021 TriumphTeam
- *
+ * <p>
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- *
+ * <p>
  * The above copyright notice and this permission notice shall be included in all
  * copies or substantial portions of the Software.
- *
+ * <p>
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -24,14 +24,12 @@
 package dev.triumphteam.gui.guis;
 
 import dev.triumphteam.gui.TriumphGui;
-import dev.triumphteam.gui.components.ContainerType;
+import dev.triumphteam.gui.components.GuiContainer;
 import dev.triumphteam.gui.components.GuiAction;
 import dev.triumphteam.gui.components.GuiType;
 import dev.triumphteam.gui.components.InteractionModifier;
-import dev.triumphteam.gui.components.InventoryProvider;
 import dev.triumphteam.gui.components.exception.GuiException;
 import dev.triumphteam.gui.components.util.GuiFiller;
-import dev.triumphteam.gui.components.util.Legacy;
 import dev.triumphteam.gui.components.util.VersionHelper;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
@@ -57,7 +55,6 @@ import java.util.EnumSet;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.Set;
 
 
@@ -96,11 +93,12 @@ public abstract class BaseGui implements InventoryHolder {
     private final Map<Integer, GuiAction<InventoryClickEvent>> slotActions;
     // Interaction modifiers.
     private final Set<InteractionModifier> interactionModifiers;
-    // Main inventory.
-    private Inventory inventory;
 
     // GUI control
-    private final ContainerType containerType;
+    private final GuiContainer guiContainer;
+
+    // Main inventory.
+    private Inventory inventory;
 
     // Action to execute when clicking on any item.
     private GuiAction<InventoryClickEvent> defaultClickAction;
@@ -124,12 +122,12 @@ public abstract class BaseGui implements InventoryHolder {
     private boolean runCloseAction = true;
     private boolean runOpenAction = true;
 
-    public BaseGui(final @NotNull ContainerType containerType, @NotNull final Set<InteractionModifier> interactionModifiers) {
+    public BaseGui(final @NotNull GuiContainer guiContainer, @NotNull final Set<InteractionModifier> interactionModifiers) {
         this.interactionModifiers = safeCopyOf(interactionModifiers);
-        int inventorySize = this.rows * 9;
-        this.inventory = Bukkit.createInventory(this, inventorySize, title);
-        this.slotActions = new LinkedHashMap<>(inventorySize);
-        this.guiItems = new LinkedHashMap<>(inventorySize);
+        this.guiContainer = guiContainer;
+        this.inventory = guiContainer.createInventory(this);
+        this.slotActions = new LinkedHashMap<>(guiContainer.inventorySize());
+        this.guiItems = new LinkedHashMap<>(guiContainer.inventorySize());
     }
 
     /**
@@ -151,7 +149,7 @@ public abstract class BaseGui implements InventoryHolder {
      */
     @NotNull
     public Component title() {
-        return Legacy.SERIALIZER.deserialize(title);
+        return guiContainer.title();
     }
 
     /**
@@ -171,15 +169,14 @@ public abstract class BaseGui implements InventoryHolder {
      * @param item The item to remove.
      */
     public void removeItem(@NotNull final GuiItem item) {
-        final Optional<Map.Entry<Integer, GuiItem>> entry = guiItems.entrySet()
+        guiItems.entrySet()
             .stream()
             .filter(it -> it.getValue().equals(item))
-            .findFirst();
-
-        entry.ifPresent(it -> {
-            guiItems.remove(it.getKey());
-            inventory.remove(it.getValue().getItemStack());
-        });
+            .findFirst()
+            .ifPresent(it -> {
+                guiItems.remove(it.getKey());
+                inventory.remove(it.getValue().getItemStack());
+            });
     }
 
     /**
@@ -188,15 +185,14 @@ public abstract class BaseGui implements InventoryHolder {
      * @param item The item to remove.
      */
     public void removeItem(@NotNull final ItemStack item) {
-        final Optional<Map.Entry<Integer, GuiItem>> entry = guiItems.entrySet()
+        guiItems.entrySet()
             .stream()
             .filter(it -> it.getValue().getItemStack().equals(item))
-            .findFirst();
-
-        entry.ifPresent(it -> {
-            guiItems.remove(it.getKey());
-            inventory.remove(item);
-        });
+            .findFirst()
+            .ifPresent(it -> {
+                guiItems.remove(it.getKey());
+                inventory.remove(item);
+            });
     }
 
     /**
@@ -263,6 +259,8 @@ public abstract class BaseGui implements InventoryHolder {
      */
     public void addItem(final boolean expandIfFull, @NotNull final GuiItem... items) {
         final List<GuiItem> notAddedItems = new ArrayList<>();
+        final int rows = guiContainer.rows();
+        final GuiType guiType = guiContainer.guiType();
 
         for (final GuiItem guiItem : items) {
             for (int slot = 0; slot < rows * 9; slot++) {
@@ -278,14 +276,13 @@ public abstract class BaseGui implements InventoryHolder {
             }
         }
 
-        if (!expandIfFull || this.rows >= 6 ||
-            notAddedItems.isEmpty() ||
-            (this.guiType != null && this.guiType != GuiType.CHEST)) {
+        if (!expandIfFull || rows >= 6 || notAddedItems.isEmpty() || guiType != GuiType.CHEST) {
             return;
         }
 
-        this.rows++;
-        this.inventory = Bukkit.createInventory(this, this.rows * 9, this.title);
+        if (!(guiContainer instanceof GuiContainer.Chest)) return;
+        ((GuiContainer.Chest) guiContainer).rows(guiContainer.rows() + 1);
+        this.inventory = guiContainer.createInventory(this);
         this.update();
         this.addItem(true, notAddedItems.toArray(new GuiItem[0]));
     }
@@ -373,7 +370,7 @@ public abstract class BaseGui implements InventoryHolder {
      * @param runCloseAction If should or not run the close action.
      */
     public void close(@NotNull final HumanEntity player, final boolean runCloseAction) {
-        Runnable task = () -> {
+        final Runnable task = () -> {
             this.runCloseAction = runCloseAction;
             player.closeInventory();
             this.runCloseAction = true;
@@ -401,7 +398,7 @@ public abstract class BaseGui implements InventoryHolder {
     public void update() {
         inventory.clear();
         populateGui();
-        for (HumanEntity viewer : new ArrayList<>(inventory.getViewers())) ((Player) viewer).updateInventory();
+        // for (HumanEntity viewer : new ArrayList<>(inventory.getViewers())) ((Player) viewer).updateInventory();
     }
 
     /**
@@ -411,21 +408,21 @@ public abstract class BaseGui implements InventoryHolder {
      * @param title The title to set.
      * @return The GUI for easier use when declaring, works like a builder.
      */
-    @Contract("_ -> this")
     @NotNull
-    public BaseGui updateTitle(@NotNull final String title) {
+    @Contract("_ -> this")
+    public BaseGui updateTitle(@NotNull final Component title) {
         updating = true;
 
         final List<HumanEntity> viewers = new ArrayList<>(inventory.getViewers());
 
-        inventory = Bukkit.createInventory(this, inventory.getSize(), title);
+        guiContainer.title(title); // Update the title.
+        inventory = guiContainer.createInventory(this);
 
         for (final HumanEntity player : viewers) {
             open(player);
         }
 
         updating = false;
-        this.title = title;
         return this;
     }
 
@@ -744,12 +741,12 @@ public abstract class BaseGui implements InventoryHolder {
     }
 
     /**
-     * Gets the amount of {@link #rows}.
+     * Gets the amount of {@link #guiContainer} rows.
      *
-     * @return The {@link #rows} of the GUI.
+     * @return The {@link #guiContainer }'s rows of the GUI.
      */
     public int getRows() {
-        return rows;
+        return guiContainer.rows();
     }
 
     /**
@@ -759,7 +756,7 @@ public abstract class BaseGui implements InventoryHolder {
      */
     @NotNull
     public GuiType guiType() {
-        return guiType;
+        return guiContainer.guiType();
     }
 
     /**
@@ -921,35 +918,17 @@ public abstract class BaseGui implements InventoryHolder {
         return (col + (row - 1) * 9) - 1;
     }
 
-    /*
-    TODO fix this part, find a better solution for using Paper
-    protected Inventory createRowedInventory(@NotNull final Component title) {
-        if (VersionHelper.IS_COMPONENT_LEGACY) {
-            return Bukkit.createInventory(this, this.rows * 9, Legacy.SERIALIZER.serialize(title));
-        }
-
-        return inventory = Bukkit.createInventory(this, this.rows * 9, title);
-    }
-
-    private Inventory createTypedInventory(@NotNull final Component title) {
-        final InventoryType inventoryType = guiType.getInventoryType();
-        if (VersionHelper.IS_COMPONENT_LEGACY) {
-            return Bukkit.createInventory(this, inventoryType, Legacy.SERIALIZER.serialize(title));
-        }
-
-        return Bukkit.createInventory(this, inventoryType, title);
-    }*/
-
     /**
      * Checks if the slot introduces is a valid slot.
      *
      * @param slot The slot to check.
      */
     private void validateSlot(final int slot) {
+        final GuiType guiType = guiContainer.guiType();
         final int limit = guiType.getLimit();
 
         if (guiType == GuiType.CHEST) {
-            if (slot < 0 || slot >= rows * limit) throwInvalidSlot(slot);
+            if (slot < 0 || slot >= guiContainer.rows() * limit) throwInvalidSlot(slot);
             return;
         }
 
@@ -962,11 +941,14 @@ public abstract class BaseGui implements InventoryHolder {
      * @param slot The specific slot to display in the error message.
      */
     private void throwInvalidSlot(final int slot) {
-        if (guiType == GuiType.CHEST) {
-            throw new GuiException("Slot " + slot + " is not valid for the gui type - " + guiType.name() + " and rows - " + rows + "!");
+        if (guiContainer.guiType() == GuiType.CHEST) {
+            throw new GuiException("Slot " + slot + " is not valid for the gui type - " + guiContainer.guiType().name() + " and rows - " + guiContainer.rows() + "!");
         }
 
-        throw new GuiException("Slot " + slot + " is not valid for the gui type - " + guiType.name() + "!");
+        throw new GuiException("Slot " + slot + " is not valid for the gui type - " + guiContainer.guiType().name() + "!");
     }
 
+    protected @NotNull GuiContainer guiContainer() {
+        return guiContainer;
+    }
 }
