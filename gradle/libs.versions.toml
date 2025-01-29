@@ -1,13 +1,13 @@
 [versions]
 # kotlin
-kotlin = "2.0.21"
+kotlin = "2.1.10"
 coroutines = "1.6.4"
 
 license = "0.16.1"
 
 # Core
 annotations = "24.1.0"
-guava = "33.2.0-jre"
+guava = "33.4.0-jre"
 logger = "2.0.13"
 nova = "1.0.0-SNAPSHOT"
 
@@ -19,7 +19,7 @@ mojang-auth = "6.0.57"
 # Build
 run-paper = "2.3.1"
 resource-factory = "1.2.0"
-shadow = "8.3.3"
+shadow = "8.3.5"
 
 [libraries]
 # Core

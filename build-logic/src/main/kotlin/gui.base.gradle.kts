@@ -26,8 +26,11 @@ java {
     withJavadocJar()
 }
 
-kotlin {
-    explicitApi()
+root {
+    configureKotlin {
+        explicitApi()
+        jvmVersion(21)
+    }
 }
 
 license {
