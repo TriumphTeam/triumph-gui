@@ -35,6 +35,7 @@ import org.bukkit.command.Command
 import org.bukkit.command.CommandExecutor
 import org.bukkit.command.CommandSender
 import org.bukkit.entity.Player
+import kotlin.time.Duration.Companion.seconds
 
 public class Scrolling : CommandExecutor {
 
@@ -49,7 +50,7 @@ public class Scrolling : CommandExecutor {
             containerType = chestContainer {
                 rows = 6
             }
-
+            spamPreventionDuration = 0.seconds
             // Simple title for the gui
             title(Component.text("Scrolling Gui"))
 
@@ -59,7 +60,8 @@ public class Scrolling : CommandExecutor {
                 // Tell the component to remember the scroller state with the given elements
                 // Elements can be anything, in this case it's the material of the scrolling items
                 // If the element is already a fully built ItemStack it'll always be static as it is rendered outside the component
-                val pagerState = rememberPager(
+                val pagerState = rememberScroller(
+                    5,
                     materials,
                     // The layout is very important as it dictates how the items will be distributed in a "page" and also
                     // how many items there will be per "page"

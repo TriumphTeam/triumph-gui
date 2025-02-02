@@ -31,7 +31,6 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import static java.lang.Math.ceil;
 import static java.lang.Math.min;
 
 public abstract class AbstractScrollerState<T> extends AbstractState implements ScrollerState<T> {
@@ -59,12 +58,12 @@ public abstract class AbstractScrollerState<T> extends AbstractState implements 
         this.current = startPosition;
         this.elements = elements;
         this.layout = layout;
-        this.limit = (int) ceil((double) elements.size() / steps);
+        this.limit = elements.size();
     }
 
     @Override
     public void next() {
-        if (current >= limit) return;
+        if (current + elementsPerView > limit) return;
         current += steps;
         trigger();
     }
@@ -78,7 +77,7 @@ public abstract class AbstractScrollerState<T> extends AbstractState implements 
 
     @Override
     public @NotNull Iterator<PageEntry<T>> iterator() {
-        // TODO: this should probably be on page change not on iterator call to avoid calculation when multiple calls are made
+        // TODO: this should probably be on page change not on iterator call to avoid substring when multiple calls are made
         final var from = current - 1;
         final var to = min(from + elementsPerView, elements.size());
         final var subList = new ArrayList<PageEntry<T>>();
