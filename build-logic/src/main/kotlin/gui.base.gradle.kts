@@ -12,7 +12,7 @@ plugins {
 
 repositories {
     mavenCentral()
-    maven("https://triumphteam.dev/snapshots/")
+    maven("https://repo.triumphteam.dev/snapshots/")
 }
 
 dependencies {

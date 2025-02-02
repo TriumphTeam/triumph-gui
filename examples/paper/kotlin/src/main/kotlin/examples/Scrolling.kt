@@ -23,7 +23,6 @@
  */
 package dev.triumphteam.gui.example.examples
 
-import dev.triumphteam.gui.kotlin.set
 import dev.triumphteam.gui.kotlin.slot
 import dev.triumphteam.gui.layout.BoxGuiLayout
 import dev.triumphteam.gui.layout.GuiLayout

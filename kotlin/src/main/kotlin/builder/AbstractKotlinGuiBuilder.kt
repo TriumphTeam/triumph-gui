@@ -31,7 +31,11 @@ import dev.triumphteam.gui.component.functional.FunctionalGuiComponent
 import dev.triumphteam.gui.component.functional.FunctionalGuiComponentRender
 import dev.triumphteam.gui.component.functional.SimpleFunctionalGuiComponent
 import dev.triumphteam.gui.component.renderer.GuiComponentRenderer
+import dev.triumphteam.gui.container.GuiContainer
 import dev.triumphteam.gui.container.type.GuiContainerType
+import dev.triumphteam.gui.item.GuiItem
+import dev.triumphteam.gui.layout.GuiLayout
+import dev.triumphteam.gui.slot.Slot
 import dev.triumphteam.gui.title.functional.FunctionalGuiTitle
 import dev.triumphteam.gui.title.functional.SimpleFunctionalGuiTitle
 import net.kyori.adventure.text.Component
@@ -86,4 +90,28 @@ public abstract class AbstractKotlinGuiBuilder<B : BaseGuiBuilder<B, P, G, I, C>
     }
 
     protected fun backing(): B = backing
+
+    public operator fun <P : Any, I : Any> GuiContainer<P, I>.set(row: Int, column: Int, item: GuiItem<P, I>): Unit =
+        setItem(row, column, item)
+
+    public operator fun <P : Any, I : Any> GuiContainer<P, I>.set(slot: Slot, item: GuiItem<P, I>): Unit =
+        setItem(slot, item)
+
+    public operator fun <P : Any, I : Any> GuiContainer<P, I>.set(slot: Int, item: GuiItem<P, I>): Unit =
+        setItem(slot, item)
+
+    public operator fun <P : Any, I : Any> GuiContainer<P, I>.set(layout: GuiLayout, item: GuiItem<P, I>): Unit =
+        fill(layout, item)
+
+    public inline fun <P : Any, I : Any, T : Any> GuiContainer<P, I>.fill(
+        layout: GuiLayout,
+        elements: Collection<T>,
+        transform: (T) -> GuiItem<P, I>
+    ) {
+        val elementIterator = elements.iterator()
+        for (slot in layout) {
+            if (!elementIterator.hasNext()) break
+            set(slot, transform(elementIterator.next()))
+        }
+    }
 }

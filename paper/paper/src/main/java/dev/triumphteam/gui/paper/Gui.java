@@ -24,6 +24,7 @@
 package dev.triumphteam.gui.paper;
 
 import dev.triumphteam.gui.BaseGui;
+import dev.triumphteam.gui.GuiView;
 import dev.triumphteam.gui.actions.GuiCloseAction;
 import dev.triumphteam.gui.click.handler.ClickHandler;
 import dev.triumphteam.gui.component.GuiComponent;
@@ -101,7 +102,7 @@ public final class Gui implements BaseGui<Player> {
     /**
      * Create a new {@link PaperGuiBuilder} to create a new {@link Gui} using a {@link HopperContainerType}.
      *
-     * @return  A new {@link PaperGuiBuilder}.
+     * @return A new {@link PaperGuiBuilder}.
      */
     @Contract(" -> new")
     public static PaperGuiBuilder hopper() {
@@ -109,7 +110,7 @@ public final class Gui implements BaseGui<Player> {
     }
 
     @Override
-    public void open(final @NotNull Player player) {
+    public @NotNull GuiView open(final @NotNull Player player) {
         final var view = new PaperGuiView(
             player,
             title,
@@ -122,5 +123,6 @@ public final class Gui implements BaseGui<Player> {
         );
 
         view.open();
+        return view;
     }
 }

@@ -38,6 +38,7 @@ public interface BaseGui<P> {
      * Opens a {@link GuiView} of this GUI for the {@link P} player.
      *
      * @param player The player to show the view to.
+     * @return The newly created {@link GuiView} of the gui.
      */
-    void open(final @NotNull P player);
+    @NotNull GuiView open(final @NotNull P player);
 }

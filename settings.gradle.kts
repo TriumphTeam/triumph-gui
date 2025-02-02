@@ -17,7 +17,7 @@ rootProject.name = "triumph-gui"
 enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
 
 plugins {
-    id("dev.triumphteam.root.settings") version "0.0.14"
+    id("dev.triumphteam.root.settings") version "0.0.15"
 }
 
 listOf(

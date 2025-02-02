@@ -23,7 +23,7 @@
  */
 package dev.triumphteam.gui;
 
-public interface GuiView<P, I> {
+public interface GuiView {
 
     void open();
 

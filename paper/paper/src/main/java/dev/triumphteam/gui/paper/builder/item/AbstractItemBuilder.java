@@ -306,6 +306,12 @@ public abstract class AbstractItemBuilder<B extends AbstractItemBuilder<B>> {
         return (B) this;
     }
 
+    @Contract("_ -> this")
+    public @NotNull B meta(final @NotNull Consumer<ItemMeta> transform) {
+        transform.accept(meta);
+        return (B) this;
+    }
+
     /**
      * Returns the {@link ItemMeta} of the item
      *
