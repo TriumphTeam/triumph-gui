@@ -40,11 +40,11 @@ public final class SimplePagerState<T> extends AbstractScrollerState<T> implemen
 
     @Override
     public int getCurrentPage() {
-        return getCurrent();
+        return getCurrent() / getSteps() + 1;
     }
 
     @Override
     public int getPageCount() {
-        return getLimit();
+        return getLimit() / getSteps() + 1;
     }
 }
