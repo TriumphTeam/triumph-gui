@@ -51,7 +51,7 @@ public final class MapBackedContainer<P, I> implements GuiContainer<P, I> {
 
     @Override
     public @NotNull GuiContainerType containerType() {
-        return null;
+        return containerType;
     }
 
     @Override

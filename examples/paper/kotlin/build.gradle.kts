@@ -30,7 +30,5 @@ tasks {
         commands.add(commands.create("gui-page"))
         commands.add(commands.create("gui-scroll"))
         foliaSupported.set(true)
-
-        // really neat idea, world found a cave that takes you to a place kinda like annihilation movie
     }
 }
