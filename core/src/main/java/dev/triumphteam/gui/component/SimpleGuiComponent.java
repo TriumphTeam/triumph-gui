@@ -23,10 +23,12 @@
  */
 package dev.triumphteam.gui.component;
 
+import dev.triumphteam.gui.click.handler.ClickHandler;
 import dev.triumphteam.gui.component.functional.FunctionalGuiComponentRender;
 import dev.triumphteam.gui.container.GuiContainer;
 import dev.triumphteam.nova.State;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
@@ -34,10 +36,16 @@ public final class SimpleGuiComponent<P, I> implements ReactiveGuiComponent<P, I
 
     private final FunctionalGuiComponentRender<P, I> component;
     private final List<State> states;
+    private final ClickHandler<P> clickHandler;
 
-    public SimpleGuiComponent(final @NotNull FunctionalGuiComponentRender<P, I> component, final @NotNull List<State> states) {
+    public SimpleGuiComponent(
+        final @NotNull FunctionalGuiComponentRender<P, I> component,
+        final @NotNull List<State> states,
+        final @Nullable ClickHandler<P> clickHandler
+    ) {
         this.component = component;
         this.states = states;
+        this.clickHandler = clickHandler;
     }
 
     @Override
@@ -48,5 +56,10 @@ public final class SimpleGuiComponent<P, I> implements ReactiveGuiComponent<P, I
     @Override
     public @NotNull List<State> states() {
         return states;
+    }
+
+    @Override
+    public @Nullable ClickHandler<P> clickHandler() {
+        return clickHandler;
     }
 }

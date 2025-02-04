@@ -42,6 +42,6 @@ public final class SimpleFunctionalGuiComponent<P, I> extends AbstractFunctional
             throw new TriumphGuiException("TODO");
         }
 
-        return new SimpleGuiComponent<>(component, getStates());
+        return new SimpleGuiComponent<>(component, getStates(), getClickHandler());
     }
 }

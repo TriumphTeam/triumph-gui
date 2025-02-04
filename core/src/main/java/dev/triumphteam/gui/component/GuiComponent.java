@@ -28,8 +28,7 @@ import org.jetbrains.annotations.Nullable;
 
 public interface GuiComponent<P, I> {
 
-    @Nullable
-    default ClickHandler<P> clickHandler() {
+    default @Nullable ClickHandler<P> clickHandler() {
         return null;
     }
 }
