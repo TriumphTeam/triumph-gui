@@ -1,18 +1,18 @@
 /**
  * MIT License
- *
+ * <p>
  * Copyright (c) 2021 TriumphTeam
- *
+ * <p>
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- *
+ * <p>
  * The above copyright notice and this permission notice shall be included in all
  * copies or substantial portions of the Software.
- *
+ * <p>
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -25,8 +25,10 @@ package dev.triumphteam.gui.guis;
 
 import dev.triumphteam.gui.builder.gui.PaginatedBuilder;
 import dev.triumphteam.gui.builder.gui.ScrollingBuilder;
-import dev.triumphteam.gui.builder.gui.SimpleBuilder;
+import dev.triumphteam.gui.builder.gui.ChestGuiBuilder;
 import dev.triumphteam.gui.builder.gui.StorageBuilder;
+import dev.triumphteam.gui.builder.gui.TypedGuiBuilder;
+import dev.triumphteam.gui.components.GuiContainer;
 import dev.triumphteam.gui.components.GuiType;
 import dev.triumphteam.gui.components.InteractionModifier;
 import dev.triumphteam.gui.components.ScrollType;
@@ -40,90 +42,31 @@ import java.util.Set;
  */
 public class Gui extends BaseGui {
 
-    /**
-     * Main constructor for the GUI
-     *
-     * @param rows                 The amount of rows the GUI should have
-     * @param title                The GUI's title using {@link String}
-     * @param interactionModifiers A set containing the {@link InteractionModifier} this GUI should use
-     * @author SecretX
-     * @since 3.0.3
-     */
-    public Gui(final int rows, @NotNull final String title, @NotNull final Set<InteractionModifier> interactionModifiers) {
-        super(rows, title, interactionModifiers);
+    public Gui(final @NotNull GuiContainer guiContainer, final @NotNull Set<InteractionModifier> interactionModifiers) {
+        super(guiContainer, interactionModifiers);
     }
 
     /**
-     * Alternative constructor that takes both a {@link GuiType} and a set of {@link InteractionModifier}
-     *
-     * @param guiType              The {@link GuiType} to be used
-     * @param title                The GUI's title using {@link String}
-     * @param interactionModifiers A set containing the {@link InteractionModifier} this GUI should use
-     * @author SecretX
-     * @since 3.0.3
-     */
-    public Gui(@NotNull final GuiType guiType, @NotNull final String title, @NotNull final Set<InteractionModifier> interactionModifiers) {
-        super(guiType, title, interactionModifiers);
-    }
-
-    /**
-     * Old main constructor for the GUI
-     *
-     * @param rows  The amount of rows the GUI should have
-     * @param title The GUI's title
-     * @deprecated In favor of {@link Gui#Gui(int, String, Set)}
-     */
-    @Deprecated
-    public Gui(final int rows, @NotNull final String title) {
-        super(rows, title);
-    }
-
-    /**
-     * Alternative constructor that defaults to 1 row
-     *
-     * @param title The GUI's title
-     * @deprecated In favor of {@link Gui#Gui(int, String, Set)}
-     */
-    @Deprecated
-    public Gui(@NotNull final String title) {
-        super(1, title);
-    }
-
-    /**
-     * Main constructor that takes a {@link GuiType} instead of rows
-     *
-     * @param guiType The {@link GuiType} to be used
-     * @param title   The GUI's title
-     * @deprecated In favor of {@link Gui#Gui(GuiType, String, Set)}
-     */
-    @Deprecated
-    public Gui(@NotNull final GuiType guiType, @NotNull final String title) {
-        super(guiType, title);
-    }
-
-    /**
-     * Creates a {@link SimpleBuilder} to build a {@link dev.triumphteam.gui.guis.Gui}
+     * Creates a {@link TypedGuiBuilder} to build a {@link dev.triumphteam.gui.guis.Gui}
      *
      * @param type The {@link GuiType} to be used
-     * @return A {@link SimpleBuilder}
+     * @return A {@link TypedGuiBuilder}
      * @since 3.0.0
      */
-    @NotNull
     @Contract("_ -> new")
-    public static SimpleBuilder gui(@NotNull final GuiType type) {
-        return new SimpleBuilder(type);
+    public static @NotNull TypedGuiBuilder gui(final @NotNull GuiType type) {
+        return new TypedGuiBuilder(type);
     }
 
     /**
-     * Creates a {@link SimpleBuilder} with CHEST as the {@link GuiType}
+     * Creates a {@link ChestGuiBuilder} with CHEST as the {@link GuiType}
      *
-     * @return A CHEST {@link SimpleBuilder}
+     * @return A CHEST {@link ChestGuiBuilder}
      * @since 3.0.0
      */
-    @NotNull
     @Contract(" -> new")
-    public static SimpleBuilder gui() {
-        return gui(GuiType.CHEST);
+    public static @NotNull ChestGuiBuilder gui() {
+        return new ChestGuiBuilder();
     }
 
     /**
@@ -132,9 +75,8 @@ public class Gui extends BaseGui {
      * @return A CHEST {@link StorageBuilder}.
      * @since 3.0.0.
      */
-    @NotNull
     @Contract(" -> new")
-    public static StorageBuilder storage() {
+    public static @NotNull StorageBuilder storage() {
         return new StorageBuilder();
     }
 
@@ -144,9 +86,8 @@ public class Gui extends BaseGui {
      * @return A {@link PaginatedBuilder}
      * @since 3.0.0
      */
-    @NotNull
     @Contract(" -> new")
-    public static PaginatedBuilder paginated() {
+    public static @NotNull PaginatedBuilder paginated() {
         return new PaginatedBuilder();
     }
 
@@ -157,22 +98,19 @@ public class Gui extends BaseGui {
      * @return A {@link ScrollingBuilder}
      * @since 3.0.0
      */
-    @NotNull
     @Contract("_ -> new")
-    public static ScrollingBuilder scrolling(@NotNull final ScrollType scrollType) {
+    public static @NotNull ScrollingBuilder scrolling(@NotNull final ScrollType scrollType) {
         return new ScrollingBuilder(scrollType);
     }
 
     /**
      * Creates a {@link ScrollingBuilder} with VERTICAL as the {@link ScrollType}
      *
-     * @return A vertical {@link SimpleBuilder}
+     * @return A vertical {@link ChestGuiBuilder}
      * @since 3.0.0
      */
-    @NotNull
     @Contract(" -> new")
-    public static ScrollingBuilder scrolling() {
+    public static @NotNull ScrollingBuilder scrolling() {
         return scrolling(ScrollType.VERTICAL);
     }
-
 }

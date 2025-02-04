@@ -23,47 +23,43 @@
  */
 package dev.triumphteam.gui.builder.gui;
 
-import dev.triumphteam.gui.guis.PaginatedGui;
+import dev.triumphteam.gui.components.GuiType;
+import dev.triumphteam.gui.guis.Gui;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.function.Consumer;
 
 /**
- * GUI builder for creating a {@link PaginatedGui}
+ * The simple GUI builder is used for creating a {@link Gui}
  */
-public class PaginatedBuilder extends BaseChestGuiBuilder<PaginatedGui, PaginatedBuilder> {
-
-    private int pageSize = 0;
+public final class ChestGuiBuilder extends BaseChestGuiBuilder<Gui, ChestGuiBuilder> {
 
     /**
-     * Sets the desirable page size, most of the time this isn't needed
+     * Sets the {@link GuiType} to use on the GUI
+     * This method is unique to the simple GUI
      *
-     * @param pageSize The amount of free slots that page items should occupy
+     * @param guiType The {@link GuiType}
      * @return The current builder
      */
     @NotNull
-    @Contract("_ -> this")
-    public PaginatedBuilder pageSize(final int pageSize) {
-        this.pageSize = pageSize;
-        return this;
+    @Contract("_ -> new")
+    public TypedGuiBuilder type(@NotNull final GuiType guiType) {
+        return new TypedGuiBuilder(guiType, this);
     }
 
     /**
-     * Creates a new {@link PaginatedGui}
+     * Creates a new {@link Gui}
      *
-     * @return A new {@link PaginatedGui}
+     * @return A new {@link Gui}
      */
     @NotNull
     @Override
     @Contract(" -> new")
-    public PaginatedGui create() {
-        final PaginatedGui gui = new PaginatedGui(createContainer(), pageSize, getModifiers());
-
-        final Consumer<PaginatedGui> consumer = getConsumer();
+    public Gui create() {
+        final Gui gui = new Gui(createContainer(), getModifiers());
+        final Consumer<Gui> consumer = getConsumer();
         if (consumer != null) consumer.accept(gui);
-
         return gui;
     }
-
 }

@@ -1,18 +1,18 @@
 /**
  * MIT License
- *
+ * <p>
  * Copyright (c) 2021 TriumphTeam
- *
+ * <p>
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- *
+ * <p>
  * The above copyright notice and this permission notice shall be included in all
  * copies or substantial portions of the Software.
- *
+ * <p>
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -23,8 +23,9 @@
  */
 package dev.triumphteam.gui.guis;
 
+import dev.triumphteam.gui.components.GuiContainer;
 import dev.triumphteam.gui.components.InteractionModifier;
-import org.bukkit.Bukkit;
+import net.kyori.adventure.text.Component;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
@@ -54,60 +55,11 @@ public class PaginatedGui extends BaseGui {
     private int pageSize;
     private int pageNum = 1;
 
-    /**
-     * Main constructor to provide a way to create PaginatedGui
-     *
-     * @param rows                 The amount of rows the GUI should have
-     * @param pageSize             The page size.
-     * @param title                The GUI's title using {@link String}
-     * @param interactionModifiers A set containing what {@link InteractionModifier} this GUI should have
-     * @author SecretX
-     * @since 3.0.3
-     */
-    public PaginatedGui(final int rows, final int pageSize, @NotNull final String title, @NotNull final Set<InteractionModifier> interactionModifiers) {
-        super(rows, title, interactionModifiers);
+
+    public PaginatedGui(final @NotNull GuiContainer guiContainer, final int pageSize, final @NotNull Set<InteractionModifier> interactionModifiers) {
+        super(guiContainer, interactionModifiers);
         this.pageSize = pageSize;
-        int inventorySize = rows * 9;
-        this.currentPage = new LinkedHashMap<>(inventorySize);
-    }
-
-    /**
-     * Old main constructor of the PaginatedGui
-     *
-     * @param rows     The rows the GUI should have
-     * @param pageSize The pageSize
-     * @param title    The GUI's title
-     * @deprecated In favor of {@link PaginatedGui#PaginatedGui(int, int, String, Set)}
-     */
-    @Deprecated
-    public PaginatedGui(final int rows, final int pageSize, @NotNull final String title) {
-        super(rows, title);
-        this.pageSize = pageSize;
-        int inventorySize = rows * 9;
-        this.currentPage = new LinkedHashMap<>(inventorySize);
-    }
-
-    /**
-     * Alternative constructor that doesn't require the {@link #pageSize} to be defined
-     *
-     * @param rows  The rows the GUI should have
-     * @param title The GUI's title
-     * @deprecated In favor of {@link PaginatedGui#PaginatedGui(int, int, String, Set)}
-     */
-    @Deprecated
-    public PaginatedGui(final int rows, @NotNull final String title) {
-        this(rows, 0, title);
-    }
-
-    /**
-     * Alternative constructor that only requires title
-     *
-     * @param title The GUI's title
-     * @deprecated In favor of {@link PaginatedGui#PaginatedGui(int, int, String, Set)}
-     */
-    @Deprecated
-    public PaginatedGui(@NotNull final String title) {
-        this(2, title);
+        this.currentPage = new LinkedHashMap<>(guiContainer.inventorySize());
     }
 
     /**
@@ -259,7 +211,7 @@ public class PaginatedGui extends BaseGui {
     }
 
     /**
-     * Overrides {@link BaseGui#updateTitle(String)} to use the paginated populator instead
+     * Overrides {@link BaseGui#updateTitle(Component)} to use the paginated populator instead
      * Updates the title of the GUI
      * <i>This method may cause LAG if used on a loop</i>
      *
@@ -267,20 +219,20 @@ public class PaginatedGui extends BaseGui {
      * @return The GUI for easier use when declaring, works like a builder
      */
     @Override
-    @NotNull
-    public BaseGui updateTitle(@NotNull final String title) {
+    public @NotNull BaseGui updateTitle(@NotNull final Component title) {
         setUpdating(true);
 
         final List<HumanEntity> viewers = new ArrayList<>(getInventory().getViewers());
+        final GuiContainer guiContainer = guiContainer();
 
-        setInventory(Bukkit.createInventory(this, getInventory().getSize(), title));
+        guiContainer.title(title);
+        setInventory(guiContainer.createInventory(this));
 
         for (final HumanEntity player : viewers) {
             open(player, getPageNum());
         }
 
         setUpdating(false);
-
         return this;
     }
 

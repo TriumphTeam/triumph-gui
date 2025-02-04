@@ -1,18 +1,18 @@
 /**
  * MIT License
- *
+ * <p>
  * Copyright (c) 2021 TriumphTeam
- *
+ * <p>
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- *
+ * <p>
  * The above copyright notice and this permission notice shall be included in all
  * copies or substantial portions of the Software.
- *
+ * <p>
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -45,24 +45,9 @@ import java.util.function.Consumer;
 public abstract class BaseGuiBuilder<G extends BaseGui, B extends BaseGuiBuilder<G, B>> {
 
     private Component title = null;
-    private int rows = 1;
     private final EnumSet<InteractionModifier> interactionModifiers = EnumSet.noneOf(InteractionModifier.class);
 
     private Consumer<G> consumer;
-
-    /**
-     * Sets the rows for the GUI
-     * This will only work on CHEST {@link dev.triumphteam.gui.components.GuiType}
-     *
-     * @param rows The amount of rows
-     * @return The builder
-     */
-    @NotNull
-    @Contract("_ -> this")
-    public B rows(final int rows) {
-        this.rows = rows;
-        return (B) this;
-    }
 
     /**
      * Sets the title for the GUI
@@ -82,8 +67,8 @@ public abstract class BaseGuiBuilder<G extends BaseGui, B extends BaseGuiBuilder
      * Disable item placement inside the GUI
      *
      * @return The builder
-     * @since 3.0.0
      * @author SecretX
+     * @since 3.0.0
      */
     @NotNull
     @Contract(" -> this")
@@ -96,8 +81,8 @@ public abstract class BaseGuiBuilder<G extends BaseGui, B extends BaseGuiBuilder
      * Disable item retrieval inside the GUI
      *
      * @return The builder
-     * @since 3.0.0
      * @author SecretX
+     * @since 3.0.0
      */
     @NotNull
     @Contract(" -> this")
@@ -110,8 +95,8 @@ public abstract class BaseGuiBuilder<G extends BaseGui, B extends BaseGuiBuilder
      * Disable item swap inside the GUI
      *
      * @return The builder
-     * @since 3.0.0
      * @author SecretX
+     * @since 3.0.0
      */
     @NotNull
     @Contract(" -> this")
@@ -151,8 +136,8 @@ public abstract class BaseGuiBuilder<G extends BaseGui, B extends BaseGuiBuilder
      * Disable all the modifications of the GUI, making it immutable by player interaction
      *
      * @return The builder
-     * @since 3.0.0
      * @author SecretX
+     * @since 3.0.0
      */
     @NotNull
     @Contract(" -> this")
@@ -165,8 +150,8 @@ public abstract class BaseGuiBuilder<G extends BaseGui, B extends BaseGuiBuilder
      * Allows item placement inside the GUI
      *
      * @return The builder
-     * @since 3.0.0
      * @author SecretX
+     * @since 3.0.0
      */
     @NotNull
     @Contract(" -> this")
@@ -179,8 +164,8 @@ public abstract class BaseGuiBuilder<G extends BaseGui, B extends BaseGuiBuilder
      * Allow items to be taken from the GUI
      *
      * @return The builder
-     * @since 3.0.0
      * @author SecretX
+     * @since 3.0.0
      */
     @NotNull
     @Contract(" -> this")
@@ -193,8 +178,8 @@ public abstract class BaseGuiBuilder<G extends BaseGui, B extends BaseGuiBuilder
      * Allows item swap inside the GUI
      *
      * @return The builder
-     * @since 3.0.0
      * @author SecretX
+     * @since 3.0.0
      */
     @NotNull
     @Contract(" -> this")
@@ -234,8 +219,8 @@ public abstract class BaseGuiBuilder<G extends BaseGui, B extends BaseGuiBuilder
      * Enable all modifications of the GUI, making it completely mutable by player interaction
      *
      * @return The builder
-     * @since 3.0.0
      * @author SecretX
+     * @since 3.0.0
      */
     @NotNull
     @Contract(" -> this")
@@ -283,15 +268,6 @@ public abstract class BaseGuiBuilder<G extends BaseGui, B extends BaseGuiBuilder
     }
 
     /**
-     * Getter for the rows
-     *
-     * @return The amount of rows
-     */
-    protected int getRows() {
-        return rows;
-    }
-
-    /**
      * Getter for the consumer
      *
      * @return The consumer
@@ -304,12 +280,18 @@ public abstract class BaseGuiBuilder<G extends BaseGui, B extends BaseGuiBuilder
 
     /**
      * Getter for the set of interaction modifiers
+     *
      * @return The set of {@link InteractionModifier}
-     * @since 3.0.0
      * @author SecretX
+     * @since 3.0.0
      */
     @NotNull
     protected Set<InteractionModifier> getModifiers() {
         return interactionModifiers;
+    }
+
+    protected void consumeBuilder(final @NotNull BaseGuiBuilder<?, ?> builder) {
+        this.title = builder.title;
+        this.interactionModifiers.addAll(builder.interactionModifiers);
     }
 }
