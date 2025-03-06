@@ -51,6 +51,7 @@ import org.jetbrains.annotations.Nullable;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.EnumSet;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -717,7 +718,7 @@ public abstract class BaseGui implements InventoryHolder {
      */
     @NotNull
     public Map<@NotNull Integer, @NotNull GuiItem> getGuiItems() {
-        return guiItems;
+        return Collections.unmodifiableMap(guiItems);
     }
 
     /**
