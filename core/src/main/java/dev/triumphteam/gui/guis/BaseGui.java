@@ -394,6 +394,28 @@ public abstract class BaseGui implements InventoryHolder {
     }
 
     /**
+     * Instantly closes the GUI without delay.
+     *
+     * @param player The {@link HumanEntity} to close the GUI for.
+     */
+    public void closeInstantly(@NotNull final HumanEntity player) {
+        closeInstantly(player, true);
+    }
+
+    /**
+     * Instantly closes the GUI without delay.
+     *
+     * @param player         The {@link HumanEntity} to close the GUI for.
+     * @param runCloseAction If should or not run the close action.
+     */
+    public void closeInstantly(@NotNull final HumanEntity player, final boolean runCloseAction) {
+        this.runCloseAction = runCloseAction;
+        player.closeInventory();
+        this.runCloseAction = true;
+    }
+
+
+    /**
      * Updates the GUI for all the {@link Inventory} views.
      */
     public void update() {
