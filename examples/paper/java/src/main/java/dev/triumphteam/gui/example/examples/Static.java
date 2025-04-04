@@ -49,6 +49,7 @@ public final class Static implements CommandExecutor {
                         player.sendMessage("You have clicked on the paper item!");
                     })
                 );
+
             })
             .build();
 

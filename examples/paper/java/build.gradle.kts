@@ -13,19 +13,19 @@ dependencies {
     implementation(projects.triumphGuiPaper)
 }
 
+bukkitPluginYaml {
+    main.set("dev.triumphteam.gui.example.GuiPlugin")
+    load = BukkitPluginYaml.PluginLoadOrder.STARTUP
+    authors.add("Matt")
+    apiVersion = "1.21"
+    commands.add(commands.create("gui-static"))
+    commands.add(commands.create("gui-clicker"))
+    commands.add(commands.create("gui-title"))
+    foliaSupported.set(true)
+}
+
 tasks {
     runServer {
         minecraftVersion("1.21.1")
-    }
-
-    bukkitPluginYaml {
-        main.set("dev.triumphteam.gui.example.GuiPlugin")
-        load = BukkitPluginYaml.PluginLoadOrder.STARTUP
-        authors.add("Matt")
-        apiVersion = "1.21"
-        commands.add(commands.create("gui-static"))
-        commands.add(commands.create("gui-clicker"))
-        commands.add(commands.create("gui-title"))
-        foliaSupported.set(true)
     }
 }
