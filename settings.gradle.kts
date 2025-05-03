@@ -1,4 +1,4 @@
-import dev.triumphteam.root.includeProject
+import dev.triumphteam.root.projects
 
 dependencyResolutionManagement {
     includeBuild("build-logic")
@@ -17,18 +17,26 @@ rootProject.name = "triumph-gui"
 enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
 
 plugins {
-    id("dev.triumphteam.root.settings") version "0.0.15"
+    id("dev.triumphteam.root.settings") version "0.0.31"
 }
 
-listOf(
-    "core" to "core",
-    "kotlin" to "kotlin",
+projects {
+    single(id = "core")
+    single(id = "kotlin")
 
     // Platforms and their Kotlin versions
-    "paper/paper" to "paper",
-    "paper/kotlin" to "paper-kotlin",
 
-    // Example projects
-    "examples/paper/java" to "example-paper-java",
-    "examples/paper/kotlin" to "example-paper-kotlin",
-).forEach(::includeProject)
+    group("paper") {
+        single(id = "paper")
+        single(id = "kotlin", includeNamespace = true)
+    }
+
+    // Examples
+
+    group("examples") {
+        group("paper") {
+            single(id = "java", includeNamespace = true)
+            single(id = "kotlin", includeNamespace = true)
+        }
+    }
+}

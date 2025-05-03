@@ -27,5 +27,5 @@ pluginManagement {
 }
 
 plugins {
-    id("dev.triumphteam.root.settings") version "0.0.15"
+    id("dev.triumphteam.root.settings") version "0.0.31"
 }
