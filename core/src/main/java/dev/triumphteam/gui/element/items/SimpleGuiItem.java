@@ -27,15 +27,10 @@ import dev.triumphteam.gui.click.action.GuiClickAction;
 import dev.triumphteam.gui.element.GuiItem;
 import org.jetbrains.annotations.NotNull;
 
-public final class SimpleGuiItem<P, I> implements GuiItem<P, I> {
-
-    private final I item;
-    private final GuiClickAction<P> clickAction;
-
-    public SimpleGuiItem(final @NotNull I item, final @NotNull GuiClickAction<P> clickAction) {
-        this.item = item;
-        this.clickAction = clickAction;
-    }
+public record SimpleGuiItem<P, I>(
+        @NotNull I item,
+        @NotNull GuiClickAction<P> clickAction
+) implements GuiItem<P, I> {
 
     @Override
     public @NotNull I render() {
