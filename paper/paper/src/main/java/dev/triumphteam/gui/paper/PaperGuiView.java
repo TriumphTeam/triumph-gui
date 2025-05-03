@@ -29,8 +29,9 @@ import dev.triumphteam.gui.click.handler.ClickHandler;
 import dev.triumphteam.gui.click.processor.ClickProcessor;
 import dev.triumphteam.gui.component.GuiComponent;
 import dev.triumphteam.gui.component.renderer.GuiComponentRenderer;
+import dev.triumphteam.gui.element.RenderedGuiElement;
 import dev.triumphteam.gui.exception.TriumphGuiException;
-import dev.triumphteam.gui.item.RenderedGuiItem;
+import dev.triumphteam.gui.element.RenderedGuiItem;
 import dev.triumphteam.gui.paper.container.type.PaperContainerType;
 import dev.triumphteam.gui.title.GuiTitle;
 import org.bukkit.entity.Player;
@@ -105,8 +106,11 @@ public final class PaperGuiView extends AbstractGuiView<Player, ItemStack> imple
     }
 
     @Override
-    protected void populateInventory(final @NotNull Map<Integer, RenderedGuiItem<Player, ItemStack>> renderedItems) {
-        renderedItems.forEach((slot, item) -> inventory.setItem(slot, item.item()));
+    protected void populateInventory(final @NotNull Map<Integer, RenderedGuiElement<Player, ItemStack>> renderedItems) {
+        renderedItems.forEach((slot, item) -> {
+            if (!(item instanceof RenderedGuiItem)) return;
+            inventory.setItem(slot, ((RenderedGuiItem<Player, ItemStack>) item).item());
+        });
     }
 
     private void checkInventory() throws TriumphGuiException {

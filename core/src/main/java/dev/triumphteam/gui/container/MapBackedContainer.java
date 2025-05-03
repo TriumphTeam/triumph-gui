@@ -25,8 +25,9 @@ package dev.triumphteam.gui.container;
 
 import dev.triumphteam.gui.click.handler.ClickHandler;
 import dev.triumphteam.gui.container.type.GuiContainerType;
-import dev.triumphteam.gui.item.GuiItem;
-import dev.triumphteam.gui.item.RenderedGuiItem;
+import dev.triumphteam.gui.element.GuiItem;
+import dev.triumphteam.gui.element.RenderedGuiElement;
+import dev.triumphteam.gui.element.RenderedGuiItem;
 import dev.triumphteam.gui.layout.GuiLayout;
 import dev.triumphteam.gui.slot.Slot;
 import org.jetbrains.annotations.NotNull;
@@ -78,7 +79,7 @@ public final class MapBackedContainer<P, I> implements GuiContainer<P, I> {
         layout.forEach(position -> setItem(position, guiItem));
     }
 
-    public @NotNull Map<Integer, RenderedGuiItem<P, I>> complete() {
+    public @NotNull Map<Integer, RenderedGuiElement<P, I>> complete() {
         return Collections.unmodifiableMap(backing);
     }
 }

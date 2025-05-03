@@ -21,14 +21,25 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package dev.triumphteam.gui.item;
+package dev.triumphteam.gui.element;
 
 import dev.triumphteam.gui.click.action.GuiClickAction;
 import dev.triumphteam.gui.click.handler.ClickHandler;
 import org.jetbrains.annotations.NotNull;
 
 public record RenderedGuiItem<P, I>(
-    @NotNull I item,
-    @NotNull ClickHandler<P> clickHandler,
-    @NotNull GuiClickAction<P> action
-) {}
+        @NotNull I item,
+        @NotNull ClickHandler<P> clickHandler,
+        @NotNull GuiClickAction<P> action
+) implements RenderedGuiElement<P, I> {
+
+    @Override
+    public @NotNull ClickHandler<P> getClickHandler() {
+        return clickHandler;
+    }
+
+    @Override
+    public @NotNull GuiClickAction<P> getAction() {
+        return action;
+    }
+}

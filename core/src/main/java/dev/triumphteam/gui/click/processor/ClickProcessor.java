@@ -84,11 +84,11 @@ public final class ClickProcessor<P, I> {
             return;
         }
 
-        final var renderedItem = view.getItem(context.slot());
+        final var renderedItem = view.getElement(context.slot());
         if (renderedItem == null) return;
 
-        final var action = renderedItem.action();
-        // Early exit if action is empty
+        final var action = renderedItem.getAction();
+        // Early exit if the action is empty
         if (action instanceof EmptyGuiClickAction<P>) {
             return;
         }
@@ -97,7 +97,7 @@ public final class ClickProcessor<P, I> {
 
         this.isProcessing = true;
 
-        final var handler = renderedItem.clickHandler();
+        final var handler = renderedItem.getClickHandler();
         // Prepare the controller with the whenComplete handler
         final var clickController = new DefaultClickController((ignored, throwable) -> {
             // If something went wrong with the click log, the error and stop processing

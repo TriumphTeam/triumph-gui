@@ -52,7 +52,7 @@ public final class DefaultGuiComponentRenderer<P, I> implements GuiComponentRend
         final var renderedItems = container.complete();
         final var renderedComponent = new RenderedComponent<>(component, renderedItems);
 
-        // Complete rendered back in the view
+        // Complete there rendered elements back in the view.
         view.completeRendered(renderedComponent);
     }
 }

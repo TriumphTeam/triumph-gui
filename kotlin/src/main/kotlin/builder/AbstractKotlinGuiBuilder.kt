@@ -33,7 +33,7 @@ import dev.triumphteam.gui.component.functional.SimpleFunctionalGuiComponent
 import dev.triumphteam.gui.component.renderer.GuiComponentRenderer
 import dev.triumphteam.gui.container.GuiContainer
 import dev.triumphteam.gui.container.type.GuiContainerType
-import dev.triumphteam.gui.item.GuiItem
+import dev.triumphteam.gui.element.GuiItem
 import dev.triumphteam.gui.layout.GuiLayout
 import dev.triumphteam.gui.slot.Slot
 import dev.triumphteam.gui.title.functional.FunctionalGuiTitle
