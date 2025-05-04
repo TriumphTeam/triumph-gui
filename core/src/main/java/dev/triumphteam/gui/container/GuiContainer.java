@@ -45,9 +45,13 @@ public interface GuiContainer<P, I> {
 
     void setAction(final int row, final int column, final @NotNull GuiClickAction<P> clickAction);
 
+    void setAction(final @NotNull Slot slot, final @NotNull GuiClickAction<P> clickAction);
+
+    void setAction(final int slot, final @NotNull SimpleGuiClickAction<P> clickAction);
+
     void setAction(final int row, final int column, final @NotNull SimpleGuiClickAction<P> clickAction);
 
-    void setAction(final @NotNull Slot slot, final @NotNull GuiClickAction<P> clickAction);
+    void setAction(final @NotNull Slot slot, final @NotNull SimpleGuiClickAction<P> clickAction);
 
     void fill(final @NotNull GuiLayout layout, final @NotNull GuiItem<@NotNull P, @NotNull I> guiItem);
 }

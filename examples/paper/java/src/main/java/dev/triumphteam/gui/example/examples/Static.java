@@ -25,9 +25,12 @@ package dev.triumphteam.gui.example.examples;
 
 import dev.triumphteam.gui.click.PickupResult;
 import dev.triumphteam.gui.click.action.GuiClickAction;
+import dev.triumphteam.gui.layout.GuiLayout;
 import dev.triumphteam.gui.paper.Gui;
 import dev.triumphteam.gui.paper.builder.item.ItemBuilder;
+import dev.triumphteam.gui.slot.Slot;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -54,17 +57,26 @@ public final class Static implements CommandExecutor {
 
                 })
                 .statelessComponent(container -> {
-
-                    container.setAction(2, 2, (player, context) -> {
-                        player.sendMessage("You have clicked on the empty slot!");
+                    GuiLayout.border(6).forEach(slot -> {
+                        container.setAction(slot, GuiClickAction.pickupable((player, context) -> {
+                            player.sendMessage(Component.text("You CANNOT place/pickup items here!").color(NamedTextColor.RED));
+                            return PickupResult.DISALLOW;
+                        }));
                     });
 
-                    container.setItem(3, 3, ItemBuilder.from(Material.PAPER)
-                            .name(Component.text("My Paper"))
-                            .asGuiItem(GuiClickAction.control((player, context) -> {
-                                return PickupResult.ALLOW;
-                            }))
-                    );
+                    GuiLayout.box(Slot.of(2, 2), Slot.of(5, 8)).forEach(slot -> {
+                        container.setAction(slot, GuiClickAction.pickupable((player, context) -> {
+                            player.sendMessage(Component.text("You can place/pickup items here!").color(NamedTextColor.GREEN));
+                            return PickupResult.ALLOW;
+                        }));
+                    });
+
+                    GuiLayout.box(Slot.of(7, 1), Slot.of(10, 9)).forEach(slot -> {
+                        container.setAction(slot, GuiClickAction.pickupable((player, context) -> {
+                            player.sendMessage(Component.text("You can place/pickup items here!").color(NamedTextColor.GREEN));
+                            return PickupResult.ALLOW;
+                        }));
+                    });
                 })
                 .build();
 

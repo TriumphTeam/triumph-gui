@@ -86,7 +86,7 @@ public final class ClickProcessor<P, I> {
             return PickupResult.DISALLOW;
         }
 
-        final var element = view.getElement(context.slot());
+        final var element = view.getElement(context.rawSlot());
         if (element == null) return PickupResult.DISALLOW;
 
         final var action = element.getAction();
@@ -105,9 +105,9 @@ public final class ClickProcessor<P, I> {
             // If something went wrong with the click log, the error and stop processing.
             if (throwable != null) {
                 LOGGER.error(
-                        "An exception occurred while processing click for '{}' on slot '{}'.",
+                        "An exception occurred while processing click for '{}' on rawSlot '{}'.",
                         view.viewerName(),
-                        context.slot(),
+                        context.rawSlot(),
                         throwable
                 );
             }

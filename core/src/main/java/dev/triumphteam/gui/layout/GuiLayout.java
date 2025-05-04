@@ -26,8 +26,6 @@ package dev.triumphteam.gui.layout;
 import dev.triumphteam.gui.slot.Slot;
 import org.jetbrains.annotations.NotNull;
 
-import javax.swing.*;
-
 public interface GuiLayout extends Iterable<Slot> {
 
     static @NotNull GuiLayout box(
@@ -43,6 +41,14 @@ public interface GuiLayout extends Iterable<Slot> {
             final @NotNull Slot max
     ) {
         return new BoxGuiLayout(min, max);
+    }
+
+    static @NotNull GuiLayout border(final int rows) {
+        return new BorderGuiLayout(rows);
+    }
+
+    static @NotNull GuiLayout border(final @NotNull Slot min, final @NotNull Slot max) {
+        return new BorderGuiLayout(min, max);
     }
 
     int size();

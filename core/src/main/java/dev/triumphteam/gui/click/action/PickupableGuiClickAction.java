@@ -25,8 +25,18 @@ package dev.triumphteam.gui.click.action;
 
 import dev.triumphteam.gui.click.ClickContext;
 import dev.triumphteam.gui.click.PickupResult;
+import dev.triumphteam.gui.click.controller.ClickController;
+import dev.triumphteam.gui.click.handler.SimpleClickHandler;
 import org.jetbrains.annotations.NotNull;
 
+/**
+ * Similar to {@link SimpleGuiClickAction} but returns a {@link PickupResult} to decide if an item can be moved.
+ * This is by default only handled by {@link SimpleClickHandler}.
+ * This SHOULD NOT be handled by any handler that uses {@link ClickController#completingLater(boolean)}.
+ *
+ * @param <P> The player type.
+ * @see SimpleClickHandler
+ */
 @FunctionalInterface
 public interface PickupableGuiClickAction<P> extends GuiClickAction<P> {
 

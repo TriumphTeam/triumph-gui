@@ -43,12 +43,12 @@ public class HopperContainerType implements PaperContainerType {
     }
 
     @Override
-    public int mapSlot(final @NotNull Slot slot) {
-        final var realSlot = (slot.column() * slot.row()) - 1;
+    public int mapSlot(final int row, final int column) {
+        final var realSlot = (column * row) - 1;
 
         if (realSlot < LOWER_LIMIT || realSlot > UPPER_LIMIT) {
             throw new TriumphGuiException(
-                "Invalid slot (" + slot.row() + ", " + slot.column() + "). Valid range is (1, 1) to (1, 5)."
+                "Invalid rawSlot (" + row + ", " + column + "). Valid range is (1, 1) to (1, 5)."
             );
         }
 
@@ -58,6 +58,16 @@ public class HopperContainerType implements PaperContainerType {
     @Override
     public @NotNull Slot mapSlot(final int slot) {
         return Slot.of(1, slot + 1);
+    }
+
+    @Override
+    public int mapToPlayerInventory(final int slot) {
+        return 0;
+    }
+
+    @Override
+    public boolean isPlayerInventory(final int slot) {
+        return false;
     }
 
     @Override

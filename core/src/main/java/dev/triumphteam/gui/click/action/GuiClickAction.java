@@ -30,7 +30,7 @@ import org.jetbrains.annotations.NotNull;
 
 /**
  * Represents an action for when a player clicks on the GUI.
- * This interface is empty to allow users to implement their own.
+ * This has no run method because it can be different on each implementation.
  * The implementation of the click action is entirely dependent on the
  * {@link ClickHandler} used.
  *
@@ -46,7 +46,7 @@ public interface GuiClickAction<P> {
         return action;
     }
 
-    static <P> @NotNull GuiClickAction<P> control(final @NotNull PickupableGuiClickAction<P> action) {
+    static <P> @NotNull GuiClickAction<P> pickupable(final @NotNull PickupableGuiClickAction<P> action) {
         return action;
     }
 }

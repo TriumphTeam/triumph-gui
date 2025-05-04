@@ -60,12 +60,12 @@ public final class MapBackedContainer<P, I> implements GuiContainer<P, I> {
 
     @Override
     public void setItem(final int row, final int column, final @NotNull GuiItem<@NotNull P, @NotNull I> guiItem) {
-        setItem(containerType.mapSlot(Slot.of(row, column)), guiItem);
+        setItem(containerType.mapSlot(row, column), guiItem);
     }
 
     @Override
     public void setItem(final @NotNull Slot slot, final @NotNull GuiItem<@NotNull P, @NotNull I> guiItem) {
-        setItem(containerType.mapSlot(slot), guiItem);
+        setItem(containerType.mapSlot(slot.row(), slot.column()), guiItem);
     }
 
     @Override
@@ -76,23 +76,33 @@ public final class MapBackedContainer<P, I> implements GuiContainer<P, I> {
     }
 
     @Override
-    public void setAction(final int row, final int column, final @NotNull GuiClickAction<P> clickAction) {
-        setAction(Slot.of(row, column), clickAction);
-    }
-
-    @Override
-    public void setAction(final @NotNull Slot slot, final @NotNull GuiClickAction<P> clickAction) {
-        setAction(containerType.mapSlot(slot), clickAction);
-    }
-
-    @Override
     public void setAction(final int slot, final @NotNull GuiClickAction<P> clickAction) {
         backing.put(slot, new RenderedClickElement<>(clickHandler, clickAction));
     }
 
     @Override
-    public void setAction(final int row, final int column, final @NotNull SimpleGuiClickAction<P> clickAction) {
+    public void setAction(final int row, final int column, final @NotNull GuiClickAction<P> clickAction) {
+        setAction(containerType.mapSlot(row, column), clickAction);
+    }
 
+    @Override
+    public void setAction(final @NotNull Slot slot, final @NotNull GuiClickAction<P> clickAction) {
+        setAction(containerType.mapSlot(slot.row(), slot.column()), clickAction);
+    }
+
+    @Override
+    public void setAction(final int slot, final @NotNull SimpleGuiClickAction<P> clickAction) {
+        backing.put(slot, new RenderedClickElement<>(clickHandler, clickAction));
+    }
+
+    @Override
+    public void setAction(final int row, final int column, final @NotNull SimpleGuiClickAction<P> clickAction) {
+        setAction(containerType.mapSlot(row, column), clickAction);
+    }
+
+    @Override
+    public void setAction(final @NotNull Slot slot, final @NotNull SimpleGuiClickAction<P> clickAction) {
+        setAction(containerType.mapSlot(slot.row(), slot.column()), clickAction);
     }
 
     @Override

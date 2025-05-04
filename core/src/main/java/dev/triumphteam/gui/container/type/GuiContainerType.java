@@ -28,7 +28,14 @@ import org.jetbrains.annotations.NotNull;
 
 public interface GuiContainerType {
 
-    int mapSlot(final @NotNull Slot slot);
+    int COLUMNS = 9;
+    int PLAYER_INVENTORY_SIZE = 27;
+
+    int mapSlot(final int row, final int column);
 
     @NotNull Slot mapSlot(final int slot);
+
+    int mapToPlayerInventory(final int slot);
+
+    boolean isPlayerInventory(final int slot);
 }
