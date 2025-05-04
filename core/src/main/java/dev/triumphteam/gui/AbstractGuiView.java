@@ -25,6 +25,7 @@ package dev.triumphteam.gui;
 
 import dev.triumphteam.gui.actions.GuiCloseAction;
 import dev.triumphteam.gui.click.ClickContext;
+import dev.triumphteam.gui.click.PickupResult;
 import dev.triumphteam.gui.click.handler.ClickHandler;
 import dev.triumphteam.gui.click.processor.ClickProcessor;
 import dev.triumphteam.gui.component.GuiComponent;
@@ -157,8 +158,8 @@ public abstract class AbstractGuiView<P, I> implements GuiView {
         populateInventory(renderedItems);
     }
 
-    public void processClick(final @NotNull ClickContext context) {
-        clickProcessor.processClick(context, this);
+    public @NotNull PickupResult processClick(final @NotNull ClickContext context) {
+        return clickProcessor.processClick(context, this);
     }
 
     public @Nullable RenderedGuiElement<P, I> getElement(final int slot) {

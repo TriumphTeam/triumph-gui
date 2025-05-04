@@ -23,6 +23,7 @@
  */
 package dev.triumphteam.gui.example.examples;
 
+import dev.triumphteam.gui.click.PickupResult;
 import dev.triumphteam.gui.click.action.GuiClickAction;
 import dev.triumphteam.gui.paper.Gui;
 import dev.triumphteam.gui.paper.builder.item.ItemBuilder;
@@ -58,9 +59,12 @@ public final class Static implements CommandExecutor {
                         player.sendMessage("You have clicked on the empty slot!");
                     });
 
-                    container.setAction(3, 3, GuiClickAction.<Player>simple((player, context) -> {
-
-                    }));
+                    container.setItem(3, 3, ItemBuilder.from(Material.PAPER)
+                            .name(Component.text("My Paper"))
+                            .asGuiItem(GuiClickAction.control((player, context) -> {
+                                return PickupResult.ALLOW;
+                            }))
+                    );
                 })
                 .build();
 

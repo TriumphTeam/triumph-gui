@@ -45,4 +45,8 @@ public interface GuiClickAction<P> {
     static <P> @NotNull GuiClickAction<P> simple(final @NotNull SimpleGuiClickAction<P> action) {
         return action;
     }
+
+    static <P> @NotNull GuiClickAction<P> control(final @NotNull PickupableGuiClickAction<P> action) {
+        return action;
+    }
 }

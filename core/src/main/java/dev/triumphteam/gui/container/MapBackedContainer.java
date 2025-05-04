@@ -23,6 +23,7 @@
  */
 package dev.triumphteam.gui.container;
 
+import dev.triumphteam.gui.click.action.GuiClickAction;
 import dev.triumphteam.gui.click.action.SimpleGuiClickAction;
 import dev.triumphteam.gui.click.handler.ClickHandler;
 import dev.triumphteam.gui.container.type.GuiContainerType;
@@ -75,18 +76,23 @@ public final class MapBackedContainer<P, I> implements GuiContainer<P, I> {
     }
 
     @Override
-    public void setAction(final int row, final int column, final @NotNull SimpleGuiClickAction<P> clickAction) {
+    public void setAction(final int row, final int column, final @NotNull GuiClickAction<P> clickAction) {
         setAction(Slot.of(row, column), clickAction);
     }
 
     @Override
-    public void setAction(final @NotNull Slot slot, final @NotNull SimpleGuiClickAction<P> clickAction) {
+    public void setAction(final @NotNull Slot slot, final @NotNull GuiClickAction<P> clickAction) {
         setAction(containerType.mapSlot(slot), clickAction);
     }
 
     @Override
-    public void setAction(final int slot, final @NotNull SimpleGuiClickAction<P> clickAction) {
+    public void setAction(final int slot, final @NotNull GuiClickAction<P> clickAction) {
         backing.put(slot, new RenderedClickElement<>(clickHandler, clickAction));
+    }
+
+    @Override
+    public void setAction(final int row, final int column, final @NotNull SimpleGuiClickAction<P> clickAction) {
+
     }
 
     @Override

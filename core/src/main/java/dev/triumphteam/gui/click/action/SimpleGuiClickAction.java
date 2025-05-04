@@ -37,6 +37,7 @@ import org.jetbrains.annotations.NotNull;
  * @see SimpleClickHandler
  * @see CompletableFutureClickHandler
  */
+@FunctionalInterface
 public interface SimpleGuiClickAction<P> extends GuiClickAction<P> {
 
     /**

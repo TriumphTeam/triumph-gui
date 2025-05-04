@@ -24,6 +24,8 @@
 package dev.triumphteam.gui.click.handler;
 
 import dev.triumphteam.gui.click.ClickContext;
+import dev.triumphteam.gui.click.PickupResult;
+import dev.triumphteam.gui.click.action.PickupableGuiClickAction;
 import dev.triumphteam.gui.click.action.GuiClickAction;
 import dev.triumphteam.gui.click.action.SimpleGuiClickAction;
 import dev.triumphteam.gui.click.controller.ClickController;
@@ -41,18 +43,27 @@ import org.jetbrains.annotations.NotNull;
 public final class SimpleClickHandler<P> implements ClickHandler<P> {
 
     @Override
-    public void handle(
-        final @NotNull P player,
-        final @NotNull ClickContext context,
-        final @NotNull GuiClickAction<P> action,
-        final @NotNull ClickController controller
+    public @NotNull PickupResult handle(
+            final @NotNull P player,
+            final @NotNull ClickContext context,
+            final @NotNull GuiClickAction<P> action,
+            final @NotNull ClickController controller
     ) {
+
+        // Handle pickupable clicks.
+        if (action instanceof PickupableGuiClickAction<P> controlGuiClickAction) {
+            return controlGuiClickAction.run(player, context);
+        }
+
         // Only accept runnable actions
         if (!(action instanceof SimpleGuiClickAction<P> runnableAction)) {
-            throw new TriumphGuiException("The click action type '" + action.getClass().getName() + "' is supported by the 'CompletableFutureClickHandler'.");
+            throw new TriumphGuiException("The click action type '" + action.getClass().getSimpleName() + "' is not supported by the 'SimpleClickHandler'.");
         }
 
         // Run the action
         runnableAction.run(player, context);
+
+        // We don't allow clicks unless it's a `PickupableGuiClickAction`.
+        return PickupResult.DISALLOW;
     }
 }

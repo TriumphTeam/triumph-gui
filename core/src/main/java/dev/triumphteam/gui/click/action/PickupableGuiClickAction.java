@@ -21,30 +21,14 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package dev.triumphteam.gui.click.handler;
+package dev.triumphteam.gui.click.action;
 
 import dev.triumphteam.gui.click.ClickContext;
 import dev.triumphteam.gui.click.PickupResult;
-import dev.triumphteam.gui.click.action.GuiClickAction;
-import dev.triumphteam.gui.click.controller.ClickController;
 import org.jetbrains.annotations.NotNull;
 
-/**
- * The click handler is responsible for handling a {@link GuiClickAction}.
- * This can have many different behaviors, like sync clicks, async clicks, Kotlin suspending clicks, etc.
- * It is left to the user to implement other behaviors.
- *
- * @param <P> The player instance.
- * @see CompletableFutureClickHandler
- * @see SimpleClickHandler
- * @see GuiClickAction
- */
-public interface ClickHandler<P> {
+@FunctionalInterface
+public interface PickupableGuiClickAction<P> extends GuiClickAction<P> {
 
-    @NotNull PickupResult handle(
-        final @NotNull P player,
-        final @NotNull ClickContext context,
-        final @NotNull GuiClickAction<P> action,
-        final @NotNull ClickController controller
-    );
+    @NotNull PickupResult run(final @NotNull P player, final @NotNull ClickContext context);
 }
