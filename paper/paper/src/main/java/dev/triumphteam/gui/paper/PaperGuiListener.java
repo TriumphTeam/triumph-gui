@@ -26,6 +26,7 @@ package dev.triumphteam.gui.paper;
 import dev.triumphteam.gui.actions.GuiCloseAction;
 import dev.triumphteam.gui.click.ClickContext;
 import dev.triumphteam.gui.click.GuiClick;
+import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.ClickType;
@@ -34,15 +35,15 @@ import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.inventory.InventoryDragEvent;
 import org.bukkit.event.inventory.InventoryOpenEvent;
 import org.bukkit.inventory.InventoryHolder;
-import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.plugin.Plugin;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public final class PaperGuiListener implements Listener {
 
-    public static void register() {
-        // Auto-register listener if none was registered yet
-        PaperGuiSettings.get().register(JavaPlugin.getProvidingPlugin(PaperGuiListener.class));
+    public static void register(final @NotNull Plugin plugin) {
+        // Auto-register the listener.
+        Bukkit.getServer().getPluginManager().registerEvents(new PaperGuiListener(), plugin);
     }
 
     @EventHandler

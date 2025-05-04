@@ -36,6 +36,7 @@ import dev.triumphteam.gui.paper.container.type.PaperContainerType;
 import dev.triumphteam.gui.title.GuiTitle;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.plugin.Plugin;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
@@ -46,8 +47,10 @@ import java.util.List;
  */
 public final class Gui implements BaseGui<Player> {
 
+    private static final Plugin plugin = PaperGuiSettings.get().getPlugin();
+
     static {
-        PaperGuiListener.register();
+        PaperGuiListener.register(plugin);
     }
 
     private final GuiTitle title;

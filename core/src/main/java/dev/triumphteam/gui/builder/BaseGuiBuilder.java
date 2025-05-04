@@ -194,7 +194,7 @@ public abstract class BaseGuiBuilder<B extends BaseGuiBuilder<B, P, G, I, C>, P,
      */
     @Contract("_ -> this")
     public @NotNull B statelessComponent(final @NotNull FunctionalGuiComponentRender<P, I> render) {
-        return component(new SimpleGuiComponent<>(render, Collections.emptyList()));
+        return component(new SimpleGuiComponent<>(render, Collections.emptyList(), getClickHandler()));
     }
 
     /**

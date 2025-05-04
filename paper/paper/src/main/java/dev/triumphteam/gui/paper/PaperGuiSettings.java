@@ -23,19 +23,17 @@
  */
 package dev.triumphteam.gui.paper;
 
-import dev.triumphteam.gui.exception.TriumphGuiException;
 import dev.triumphteam.gui.settings.GuiSettings;
-import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
+import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 
 public final class PaperGuiSettings extends GuiSettings<Player, ItemStack, PaperGuiSettings> {
 
     private static final PaperGuiSettings INSTANCE = new PaperGuiSettings();
 
-    private boolean listenerRegistered = false;
     private Plugin plugin = null;
 
     private PaperGuiSettings() {}
@@ -44,21 +42,21 @@ public final class PaperGuiSettings extends GuiSettings<Player, ItemStack, Paper
         return INSTANCE;
     }
 
-    public PaperGuiSettings register(final @NotNull Plugin plugin) {
-        // Only register listener once
-        if (this.listenerRegistered) return this;
-
-        this.plugin = plugin;
-        Bukkit.getServer().getPluginManager().registerEvents(new PaperGuiListener(), plugin);
-        this.listenerRegistered = true;
-        return this;
+    public static PaperGuiSettings init(final @NotNull Plugin plugin) {
+        return INSTANCE.setPlugin(plugin);
     }
 
     public @NotNull Plugin getPlugin() {
         if (plugin == null) {
-            throw new TriumphGuiException("An error occurred while attempting to get the plugin instance.");
+            init(JavaPlugin.getProvidingPlugin(PaperGuiListener.class));
         }
 
         return plugin;
+    }
+
+    private PaperGuiSettings setPlugin(final @NotNull Plugin plugin) {
+        if (this.plugin != null) return this;
+        this.plugin = plugin;
+        return this;
     }
 }
