@@ -24,6 +24,7 @@
 package dev.triumphteam.gui.click.handler;
 
 import dev.triumphteam.gui.click.ClickContext;
+import dev.triumphteam.gui.click.MoveResult;
 import dev.triumphteam.gui.click.action.GuiClickAction;
 import dev.triumphteam.gui.click.controller.ClickController;
 import org.jetbrains.annotations.NotNull;
@@ -40,15 +41,7 @@ import org.jetbrains.annotations.NotNull;
  */
 public interface ClickHandler<P> {
 
-    /**
-     * Handle the click action given the {@link ClickController}.
-     *
-     * @param player     The player clicking in the GUI.
-     * @param context    The click context, containing information about the click.
-     * @param action     The action to run.
-     * @param controller The controller which can be used to control how the click is processed.
-     */
-    void handle(
+    @NotNull MoveResult handle(
         final @NotNull P player,
         final @NotNull ClickContext context,
         final @NotNull GuiClickAction<P> action,

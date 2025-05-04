@@ -29,8 +29,9 @@ import dev.triumphteam.gui.click.handler.ClickHandler;
 import dev.triumphteam.gui.click.processor.ClickProcessor;
 import dev.triumphteam.gui.component.GuiComponent;
 import dev.triumphteam.gui.component.renderer.GuiComponentRenderer;
+import dev.triumphteam.gui.element.RenderedGuiElement;
+import dev.triumphteam.gui.element.RenderedGuiItem;
 import dev.triumphteam.gui.exception.TriumphGuiException;
-import dev.triumphteam.gui.item.RenderedGuiItem;
 import dev.triumphteam.gui.paper.container.type.PaperContainerType;
 import dev.triumphteam.gui.title.GuiTitle;
 import org.bukkit.entity.Player;
@@ -46,20 +47,22 @@ import java.util.UUID;
 public final class PaperGuiView extends AbstractGuiView<Player, ItemStack> implements InventoryHolder {
 
     private final PaperContainerType containerType;
+    private final Inventory playerInventory;
     private Inventory inventory = null;
 
     public PaperGuiView(
-        final @NotNull Player player,
-        final @NotNull GuiTitle title,
-        final @NotNull PaperContainerType containerType,
-        final @NotNull List<GuiComponent<Player, ItemStack>> components,
-        final @NotNull List<GuiCloseAction> closeActions,
-        final @NotNull GuiComponentRenderer<Player, ItemStack> componentRenderer,
-        final @NotNull ClickHandler<Player> clickHandler,
-        final long spamPreventionDuration
+            final @NotNull Player player,
+            final @NotNull GuiTitle title,
+            final @NotNull PaperContainerType containerType,
+            final @NotNull List<GuiComponent<Player, ItemStack>> components,
+            final @NotNull List<GuiCloseAction> closeActions,
+            final @NotNull GuiComponentRenderer<Player, ItemStack> componentRenderer,
+            final @NotNull ClickHandler<Player> clickHandler,
+            final long spamPreventionDuration
     ) {
         super(player, title, components, closeActions, containerType, componentRenderer, clickHandler, new ClickProcessor<>(spamPreventionDuration));
         this.containerType = containerType;
+        this.playerInventory = player.getInventory();
     }
 
     @Override
@@ -70,9 +73,14 @@ public final class PaperGuiView extends AbstractGuiView<Player, ItemStack> imple
 
         final var viewer = viewer();
         viewer.getScheduler().run(PaperGuiSettings.get().getPlugin(), (task) -> {
-            setUpdating(true);
+            if (updating) {
+                setUpdating(true);
+                viewer.openInventory(inventory);
+                setUpdating(false);
+                return;
+            }
+
             viewer.openInventory(inventory);
-            setUpdating(false);
         }, null);
     }
 
@@ -105,8 +113,18 @@ public final class PaperGuiView extends AbstractGuiView<Player, ItemStack> imple
     }
 
     @Override
-    protected void populateInventory(final @NotNull Map<Integer, RenderedGuiItem<Player, ItemStack>> renderedItems) {
-        renderedItems.forEach((slot, item) -> inventory.setItem(slot, item.item()));
+    protected void populateInventory(final @NotNull Map<Integer, RenderedGuiElement<Player, ItemStack>> renderedItems) {
+        renderedItems.forEach((slot, item) -> {
+            if (!(item instanceof RenderedGuiItem)) return;
+            final var itemStack = ((RenderedGuiItem<Player, ItemStack>) item).item();
+
+            if (containerType.isPlayerInventory(slot)) {
+                playerInventory.setItem(containerType.toPlayerInventory(slot), itemStack);
+                return;
+            }
+
+            inventory.setItem(containerType.toTopInventory(slot), itemStack);
+        });
     }
 
     private void checkInventory() throws TriumphGuiException {

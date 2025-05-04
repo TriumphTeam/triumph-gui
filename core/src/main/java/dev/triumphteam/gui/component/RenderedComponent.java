@@ -23,13 +23,13 @@
  */
 package dev.triumphteam.gui.component;
 
-import dev.triumphteam.gui.item.RenderedGuiItem;
+import dev.triumphteam.gui.element.RenderedGuiElement;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Map;
 
 public record RenderedComponent<P, I>(
     @NotNull GuiComponent<P, I> component,
-    @NotNull Map<Integer, RenderedGuiItem<P, I>> renderedItems
+    @NotNull Map<Integer, RenderedGuiElement<P, I>> renderedItems
 ) {
 }

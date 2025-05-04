@@ -23,9 +23,14 @@
  */
 package dev.triumphteam.gui.example.examples;
 
+import dev.triumphteam.gui.click.MoveResult;
+import dev.triumphteam.gui.click.action.GuiClickAction;
+import dev.triumphteam.gui.layout.GuiLayout;
 import dev.triumphteam.gui.paper.Gui;
 import dev.triumphteam.gui.paper.builder.item.ItemBuilder;
+import dev.triumphteam.gui.slot.Slot;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -40,20 +45,43 @@ public final class Static implements CommandExecutor {
         if (!(sender instanceof Player senderPlayer)) return false;
 
         final var gui = Gui
-            .of(6)
-            .title(Component.text("Static Gui")) // Simple title for the GUI
-            .statelessComponent(container -> { // A stateless component, we don't care about the item updating, just want the click action
-                container.setItem(1, 1, ItemBuilder.from(Material.PAPER)
-                    .name(Component.text("My Paper"))
-                    .asGuiItem((player, context) -> {
-                        player.sendMessage("You have clicked on the paper item!");
-                    })
-                );
+                .of(6)
+                .title(Component.text("Static Gui")) // Simple title for the GUI
+                .statelessComponent(container -> { // A stateless component, we don't care about the item updating, just want the click action
+                    container.setItem(1, 1, ItemBuilder.from(Material.PAPER)
+                            .name(Component.text("My Paper"))
+                            .asGuiItem((player, context) -> {
+                                player.sendMessage("You have clicked on the paper item!");
+                            })
+                    );
 
-            })
-            .build();
+                })
+                .statelessComponent(container -> {
+                    GuiLayout.border(6).forEach(slot -> {
+                        container.setAction(slot, GuiClickAction.movable((player, context) -> {
+                            player.sendMessage(Component.text("You CANNOT place/pickup items here!").color(NamedTextColor.RED));
+                            return MoveResult.DISALLOW;
+                        }));
+                    });
+
+                    GuiLayout.box(Slot.of(2, 2), Slot.of(5, 8)).forEach(slot -> {
+                        container.setAction(slot, GuiClickAction.movable((player, context) -> {
+                            player.sendMessage(Component.text("You can place/pickup items here!").color(NamedTextColor.GREEN));
+                            return MoveResult.ALLOW;
+                        }));
+                    });
+
+                    GuiLayout.box(Slot.of(7, 1), Slot.of(10, 9)).forEach(slot -> {
+                        container.setAction(slot, GuiClickAction.movable((player, context) -> {
+                            player.sendMessage(Component.text("You can place/pickup items here!").color(NamedTextColor.GREEN));
+                            return MoveResult.ALLOW;
+                        }));
+                    });
+                })
+                .build();
 
         gui.open(senderPlayer);
+
         return true;
     }
 }

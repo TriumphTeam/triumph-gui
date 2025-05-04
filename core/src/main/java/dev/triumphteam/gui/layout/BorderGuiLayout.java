@@ -29,6 +29,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.stream.IntStream;
 
 public final class BorderGuiLayout implements GuiLayout {
 
@@ -39,25 +40,19 @@ public final class BorderGuiLayout implements GuiLayout {
     }
 
     public BorderGuiLayout(final @NotNull Slot min, final @NotNull Slot max) {
-        // Top border
-        for (int col = min.column(); col <= max.column(); col++) {
-            slots.add(Slot.of(min.row(), col));
-        }
+        // Top and bottom borders
+        IntStream.rangeClosed(min.column(), max.column())
+                .forEach(col -> {
+                    slots.add(Slot.of(min.row(), col)); // Top border
+                    slots.add(Slot.of(max.row(), col)); // Bottom border
+                });
 
-        // Bottom border
-        for (int col = min.column(); col <= max.column(); col++) {
-            slots.add(Slot.of(max.row(), col));
-        }
-
-        // Left border
-        for (int row = min.row() + 1; row < max.row(); row++) {
-            slots.add(Slot.of(row, min.column()));
-        }
-
-        // Right border
-        for (int row = min.row() + 1; row < max.row(); row++) {
-            slots.add(Slot.of(row, max.column()));
-        }
+        // Left and right borders (excluding corners that were already added)
+        IntStream.range(min.row() + 1, max.row())
+                .forEach(row -> {
+                    slots.add(Slot.of(row, min.column())); // Left border
+                    slots.add(Slot.of(row, max.column())); // Right border
+                });
     }
 
     @Override

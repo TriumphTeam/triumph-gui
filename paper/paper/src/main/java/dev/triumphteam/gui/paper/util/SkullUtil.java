@@ -54,7 +54,6 @@ public final class SkullUtil {
      *
      * @return player skull
      */
-    @SuppressWarnings("deprecation")
     public static ItemStack skull() {
         return new ItemStack(SKULL);
     }
@@ -65,7 +64,6 @@ public final class SkullUtil {
      * @param item item to check
      * @return whether the item is a player skull
      */
-    @SuppressWarnings("deprecation")
     public static boolean isPlayerSkull(@NotNull final ItemStack item) {
         return item.getType() == SKULL;
     }

@@ -21,3 +21,9 @@ dependencies {
 java {
     toolchain.languageVersion.set(JavaLanguageVersion.of(21))
 }
+
+tasks {
+    runServer {
+        minecraftVersion("1.21.4")
+    }
+}

@@ -26,5 +26,5 @@ package dev.triumphteam.gui.click;
 import dev.triumphteam.gui.GuiView;
 import org.jetbrains.annotations.NotNull;
 
-public record ClickContext(@NotNull GuiClick guiClick, int slot, @NotNull GuiView guiView) {
+public record ClickContext(@NotNull GuiClick guiClick, int rawSlot, @NotNull GuiView guiView) {
 }

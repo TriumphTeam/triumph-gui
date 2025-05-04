@@ -23,10 +23,14 @@
  */
 package dev.triumphteam.gui.container;
 
+import dev.triumphteam.gui.click.action.GuiClickAction;
+import dev.triumphteam.gui.click.action.SimpleGuiClickAction;
 import dev.triumphteam.gui.click.handler.ClickHandler;
 import dev.triumphteam.gui.container.type.GuiContainerType;
-import dev.triumphteam.gui.item.GuiItem;
-import dev.triumphteam.gui.item.RenderedGuiItem;
+import dev.triumphteam.gui.element.GuiItem;
+import dev.triumphteam.gui.element.RenderedClickElement;
+import dev.triumphteam.gui.element.RenderedGuiElement;
+import dev.triumphteam.gui.element.RenderedGuiItem;
 import dev.triumphteam.gui.layout.GuiLayout;
 import dev.triumphteam.gui.slot.Slot;
 import org.jetbrains.annotations.NotNull;
@@ -37,13 +41,13 @@ import java.util.Map;
 
 public final class MapBackedContainer<P, I> implements GuiContainer<P, I> {
 
-    private final Map<Integer, RenderedGuiItem<P, I>> backing = new HashMap<>(100);
+    private final Map<Integer, RenderedGuiElement<P, I>> backing = new HashMap<>(100);
     private final ClickHandler<P> clickHandler;
     private final GuiContainerType containerType;
 
     public MapBackedContainer(
-        final @NotNull ClickHandler<P> clickHandler,
-        final @NotNull GuiContainerType containerType
+            final @NotNull ClickHandler<P> clickHandler,
+            final @NotNull GuiContainerType containerType
     ) {
         this.clickHandler = clickHandler;
         this.containerType = containerType;
@@ -56,21 +60,49 @@ public final class MapBackedContainer<P, I> implements GuiContainer<P, I> {
 
     @Override
     public void setItem(final int row, final int column, final @NotNull GuiItem<@NotNull P, @NotNull I> guiItem) {
-        setItem(containerType.mapSlot(Slot.of(row, column)), guiItem);
+        setItem(containerType.toSlot(row, column), guiItem);
     }
 
     @Override
     public void setItem(final @NotNull Slot slot, final @NotNull GuiItem<@NotNull P, @NotNull I> guiItem) {
-        setItem(containerType.mapSlot(slot), guiItem);
+        setItem(containerType.toSlot(slot.row(), slot.column()), guiItem);
     }
 
     @Override
     public void setItem(final int slot, final @NotNull GuiItem<@NotNull P, @NotNull I> guiItem) {
         // TODO VALIDATE SLOT HERE TOO
-        // Render item
-        final var renderedItem = new RenderedGuiItem<>(guiItem.render(), clickHandler, guiItem.getClickAction());
-        // Add rendered to backing
-        backing.put(slot, renderedItem);
+        // Render and add item to backing
+        backing.put(slot, new RenderedGuiItem<>(guiItem.render(), clickHandler, guiItem.getClickAction()));
+    }
+
+    @Override
+    public void setAction(final int slot, final @NotNull GuiClickAction<P> clickAction) {
+        backing.put(slot, new RenderedClickElement<>(clickHandler, clickAction));
+    }
+
+    @Override
+    public void setAction(final int row, final int column, final @NotNull GuiClickAction<P> clickAction) {
+        setAction(containerType.toSlot(row, column), clickAction);
+    }
+
+    @Override
+    public void setAction(final @NotNull Slot slot, final @NotNull GuiClickAction<P> clickAction) {
+        setAction(containerType.toSlot(slot.row(), slot.column()), clickAction);
+    }
+
+    @Override
+    public void setAction(final int slot, final @NotNull SimpleGuiClickAction<P> clickAction) {
+        backing.put(slot, new RenderedClickElement<>(clickHandler, clickAction));
+    }
+
+    @Override
+    public void setAction(final int row, final int column, final @NotNull SimpleGuiClickAction<P> clickAction) {
+        setAction(containerType.toSlot(row, column), clickAction);
+    }
+
+    @Override
+    public void setAction(final @NotNull Slot slot, final @NotNull SimpleGuiClickAction<P> clickAction) {
+        setAction(containerType.toSlot(slot.row(), slot.column()), clickAction);
     }
 
     @Override
@@ -78,7 +110,7 @@ public final class MapBackedContainer<P, I> implements GuiContainer<P, I> {
         layout.forEach(position -> setItem(position, guiItem));
     }
 
-    public @NotNull Map<Integer, RenderedGuiItem<P, I>> complete() {
+    public @NotNull Map<Integer, RenderedGuiElement<P, I>> complete() {
         return Collections.unmodifiableMap(backing);
     }
 }

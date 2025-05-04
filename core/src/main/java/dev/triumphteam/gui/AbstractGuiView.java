@@ -25,6 +25,7 @@ package dev.triumphteam.gui;
 
 import dev.triumphteam.gui.actions.GuiCloseAction;
 import dev.triumphteam.gui.click.ClickContext;
+import dev.triumphteam.gui.click.MoveResult;
 import dev.triumphteam.gui.click.handler.ClickHandler;
 import dev.triumphteam.gui.click.processor.ClickProcessor;
 import dev.triumphteam.gui.component.GuiComponent;
@@ -32,8 +33,8 @@ import dev.triumphteam.gui.component.RenderedComponent;
 import dev.triumphteam.gui.component.StatefulGuiComponent;
 import dev.triumphteam.gui.component.renderer.GuiComponentRenderer;
 import dev.triumphteam.gui.container.type.GuiContainerType;
+import dev.triumphteam.gui.element.RenderedGuiElement;
 import dev.triumphteam.gui.exception.TriumphGuiException;
-import dev.triumphteam.gui.item.RenderedGuiItem;
 import dev.triumphteam.gui.title.GuiTitle;
 import dev.triumphteam.gui.title.StatefulGuiTitle;
 import dev.triumphteam.gui.title.renderer.DefaultGuiTitleRenderer;
@@ -61,10 +62,10 @@ public abstract class AbstractGuiView<P, I> implements GuiView {
     private final ClickProcessor<P, I> clickProcessor;
     // Cache of rendered components.
     private final Map<GuiComponent<P, I>, RenderedComponent<P, I>> renderedComponents = new ConcurrentHashMap<>();
-    // All the gui items that have been rendered and are in the inventory.
-    private final Map<Integer, RenderedGuiItem<P, I>> allRenderedItems = new ConcurrentHashMap<>();
+    // All the gui elements that have been rendered and are in the inventory.
+    private final Map<Integer, RenderedGuiElement<P, I>> allRenderedElements = new ConcurrentHashMap<>();
     // Helper boolean for updating title.
-    private boolean updating = true;
+    private boolean updating = false;
     private Component renderedTitle = null;
 
     public AbstractGuiView(
@@ -97,7 +98,7 @@ public abstract class AbstractGuiView<P, I> implements GuiView {
 
     protected abstract void clearSlot(final int slot);
 
-    protected abstract void populateInventory(final @NotNull Map<Integer, @NotNull RenderedGuiItem<P, I>> renderedItems);
+    protected abstract void populateInventory(final @NotNull Map<Integer, @NotNull RenderedGuiElement<P, I>> renderedItems);
 
     protected abstract void openInventory(final boolean updating);
 
@@ -145,24 +146,24 @@ public abstract class AbstractGuiView<P, I> implements GuiView {
             // Clear its uses
             existing.renderedItems().forEach((slot, ignored) -> {
                 clearSlot(slot);
-                allRenderedItems.remove(slot);
+                allRenderedElements.remove(slot);
             });
         }
 
         renderedComponents.put(ownerComponent, renderedComponent);
 
         final var renderedItems = renderedComponent.renderedItems();
-        allRenderedItems.putAll(renderedItems);
+        allRenderedElements.putAll(renderedItems);
 
         populateInventory(renderedItems);
     }
 
-    public void processClick(final @NotNull ClickContext context) {
-        clickProcessor.processClick(context, this);
+    public @NotNull MoveResult processClick(final @NotNull ClickContext context) {
+        return clickProcessor.processClick(context, this);
     }
 
-    public @Nullable RenderedGuiItem<P, I> getItem(final int slot) {
-        return allRenderedItems.get(slot);
+    public @Nullable RenderedGuiElement<P, I> getElement(final int slot) {
+        return allRenderedElements.get(slot);
     }
 
     public @NotNull ClickHandler<P> getDefaultClickHandler() {

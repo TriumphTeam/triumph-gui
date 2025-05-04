@@ -24,8 +24,10 @@
 package dev.triumphteam.gui.click.handler;
 
 import dev.triumphteam.gui.click.ClickContext;
+import dev.triumphteam.gui.click.MoveResult;
+import dev.triumphteam.gui.click.action.MovableGuiClickAction;
 import dev.triumphteam.gui.click.action.GuiClickAction;
-import dev.triumphteam.gui.click.action.RunnableGuiClickAction;
+import dev.triumphteam.gui.click.action.SimpleGuiClickAction;
 import dev.triumphteam.gui.click.controller.ClickController;
 import dev.triumphteam.gui.exception.TriumphGuiException;
 import org.jetbrains.annotations.NotNull;
@@ -41,18 +43,27 @@ import org.jetbrains.annotations.NotNull;
 public final class SimpleClickHandler<P> implements ClickHandler<P> {
 
     @Override
-    public void handle(
-        final @NotNull P player,
-        final @NotNull ClickContext context,
-        final @NotNull GuiClickAction<P> action,
-        final @NotNull ClickController controller
+    public @NotNull MoveResult handle(
+            final @NotNull P player,
+            final @NotNull ClickContext context,
+            final @NotNull GuiClickAction<P> action,
+            final @NotNull ClickController controller
     ) {
+
+        // Handle pickupable clicks.
+        if (action instanceof MovableGuiClickAction<P> controlGuiClickAction) {
+            return controlGuiClickAction.run(player, context);
+        }
+
         // Only accept runnable actions
-        if (!(action instanceof RunnableGuiClickAction<P> runnableAction)) {
-            throw new TriumphGuiException("The click action type '" + action.getClass().getName() + "' is supported by the 'CompletableFutureClickHandler'.");
+        if (!(action instanceof SimpleGuiClickAction<P> runnableAction)) {
+            throw new TriumphGuiException("The click action type '" + action.getClass().getSimpleName() + "' is not supported by the 'SimpleClickHandler'.");
         }
 
         // Run the action
         runnableAction.run(player, context);
+
+        // We don't allow clicks unless it's a `PickupableGuiClickAction`.
+        return MoveResult.DISALLOW;
     }
 }

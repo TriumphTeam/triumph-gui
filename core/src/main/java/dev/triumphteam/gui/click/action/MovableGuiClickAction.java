@@ -21,16 +21,24 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package dev.triumphteam.gui.item;
+package dev.triumphteam.gui.click.action;
 
-import dev.triumphteam.gui.click.action.GuiClickAction;
+import dev.triumphteam.gui.click.ClickContext;
+import dev.triumphteam.gui.click.MoveResult;
+import dev.triumphteam.gui.click.controller.ClickController;
+import dev.triumphteam.gui.click.handler.SimpleClickHandler;
 import org.jetbrains.annotations.NotNull;
 
-public interface GuiItem<P, I> {
+/**
+ * Similar to {@link SimpleGuiClickAction} but returns a {@link MoveResult} to decide if an item can be moved.
+ * This is by default only handled by {@link SimpleClickHandler}.
+ * This SHOULD NOT be handled by any handler that uses {@link ClickController#completingLater(boolean)}.
+ *
+ * @param <P> The player type.
+ * @see SimpleClickHandler
+ */
+@FunctionalInterface
+public interface MovableGuiClickAction<P> extends GuiClickAction<P> {
 
-    @NotNull
-    I render();
-
-    @NotNull
-    GuiClickAction<P> getClickAction();
+    @NotNull MoveResult run(final @NotNull P player, final @NotNull ClickContext context);
 }

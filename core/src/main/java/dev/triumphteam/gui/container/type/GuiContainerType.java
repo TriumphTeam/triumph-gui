@@ -28,7 +28,32 @@ import org.jetbrains.annotations.NotNull;
 
 public interface GuiContainerType {
 
-    int mapSlot(final @NotNull Slot slot);
+    int COLUMNS = 9;
+    int PLAYER_INVENTORY_SIZE = 27;
+    int PLAYER_INVENTORY_ROWS = 3;
+    int PLAYER_INVENTORY_HOTBAR_ROWS = 4;
 
-    @NotNull Slot mapSlot(final int slot);
+    static int defaultMapping(final int row, final int column) {
+        return (column + (row - 1) * GuiContainerType.COLUMNS) - 1;
+    }
+
+    static int defaultPlayerInventoryMapping(final int relative) {
+        // If it's the hotbar area.
+        if (relative >= GuiContainerType.PLAYER_INVENTORY_SIZE) {
+            return relative - GuiContainerType.PLAYER_INVENTORY_SIZE; // Maps to hotbar slots 0-8.
+        }
+
+        // Otherwise, it's the main inventory.
+        return relative + GuiContainerType.COLUMNS; // Maps to inventory slots 9-35.
+    }
+
+    int toSlot(final int row, final int column);
+
+    @NotNull Slot toSlot(final int slot);
+
+    int toTopInventory(final int slot);
+
+    int toPlayerInventory(final int slot);
+
+    boolean isPlayerInventory(final int slot);
 }

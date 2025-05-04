@@ -23,9 +23,3 @@ bukkitPluginYaml {
     commands.add(commands.create("gui-title"))
     foliaSupported.set(true)
 }
-
-tasks {
-    runServer {
-        minecraftVersion("1.21.1")
-    }
-}

@@ -23,5 +23,18 @@
  */
 package dev.triumphteam.gui.click.action;
 
+import dev.triumphteam.gui.click.processor.ClickProcessor;
+
+/**
+ * Represents an empty implementation of {@link GuiClickAction}.
+ * This implementation provides no functionality and is intended to act
+ * as a placeholder or default value when no specific click action is required.
+ * This will cause {@link ClickProcessor} to completely ignore the clicks.
+ *
+ * @param <P> The player type.
+ * @see GuiClickAction
+ * @see SimpleGuiClickAction
+ * @see MovableGuiClickAction
+ */
 public final class EmptyGuiClickAction<P> implements GuiClickAction<P> {
 }

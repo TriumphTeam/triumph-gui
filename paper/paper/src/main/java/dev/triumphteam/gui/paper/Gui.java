@@ -62,13 +62,13 @@ public final class Gui implements BaseGui<Player> {
     private final long spamPreventionDuration;
 
     public Gui(
-        final @NotNull GuiTitle title,
-        final @NotNull List<GuiComponent<Player, ItemStack>> components,
-        final @NotNull List<GuiCloseAction> closeActions,
-        final @NotNull PaperContainerType containerType,
-        final @NotNull GuiComponentRenderer<Player, ItemStack> componentRenderer,
-        final @NotNull ClickHandler<Player> clickHandler,
-        final long spamPreventionDuration
+            final @NotNull GuiTitle title,
+            final @NotNull List<GuiComponent<Player, ItemStack>> components,
+            final @NotNull List<GuiCloseAction> closeActions,
+            final @NotNull PaperContainerType containerType,
+            final @NotNull GuiComponentRenderer<Player, ItemStack> componentRenderer,
+            final @NotNull ClickHandler<Player> clickHandler,
+            final long spamPreventionDuration
     ) {
         this.title = title;
         this.components = components;
@@ -99,7 +99,7 @@ public final class Gui implements BaseGui<Player> {
      */
     @Contract("_ -> new")
     public static PaperGuiBuilder of(final int rows) {
-        return new PaperGuiBuilder(new ChestContainerType(rows));
+        return new PaperGuiBuilder(PaperContainerType.chest(rows));
     }
 
     /**
@@ -109,20 +109,20 @@ public final class Gui implements BaseGui<Player> {
      */
     @Contract(" -> new")
     public static PaperGuiBuilder hopper() {
-        return new PaperGuiBuilder(new HopperContainerType());
+        return new PaperGuiBuilder(PaperContainerType.hopper());
     }
 
     @Override
     public @NotNull GuiView open(final @NotNull Player player) {
         final var view = new PaperGuiView(
-            player,
-            title,
-            containerType,
-            components,
-            closeActions,
-            componentRenderer,
-            clickHandler,
-            spamPreventionDuration
+                player,
+                title,
+                containerType,
+                components,
+                closeActions,
+                componentRenderer,
+                clickHandler,
+                spamPreventionDuration
         );
 
         view.open();

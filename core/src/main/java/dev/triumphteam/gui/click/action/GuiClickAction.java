@@ -26,17 +26,41 @@ package dev.triumphteam.gui.click.action;
 import dev.triumphteam.gui.click.handler.ClickHandler;
 import dev.triumphteam.gui.click.handler.CompletableFutureClickHandler;
 import dev.triumphteam.gui.click.handler.SimpleClickHandler;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Represents an action for when a player clicks on the GUI.
- * This interface is empty to allow users to implement their own.
+ * This has no run method because it can be different on each implementation.
  * The implementation of the click action is entirely dependent on the
  * {@link ClickHandler} used.
  *
  * @param <P> The player type.
- * @see RunnableGuiClickAction
+ * @see SimpleGuiClickAction
  * @see ClickHandler
  * @see SimpleClickHandler
  * @see CompletableFutureClickHandler
  */
-public interface GuiClickAction<P> {}
+public interface GuiClickAction<P> {
+
+    /**
+     * Wraps the provided {@link SimpleGuiClickAction} and returns it as a {@link GuiClickAction}.
+     *
+     * @param <P>    The type of the player interacting with the GUI.
+     * @param action The {@link SimpleGuiClickAction} to be wrapped and returned as a {@link GuiClickAction}.
+     * @return The provided {@link SimpleGuiClickAction} as a {@link GuiClickAction}.
+     */
+    static <P> @NotNull GuiClickAction<P> simple(final @NotNull SimpleGuiClickAction<P> action) {
+        return action;
+    }
+
+    /**
+     * Wraps the provided {@link MovableGuiClickAction} and returns it as a {@link GuiClickAction}.
+     *
+     * @param <P>    The type of the player interacting with the GUI.
+     * @param action The {@link MovableGuiClickAction} to be wrapped and returned as a {@link GuiClickAction}.
+     * @return The provided {@link MovableGuiClickAction} as a {@link GuiClickAction}.
+     */
+    static <P> @NotNull GuiClickAction<P> movable(final @NotNull MovableGuiClickAction<P> action) {
+        return action;
+    }
+}

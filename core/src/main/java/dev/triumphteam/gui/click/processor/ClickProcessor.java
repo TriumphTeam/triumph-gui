@@ -27,6 +27,7 @@ import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
 import dev.triumphteam.gui.AbstractGuiView;
 import dev.triumphteam.gui.click.ClickContext;
+import dev.triumphteam.gui.click.MoveResult;
 import dev.triumphteam.gui.click.action.EmptyGuiClickAction;
 import dev.triumphteam.gui.click.controller.DefaultClickController;
 import dev.triumphteam.gui.click.handler.ClickHandler;
@@ -63,69 +64,75 @@ public final class ClickProcessor<P, I> {
         // Cache for spam prevention
         this.spamPreventionDuration = spamPreventionDuration;
         this.spamPrevention = CacheBuilder.newBuilder()
-            .expireAfterWrite(spamPreventionDuration, TimeUnit.MILLISECONDS)
-            .build();
+                .expireAfterWrite(spamPreventionDuration, TimeUnit.MILLISECONDS)
+                .build();
     }
 
     /**
      * Process the current click.
-     * Will mark the processor as busy once the click starts then may or may not free it once it's done processing.
+     * Will mark the processor as busy once the click starts,
+     * then may or may not free it once it's done processing.
      * A click can be blocked for a much longer time depending on the {@link ClickHandler} being used.
      *
      * @param context The context of the click.
-     * @param view The current view.
+     * @param view    The current view.
      */
-    public void processClick(final @NotNull ClickContext context, final @NotNull AbstractGuiView<P, I> view) {
+    public MoveResult processClick(final @NotNull ClickContext context, final @NotNull AbstractGuiView<P, I> view) {
 
         final var viewerUuid = view.viewerUuid();
 
-        // Check if the player can currently click
+        // Check if the player can currently click.
         if (!canClick(viewerUuid)) {
-            return;
+            return MoveResult.DISALLOW;
         }
 
-        final var renderedItem = view.getItem(context.slot());
-        if (renderedItem == null) return;
+        final var element = view.getElement(context.rawSlot());
+        if (element == null) return MoveResult.DISALLOW;
 
-        final var action = renderedItem.action();
-        // Early exit if action is empty
+        final var action = element.getAction();
+        // Early exit if the action is empty.
         if (action instanceof EmptyGuiClickAction<P>) {
-            return;
+            return MoveResult.DISALLOW;
         }
 
-        // Start processing the click
+        // Start processing the click.
 
         this.isProcessing = true;
 
-        final var handler = renderedItem.clickHandler();
-        // Prepare the controller with the whenComplete handler
+        final var handler = element.getClickHandler();
+        // Prepare the controller with the whenComplete handler.
         final var clickController = new DefaultClickController((ignored, throwable) -> {
-            // If something went wrong with the click log, the error and stop processing
+            // If something went wrong with the click log, the error and stop processing.
             if (throwable != null) {
                 LOGGER.error(
-                    "An exception occurred while processing click for '{}' on slot '{}'.",
-                    view.viewerName(),
-                    context.slot(),
-                    throwable
+                        "An exception occurred while processing click for '{}' on rawSlot '{}'.",
+                        view.viewerName(),
+                        context.rawSlot(),
+                        throwable
                 );
             }
 
             this.isProcessing = false;
         });
 
-        // The handler needs to catch so the click can finish
-        // The exception is passed to the controller and still logged
+        // The handler needs to catch so the click can finish.
+        // The exception is passed to the controller and still logged.
         Exception handledException = null;
+        MoveResult result = MoveResult.DISALLOW;
         try {
-            handler.handle(view.viewer(), context, action, clickController);
+            result = handler.handle(view.viewer(), context, action, clickController);
         } catch (final Exception exception) {
             handledException = exception;
         }
 
-        // If not completing later makes sure to immediately complete it
+        // If not completing later makes sure to immediately complete it.
+        // We don't need to worry about the exception if it's completed later because the handler
+        // will handle the exceptions itself.
         if (!clickController.completingLater()) {
             clickController.complete(handledException);
         }
+
+        return result;
     }
 
     /**
@@ -136,7 +143,7 @@ public final class ClickProcessor<P, I> {
      */
     private boolean canClick(final @NotNull UUID clickerUuid) {
 
-        // If spam prevention is disabled, ignore it
+        // If spam prevention is disabled, ignore it.
         if (spamPreventionDuration != 0) {
             final var spamming = spamPrevention.getIfPresent(clickerUuid);
             if (spamming != null) {
@@ -146,7 +153,7 @@ public final class ClickProcessor<P, I> {
             spamPrevention.put(clickerUuid, LocalTime.now());
         }
 
-        // Check if the processor is not currently busy
+        // Check if the processor is not currently busy.
         return !isProcessing;
     }
 }

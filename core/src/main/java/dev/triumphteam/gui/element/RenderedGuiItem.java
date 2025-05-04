@@ -21,30 +21,25 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package dev.triumphteam.gui.click.action;
+package dev.triumphteam.gui.element;
 
-import dev.triumphteam.gui.click.ClickContext;
-import dev.triumphteam.gui.click.handler.CompletableFutureClickHandler;
-import dev.triumphteam.gui.click.handler.SimpleClickHandler;
+import dev.triumphteam.gui.click.action.GuiClickAction;
+import dev.triumphteam.gui.click.handler.ClickHandler;
 import org.jetbrains.annotations.NotNull;
 
-/**
- * The main/default click action type.
- * A simple {@link Runnable} like functional interface.
- * This is by default handled by {@link CompletableFutureClickHandler} and {@link SimpleClickHandler}.
- *
- * @param <P> The player type.
- * @see SimpleClickHandler
- * @see CompletableFutureClickHandler
- */
-@FunctionalInterface
-public interface RunnableGuiClickAction<P> extends GuiClickAction<P> {
+public record RenderedGuiItem<P, I>(
+        @NotNull I item,
+        @NotNull ClickHandler<P> clickHandler,
+        @NotNull GuiClickAction<P> action
+) implements RenderedGuiElement<P, I> {
 
-    /**
-     * Run the click action.
-     *
-     * @param player  The instance of the player clicking on the GUI.
-     * @param context The click context.
-     */
-    void run(final @NotNull P player, final @NotNull ClickContext context);
+    @Override
+    public @NotNull ClickHandler<P> getClickHandler() {
+        return clickHandler;
+    }
+
+    @Override
+    public @NotNull GuiClickAction<P> getAction() {
+        return action;
+    }
 }
