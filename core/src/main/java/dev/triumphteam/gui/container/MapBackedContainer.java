@@ -60,12 +60,12 @@ public final class MapBackedContainer<P, I> implements GuiContainer<P, I> {
 
     @Override
     public void setItem(final int row, final int column, final @NotNull GuiItem<@NotNull P, @NotNull I> guiItem) {
-        setItem(containerType.mapSlot(row, column), guiItem);
+        setItem(containerType.toSlot(row, column), guiItem);
     }
 
     @Override
     public void setItem(final @NotNull Slot slot, final @NotNull GuiItem<@NotNull P, @NotNull I> guiItem) {
-        setItem(containerType.mapSlot(slot.row(), slot.column()), guiItem);
+        setItem(containerType.toSlot(slot.row(), slot.column()), guiItem);
     }
 
     @Override
@@ -82,12 +82,12 @@ public final class MapBackedContainer<P, I> implements GuiContainer<P, I> {
 
     @Override
     public void setAction(final int row, final int column, final @NotNull GuiClickAction<P> clickAction) {
-        setAction(containerType.mapSlot(row, column), clickAction);
+        setAction(containerType.toSlot(row, column), clickAction);
     }
 
     @Override
     public void setAction(final @NotNull Slot slot, final @NotNull GuiClickAction<P> clickAction) {
-        setAction(containerType.mapSlot(slot.row(), slot.column()), clickAction);
+        setAction(containerType.toSlot(slot.row(), slot.column()), clickAction);
     }
 
     @Override
@@ -97,12 +97,12 @@ public final class MapBackedContainer<P, I> implements GuiContainer<P, I> {
 
     @Override
     public void setAction(final int row, final int column, final @NotNull SimpleGuiClickAction<P> clickAction) {
-        setAction(containerType.mapSlot(row, column), clickAction);
+        setAction(containerType.toSlot(row, column), clickAction);
     }
 
     @Override
     public void setAction(final @NotNull Slot slot, final @NotNull SimpleGuiClickAction<P> clickAction) {
-        setAction(containerType.mapSlot(slot.row(), slot.column()), clickAction);
+        setAction(containerType.toSlot(slot.row(), slot.column()), clickAction);
     }
 
     @Override

@@ -23,6 +23,8 @@
  */
 package dev.triumphteam.gui.slot;
 
+import dev.triumphteam.gui.container.type.types.AbstractHopperContainerType;
+
 public record Slot(int row, int column) {
 
     public static Slot of(final int row, final int column) {
@@ -31,5 +33,9 @@ public record Slot(int row, int column) {
 
     public static Slot origin() {return new Slot(1, 1);}
 
+    public static Slot min(final int rows) {return new Slot(rows, 1);}
+
     public static Slot max(final int rows) {return new Slot(rows, 9);}
+
+    public static Slot hopper(final int slot) {return new Slot(AbstractHopperContainerType.HOPPER_ROW, slot);}
 }

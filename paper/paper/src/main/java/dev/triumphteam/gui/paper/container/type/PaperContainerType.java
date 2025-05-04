@@ -31,8 +31,12 @@ import org.jetbrains.annotations.NotNull;
 
 public interface PaperContainerType extends GuiContainerType {
 
-    static @NotNull GuiContainerType chest(final int rows) {
+    static @NotNull PaperContainerType chest(final int rows) {
         return new ChestContainerType(rows);
+    }
+
+    static @NotNull PaperContainerType hopper() {
+        return new HopperContainerType();
     }
 
     @NotNull

@@ -65,7 +65,7 @@ public abstract class AbstractGuiView<P, I> implements GuiView {
     // All the gui elements that have been rendered and are in the inventory.
     private final Map<Integer, RenderedGuiElement<P, I>> allRenderedElements = new ConcurrentHashMap<>();
     // Helper boolean for updating title.
-    private boolean updating = true;
+    private boolean updating = false;
     private Component renderedTitle = null;
 
     public AbstractGuiView(

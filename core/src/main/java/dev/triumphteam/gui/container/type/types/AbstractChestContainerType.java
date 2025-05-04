@@ -18,26 +18,23 @@ public abstract class AbstractChestContainerType implements GuiContainerType {
     // TODO(important): VALIDATION NEEDS TO BE RE-ADDED
 
     @Override
-    public int mapSlot(final int row, final int column) {
-        return (column + (row - 1) * GuiContainerType.COLUMNS) - 1;
+    public int toSlot(final int row, final int column) {
+        return GuiContainerType.defaultMapping(row, column);
     }
 
     @Override
-    public @NotNull Slot mapSlot(final int slot) {
+    public @NotNull Slot toSlot(final int slot) {
         return Slot.of(slot / GuiContainerType.COLUMNS + 1, slot % GuiContainerType.COLUMNS + 1);
     }
 
     @Override
-    public int mapToPlayerInventory(final int slot) {
-        final var relative = slot - upperLimit;
+    public int toTopInventory(final int slot) {
+        return slot; // The normal slots are the same for chest inventories.
+    }
 
-        // If it's the hotbar area.
-        if (relative >= GuiContainerType.PLAYER_INVENTORY_SIZE) {
-            return relative - GuiContainerType.PLAYER_INVENTORY_SIZE; // Maps to hotbar slots 0-8.
-        }
-
-        // Otherwise, it's the main inventory.
-        return relative + GuiContainerType.COLUMNS; // Maps to inventory slots 9-35.
+    @Override
+    public int toPlayerInventory(final int slot) {
+        return GuiContainerType.defaultPlayerInventoryMapping(slot - upperLimit);
     }
 
     @Override

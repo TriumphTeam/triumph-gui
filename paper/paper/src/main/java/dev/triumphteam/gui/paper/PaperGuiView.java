@@ -73,9 +73,14 @@ public final class PaperGuiView extends AbstractGuiView<Player, ItemStack> imple
 
         final var viewer = viewer();
         viewer.getScheduler().run(PaperGuiSettings.get().getPlugin(), (task) -> {
-            setUpdating(true);
+            if (updating) {
+                setUpdating(true);
+                viewer.openInventory(inventory);
+                setUpdating(false);
+                return;
+            }
+
             viewer.openInventory(inventory);
-            setUpdating(false);
         }, null);
     }
 
@@ -114,11 +119,11 @@ public final class PaperGuiView extends AbstractGuiView<Player, ItemStack> imple
             final var itemStack = ((RenderedGuiItem<Player, ItemStack>) item).item();
 
             if (containerType.isPlayerInventory(slot)) {
-                playerInventory.setItem(containerType.mapToPlayerInventory(slot), itemStack);
+                playerInventory.setItem(containerType.toPlayerInventory(slot), itemStack);
                 return;
             }
 
-            inventory.setItem(slot, itemStack);
+            inventory.setItem(containerType.toTopInventory(slot), itemStack);
         });
     }
 
