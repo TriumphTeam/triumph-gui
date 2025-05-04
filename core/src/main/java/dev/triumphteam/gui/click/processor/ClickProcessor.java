@@ -115,6 +115,7 @@ public final class ClickProcessor<P, I> {
 
         // The handler needs to catch so the click can finish
         // The exception is passed to the controller and still logged
+        // TODO(important): Might need to pass it to complete later clicks too?
         Exception handledException = null;
         try {
             handler.handle(view.viewer(), context, action, clickController);

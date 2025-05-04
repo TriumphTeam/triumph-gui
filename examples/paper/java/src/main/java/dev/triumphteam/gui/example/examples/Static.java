@@ -23,6 +23,7 @@
  */
 package dev.triumphteam.gui.example.examples;
 
+import dev.triumphteam.gui.click.action.GuiClickAction;
 import dev.triumphteam.gui.paper.Gui;
 import dev.triumphteam.gui.paper.builder.item.ItemBuilder;
 import net.kyori.adventure.text.Component;
@@ -56,10 +57,15 @@ public final class Static implements CommandExecutor {
                     container.setAction(2, 2, (player, context) -> {
                         player.sendMessage("You have clicked on the empty slot!");
                     });
+
+                    container.setAction(3, 3, GuiClickAction.<Player>simple((player, context) -> {
+
+                    }));
                 })
                 .build();
 
         gui.open(senderPlayer);
+
         return true;
     }
 }

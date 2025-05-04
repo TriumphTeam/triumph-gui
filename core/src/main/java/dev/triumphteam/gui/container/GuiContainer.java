@@ -23,7 +23,8 @@
  */
 package dev.triumphteam.gui.container;
 
-import dev.triumphteam.gui.click.action.RunnableGuiClickAction;
+import dev.triumphteam.gui.click.action.GuiClickAction;
+import dev.triumphteam.gui.click.action.SimpleGuiClickAction;
 import dev.triumphteam.gui.container.type.GuiContainerType;
 import dev.triumphteam.gui.element.GuiItem;
 import dev.triumphteam.gui.layout.GuiLayout;
@@ -40,11 +41,13 @@ public interface GuiContainer<P, I> {
 
     void setItem(final @NotNull Slot slot, final @NotNull GuiItem<@NotNull P, @NotNull I> guiItem);
 
-    void setAction(final int slot, final @NotNull RunnableGuiClickAction<P> clickAction);
+    void setAction(final int slot, final @NotNull SimpleGuiClickAction<P> clickAction);
 
-    void setAction(final int row, final int column, final @NotNull RunnableGuiClickAction<P> clickAction);
+    void setAction(final int row, final int column, final @NotNull SimpleGuiClickAction<P> clickAction);
 
-    void setAction(final @NotNull Slot slot, final @NotNull RunnableGuiClickAction<P> clickAction);
+    void setAction(final @NotNull Slot slot, final @NotNull SimpleGuiClickAction<P> clickAction);
+
+    void setAction(final @NotNull Slot slot, final @NotNull GuiClickAction<P> clickAction);
 
     void fill(final @NotNull GuiLayout layout, final @NotNull GuiItem<@NotNull P, @NotNull I> guiItem);
 }

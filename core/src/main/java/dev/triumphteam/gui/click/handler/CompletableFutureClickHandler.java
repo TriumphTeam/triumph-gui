@@ -25,7 +25,7 @@ package dev.triumphteam.gui.click.handler;
 
 import dev.triumphteam.gui.click.ClickContext;
 import dev.triumphteam.gui.click.action.GuiClickAction;
-import dev.triumphteam.gui.click.action.RunnableGuiClickAction;
+import dev.triumphteam.gui.click.action.SimpleGuiClickAction;
 import dev.triumphteam.gui.click.controller.ClickController;
 import dev.triumphteam.gui.exception.TriumphGuiException;
 import org.jetbrains.annotations.NotNull;
@@ -60,7 +60,7 @@ public final class CompletableFutureClickHandler<P> implements ClickHandler<P> {
         final @NotNull ClickController controller
     ) {
         // Only accept runnable actions
-        if (!(action instanceof RunnableGuiClickAction<P> runnableAction)) {
+        if (!(action instanceof SimpleGuiClickAction<P> runnableAction)) {
             throw new TriumphGuiException("The click action type '" + action.getClass().getName() + "' is supported by the 'CompletableFutureClickHandler'.");
         }
 

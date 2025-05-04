@@ -26,7 +26,7 @@ package dev.triumphteam.gui.paper.builder.item;
 import com.google.common.base.Preconditions;
 import dev.triumphteam.gui.click.action.EmptyGuiClickAction;
 import dev.triumphteam.gui.click.action.GuiClickAction;
-import dev.triumphteam.gui.click.action.RunnableGuiClickAction;
+import dev.triumphteam.gui.click.action.SimpleGuiClickAction;
 import dev.triumphteam.gui.element.GuiItem;
 import dev.triumphteam.gui.element.items.SimpleGuiItem;
 import net.kyori.adventure.text.Component;
@@ -343,7 +343,7 @@ public abstract class AbstractItemBuilder<B extends AbstractItemBuilder<B>> {
      */
     @NotNull
     @Contract("_ -> new")
-    public GuiItem<Player, ItemStack> asGuiItem(final @NotNull RunnableGuiClickAction<Player> action) {
+    public GuiItem<Player, ItemStack> asGuiItem(final @NotNull SimpleGuiClickAction<Player> action) {
         return new SimpleGuiItem<>(asItemStack(), action);
     }
 

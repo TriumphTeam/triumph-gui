@@ -26,6 +26,7 @@ package dev.triumphteam.gui.click.action;
 import dev.triumphteam.gui.click.handler.ClickHandler;
 import dev.triumphteam.gui.click.handler.CompletableFutureClickHandler;
 import dev.triumphteam.gui.click.handler.SimpleClickHandler;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Represents an action for when a player clicks on the GUI.
@@ -34,9 +35,14 @@ import dev.triumphteam.gui.click.handler.SimpleClickHandler;
  * {@link ClickHandler} used.
  *
  * @param <P> The player type.
- * @see RunnableGuiClickAction
+ * @see SimpleGuiClickAction
  * @see ClickHandler
  * @see SimpleClickHandler
  * @see CompletableFutureClickHandler
  */
-public interface GuiClickAction<P> {}
+public interface GuiClickAction<P> {
+
+    static <P> @NotNull GuiClickAction<P> simple(final @NotNull SimpleGuiClickAction<P> action) {
+        return action;
+    }
+}

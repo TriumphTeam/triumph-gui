@@ -37,8 +37,7 @@ import org.jetbrains.annotations.NotNull;
  * @see SimpleClickHandler
  * @see CompletableFutureClickHandler
  */
-@FunctionalInterface
-public interface RunnableGuiClickAction<P> extends GuiClickAction<P> {
+public interface SimpleGuiClickAction<P> extends GuiClickAction<P> {
 
     /**
      * Run the click action.
