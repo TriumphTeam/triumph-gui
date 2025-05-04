@@ -34,7 +34,7 @@ import dev.triumphteam.gui.click.processor.ClickProcessor;
  * @param <P> The player type.
  * @see GuiClickAction
  * @see SimpleGuiClickAction
- * @see PickupableGuiClickAction
+ * @see MovableGuiClickAction
  */
 public final class EmptyGuiClickAction<P> implements GuiClickAction<P> {
 }

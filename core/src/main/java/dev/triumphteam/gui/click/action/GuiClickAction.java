@@ -42,11 +42,25 @@ import org.jetbrains.annotations.NotNull;
  */
 public interface GuiClickAction<P> {
 
+    /**
+     * Wraps the provided {@link SimpleGuiClickAction} and returns it as a {@link GuiClickAction}.
+     *
+     * @param <P>    The type of the player interacting with the GUI.
+     * @param action The {@link SimpleGuiClickAction} to be wrapped and returned as a {@link GuiClickAction}.
+     * @return The provided {@link SimpleGuiClickAction} as a {@link GuiClickAction}.
+     */
     static <P> @NotNull GuiClickAction<P> simple(final @NotNull SimpleGuiClickAction<P> action) {
         return action;
     }
 
-    static <P> @NotNull GuiClickAction<P> pickupable(final @NotNull PickupableGuiClickAction<P> action) {
+    /**
+     * Wraps the provided {@link MovableGuiClickAction} and returns it as a {@link GuiClickAction}.
+     *
+     * @param <P>    The type of the player interacting with the GUI.
+     * @param action The {@link MovableGuiClickAction} to be wrapped and returned as a {@link GuiClickAction}.
+     * @return The provided {@link MovableGuiClickAction} as a {@link GuiClickAction}.
+     */
+    static <P> @NotNull GuiClickAction<P> movable(final @NotNull MovableGuiClickAction<P> action) {
         return action;
     }
 }

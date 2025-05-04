@@ -24,7 +24,7 @@
 package dev.triumphteam.gui.click.handler;
 
 import dev.triumphteam.gui.click.ClickContext;
-import dev.triumphteam.gui.click.PickupResult;
+import dev.triumphteam.gui.click.MoveResult;
 import dev.triumphteam.gui.click.action.GuiClickAction;
 import dev.triumphteam.gui.click.action.SimpleGuiClickAction;
 import dev.triumphteam.gui.click.controller.ClickController;
@@ -54,7 +54,7 @@ public final class CompletableFutureClickHandler<P> implements ClickHandler<P> {
     }
 
     @Override
-    public @NotNull PickupResult handle(
+    public @NotNull MoveResult handle(
         final @NotNull P player,
         final @NotNull ClickContext context,
         final @NotNull GuiClickAction<P> action,
@@ -74,6 +74,6 @@ public final class CompletableFutureClickHandler<P> implements ClickHandler<P> {
             .whenComplete((unused, throwable) -> controller.complete(throwable));
 
         // We never allow click when running async.
-        return PickupResult.DISALLOW;
+        return MoveResult.DISALLOW;
     }
 }

@@ -1,6 +1,6 @@
 package dev.triumphteam.gui.click;
 
-public enum PickupResult {
+public enum MoveResult {
     ALLOW,
     DISALLOW,
 }

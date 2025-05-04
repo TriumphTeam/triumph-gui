@@ -24,7 +24,7 @@
 package dev.triumphteam.gui.click.handler;
 
 import dev.triumphteam.gui.click.ClickContext;
-import dev.triumphteam.gui.click.PickupResult;
+import dev.triumphteam.gui.click.MoveResult;
 import dev.triumphteam.gui.click.action.GuiClickAction;
 import dev.triumphteam.gui.click.controller.ClickController;
 import org.jetbrains.annotations.NotNull;
@@ -41,7 +41,7 @@ import org.jetbrains.annotations.NotNull;
  */
 public interface ClickHandler<P> {
 
-    @NotNull PickupResult handle(
+    @NotNull MoveResult handle(
         final @NotNull P player,
         final @NotNull ClickContext context,
         final @NotNull GuiClickAction<P> action,

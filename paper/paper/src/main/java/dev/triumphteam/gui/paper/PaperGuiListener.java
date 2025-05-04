@@ -26,7 +26,7 @@ package dev.triumphteam.gui.paper;
 import dev.triumphteam.gui.actions.GuiCloseAction;
 import dev.triumphteam.gui.click.ClickContext;
 import dev.triumphteam.gui.click.GuiClick;
-import dev.triumphteam.gui.click.PickupResult;
+import dev.triumphteam.gui.click.MoveResult;
 import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -54,7 +54,7 @@ public final class PaperGuiListener implements Listener {
 
         final var result = view.processClick(new ClickContext(mapClick(event.getClick()), event.getRawSlot(), view));
 
-        if (result == PickupResult.DISALLOW) {
+        if (result == MoveResult.DISALLOW) {
             event.setCancelled(true);
         }
     }

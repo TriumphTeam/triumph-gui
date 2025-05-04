@@ -27,7 +27,7 @@ import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
 import dev.triumphteam.gui.AbstractGuiView;
 import dev.triumphteam.gui.click.ClickContext;
-import dev.triumphteam.gui.click.PickupResult;
+import dev.triumphteam.gui.click.MoveResult;
 import dev.triumphteam.gui.click.action.EmptyGuiClickAction;
 import dev.triumphteam.gui.click.controller.DefaultClickController;
 import dev.triumphteam.gui.click.handler.ClickHandler;
@@ -77,22 +77,22 @@ public final class ClickProcessor<P, I> {
      * @param context The context of the click.
      * @param view    The current view.
      */
-    public PickupResult processClick(final @NotNull ClickContext context, final @NotNull AbstractGuiView<P, I> view) {
+    public MoveResult processClick(final @NotNull ClickContext context, final @NotNull AbstractGuiView<P, I> view) {
 
         final var viewerUuid = view.viewerUuid();
 
         // Check if the player can currently click.
         if (!canClick(viewerUuid)) {
-            return PickupResult.DISALLOW;
+            return MoveResult.DISALLOW;
         }
 
         final var element = view.getElement(context.rawSlot());
-        if (element == null) return PickupResult.DISALLOW;
+        if (element == null) return MoveResult.DISALLOW;
 
         final var action = element.getAction();
         // Early exit if the action is empty.
         if (action instanceof EmptyGuiClickAction<P>) {
-            return PickupResult.DISALLOW;
+            return MoveResult.DISALLOW;
         }
 
         // Start processing the click.
@@ -118,7 +118,7 @@ public final class ClickProcessor<P, I> {
         // The handler needs to catch so the click can finish.
         // The exception is passed to the controller and still logged.
         Exception handledException = null;
-        PickupResult result = PickupResult.DISALLOW;
+        MoveResult result = MoveResult.DISALLOW;
         try {
             result = handler.handle(view.viewer(), context, action, clickController);
         } catch (final Exception exception) {

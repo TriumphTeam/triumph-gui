@@ -24,8 +24,8 @@
 package dev.triumphteam.gui.click.handler;
 
 import dev.triumphteam.gui.click.ClickContext;
-import dev.triumphteam.gui.click.PickupResult;
-import dev.triumphteam.gui.click.action.PickupableGuiClickAction;
+import dev.triumphteam.gui.click.MoveResult;
+import dev.triumphteam.gui.click.action.MovableGuiClickAction;
 import dev.triumphteam.gui.click.action.GuiClickAction;
 import dev.triumphteam.gui.click.action.SimpleGuiClickAction;
 import dev.triumphteam.gui.click.controller.ClickController;
@@ -43,7 +43,7 @@ import org.jetbrains.annotations.NotNull;
 public final class SimpleClickHandler<P> implements ClickHandler<P> {
 
     @Override
-    public @NotNull PickupResult handle(
+    public @NotNull MoveResult handle(
             final @NotNull P player,
             final @NotNull ClickContext context,
             final @NotNull GuiClickAction<P> action,
@@ -51,7 +51,7 @@ public final class SimpleClickHandler<P> implements ClickHandler<P> {
     ) {
 
         // Handle pickupable clicks.
-        if (action instanceof PickupableGuiClickAction<P> controlGuiClickAction) {
+        if (action instanceof MovableGuiClickAction<P> controlGuiClickAction) {
             return controlGuiClickAction.run(player, context);
         }
 
@@ -64,6 +64,6 @@ public final class SimpleClickHandler<P> implements ClickHandler<P> {
         runnableAction.run(player, context);
 
         // We don't allow clicks unless it's a `PickupableGuiClickAction`.
-        return PickupResult.DISALLOW;
+        return MoveResult.DISALLOW;
     }
 }
