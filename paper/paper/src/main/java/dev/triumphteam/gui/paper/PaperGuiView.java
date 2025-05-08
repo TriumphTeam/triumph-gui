@@ -58,9 +58,10 @@ public final class PaperGuiView extends AbstractGuiView<Player, ItemStack> imple
             final @NotNull List<GuiCloseAction> closeActions,
             final @NotNull GuiComponentRenderer<Player, ItemStack> componentRenderer,
             final @NotNull ClickHandler<Player> clickHandler,
-            final long spamPreventionDuration
+            final long spamPreventionDuration,
+            final boolean usePlayerInventory
     ) {
-        super(player, title, components, closeActions, containerType, componentRenderer, clickHandler, new ClickProcessor<>(spamPreventionDuration));
+        super(player, title, components, closeActions, containerType, componentRenderer, clickHandler, new ClickProcessor<>(spamPreventionDuration), usePlayerInventory);
         this.containerType = containerType;
         this.playerInventory = player.getInventory();
     }
@@ -97,9 +98,20 @@ public final class PaperGuiView extends AbstractGuiView<Player, ItemStack> imple
     }
 
     @Override
+    public void restorePlayerInventory() {
+        playerInventory.setContents(viewer().getInventory().getContents());
+    }
+
+    @Override
     protected void clearSlot(final int slot) {
         checkInventory();
         inventory.clear(slot);
+    }
+
+    @Override
+    protected void clearPlayerInventory() {
+        checkInventory();
+        playerInventory.clear();
     }
 
     @Override

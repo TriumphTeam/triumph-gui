@@ -46,6 +46,7 @@ public final class Static implements CommandExecutor {
 
         final var gui = Gui
                 .of(6)
+                .usePlayerInventory()
                 .title(Component.text("Static Gui")) // Simple title for the GUI
                 .statelessComponent(container -> { // A stateless component, we don't care about the item updating, just want the click action
                     container.setItem(1, 1, ItemBuilder.from(Material.PAPER)

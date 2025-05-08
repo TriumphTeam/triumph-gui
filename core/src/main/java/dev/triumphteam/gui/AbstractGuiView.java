@@ -64,19 +64,21 @@ public abstract class AbstractGuiView<P, I> implements GuiView {
     private final Map<GuiComponent<P, I>, RenderedComponent<P, I>> renderedComponents = new ConcurrentHashMap<>();
     // All the gui elements that have been rendered and are in the inventory.
     private final Map<Integer, RenderedGuiElement<P, I>> allRenderedElements = new ConcurrentHashMap<>();
+    private final boolean usePlayerInventory;
     // Helper boolean for updating title.
     private boolean updating = false;
     private Component renderedTitle = null;
 
     public AbstractGuiView(
-        final @NotNull P viewer,
-        final @NotNull GuiTitle title,
-        final @NotNull List<@NotNull GuiComponent<P, I>> components,
-        final @NotNull List<GuiCloseAction> closeActions,
-        final @NotNull GuiContainerType containerType,
-        final @NotNull GuiComponentRenderer<P, I> renderer,
-        final @NotNull ClickHandler<P> defaultClickHandler,
-        final @NotNull ClickProcessor<P, I> clickProcessor
+            final @NotNull P viewer,
+            final @NotNull GuiTitle title,
+            final @NotNull List<@NotNull GuiComponent<P, I>> components,
+            final @NotNull List<GuiCloseAction> closeActions,
+            final @NotNull GuiContainerType containerType,
+            final @NotNull GuiComponentRenderer<P, I> renderer,
+            final @NotNull ClickHandler<P> defaultClickHandler,
+            final @NotNull ClickProcessor<P, I> clickProcessor,
+            final boolean usePlayerInventory
     ) {
         this.title = title;
         this.viewer = viewer;
@@ -86,6 +88,7 @@ public abstract class AbstractGuiView<P, I> implements GuiView {
         this.renderer = renderer;
         this.defaultClickHandler = defaultClickHandler;
         this.clickProcessor = clickProcessor;
+        this.usePlayerInventory = usePlayerInventory;
     }
 
     public @NotNull P viewer() {
@@ -96,7 +99,11 @@ public abstract class AbstractGuiView<P, I> implements GuiView {
 
     public abstract @NotNull UUID viewerUuid();
 
+    public abstract void restorePlayerInventory();
+
     protected abstract void clearSlot(final int slot);
+
+    protected abstract void clearPlayerInventory();
 
     protected abstract void populateInventory(final @NotNull Map<Integer, @NotNull RenderedGuiElement<P, I>> renderedItems);
 
@@ -124,6 +131,11 @@ public abstract class AbstractGuiView<P, I> implements GuiView {
     }
 
     protected void setup() {
+        // When the gui wants full control of the player inventory, we need to start by cleaning it.
+        if (usePlayerInventory){
+            clearPlayerInventory();
+        }
+
         components.forEach(component -> {
 
             if (component instanceof StatefulGuiComponent<P, I> statefulComponent) {
@@ -140,7 +152,7 @@ public abstract class AbstractGuiView<P, I> implements GuiView {
 
     public void completeRendered(final @NotNull RenderedComponent<P, I> renderedComponent) {
         var ownerComponent = renderedComponent.component();
-        // Check if component was already rendered before
+        // Check if the component was already rendered before
         var existing = renderedComponents.get(ownerComponent);
         if (existing != null) {
             // Clear its uses
@@ -187,6 +199,10 @@ public abstract class AbstractGuiView<P, I> implements GuiView {
 
     public boolean isUpdating() {
         return updating;
+    }
+
+    public boolean usePlayerInventory() {
+        return usePlayerInventory;
     }
 
     protected void setUpdating(final boolean newValue) {

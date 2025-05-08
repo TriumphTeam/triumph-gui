@@ -60,6 +60,7 @@ public final class Gui implements BaseGui<Player> {
     private final GuiComponentRenderer<Player, ItemStack> componentRenderer;
     private final ClickHandler<Player> clickHandler;
     private final long spamPreventionDuration;
+    private final boolean usePlayerInventory;
 
     public Gui(
             final @NotNull GuiTitle title,
@@ -68,7 +69,8 @@ public final class Gui implements BaseGui<Player> {
             final @NotNull PaperContainerType containerType,
             final @NotNull GuiComponentRenderer<Player, ItemStack> componentRenderer,
             final @NotNull ClickHandler<Player> clickHandler,
-            final long spamPreventionDuration
+            final long spamPreventionDuration,
+            final boolean usePlayerInventory
     ) {
         this.title = title;
         this.components = components;
@@ -77,6 +79,7 @@ public final class Gui implements BaseGui<Player> {
         this.componentRenderer = componentRenderer;
         this.clickHandler = clickHandler;
         this.spamPreventionDuration = spamPreventionDuration;
+        this.usePlayerInventory = usePlayerInventory;
     }
 
     /**
@@ -122,7 +125,8 @@ public final class Gui implements BaseGui<Player> {
                 closeActions,
                 componentRenderer,
                 clickHandler,
-                spamPreventionDuration
+                spamPreventionDuration,
+                usePlayerInventory
         );
 
         view.open();

@@ -58,7 +58,6 @@ import java.util.function.Consumer;
  * @param <G> The {@link BaseGui} type.
  * @param <I> The item type.
  */
-@SuppressWarnings({"unchecked", "UnusedReturnValue"})
 public abstract class BaseGuiBuilder<B extends BaseGuiBuilder<B, P, G, I, C>, P, G extends BaseGui<P>, I, C extends GuiContainerType> {
 
     private final GuiSettings<P, I, ?> guiSettings;
@@ -69,6 +68,7 @@ public abstract class BaseGuiBuilder<B extends BaseGuiBuilder<B, P, G, I, C>, P,
     private GuiComponentRenderer<P, I> componentRenderer = null;
     private GuiTitle title = null;
     private long spamPreventionDuration = -1;
+    private boolean usePlayerInventory = false;
 
     public BaseGuiBuilder(
         final GuiSettings<P, I, ?> guiSettings,
@@ -77,6 +77,8 @@ public abstract class BaseGuiBuilder<B extends BaseGuiBuilder<B, P, G, I, C>, P,
         this.guiSettings = guiSettings;
         this.containerType = defaultContainerType;
     }
+
+    protected abstract @NotNull B getThis();
 
     /**
      * Sets the title of the {@link BaseGui}.
@@ -87,7 +89,7 @@ public abstract class BaseGuiBuilder<B extends BaseGuiBuilder<B, P, G, I, C>, P,
     @Contract("_ -> this")
     public @NotNull B title(final @NotNull GuiTitle title) {
         this.title = title;
-        return (B) this;
+        return getThis();
     }
 
     /**
@@ -123,7 +125,7 @@ public abstract class BaseGuiBuilder<B extends BaseGuiBuilder<B, P, G, I, C>, P,
     @Contract("_ -> this")
     public @NotNull B containerType(final @NotNull C containerType) {
         this.containerType = containerType;
-        return (B) this;
+        return getThis();
     }
 
     /**
@@ -135,7 +137,7 @@ public abstract class BaseGuiBuilder<B extends BaseGuiBuilder<B, P, G, I, C>, P,
     @Contract("_ -> this")
     public @NotNull B clickHandler(final @NotNull ClickHandler<P> clickHandler) {
         this.clickHandler = clickHandler;
-        return (B) this;
+        return getThis();
     }
 
     /**
@@ -147,7 +149,7 @@ public abstract class BaseGuiBuilder<B extends BaseGuiBuilder<B, P, G, I, C>, P,
     @Contract("_ -> this")
     public @NotNull B componentRenderer(final @NotNull GuiComponentRenderer<P, I> componentRenderer) {
         this.componentRenderer = componentRenderer;
-        return (B) this;
+        return getThis();
     }
 
     /**
@@ -164,7 +166,7 @@ public abstract class BaseGuiBuilder<B extends BaseGuiBuilder<B, P, G, I, C>, P,
         }
 
         this.spamPreventionDuration = spamPreventionDuration;
-        return (B) this;
+        return getThis();
     }
 
     /**
@@ -182,7 +184,7 @@ public abstract class BaseGuiBuilder<B extends BaseGuiBuilder<B, P, G, I, C>, P,
         final var simpleComponent = new SimpleFunctionalGuiComponent<P, I>();
         component.accept(simpleComponent);
         components.add(simpleComponent.asGuiComponent());
-        return (B) this;
+        return getThis();
     }
 
     /**
@@ -206,13 +208,18 @@ public abstract class BaseGuiBuilder<B extends BaseGuiBuilder<B, P, G, I, C>, P,
     @Contract("_ -> this")
     public @NotNull B component(final @NotNull GuiComponent<P, I> component) {
         components.add(component);
-        return (B) this;
+        return getThis();
     }
 
     @Contract("_ -> this")
     public @NotNull B onClose(final @NotNull GuiCloseAction closeAction) {
         closeActions.add(closeAction);
-        return (B) this;
+        return getThis();
+    }
+
+    public @NotNull B usePlayerInventory() {
+        usePlayerInventory = true;
+        return getThis();
     }
 
     /**
@@ -266,5 +273,9 @@ public abstract class BaseGuiBuilder<B extends BaseGuiBuilder<B, P, G, I, C>, P,
         }
 
         return spamPreventionDuration;
+    }
+
+    protected boolean getUsePlayerInventory() {
+        return usePlayerInventory;
     }
 }

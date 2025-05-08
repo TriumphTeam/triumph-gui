@@ -38,6 +38,11 @@ public final class PaperGuiBuilder extends BaseGuiBuilder<PaperGuiBuilder, Playe
     }
 
     @Override
+    protected @NotNull PaperGuiBuilder getThis() {
+        return this;
+    }
+
+    @Override
     public Gui build() {
         return new Gui(
             getTitle(),
@@ -46,7 +51,8 @@ public final class PaperGuiBuilder extends BaseGuiBuilder<PaperGuiBuilder, Playe
             getContainerType(),
             getComponentRenderer(),
             getClickHandler(),
-            getSpamPreventionDuration()
+            getSpamPreventionDuration(),
+            getUsePlayerInventory()
         );
     }
 }
