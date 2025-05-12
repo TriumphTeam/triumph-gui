@@ -25,7 +25,7 @@ package dev.triumphteam.gui.paper.container.type;
 
 import dev.triumphteam.gui.container.type.types.AbstractChestContainerType;
 import dev.triumphteam.gui.paper.container.inventory.PaperDefaultGuiInventory;
-import dev.triumphteam.gui.paper.container.inventory.PaperGuiInventory;
+import dev.triumphteam.gui.paper.nms.inventory.PaperGuiInventory;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;

@@ -27,14 +27,20 @@ projects {
 
     // Platforms and their Kotlin versions
 
-    group("paper") {
+    group(namespace = "paper") {
         single(id = "paper")
         single(id = "kotlin", includeNamespace = true)
+
+        // Nms projects
+        group(namespace = "nms") {
+            single(id = "common", includeNamespace = true)
+            single(id = "test", includeNamespace = true)
+        }
     }
 
     // Examples
 
-    group("examples") {
+    group(namespace = "examples") {
         group("paper") {
             single(id = "java", includeNamespace = true)
             single(id = "kotlin", includeNamespace = true)

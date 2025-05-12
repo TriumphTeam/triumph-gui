@@ -34,17 +34,6 @@ import dev.triumphteam.gui.paper.container.type.ChestContainerType;
 import dev.triumphteam.gui.paper.container.type.HopperContainerType;
 import dev.triumphteam.gui.paper.container.type.PaperContainerType;
 import dev.triumphteam.gui.title.GuiTitle;
-import net.kyori.adventure.text.Component;
-import net.minecraft.network.protocol.game.ClientboundOpenScreenPacket;
-import net.minecraft.world.Container;
-import net.minecraft.world.SimpleContainer;
-import net.minecraft.world.inventory.AbstractContainerMenu;
-import net.minecraft.world.inventory.MenuType;
-import net.minecraft.world.inventory.Slot;
-import org.bukkit.Bukkit;
-import org.bukkit.craftbukkit.entity.CraftPlayer;
-import org.bukkit.craftbukkit.event.CraftEventFactory;
-import org.bukkit.craftbukkit.inventory.CraftContainer;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
@@ -124,30 +113,6 @@ public final class Gui implements BaseGui<Player> {
     @Contract(" -> new")
     public static PaperGuiBuilder hopper() {
         return new PaperGuiBuilder(PaperContainerType.hopper());
-    }
-
-    public static void openFor(final org.bukkit.entity.Player player) {
-        // new GivingItATry(((CraftPlayer) player).getHandle()).open();
-        final var test = Bukkit.createInventory(null, 9 * 6, Component.text("Test"));
-        final var serverPlayer = ((CraftPlayer) player).getHandle();
-        AbstractContainerMenu container = new CraftContainer(test, serverPlayer, serverPlayer.nextContainerCounter());
-        final Container uh = new SimpleContainer(90);
-        for (int i = 0; i < 90; i++) {
-            container.slots.set(i, new Slot(uh, i, 0, 0));
-        }
-
-        final com.mojang.datafixers.util.Pair<net.kyori.adventure.text.Component, AbstractContainerMenu> result = CraftEventFactory.callInventoryOpenEventWithTitle(serverPlayer, container);
-        container = result.getSecond();
-        // Paper end - Add titleOverride to InventoryOpenEvent
-        if (container == null) return;
-
-        net.kyori.adventure.text.Component adventure$title = container.getBukkitView().title(); // Paper
-        if (adventure$title == null) adventure$title = net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer.legacySection().deserialize(container.getBukkitView().getTitle()); // Paper
-        if (result.getFirst() != null) adventure$title = result.getFirst();
-
-        if (!serverPlayer.isImmobile()) serverPlayer.connection.send(new ClientboundOpenScreenPacket(container.containerId, MenuType.GENERIC_9x6, io.papermc.paper.adventure.PaperAdventure.asVanilla(adventure$title))); // Paper - Prevent opening inventories when frozen
-        serverPlayer.containerMenu = container;
-        serverPlayer.initMenu(container);
     }
 
     @Override

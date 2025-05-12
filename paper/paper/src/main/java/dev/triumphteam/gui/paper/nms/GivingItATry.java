@@ -1,23 +1,8 @@
 package dev.triumphteam.gui.paper.nms;
 
-import net.minecraft.core.NonNullList;
-import net.minecraft.network.chat.Component;
-import net.minecraft.network.protocol.game.ClientboundContainerSetContentPacket;
-import net.minecraft.network.protocol.game.ClientboundOpenScreenPacket;
-import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.Container;
-import net.minecraft.world.SimpleContainer;
-import net.minecraft.world.entity.player.Inventory;
-import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.inventory.AbstractContainerMenu;
-import net.minecraft.world.inventory.MenuType;
-import net.minecraft.world.inventory.Slot;
-import net.minecraft.world.item.ItemStack;
-import org.bukkit.craftbukkit.event.CraftEventFactory;
+public final class GivingItATry {
 
-public final class GivingItATry extends AbstractContainerMenu {
-
-    private final Container container = new SimpleContainer(9 * 6);
+    /*private final Container container = new SimpleContainer(9 * 6);
     private final ServerPlayer player;
     private org.bukkit.craftbukkit.inventory.CraftInventoryView bukkitEntity = null;
 
@@ -107,5 +92,5 @@ public final class GivingItATry extends AbstractContainerMenu {
     public boolean stillValid(Player player) {
         if (!this.checkReachable) return true; // CraftBukkit
         return this.container.stillValid(player);
-    }
+    }*/
 }
