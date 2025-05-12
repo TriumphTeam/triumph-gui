@@ -103,7 +103,9 @@ public abstract class AbstractGuiView<P, I> implements GuiView {
 
     protected abstract void clearSlot(final int slot);
 
-    protected abstract void clearPlayerInventory();
+    protected abstract void prepareInventory();
+
+    protected abstract void runDelayed(final int ticks, final @NotNull Runnable runnable);
 
     protected abstract void populateInventory(final @NotNull Map<Integer, @NotNull RenderedGuiElement<P, I>> renderedItems);
 
@@ -126,18 +128,12 @@ public abstract class AbstractGuiView<P, I> implements GuiView {
         titleRenderer.renderTitle(title, (rendered) -> {
             this.renderedTitle = rendered;
             openInventory(false);
-            setup();
+            runDelayed(1, this::setup);
         });
     }
 
     protected void setup() {
-        // When the gui wants full control of the player inventory, we need to start by cleaning it.
-        if (usePlayerInventory){
-            clearPlayerInventory();
-        }
-
         components.forEach(component -> {
-
             if (component instanceof StatefulGuiComponent<P, I> statefulComponent) {
                 // Add listener to used states
                 statefulComponent.states().forEach(state -> {

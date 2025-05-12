@@ -7,10 +7,13 @@ plugins {
 
 repositories {
     maven("https://repo.papermc.io/repository/maven-public/")
+    maven("https://repo.codemc.io/repository/maven-releases/")
+    maven("https://repo.codemc.io/repository/maven-snapshots/")
 }
 
 dependencies {
     implementation(projects.triumphGuiPaper)
+    compileOnly("com.github.retrooper:packetevents-spigot:2.7.0")
 }
 
 bukkitPluginYaml {

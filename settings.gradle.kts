@@ -9,6 +9,7 @@ pluginManagement {
     repositories {
         gradlePluginPortal()
         maven("https://repo.triumphteam.dev/releases")
+        maven("https://repo.papermc.io/repository/maven-public/")
     }
 }
 

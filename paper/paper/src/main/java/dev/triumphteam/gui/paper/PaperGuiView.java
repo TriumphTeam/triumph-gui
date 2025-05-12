@@ -32,6 +32,7 @@ import dev.triumphteam.gui.component.renderer.GuiComponentRenderer;
 import dev.triumphteam.gui.element.RenderedGuiElement;
 import dev.triumphteam.gui.element.RenderedGuiItem;
 import dev.triumphteam.gui.exception.TriumphGuiException;
+import dev.triumphteam.gui.paper.container.inventory.PaperGuiInventory;
 import dev.triumphteam.gui.paper.container.type.PaperContainerType;
 import dev.triumphteam.gui.title.GuiTitle;
 import org.bukkit.entity.Player;
@@ -47,8 +48,7 @@ import java.util.UUID;
 public final class PaperGuiView extends AbstractGuiView<Player, ItemStack> implements InventoryHolder {
 
     private final PaperContainerType containerType;
-    private final Inventory playerInventory;
-    private Inventory inventory = null;
+    private PaperGuiInventory inventory = null;
 
     public PaperGuiView(
             final @NotNull Player player,
@@ -63,25 +63,24 @@ public final class PaperGuiView extends AbstractGuiView<Player, ItemStack> imple
     ) {
         super(player, title, components, closeActions, containerType, componentRenderer, clickHandler, new ClickProcessor<>(spamPreventionDuration), usePlayerInventory);
         this.containerType = containerType;
-        this.playerInventory = player.getInventory();
     }
 
     @Override
     public void openInventory(final boolean updating) {
         if (inventory == null) {
-            this.inventory = containerType.createInventory(this, getTitle());
+            this.inventory = containerType.createInventory(this, getTitle(), viewer(), usePlayerInventory());
         }
 
         final var viewer = viewer();
         viewer.getScheduler().run(PaperGuiSettings.get().getPlugin(), (task) -> {
             if (updating) {
                 setUpdating(true);
-                viewer.openInventory(inventory);
+                inventory.open();
                 setUpdating(false);
                 return;
             }
 
-            viewer.openInventory(inventory);
+            inventory.open();
         }, null);
     }
 
@@ -94,24 +93,30 @@ public final class PaperGuiView extends AbstractGuiView<Player, ItemStack> imple
     @Override
     public @NotNull Inventory getInventory() {
         checkInventory();
-        return inventory;
+        return inventory.getBukkitInventory();
     }
 
     @Override
     public void restorePlayerInventory() {
-        playerInventory.setContents(viewer().getInventory().getContents());
+
     }
 
     @Override
     protected void clearSlot(final int slot) {
         checkInventory();
-        inventory.clear(slot);
+        inventory.clearSlot(slot);
     }
 
     @Override
-    protected void clearPlayerInventory() {
+    protected void runDelayed(final int ticks, final @NotNull Runnable runnable) {
+        viewer().getScheduler().runDelayed(PaperGuiSettings.get().getPlugin(), (task) -> {
+            runnable.run();
+        }, null, ticks);
+    }
+
+    @Override
+    protected void prepareInventory() {
         checkInventory();
-        playerInventory.clear();
     }
 
     @Override
@@ -128,14 +133,7 @@ public final class PaperGuiView extends AbstractGuiView<Player, ItemStack> imple
     protected void populateInventory(final @NotNull Map<Integer, RenderedGuiElement<Player, ItemStack>> renderedItems) {
         renderedItems.forEach((slot, item) -> {
             if (!(item instanceof RenderedGuiItem)) return;
-            final var itemStack = ((RenderedGuiItem<Player, ItemStack>) item).item();
-
-            if (containerType.isPlayerInventory(slot)) {
-                playerInventory.setItem(containerType.toPlayerInventory(slot), itemStack);
-                return;
-            }
-
-            inventory.setItem(containerType.toTopInventory(slot), itemStack);
+            inventory.setItem(slot, ((RenderedGuiItem<Player, ItemStack>) item).item());
         });
     }
 

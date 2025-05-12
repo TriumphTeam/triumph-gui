@@ -24,20 +24,22 @@
 package dev.triumphteam.gui.paper.container.type;
 
 import dev.triumphteam.gui.container.type.types.AbstractHopperContainerType;
+import dev.triumphteam.gui.paper.container.inventory.PaperGuiInventory;
 import net.kyori.adventure.text.Component;
-import org.bukkit.Bukkit;
-import org.bukkit.event.inventory.InventoryType;
-import org.bukkit.inventory.Inventory;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.InventoryHolder;
 import org.jetbrains.annotations.NotNull;
 
 public class HopperContainerType extends AbstractHopperContainerType implements PaperContainerType {
 
     @Override
-    public @NotNull Inventory createInventory(
+    public @NotNull PaperGuiInventory createInventory(
             final @NotNull InventoryHolder holder,
-            final @NotNull Component title
+            final @NotNull Component title,
+            final @NotNull Player player,
+            final boolean usePlayerInventory
     ) {
-        return Bukkit.createInventory(holder, InventoryType.HOPPER, title);
+        throw new UnsupportedOperationException("Hopper container type is not supported yet.");
+        // return Bukkit.createInventory(holder, InventoryType.HOPPER, title);
     }
 }

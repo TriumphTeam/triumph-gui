@@ -49,6 +49,8 @@ public final class PaperGuiListener implements Listener {
 
     @EventHandler
     public void onGuiClick(final @NotNull InventoryClickEvent event) {
+        event.getWhoClicked().sendMessage("CLICK -> " + event.getRawSlot());
+
         final var view = convertHolder(event.getInventory().getHolder());
         if (view == null) return;
 
