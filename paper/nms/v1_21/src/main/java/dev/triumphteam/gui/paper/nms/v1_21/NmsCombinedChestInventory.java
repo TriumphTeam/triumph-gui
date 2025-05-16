@@ -1,7 +1,6 @@
 package dev.triumphteam.gui.paper.nms.v1_21;
 
 import com.mojang.datafixers.util.Pair;
-import dev.triumphteam.gui.paper.nms.v1_21.inventory.CommonNmsCombinedChestInventory;
 import dev.triumphteam.gui.paper.nms.v1_21.inventory.PaperGuiInventory;
 import io.papermc.paper.adventure.PaperAdventure;
 import net.kyori.adventure.text.Component;
@@ -9,24 +8,24 @@ import net.minecraft.network.protocol.game.ClientboundOpenScreenPacket;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.Container;
 import net.minecraft.world.SimpleContainer;
-import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.ChestMenu;
 import net.minecraft.world.inventory.MenuType;
-import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
 import org.bukkit.craftbukkit.entity.CraftPlayer;
 import org.bukkit.craftbukkit.event.CraftEventFactory;
 import org.bukkit.craftbukkit.inventory.CraftInventoryCustom;
 import org.bukkit.craftbukkit.inventory.CraftInventoryView;
 import org.bukkit.craftbukkit.inventory.CraftItemStack;
-import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
-import org.bukkit.inventory.InventoryView;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
-public final class NmsCombinedChestInventory extends AbstractContainerMenu implements PaperGuiInventory {
+import static dev.triumphteam.gui.container.type.GuiContainerType.COLUMNS;
+
+public final class NmsCombinedChestInventory extends ChestMenu implements PaperGuiInventory {
 
     private static final List<MenuType<?>> TYPES = List.of(
             MenuType.GENERIC_9x1,
@@ -37,14 +36,14 @@ public final class NmsCombinedChestInventory extends AbstractContainerMenu imple
             MenuType.GENERIC_9x6
     );
 
-    private final CommonNmsCombinedChestInventory delegate;
-
     private final Component title;
-    private final int containerRows;
-    private final Inventory vanillaInventory;
+    private final org.bukkit.inventory.Inventory bukkitInventory;
     private final CraftInventoryView<?, ?> bukkitEntity;
-    private final Container container;
+
     private final ServerPlayer player;
+
+    private final Container container;
+    private final Inventory playerInventory;
 
     public NmsCombinedChestInventory(
             final @NotNull InventoryHolder holder,
@@ -61,21 +60,28 @@ public final class NmsCombinedChestInventory extends AbstractContainerMenu imple
             final @NotNull Component title,
             final int rows
     ) {
-        super(TYPES.get(rows - 1), player.nextContainerCounter());
+        this(holder, player, title, new Inventory(player), new SimpleContainer(rows * COLUMNS), rows);
+    }
 
-        this.delegate = new CommonNmsCombinedChestInventory(rows);
+    private NmsCombinedChestInventory(
+            final @NotNull InventoryHolder holder,
+            final @NotNull ServerPlayer player,
+            final @NotNull Component title,
+            final @NotNull net.minecraft.world.entity.player.Inventory playerInventory,
+            final @NotNull Container container,
+            final int rows
+    ) {
+        super(TYPES.get(rows - 1), player.nextContainerCounter(), playerInventory, container, rows);
 
-        this.containerRows = rows;
-        this.player = player;
         this.title = title;
+        this.player = player;
 
-        // Set up the full container and bukkit inventory-related things.
-        this.container = new SimpleContainer(delegate.fullContainerSize());
-        this.vanillaInventory = new CraftInventoryCustom(holder, delegate.topContainerSize());
-        this.bukkitEntity = new CraftInventoryView<>(player.getBukkitEntity(), vanillaInventory, this);
+        this.playerInventory = playerInventory;
+        this.container = container;
 
-        // Add all the container slots.
-        delegate.generateSlots((slot, x, y) -> addSlot(new Slot(container, slot, x, y)));
+        // Set up bukkit things.
+        this.bukkitInventory = new CraftInventoryCustom(holder, container.getContainerSize());
+        this.bukkitEntity = new CraftInventoryView<>(player.getBukkitEntity(), bukkitInventory, this);
     }
 
     @Override
@@ -103,62 +109,33 @@ public final class NmsCombinedChestInventory extends AbstractContainerMenu imple
     }
 
     @Override
-    public void setItem(final int slot, final @NotNull org.bukkit.inventory.ItemStack itemStack) {
+    public void setTopInventoryItem(final int slot, final @NotNull org.bukkit.inventory.ItemStack itemStack) {
         container.setItem(slot, CraftItemStack.asNMSCopy(itemStack));
     }
 
     @Override
-    public void clearSlot(final int slot) {
-        container.setItem(slot, ItemStack.EMPTY);
+    public void setPlayerInventoryItem(final int slot, final org.bukkit.inventory.@NotNull ItemStack itemStack) {
+        playerInventory.setItem(slot, CraftItemStack.asNMSCopy(itemStack));
     }
 
     @Override
-    public @NotNull Inventory getBukkitInventory() {
-        return vanillaInventory;
+    public void clearTopInventorySlot(final int slot) {
+        getContainer().setItem(slot, ItemStack.EMPTY);
     }
 
     @Override
-    public @NotNull InventoryView getBukkitView() {
+    public void clearPlayerInventorySlot(final int slot) {
+        playerInventory.setItem(slot, ItemStack.EMPTY);
+    }
+
+    @Override
+    public @NotNull org.bukkit.inventory.Inventory getBukkitInventory() {
+        return bukkitInventory;
+    }
+
+    @Override
+    public @NotNull CraftInventoryView<?, ?> getBukkitView() {
         return bukkitEntity;
-    }
-
-    @Override
-    public @NotNull ItemStack quickMoveStack(final @NotNull Player player, final int index) {
-        // TODO: Abstract this somehow?
-        final ItemStack itemStack = ItemStack.EMPTY;
-        final Slot slot = this.slots.get(index);
-
-        if (!slot.hasItem()) return itemStack;
-
-        final ItemStack item = slot.getItem();
-
-        if (index < delegate.topContainerSize()) {
-            if (!this.moveItemStackTo(item, this.containerRows * 9, this.slots.size(), true)) {
-                return ItemStack.EMPTY;
-            }
-        } else if (!this.moveItemStackTo(item, 0, this.containerRows * 9, false)) {
-            return ItemStack.EMPTY;
-        }
-
-        if (item.isEmpty()) {
-            slot.setByPlayer(ItemStack.EMPTY);
-        } else {
-            slot.setChanged();
-        }
-
-        return item.copy();
-    }
-
-    @Override
-    public void removed(final @NotNull Player player) {
-        super.removed(player);
-        this.container.stopOpen(player);
-    }
-
-    @Override
-    public boolean stillValid(final @NotNull Player player) {
-        if (!this.checkReachable) return true;
-        return this.container.stillValid(player);
     }
 
     @Override

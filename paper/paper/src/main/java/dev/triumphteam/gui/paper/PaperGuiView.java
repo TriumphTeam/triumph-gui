@@ -104,7 +104,7 @@ public final class PaperGuiView extends AbstractGuiView<Player, ItemStack> imple
     @Override
     protected void clearSlot(final int slot) {
         checkInventory();
-        inventory.clearSlot(slot);
+        inventory.clearTopInventorySlot(slot);
     }
 
     @Override
@@ -133,7 +133,15 @@ public final class PaperGuiView extends AbstractGuiView<Player, ItemStack> imple
     protected void populateInventory(final @NotNull Map<Integer, RenderedGuiElement<Player, ItemStack>> renderedItems) {
         renderedItems.forEach((slot, item) -> {
             if (!(item instanceof RenderedGuiItem)) return;
-            inventory.setItem(slot, ((RenderedGuiItem<Player, ItemStack>) item).item());
+
+            final ItemStack itemStack = ((RenderedGuiItem<Player, ItemStack>) item).item();
+
+            if (containerType.isPlayerInventory(slot)) {
+                inventory.setPlayerInventoryItem(containerType.toPlayerInventory(slot), itemStack);
+                return;
+            }
+
+            inventory.setTopInventoryItem(containerType.toTopInventory(slot), itemStack);
         });
     }
 

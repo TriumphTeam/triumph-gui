@@ -36,22 +36,22 @@ public final class PaperDefaultGuiInventory implements PaperGuiInventory {
     }
 
     @Override
-    public void setItem(final int slot, final @NotNull ItemStack itemStack) {
-        if (containerType.isPlayerInventory(slot)) {
-            playerInventory.setItem(containerType.toPlayerInventory(slot), itemStack);
-            return;
-        }
-
+    public void setTopInventoryItem(final int slot, final @NotNull ItemStack itemStack) {
         inventory.setItem(containerType.toTopInventory(slot), itemStack);
     }
 
     @Override
-    public void clearSlot(final int slot) {
-        if (containerType.isPlayerInventory(slot)) {
-            playerInventory.clear(containerType.toPlayerInventory(slot));
-            return;
-        }
+    public void setPlayerInventoryItem(final int slot, final @NotNull ItemStack itemStack) {
+        playerInventory.setItem(containerType.toPlayerInventory(slot), itemStack);
+    }
 
+    @Override
+    public void clearTopInventorySlot(final int slot) {
         inventory.clear(containerType.toTopInventory(slot));
+    }
+
+    @Override
+    public void clearPlayerInventorySlot(final int slot) {
+        playerInventory.clear(containerType.toPlayerInventory(slot));
     }
 }

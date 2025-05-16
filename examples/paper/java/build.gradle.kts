@@ -14,6 +14,7 @@ repositories {
 dependencies {
     implementation(projects.triumphGuiPaper)
     compileOnly("com.github.retrooper:packetevents-spigot:2.7.0")
+    implementation("dev.triumphteam:triumph-gui:3.1.12")
 }
 
 bukkitPluginYaml {

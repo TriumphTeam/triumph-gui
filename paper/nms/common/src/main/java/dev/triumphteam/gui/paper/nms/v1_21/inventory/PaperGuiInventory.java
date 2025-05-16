@@ -8,9 +8,13 @@ public interface PaperGuiInventory {
 
     void open();
 
-    void setItem(final int slot, final @NotNull ItemStack itemStack);
+    void setTopInventoryItem(final int slot, final @NotNull ItemStack itemStack);
 
-    void clearSlot(final int slot);
+    void setPlayerInventoryItem(final int slot, final @NotNull ItemStack itemStack);
+
+    void clearTopInventorySlot(final int slot);
+    
+    void clearPlayerInventorySlot(final int slot);
 
     @NotNull Inventory getBukkitInventory();
 

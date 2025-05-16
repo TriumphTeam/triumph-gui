@@ -46,8 +46,9 @@ public final class ChestContainerType extends AbstractChestContainerType impleme
             final @NotNull Player player,
             final boolean usePlayerInventory
     ) {
+        // player.getInventory().getChestplate()
         if (usePlayerInventory) {
-            return NmsInventoryFactory.chest(holder, player, title, 6);
+            return NmsInventoryFactory.chest(holder, player, title, getRows());
         }
         return new PaperDefaultGuiInventory(player, this, Bukkit.createInventory(holder, getUpperLimit(), title));
     }

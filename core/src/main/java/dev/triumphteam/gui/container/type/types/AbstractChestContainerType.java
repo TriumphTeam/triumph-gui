@@ -45,4 +45,8 @@ public abstract class AbstractChestContainerType implements GuiContainerType {
     protected int getUpperLimit() {
         return upperLimit;
     }
+
+    protected int getRows() {
+        return rows;
+    }
 }

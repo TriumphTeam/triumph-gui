@@ -55,7 +55,6 @@ public final class Static implements CommandExecutor {
                                 player.sendMessage("You have clicked on the paper item!");
                             })
                     );
-
                 })
                 .statelessComponent(container -> {
                     GuiLayout.border(6).forEach(slot -> {
@@ -73,7 +72,6 @@ public final class Static implements CommandExecutor {
                     });
 
                     GuiLayout.box(Slot.of(7, 2), Slot.of(10, 8)).forEach(slot -> {
-
                         container.setItem(slot, ItemBuilder.from(Material.PAPER).asGuiItem(GuiClickAction.movable((player, context) -> {
                             return MoveResult.ALLOW;
                         })));
