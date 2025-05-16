@@ -30,6 +30,7 @@ public interface GuiContainerType {
 
     int COLUMNS = 9;
     int PLAYER_INVENTORY_SIZE = 27;
+    int PLAYER_INVENTORY_FULL_SIZE = PLAYER_INVENTORY_SIZE + COLUMNS;
     int PLAYER_INVENTORY_ROWS = 3;
     int PLAYER_INVENTORY_HOTBAR_ROWS = 4;
 

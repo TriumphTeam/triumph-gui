@@ -71,6 +71,7 @@ public final class PaperGuiListener implements Listener {
 
     @EventHandler
     public void onGuiOpen(final @NotNull InventoryOpenEvent event) {
+        event.getPlayer().sendMessage("OPEN -> " + event.getInventory().getHolder());
         final var view = convertHolder(event.getInventory().getHolder());
         if (view == null) return;
 
@@ -83,10 +84,8 @@ public final class PaperGuiListener implements Listener {
         final var view = convertHolder(event.getInventory().getHolder());
         if (view == null) return;
 
-        // If the player has the inventory open, we need to restore it on close.
-        if (view.usePlayerInventory()) {
-            view.restorePlayerInventory();
-        }
+        // Tell the view to attempt to restore the player's inventory.
+        view.restorePlayerInventory();
 
         if (view.isUpdating()) return;
         view.getCloseActions().forEach(GuiCloseAction::onClose);

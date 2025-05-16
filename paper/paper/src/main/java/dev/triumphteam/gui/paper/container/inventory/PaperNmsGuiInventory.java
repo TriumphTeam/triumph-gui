@@ -7,14 +7,14 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
-public final class PaperDefaultGuiInventory implements PaperGuiInventory {
+public final class PaperNmsGuiInventory implements PaperGuiInventory {
 
     private final Player player;
     private final PaperContainerType containerType;
     private final Inventory inventory;
     private final Inventory playerInventory;
 
-    public PaperDefaultGuiInventory(
+    public PaperNmsGuiInventory(
             final @NotNull Player player,
             final @NotNull PaperContainerType containerType,
             final @NotNull Inventory inventory

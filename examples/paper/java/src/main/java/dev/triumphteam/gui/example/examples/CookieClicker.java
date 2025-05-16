@@ -40,26 +40,26 @@ public final class CookieClicker implements CommandExecutor {
         if (!(sender instanceof Player senderPlayer)) return false;
 
         final var gui = Gui
-            .of(1)
-            .spamPreventionDuration(0) // We want fast clicks so let's not have any spam prevention
-            .title(Component.text("Cookie Clicker Gui")) // Simple title for the GUI
-            .component(component -> { // A reactive component
+                .of(1)
+                .spamPreventionDuration(0) // We want fast clicks, so let's not have any spam prevention
+                .title(Component.text("Cookie Clicker Gui")) // Simple title for the GUI
+                .component(component -> { // A reactive component
 
-                // Remember how many times the item was clicked
-                final var clicks = component.remember(0);
+                    // Remember how many times the item was clicked
+                    final var clicks = component.remember(0);
 
-                // Rendering the component
-                component.render(container -> {
-                    container.setItem(1, 1, ItemBuilder.from(Material.COOKIE)
-                        .name(Component.text("Clicked " + clicks.get() + " times!"))
-                        .asGuiItem((player, context) -> {
-                            // Increase clicks which, in turn, updates the state of the component
-                            clicks.update((value) -> value + 1);
-                        })
-                    );
-                });
-            })
-            .build();
+                    // Rendering the component
+                    component.render(container -> {
+                        container.setItem(1, 1, ItemBuilder.from(Material.COOKIE)
+                                .name(Component.text("Clicked " + clicks.get() + " times!"))
+                                .asGuiItem((player, context) -> {
+                                    // Increase clicks which, in turn, updates the state of the component
+                                    clicks.update((value) -> value + 1);
+                                })
+                        );
+                    });
+                })
+                .build();
 
         gui.open(senderPlayer);
         return true;

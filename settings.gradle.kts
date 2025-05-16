@@ -34,7 +34,9 @@ projects {
         // Nms projects
         group(namespace = "nms") {
             single(id = "common", includeNamespace = true)
-            single(id = "test", includeNamespace = true)
+
+            // NMS versions
+            single(id = "v1_21", includeNamespace = true)
         }
     }
 

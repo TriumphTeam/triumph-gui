@@ -73,11 +73,18 @@ public final class Static implements CommandExecutor {
                     });
 
                     GuiLayout.box(Slot.of(7, 2), Slot.of(10, 8)).forEach(slot -> {
+
+                        container.setItem(slot, ItemBuilder.from(Material.PAPER).asGuiItem(GuiClickAction.movable((player, context) -> {
+                            return MoveResult.ALLOW;
+                        })));
+                    });
+
+                    /*GuiLayout.box(Slot.of(7, 2), Slot.of(10, 8)).forEach(slot -> {
                         container.setAction(slot, GuiClickAction.movable((player, context) -> {
                             player.sendMessage(Component.text("You can place/pickup items here!").color(NamedTextColor.GREEN));
                             return MoveResult.ALLOW;
                         }));
-                    });
+                    });*/
                 })
                 .build();
 
