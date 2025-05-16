@@ -15,4 +15,13 @@ public final class NmsInventoryFactory {
     ) {
         return new NmsCombinedChestInventory(holder, player, title, rows);
     }
+
+    public static @NotNull PaperGuiInventory anvil(
+            final @NotNull InventoryHolder holder,
+            final @NotNull org.bukkit.entity.Player player,
+            final @NotNull Component title,
+            final boolean usePlayerInventory
+    ) {
+        return new NmsAnvilInventory(holder, player, title, usePlayerInventory);
+    }
 }

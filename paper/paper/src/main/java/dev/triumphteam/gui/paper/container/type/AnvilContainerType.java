@@ -33,9 +33,9 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.InventoryHolder;
 import org.jetbrains.annotations.NotNull;
 
-public final class ChestContainerType extends AbstractChestContainerType implements PaperContainerType {
+public final class AnvilContainerType extends AbstractChestContainerType implements PaperContainerType {
 
-    public ChestContainerType(final int rows) {
+    public AnvilContainerType(final int rows) {
         super(rows);
     }
 
@@ -46,8 +46,9 @@ public final class ChestContainerType extends AbstractChestContainerType impleme
             final @NotNull Player player,
             final boolean usePlayerInventory
     ) {
+        // player.getInventory().getChestplate()
         if (usePlayerInventory) {
-            return NmsInventoryFactory.chest(holder, player, title, getRows());
+            return NmsInventoryFactory.anvil(holder, player, title, usePlayerInventory);
         }
         return new PaperDefaultGuiInventory(player, this, Bukkit.createInventory(holder, getUpperLimit(), title));
     }

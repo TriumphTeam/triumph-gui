@@ -66,7 +66,7 @@ public final class Static implements CommandExecutor {
 
                     GuiLayout.box(Slot.of(2, 2), Slot.of(5, 8)).forEach(slot -> {
                         container.setAction(slot, GuiClickAction.movable((player, context) -> {
-                            player.sendMessage(Component.text("You can place/pickup items here!").color(NamedTextColor.GREEN));
+                            player.sendMessage(Component.text("Clicked on GUI").color(NamedTextColor.GREEN));
                             return MoveResult.ALLOW;
                         }));
                     });
@@ -76,13 +76,6 @@ public final class Static implements CommandExecutor {
                             return MoveResult.ALLOW;
                         })));
                     });
-
-                    /*GuiLayout.box(Slot.of(7, 2), Slot.of(10, 8)).forEach(slot -> {
-                        container.setAction(slot, GuiClickAction.movable((player, context) -> {
-                            player.sendMessage(Component.text("You can place/pickup items here!").color(NamedTextColor.GREEN));
-                            return MoveResult.ALLOW;
-                        }));
-                    });*/
                 })
                 .build();
 
