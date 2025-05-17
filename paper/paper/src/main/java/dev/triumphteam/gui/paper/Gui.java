@@ -41,6 +41,7 @@ import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
+import java.util.function.Consumer;
 
 /**
  * The GUI implementation for Paper servers.
@@ -102,7 +103,7 @@ public final class Gui implements BaseGui<Player> {
      */
     @Contract("_ -> new")
     public static PaperGuiBuilder of(final int rows) {
-        return new PaperGuiBuilder(PaperContainerType.chest(rows));
+        return of(PaperContainerType.chest(rows));
     }
 
     /**
@@ -112,7 +113,12 @@ public final class Gui implements BaseGui<Player> {
      */
     @Contract(" -> new")
     public static PaperGuiBuilder hopper() {
-        return new PaperGuiBuilder(PaperContainerType.hopper());
+        return of(PaperContainerType.hopper());
+    }
+
+    @Contract("_ -> new")
+    public static PaperGuiBuilder anvil(final @NotNull Consumer<String> inputHandler) {
+        return of(PaperContainerType.anvil(inputHandler));
     }
 
     @Override

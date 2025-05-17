@@ -23,20 +23,20 @@
  */
 package dev.triumphteam.gui.paper.container.type;
 
-import dev.triumphteam.gui.container.type.types.AbstractChestContainerType;
-import dev.triumphteam.gui.paper.container.inventory.PaperDefaultGuiInventory;
+import dev.triumphteam.gui.container.type.types.AbstractAnvilContainerType;
 import dev.triumphteam.gui.paper.nms.v1_21.NmsInventoryFactory;
 import dev.triumphteam.gui.paper.nms.v1_21.inventory.PaperGuiInventory;
 import net.kyori.adventure.text.Component;
-import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.InventoryHolder;
 import org.jetbrains.annotations.NotNull;
 
-public final class AnvilContainerType extends AbstractChestContainerType implements PaperContainerType {
+import java.util.function.Consumer;
 
-    public AnvilContainerType(final int rows) {
-        super(rows);
+public final class AnvilContainerType extends AbstractAnvilContainerType implements PaperContainerType {
+
+    public AnvilContainerType(final @NotNull Consumer<String> inputHandler) {
+        super(inputHandler);
     }
 
     @Override
@@ -46,10 +46,11 @@ public final class AnvilContainerType extends AbstractChestContainerType impleme
             final @NotNull Player player,
             final boolean usePlayerInventory
     ) {
-        // player.getInventory().getChestplate()
-        if (usePlayerInventory) {
-            return NmsInventoryFactory.anvil(holder, player, title, usePlayerInventory);
-        }
-        return new PaperDefaultGuiInventory(player, this, Bukkit.createInventory(holder, getUpperLimit(), title));
+        return NmsInventoryFactory.anvil(holder, player, title, usePlayerInventory);
+    }
+
+    @Override
+    public @NotNull PaperContainerType copy() {
+        return new AnvilContainerType(getInputHandler());
     }
 }

@@ -62,7 +62,8 @@ public final class PaperGuiView extends AbstractGuiView<Player, ItemStack> imple
             final boolean usePlayerInventory
     ) {
         super(player, title, components, closeActions, containerType, componentRenderer, clickHandler, new ClickProcessor<>(spamPreventionDuration), usePlayerInventory);
-        this.containerType = containerType;
+        // We always copy the container type so it has view independent data.
+        this.containerType = containerType.copy();
     }
 
     @Override
@@ -104,7 +105,13 @@ public final class PaperGuiView extends AbstractGuiView<Player, ItemStack> imple
     @Override
     protected void clearSlot(final int slot) {
         checkInventory();
-        inventory.clearTopInventorySlot(slot);
+
+        if (containerType.isPlayerInventory(slot)) {
+            inventory.clearPlayerInventorySlot(containerType.toPlayerInventory(slot));
+            return;
+        }
+
+        inventory.clearTopInventorySlot(containerType.toTopInventory(slot));
     }
 
     @Override

@@ -57,4 +57,6 @@ public interface GuiContainerType {
     int toPlayerInventory(final int slot);
 
     boolean isPlayerInventory(final int slot);
+
+    @NotNull GuiContainerType copy();
 }

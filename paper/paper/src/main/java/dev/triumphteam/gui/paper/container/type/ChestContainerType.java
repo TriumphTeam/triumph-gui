@@ -51,4 +51,9 @@ public final class ChestContainerType extends AbstractChestContainerType impleme
         }
         return new PaperDefaultGuiInventory(player, this, Bukkit.createInventory(holder, getUpperLimit(), title));
     }
+
+    @Override
+    public @NotNull PaperContainerType copy() {
+        return new ChestContainerType(getRows());
+    }
 }

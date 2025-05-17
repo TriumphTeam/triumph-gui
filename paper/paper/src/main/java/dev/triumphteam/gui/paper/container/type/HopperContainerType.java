@@ -42,4 +42,9 @@ public class HopperContainerType extends AbstractHopperContainerType implements 
         throw new UnsupportedOperationException("Hopper container type is not supported yet.");
         // return Bukkit.createInventory(holder, InventoryType.HOPPER, title);
     }
+
+    @Override
+    public @NotNull PaperContainerType copy() {
+        return new HopperContainerType();
+    }
 }

@@ -8,6 +8,7 @@ import net.kyori.adventure.text.Component;
 import net.minecraft.network.protocol.game.ClientboundOpenScreenPacket;
 import net.minecraft.network.protocol.game.ServerboundContainerClosePacket;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.Container;
 import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
@@ -19,6 +20,7 @@ import net.minecraft.world.item.ItemStack;
 import org.bukkit.craftbukkit.entity.CraftPlayer;
 import org.bukkit.craftbukkit.event.CraftEventFactory;
 import org.bukkit.craftbukkit.inventory.CraftInventoryAnvil;
+import org.bukkit.craftbukkit.inventory.CraftItemStack;
 import org.bukkit.craftbukkit.inventory.view.CraftAnvilView;
 import org.bukkit.inventory.AnvilInventory;
 import org.bukkit.inventory.InventoryHolder;
@@ -29,6 +31,7 @@ import static org.bukkit.event.inventory.InventoryCloseEvent.Reason.OPEN_NEW;
 public final class NmsAnvilInventory extends AnvilMenu implements PaperGuiInventory {
 
     private static final NmsGuiReflectionHandler REFLECTION_HANDLER = new NmsGuiReflectionHandler(SimpleContainer.class);
+    private static final int RESULT_SLOT = 2;
 
     private final Component title;
     private final AnvilInventory bukkitInventory;
@@ -109,17 +112,27 @@ public final class NmsAnvilInventory extends AnvilMenu implements PaperGuiInvent
 
     @Override
     public void setTopInventoryItem(final int slot, final @NotNull org.bukkit.inventory.ItemStack itemStack) {
-        // TODO
+        if (slot < inputSlots.getContainerSize()) {
+            inputSlots.setItem(slot, CraftItemStack.asNMSCopy(itemStack));
+            return;
+        }
+
+        resultSlots.setItem(RESULT_SLOT, CraftItemStack.asNMSCopy(itemStack));
     }
 
     @Override
     public void setPlayerInventoryItem(final int slot, final org.bukkit.inventory.@NotNull ItemStack itemStack) {
-        // playerInventory.setItem(slot, CraftItemStack.asNMSCopy(itemStack));
+        playerInventory.setItem(slot, CraftItemStack.asNMSCopy(itemStack));
     }
 
     @Override
     public void clearTopInventorySlot(final int slot) {
-        // TODO
+        if (slot < inputSlots.getContainerSize()) {
+            inputSlots.setItem(slot, ItemStack.EMPTY);
+            return;
+        }
+
+        resultSlots.setItem(RESULT_SLOT, ItemStack.EMPTY);
     }
 
     @Override
@@ -145,5 +158,10 @@ public final class NmsAnvilInventory extends AnvilMenu implements PaperGuiInvent
     @Override
     public boolean stillValid(final @NotNull Player player) {
         return true;
+    }
+
+    @Override
+    protected void clearContainer(final @NotNull Player player, final @NotNull Container container) {
+        // Empty, prevent items from being dropped or taken.
     }
 }

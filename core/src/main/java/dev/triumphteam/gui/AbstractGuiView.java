@@ -34,6 +34,7 @@ import dev.triumphteam.gui.component.StatefulGuiComponent;
 import dev.triumphteam.gui.component.renderer.GuiComponentRenderer;
 import dev.triumphteam.gui.container.type.GuiContainerType;
 import dev.triumphteam.gui.element.RenderedGuiElement;
+import dev.triumphteam.gui.element.RenderedGuiItem;
 import dev.triumphteam.gui.exception.TriumphGuiException;
 import dev.triumphteam.gui.title.GuiTitle;
 import dev.triumphteam.gui.title.StatefulGuiTitle;
@@ -174,6 +175,14 @@ public abstract class AbstractGuiView<P, I> implements GuiView {
         return allRenderedElements.get(slot);
     }
 
+    public @Nullable I getRawItem(final int slot) {
+        final RenderedGuiElement<P, I> renderedGuiElement = getElement(slot);
+        if (renderedGuiElement == null) return null;
+        if (!(renderedGuiElement instanceof RenderedGuiItem<P, I> guiItem)) return null;
+
+        return guiItem.item();
+    }
+
     public @NotNull ClickHandler<P> getDefaultClickHandler() {
         return defaultClickHandler;
     }
@@ -197,11 +206,11 @@ public abstract class AbstractGuiView<P, I> implements GuiView {
         return updating;
     }
 
-    public boolean usePlayerInventory() {
-        return usePlayerInventory;
-    }
-
     protected void setUpdating(final boolean newValue) {
         this.updating = newValue;
+    }
+
+    public boolean usePlayerInventory() {
+        return usePlayerInventory;
     }
 }

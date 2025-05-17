@@ -24,6 +24,7 @@
 package dev.triumphteam.gui.example;
 
 import com.github.retrooper.packetevents.PacketEvents;
+import dev.triumphteam.gui.example.examples.Anvil;
 import dev.triumphteam.gui.example.examples.CookieClicker;
 import dev.triumphteam.gui.example.examples.Static;
 import dev.triumphteam.gui.example.examples.UpdatingTitle;
@@ -47,5 +48,6 @@ public final class GuiPlugin extends JavaPlugin {
         getCommand("gui-static").setExecutor(new Static());
         getCommand("gui-clicker").setExecutor(new CookieClicker());
         getCommand("gui-title").setExecutor(new UpdatingTitle());
+        getCommand("gui-anvil").setExecutor(new Anvil());
     }
 }

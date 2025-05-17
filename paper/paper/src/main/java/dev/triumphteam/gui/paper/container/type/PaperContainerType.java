@@ -30,6 +30,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.InventoryHolder;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.function.Consumer;
+
 public interface PaperContainerType extends GuiContainerType {
 
     static @NotNull PaperContainerType chest(final int rows) {
@@ -40,6 +42,10 @@ public interface PaperContainerType extends GuiContainerType {
         return new HopperContainerType();
     }
 
+    static @NotNull PaperContainerType anvil(final @NotNull Consumer<String> inputHandler) {
+        return new AnvilContainerType(inputHandler);
+    }
+
     @NotNull
     PaperGuiInventory createInventory(
             final @NotNull InventoryHolder holder,
@@ -47,4 +53,7 @@ public interface PaperContainerType extends GuiContainerType {
             final @NotNull Player player,
             final boolean usePlayerInventory
     );
+
+    @Override
+    @NotNull PaperContainerType copy();
 }

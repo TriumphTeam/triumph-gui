@@ -1,3 +1,5 @@
+
+
 import xyz.jpenilla.resourcefactory.bukkit.BukkitPluginYaml
 
 plugins {
@@ -25,5 +27,6 @@ bukkitPluginYaml {
     commands.add(commands.create("gui-static"))
     commands.add(commands.create("gui-clicker"))
     commands.add(commands.create("gui-title"))
+    commands.add(commands.create("gui-anvil"))
     foliaSupported.set(true)
 }
