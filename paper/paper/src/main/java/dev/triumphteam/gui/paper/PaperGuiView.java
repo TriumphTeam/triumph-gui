@@ -33,7 +33,6 @@ import dev.triumphteam.gui.element.RenderedGuiElement;
 import dev.triumphteam.gui.element.RenderedGuiItem;
 import dev.triumphteam.gui.exception.TriumphGuiException;
 import dev.triumphteam.gui.paper.container.type.PaperContainerType;
-import dev.triumphteam.gui.paper.nms.PaperGuiInventory;
 import dev.triumphteam.gui.title.GuiTitle;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
@@ -73,6 +72,7 @@ public final class PaperGuiView extends AbstractGuiView<Player, ItemStack> imple
         }
 
         final var viewer = viewer();
+        // Needs to run on the main thread.
         viewer.getScheduler().run(PaperGuiSettings.get().getPlugin(), (task) -> {
             if (updating) {
                 setUpdating(true);
@@ -112,18 +112,6 @@ public final class PaperGuiView extends AbstractGuiView<Player, ItemStack> imple
         }
 
         inventory.clearTopInventorySlot(containerType.toTopInventory(slot));
-    }
-
-    @Override
-    protected void runDelayed(final int ticks, final @NotNull Runnable runnable) {
-        viewer().getScheduler().runDelayed(PaperGuiSettings.get().getPlugin(), (task) -> {
-            runnable.run();
-        }, null, ticks);
-    }
-
-    @Override
-    protected void prepareInventory() {
-        checkInventory();
     }
 
     @Override

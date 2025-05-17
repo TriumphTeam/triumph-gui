@@ -1,4 +1,4 @@
-package dev.triumphteam.gui.paper.nms;
+package dev.triumphteam.gui.paper;
 
 import com.google.common.primitives.Ints;
 import dev.triumphteam.gui.exception.TriumphGuiException;
@@ -14,8 +14,9 @@ public final class VersionHelper {
     /**
      * The current server version.
      */
-    private static final int CURRENT_VERSION = getCurrentVersion();
+    public static final int CURRENT_VERSION = getCurrentVersion();
 
+    public static final int V1_21_5 = 1215;
 
     /**
      * Gets the current server version

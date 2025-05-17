@@ -24,8 +24,8 @@
 package dev.triumphteam.gui.paper.container.type;
 
 import dev.triumphteam.gui.container.type.types.AbstractAnvilContainerType;
-import dev.triumphteam.gui.paper.nms.v1_21.NmsInventoryFactory;
-import dev.triumphteam.gui.paper.nms.PaperGuiInventory;
+import dev.triumphteam.gui.paper.container.inventory.NmsVersionedGuiInventoryFactory;
+import dev.triumphteam.gui.paper.PaperGuiInventory;
 import net.kyori.adventure.text.Component;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.InventoryHolder;
@@ -46,7 +46,7 @@ public final class AnvilContainerType extends AbstractAnvilContainerType impleme
             final @NotNull Player player,
             final boolean usePlayerInventory
     ) {
-        return NmsInventoryFactory.anvil(holder, player, title, usePlayerInventory);
+        return NmsVersionedGuiInventoryFactory.anvil(holder, player, title, usePlayerInventory);
     }
 
     @Override

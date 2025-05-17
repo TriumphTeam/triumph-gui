@@ -1,13 +1,14 @@
-package dev.triumphteam.gui.paper.nms.v1_21;
+package dev.triumphteam.gui.paper.container.inventory;
 
 import dev.triumphteam.gui.paper.PaperGuiInventory;
+import dev.triumphteam.gui.paper.nms.v1_21.NmsInventoryFactory;
 import net.kyori.adventure.text.Component;
 import org.bukkit.inventory.InventoryHolder;
 import org.jetbrains.annotations.NotNull;
 
-public final class NmsInventoryFactory {
+public final class NmsVersionedGuiInventoryFactory {
 
-    private NmsInventoryFactory() {
+    private NmsVersionedGuiInventoryFactory() {
         throw new AssertionError("Util class, cannot be instantiated");
     }
 
@@ -17,7 +18,8 @@ public final class NmsInventoryFactory {
             final @NotNull Component title,
             final int rows
     ) {
-        return new NmsCombinedChestInventory(holder, player, title, rows);
+        // TODO: Add more versions, currently we use only 1.21.5
+        return NmsInventoryFactory.chest(holder, player, title, rows);
     }
 
     public static @NotNull PaperGuiInventory anvil(
@@ -26,6 +28,7 @@ public final class NmsInventoryFactory {
             final @NotNull Component title,
             final boolean usePlayerInventory
     ) {
-        return new NmsAnvilInventory(holder, player, title, usePlayerInventory);
+        // TODO: Add more versions, currently we use only 1.21.5
+        return NmsInventoryFactory.anvil(holder, player, title, usePlayerInventory);
     }
 }

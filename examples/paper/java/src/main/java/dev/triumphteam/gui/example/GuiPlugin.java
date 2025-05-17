@@ -23,28 +23,16 @@
  */
 package dev.triumphteam.gui.example;
 
-import com.github.retrooper.packetevents.PacketEvents;
 import dev.triumphteam.gui.example.examples.Anvil;
 import dev.triumphteam.gui.example.examples.CookieClicker;
 import dev.triumphteam.gui.example.examples.Static;
 import dev.triumphteam.gui.example.examples.UpdatingTitle;
-import io.github.retrooper.packetevents.factory.spigot.SpigotPacketEventsBuilder;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public final class GuiPlugin extends JavaPlugin {
 
     @Override
-    public void onLoad() {
-        PacketEvents.setAPI(SpigotPacketEventsBuilder.build(this));
-        //On Bukkit, calling this here is essential, hence the name "load"
-        PacketEvents.getAPI().load();
-    }
-
-    @Override
     public void onEnable() {
-        //Initialize!
-        PacketEvents.getAPI().init();
-
         getCommand("gui-static").setExecutor(new Static());
         getCommand("gui-clicker").setExecutor(new CookieClicker());
         getCommand("gui-title").setExecutor(new UpdatingTitle());

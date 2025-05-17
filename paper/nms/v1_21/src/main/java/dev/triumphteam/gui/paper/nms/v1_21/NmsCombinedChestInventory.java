@@ -1,21 +1,16 @@
 package dev.triumphteam.gui.paper.nms.v1_21;
 
-import com.mojang.datafixers.util.Pair;
-import dev.triumphteam.gui.paper.nms.PaperGuiInventory;
-import io.papermc.paper.adventure.PaperAdventure;
+import dev.triumphteam.gui.paper.PaperGuiInventory;
 import net.kyori.adventure.text.Component;
-import net.minecraft.network.protocol.game.ClientboundOpenScreenPacket;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.Container;
 import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.entity.EntityEquipment;
 import net.minecraft.world.entity.player.Inventory;
-import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.ChestMenu;
 import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.item.ItemStack;
 import org.bukkit.craftbukkit.entity.CraftPlayer;
-import org.bukkit.craftbukkit.event.CraftEventFactory;
 import org.bukkit.craftbukkit.inventory.CraftInventoryCustom;
 import org.bukkit.craftbukkit.inventory.CraftInventoryView;
 import org.bukkit.craftbukkit.inventory.CraftItemStack;
@@ -26,7 +21,7 @@ import java.util.List;
 
 import static dev.triumphteam.gui.container.type.GuiContainerType.COLUMNS;
 
-public final class NmsCombinedChestInventory extends ChestMenu implements PaperGuiInventory {
+final class NmsCombinedChestInventory extends ChestMenu implements PaperGuiInventory {
 
     private static final List<MenuType<?>> TYPES = List.of(
             MenuType.GENERIC_9x1,
@@ -87,26 +82,7 @@ public final class NmsCombinedChestInventory extends ChestMenu implements PaperG
 
     @Override
     public void open() {
-        // This method follows the CraftHumanEntity#openCustomInventory method.
-        // Call inventory open event.
-        final Pair<Component, AbstractContainerMenu> result = CraftEventFactory.callInventoryOpenEventWithTitle(player, this);
-        // Event likely canceled.
-        if (result.getSecond() == null) return;
-
-        Component title = this.title;
-
-        // Overridable by the event.
-        final Component titleOverride = result.getFirst();
-        if (titleOverride != null) {
-            title = titleOverride;
-        }
-
-        if (!player.isImmobile()) {
-            player.connection.send(new ClientboundOpenScreenPacket(containerId, getType(), PaperAdventure.asVanilla(title)));
-        }
-
-        player.containerMenu = this;
-        player.initMenu(this);
+        NmsGuiUtil.openInventory(player, this, title, getType(), containerId);
     }
 
     @Override

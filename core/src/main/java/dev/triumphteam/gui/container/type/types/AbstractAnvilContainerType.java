@@ -9,10 +9,11 @@ import java.util.function.Consumer;
 public abstract class AbstractAnvilContainerType implements GuiContainerType {
 
     public static final int ANVIL_ROW = 5;
+    public static final int RESULT_SLOT = 2;
     private static final int ANVIL_SLOTS = 3;
-
-    private String input = "";
+    
     private final Consumer<String> inputHandler;
+    private String input = "";
 
     public AbstractAnvilContainerType(final @NotNull Consumer<String> inputHandler) {
         this.inputHandler = inputHandler;
@@ -49,6 +50,7 @@ public abstract class AbstractAnvilContainerType implements GuiContainerType {
 
     public void setInput(final @NotNull String input) {
         if (this.input.equals(input)) return;
+        this.input = input;
         inputHandler.accept(input);
     }
 

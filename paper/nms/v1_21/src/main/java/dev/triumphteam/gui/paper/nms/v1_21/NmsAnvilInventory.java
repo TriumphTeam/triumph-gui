@@ -1,25 +1,18 @@
 package dev.triumphteam.gui.paper.nms.v1_21;
 
-import com.mojang.datafixers.util.Pair;
-import dev.triumphteam.gui.paper.nms.NmsGuiReflectionHandler;
-import dev.triumphteam.gui.paper.nms.PaperGuiInventory;
-import io.papermc.paper.adventure.PaperAdventure;
+import dev.triumphteam.gui.paper.NmsGuiReflectionHandler;
+import dev.triumphteam.gui.paper.PaperGuiInventory;
 import net.kyori.adventure.text.Component;
-import net.minecraft.network.protocol.game.ClientboundOpenScreenPacket;
-import net.minecraft.network.protocol.game.ServerboundContainerClosePacket;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.Container;
 import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.entity.EntityEquipment;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.AnvilMenu;
 import net.minecraft.world.inventory.ContainerLevelAccess;
-import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.item.ItemStack;
 import org.bukkit.craftbukkit.entity.CraftPlayer;
-import org.bukkit.craftbukkit.event.CraftEventFactory;
 import org.bukkit.craftbukkit.inventory.CraftInventoryAnvil;
 import org.bukkit.craftbukkit.inventory.CraftItemStack;
 import org.bukkit.craftbukkit.inventory.view.CraftAnvilView;
@@ -27,9 +20,7 @@ import org.bukkit.inventory.AnvilInventory;
 import org.bukkit.inventory.InventoryHolder;
 import org.jetbrains.annotations.NotNull;
 
-import static org.bukkit.event.inventory.InventoryCloseEvent.Reason.OPEN_NEW;
-
-public final class NmsAnvilInventory extends AnvilMenu implements PaperGuiInventory {
+final class NmsAnvilInventory extends AnvilMenu implements PaperGuiInventory {
 
     private static final NmsGuiReflectionHandler REFLECTION_HANDLER = new NmsGuiReflectionHandler(SimpleContainer.class);
     private static final int RESULT_SLOT = 2;
@@ -82,34 +73,7 @@ public final class NmsAnvilInventory extends AnvilMenu implements PaperGuiInvent
 
     @Override
     public void open() {
-        if (player.containerMenu != player.inventoryMenu) {
-            // fire INVENTORY_CLOSE if one already open
-            player.connection.handleContainerClose(
-                    new ServerboundContainerClosePacket(player.containerMenu.containerId),
-                    OPEN_NEW
-            ); // Paper - Inventory close reason
-        }
-
-        // This method follows the CraftHumanEntity#openCustomInventory method.
-        // Call inventory open event.
-        final Pair<Component, AbstractContainerMenu> result = CraftEventFactory.callInventoryOpenEventWithTitle(player, this);
-        // Event likely canceled.
-        if (result.getSecond() == null) return;
-
-        Component title = this.title;
-
-        // Overridable by the event.
-        final Component titleOverride = result.getFirst();
-        if (titleOverride != null) {
-            title = titleOverride;
-        }
-
-        if (!player.isImmobile()) {
-            player.connection.send(new ClientboundOpenScreenPacket(containerId, MenuType.ANVIL, PaperAdventure.asVanilla(title)));
-        }
-
-        player.containerMenu = this;
-        player.initMenu(this);
+        NmsGuiUtil.openInventory(player, this, title, getType(), containerId);
     }
 
     @Override
@@ -159,6 +123,7 @@ public final class NmsAnvilInventory extends AnvilMenu implements PaperGuiInvent
 
     @Override
     public boolean stillValid(final @NotNull Player player) {
+        // Always true so the player can open it from anywhere.
         return true;
     }
 

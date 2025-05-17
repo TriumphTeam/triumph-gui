@@ -24,7 +24,7 @@
 package dev.triumphteam.gui.paper.container.type;
 
 import dev.triumphteam.gui.container.type.GuiContainerType;
-import dev.triumphteam.gui.paper.nms.PaperGuiInventory;
+import dev.triumphteam.gui.paper.PaperGuiInventory;
 import net.kyori.adventure.text.Component;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.InventoryHolder;

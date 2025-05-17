@@ -1,4 +1,4 @@
-package dev.triumphteam.gui.paper.nms;
+package dev.triumphteam.gui.paper;
 
 import dev.triumphteam.gui.exception.TriumphGuiException;
 import org.bukkit.inventory.InventoryHolder;

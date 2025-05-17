@@ -56,8 +56,6 @@ public final class PaperGuiListener implements Listener {
 
     @EventHandler
     public void onGuiClick(final @NotNull InventoryClickEvent event) {
-        event.getWhoClicked().sendMessage("CLICK -> " + event.getRawSlot());
-
         final var view = convertHolder(event.getInventory().getHolder());
         if (view == null) return;
 
@@ -78,7 +76,6 @@ public final class PaperGuiListener implements Listener {
 
     @EventHandler
     public void onGuiOpen(final @NotNull InventoryOpenEvent event) {
-        event.getPlayer().sendMessage("OPEN -> " + event.getInventory().getHolder());
         final var view = convertHolder(event.getInventory().getHolder());
         if (view == null) return;
 
@@ -117,7 +114,7 @@ public final class PaperGuiListener implements Listener {
         anvilContainerType.setInput(PlainTextComponentSerializer.plainText().serialize(resultDisplayName));
 
         // Then set the result if needed.
-        final ItemStack viewResultItem = view.getRawItem(2);
+        final ItemStack viewResultItem = view.getRawItem(AbstractAnvilContainerType.RESULT_SLOT);
         if (viewResultItem == null) return;
 
         // If we do have an item for the result, we set it here.

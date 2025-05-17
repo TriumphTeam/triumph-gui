@@ -1,4 +1,4 @@
-package dev.triumphteam.gui.paper.nms;
+package dev.triumphteam.gui.paper;
 
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;

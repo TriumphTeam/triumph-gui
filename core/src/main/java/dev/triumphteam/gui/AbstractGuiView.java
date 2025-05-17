@@ -104,10 +104,6 @@ public abstract class AbstractGuiView<P, I> implements GuiView {
 
     protected abstract void clearSlot(final int slot);
 
-    protected abstract void prepareInventory();
-
-    protected abstract void runDelayed(final int ticks, final @NotNull Runnable runnable);
-
     protected abstract void populateInventory(final @NotNull Map<Integer, @NotNull RenderedGuiElement<P, I>> renderedItems);
 
     protected abstract void openInventory(final boolean updating);
@@ -129,7 +125,7 @@ public abstract class AbstractGuiView<P, I> implements GuiView {
         titleRenderer.renderTitle(title, (rendered) -> {
             this.renderedTitle = rendered;
             openInventory(false);
-            runDelayed(1, this::setup);
+            setup();
         });
     }
 

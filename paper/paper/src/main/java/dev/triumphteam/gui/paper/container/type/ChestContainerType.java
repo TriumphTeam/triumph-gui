@@ -24,9 +24,9 @@
 package dev.triumphteam.gui.paper.container.type;
 
 import dev.triumphteam.gui.container.type.types.AbstractChestContainerType;
+import dev.triumphteam.gui.paper.container.inventory.NmsVersionedGuiInventoryFactory;
 import dev.triumphteam.gui.paper.container.inventory.PaperDefaultGuiInventory;
-import dev.triumphteam.gui.paper.nms.v1_21.NmsInventoryFactory;
-import dev.triumphteam.gui.paper.nms.PaperGuiInventory;
+import dev.triumphteam.gui.paper.PaperGuiInventory;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -47,7 +47,7 @@ public final class ChestContainerType extends AbstractChestContainerType impleme
             final boolean usePlayerInventory
     ) {
         if (usePlayerInventory) {
-            return NmsInventoryFactory.chest(holder, player, title, getRows());
+            return NmsVersionedGuiInventoryFactory.chest(holder, player, title, getRows());
         }
         return new PaperDefaultGuiInventory(player, this, Bukkit.createInventory(holder, getUpperLimit(), title));
     }
