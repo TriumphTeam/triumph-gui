@@ -1,7 +1,7 @@
 package dev.triumphteam.gui.paper.container.inventory;
 
 import dev.triumphteam.gui.paper.container.type.PaperContainerType;
-import dev.triumphteam.gui.paper.nms.v1_21.inventory.PaperGuiInventory;
+import dev.triumphteam.gui.paper.nms.PaperGuiInventory;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;

@@ -1,13 +1,14 @@
 package dev.triumphteam.gui.paper.nms.v1_21;
 
 import com.mojang.datafixers.util.Pair;
-import dev.triumphteam.gui.paper.nms.v1_21.inventory.PaperGuiInventory;
+import dev.triumphteam.gui.paper.nms.PaperGuiInventory;
 import io.papermc.paper.adventure.PaperAdventure;
 import net.kyori.adventure.text.Component;
 import net.minecraft.network.protocol.game.ClientboundOpenScreenPacket;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.Container;
 import net.minecraft.world.SimpleContainer;
+import net.minecraft.world.entity.EntityEquipment;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.ChestMenu;
@@ -60,7 +61,7 @@ public final class NmsCombinedChestInventory extends ChestMenu implements PaperG
             final @NotNull Component title,
             final int rows
     ) {
-        this(holder, player, title, new Inventory(player), new SimpleContainer(rows * COLUMNS), rows);
+        this(holder, player, title, new Inventory(player, new EntityEquipment()), new SimpleContainer(rows * COLUMNS), rows);
     }
 
     private NmsCombinedChestInventory(

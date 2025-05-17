@@ -1,8 +1,8 @@
 package dev.triumphteam.gui.paper.nms.v1_21;
 
 import com.mojang.datafixers.util.Pair;
-import dev.triumphteam.gui.paper.nms.v1_21.inventory.NmsGuiReflectionHandler;
-import dev.triumphteam.gui.paper.nms.v1_21.inventory.PaperGuiInventory;
+import dev.triumphteam.gui.paper.nms.NmsGuiReflectionHandler;
+import dev.triumphteam.gui.paper.nms.PaperGuiInventory;
 import io.papermc.paper.adventure.PaperAdventure;
 import net.kyori.adventure.text.Component;
 import net.minecraft.network.protocol.game.ClientboundOpenScreenPacket;
@@ -10,6 +10,7 @@ import net.minecraft.network.protocol.game.ServerboundContainerClosePacket;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.Container;
 import net.minecraft.world.SimpleContainer;
+import net.minecraft.world.entity.EntityEquipment;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
@@ -55,7 +56,7 @@ public final class NmsAnvilInventory extends AnvilMenu implements PaperGuiInvent
             final @NotNull Component title,
             final boolean usePlayerInventory
     ) {
-        this(holder, player, title, usePlayerInventory ? new Inventory(player) : player.getInventory());
+        this(holder, player, title, usePlayerInventory ? new Inventory(player, new EntityEquipment()) : player.getInventory());
     }
 
     private NmsAnvilInventory(
@@ -76,6 +77,7 @@ public final class NmsAnvilInventory extends AnvilMenu implements PaperGuiInvent
         this.bukkitEntity = new CraftAnvilView(player.getBukkitEntity(), bukkitInventory, this);
         // Little hack to allow us to set an inventory holder.
         REFLECTION_HANDLER.setBukkitOwner(inputSlots, holder);
+        maximumRepairCost = 0;
     }
 
     @Override

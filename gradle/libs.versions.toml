@@ -13,7 +13,7 @@ nova = "1.0.0-SNAPSHOT"
 
 # Minecraft
 adventure = "4.16.0"
-paper = "1.21.1-R0.1-SNAPSHOT"
+paper = "1.21.5-R0.1-SNAPSHOT"
 mojang-auth = "6.0.57"
 
 # Build

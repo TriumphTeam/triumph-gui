@@ -33,7 +33,7 @@ import dev.triumphteam.gui.element.RenderedGuiElement;
 import dev.triumphteam.gui.element.RenderedGuiItem;
 import dev.triumphteam.gui.exception.TriumphGuiException;
 import dev.triumphteam.gui.paper.container.type.PaperContainerType;
-import dev.triumphteam.gui.paper.nms.v1_21.inventory.PaperGuiInventory;
+import dev.triumphteam.gui.paper.nms.PaperGuiInventory;
 import dev.triumphteam.gui.title.GuiTitle;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;

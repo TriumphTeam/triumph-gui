@@ -1,5 +1,3 @@
-
-
 import xyz.jpenilla.resourcefactory.bukkit.BukkitPluginYaml
 
 plugins {

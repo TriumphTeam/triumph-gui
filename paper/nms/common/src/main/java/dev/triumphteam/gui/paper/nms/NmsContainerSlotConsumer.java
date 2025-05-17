@@ -1,4 +1,4 @@
-package dev.triumphteam.gui.paper.nms.v1_21.inventory;
+package dev.triumphteam.gui.paper.nms;
 
 @FunctionalInterface
 public interface NmsContainerSlotConsumer {

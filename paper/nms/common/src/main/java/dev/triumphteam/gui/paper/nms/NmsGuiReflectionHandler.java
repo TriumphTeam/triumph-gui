@@ -1,5 +1,6 @@
-package dev.triumphteam.gui.paper.nms.v1_21.inventory;
+package dev.triumphteam.gui.paper.nms;
 
+import dev.triumphteam.gui.exception.TriumphGuiException;
 import org.bukkit.inventory.InventoryHolder;
 import org.jetbrains.annotations.NotNull;
 
@@ -24,7 +25,7 @@ public final class NmsGuiReflectionHandler {
         try {
             bukkitOwnerField.set(container, bukkitOwner);
         } catch (IllegalAccessException e) {
-            throw new RuntimeException("Could not set bukkitOwner field.", e);
+            throw new TriumphGuiException("Could not set bukkitOwner field.", e);
         }
     }
 }

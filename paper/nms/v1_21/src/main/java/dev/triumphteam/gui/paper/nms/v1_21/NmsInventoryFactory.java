@@ -1,6 +1,6 @@
 package dev.triumphteam.gui.paper.nms.v1_21;
 
-import dev.triumphteam.gui.paper.nms.v1_21.inventory.PaperGuiInventory;
+import dev.triumphteam.gui.paper.nms.PaperGuiInventory;
 import net.kyori.adventure.text.Component;
 import org.bukkit.inventory.InventoryHolder;
 import org.jetbrains.annotations.NotNull;
