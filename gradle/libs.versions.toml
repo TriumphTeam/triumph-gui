@@ -19,7 +19,8 @@ mojang-auth = "6.0.57"
 # Build
 run-paper = "2.3.1"
 resource-factory = "1.2.0"
-shadow = "8.3.5"
+shadow = "9.0.0-beta13"
+paperweight = "2.0.0-beta.16"
 
 [libraries]
 # Core
@@ -43,6 +44,7 @@ build-license = { module = "gradle.plugin.com.hierynomus.gradle.plugins:license-
 build-run-paper = { module = "xyz.jpenilla:run-task", version.ref = "run-paper" }
 build-resource-factory = { module = "xyz.jpenilla:resource-factory", version.ref = "resource-factory" }
 build-shadow = { module = "com.gradleup.shadow:shadow-gradle-plugin", version.ref = "shadow" }
+build-paperweight = { module = "io.papermc.paperweight.userdev:io.papermc.paperweight.userdev.gradle.plugin", version.ref = "paperweight" }
 
 [bundles]
 build = [
@@ -53,4 +55,5 @@ paper-examples = [
     "build-run-paper",
     "build-resource-factory",
     "build-shadow",
+    "build-paperweight",
 ]

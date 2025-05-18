@@ -1,6 +1,5 @@
 plugins {
-    id("gui.paper")
-    id("io.papermc.paperweight.userdev") version "2.0.0-beta.16"
+    id("gui.paper-weight")
 }
 
 dependencies {

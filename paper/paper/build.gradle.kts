@@ -11,3 +11,4 @@ dependencies {
 
     compileOnly(libs.mojang.auth)
 }
+

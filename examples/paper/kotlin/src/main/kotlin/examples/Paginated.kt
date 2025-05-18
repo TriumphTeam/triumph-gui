@@ -37,7 +37,7 @@ import org.bukkit.entity.Player
 
 public class Paginated : CommandExecutor {
 
-    override fun onCommand(sender: CommandSender, command: Command, label: String, args: Array<out String>?): Boolean {
+    override fun onCommand(sender: CommandSender, command: Command, label: String, args: Array<out String>): Boolean {
         if (sender !is Player) return false
 
         // Simple example to fill in the pages
