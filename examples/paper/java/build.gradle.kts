@@ -7,6 +7,8 @@ plugins {
 
 repositories {
     maven("https://repo.papermc.io/repository/maven-public/")
+    maven("https://repo.codemc.io/repository/maven-releases/")
+    maven("https://repo.codemc.io/repository/maven-snapshots/")
 }
 
 dependencies {
@@ -21,5 +23,6 @@ bukkitPluginYaml {
     commands.add(commands.create("gui-static"))
     commands.add(commands.create("gui-clicker"))
     commands.add(commands.create("gui-title"))
+    commands.add(commands.create("gui-anvil"))
     foliaSupported.set(true)
 }

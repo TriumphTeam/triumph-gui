@@ -24,9 +24,12 @@
 package dev.triumphteam.gui.paper.container.type;
 
 import dev.triumphteam.gui.container.type.types.AbstractChestContainerType;
+import dev.triumphteam.gui.paper.container.inventory.NmsVersionedGuiInventoryFactory;
+import dev.triumphteam.gui.paper.container.inventory.PaperDefaultGuiInventory;
+import dev.triumphteam.gui.paper.PaperGuiInventory;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
-import org.bukkit.inventory.Inventory;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.InventoryHolder;
 import org.jetbrains.annotations.NotNull;
 
@@ -37,10 +40,20 @@ public final class ChestContainerType extends AbstractChestContainerType impleme
     }
 
     @Override
-    public @NotNull Inventory createInventory(
+    public @NotNull PaperGuiInventory createInventory(
             final @NotNull InventoryHolder holder,
-            final @NotNull Component title
+            final @NotNull Component title,
+            final @NotNull Player player,
+            final boolean usePlayerInventory
     ) {
-        return Bukkit.createInventory(holder, getUpperLimit(), title);
+        if (usePlayerInventory) {
+            return NmsVersionedGuiInventoryFactory.chest(holder, player, title, getRows());
+        }
+        return new PaperDefaultGuiInventory(player, this, Bukkit.createInventory(holder, getUpperLimit(), title));
+    }
+
+    @Override
+    public @NotNull PaperContainerType copy() {
+        return new ChestContainerType(getRows());
     }
 }

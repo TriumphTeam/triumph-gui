@@ -27,6 +27,10 @@ import dev.triumphteam.gui.actions.GuiCloseAction;
 import dev.triumphteam.gui.click.ClickContext;
 import dev.triumphteam.gui.click.GuiClick;
 import dev.triumphteam.gui.click.MoveResult;
+import dev.triumphteam.gui.container.type.GuiContainerType;
+import dev.triumphteam.gui.container.type.types.AbstractAnvilContainerType;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -35,7 +39,10 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.inventory.InventoryDragEvent;
 import org.bukkit.event.inventory.InventoryOpenEvent;
+import org.bukkit.event.inventory.PrepareAnvilEvent;
 import org.bukkit.inventory.InventoryHolder;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.Plugin;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -81,8 +88,37 @@ public final class PaperGuiListener implements Listener {
         final var view = convertHolder(event.getInventory().getHolder());
         if (view == null) return;
 
+        // Tell the view to attempt to restore the player's inventory.
+        view.restorePlayerInventory();
+
         if (view.isUpdating()) return;
         view.getCloseActions().forEach(GuiCloseAction::onClose);
+    }
+
+    @EventHandler
+    public void onAnvilRename(final @NotNull PrepareAnvilEvent event) {
+        final var view = convertHolder(event.getInventory().getHolder());
+        if (view == null) return;
+
+        final GuiContainerType containerType = view.getContainerType();
+        if (!(containerType instanceof final AbstractAnvilContainerType anvilContainerType)) return;
+
+        final ItemStack resultItemStack = event.getResult();
+        if (resultItemStack == null) return;
+        final ItemMeta resultMeta = resultItemStack.getItemMeta();
+        if (resultMeta == null) return;
+        final Component resultDisplayName = resultMeta.displayName();
+        if (resultDisplayName == null) return;
+
+        // Finally, we can set the input.
+        anvilContainerType.setInput(PlainTextComponentSerializer.plainText().serialize(resultDisplayName));
+
+        // Then set the result if needed.
+        final ItemStack viewResultItem = view.getRawItem(AbstractAnvilContainerType.RESULT_SLOT);
+        if (viewResultItem == null) return;
+
+        // If we do have an item for the result, we set it here.
+        event.setResult(viewResultItem);
     }
 
     private @Nullable PaperGuiView convertHolder(final @Nullable InventoryHolder holder) {

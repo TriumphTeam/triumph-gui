@@ -30,4 +30,8 @@ public final class TriumphGuiException extends RuntimeException {
     public TriumphGuiException(final @NotNull String message) {
         super(message);
     }
+
+    public TriumphGuiException(final @NotNull String message, final @NotNull Throwable cause) {
+        super(message, cause);
+    }
 }

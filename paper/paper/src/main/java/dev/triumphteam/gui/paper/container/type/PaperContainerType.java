@@ -24,10 +24,13 @@
 package dev.triumphteam.gui.paper.container.type;
 
 import dev.triumphteam.gui.container.type.GuiContainerType;
+import dev.triumphteam.gui.paper.PaperGuiInventory;
 import net.kyori.adventure.text.Component;
-import org.bukkit.inventory.Inventory;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.InventoryHolder;
 import org.jetbrains.annotations.NotNull;
+
+import java.util.function.Consumer;
 
 public interface PaperContainerType extends GuiContainerType {
 
@@ -39,9 +42,18 @@ public interface PaperContainerType extends GuiContainerType {
         return new HopperContainerType();
     }
 
+    static @NotNull PaperContainerType anvil(final @NotNull Consumer<String> inputHandler) {
+        return new AnvilContainerType(inputHandler);
+    }
+
     @NotNull
-    Inventory createInventory(
+    PaperGuiInventory createInventory(
             final @NotNull InventoryHolder holder,
-            final @NotNull Component title
+            final @NotNull Component title,
+            final @NotNull Player player,
+            final boolean usePlayerInventory
     );
+
+    @Override
+    @NotNull PaperContainerType copy();
 }

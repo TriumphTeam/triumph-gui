@@ -34,6 +34,7 @@ import dev.triumphteam.gui.component.StatefulGuiComponent;
 import dev.triumphteam.gui.component.renderer.GuiComponentRenderer;
 import dev.triumphteam.gui.container.type.GuiContainerType;
 import dev.triumphteam.gui.element.RenderedGuiElement;
+import dev.triumphteam.gui.element.RenderedGuiItem;
 import dev.triumphteam.gui.exception.TriumphGuiException;
 import dev.triumphteam.gui.title.GuiTitle;
 import dev.triumphteam.gui.title.StatefulGuiTitle;
@@ -64,19 +65,21 @@ public abstract class AbstractGuiView<P, I> implements GuiView {
     private final Map<GuiComponent<P, I>, RenderedComponent<P, I>> renderedComponents = new ConcurrentHashMap<>();
     // All the gui elements that have been rendered and are in the inventory.
     private final Map<Integer, RenderedGuiElement<P, I>> allRenderedElements = new ConcurrentHashMap<>();
+    private final boolean usePlayerInventory;
     // Helper boolean for updating title.
     private boolean updating = false;
     private Component renderedTitle = null;
 
     public AbstractGuiView(
-        final @NotNull P viewer,
-        final @NotNull GuiTitle title,
-        final @NotNull List<@NotNull GuiComponent<P, I>> components,
-        final @NotNull List<GuiCloseAction> closeActions,
-        final @NotNull GuiContainerType containerType,
-        final @NotNull GuiComponentRenderer<P, I> renderer,
-        final @NotNull ClickHandler<P> defaultClickHandler,
-        final @NotNull ClickProcessor<P, I> clickProcessor
+            final @NotNull P viewer,
+            final @NotNull GuiTitle title,
+            final @NotNull List<@NotNull GuiComponent<P, I>> components,
+            final @NotNull List<GuiCloseAction> closeActions,
+            final @NotNull GuiContainerType containerType,
+            final @NotNull GuiComponentRenderer<P, I> renderer,
+            final @NotNull ClickHandler<P> defaultClickHandler,
+            final @NotNull ClickProcessor<P, I> clickProcessor,
+            final boolean usePlayerInventory
     ) {
         this.title = title;
         this.viewer = viewer;
@@ -86,6 +89,7 @@ public abstract class AbstractGuiView<P, I> implements GuiView {
         this.renderer = renderer;
         this.defaultClickHandler = defaultClickHandler;
         this.clickProcessor = clickProcessor;
+        this.usePlayerInventory = usePlayerInventory;
     }
 
     public @NotNull P viewer() {
@@ -95,6 +99,8 @@ public abstract class AbstractGuiView<P, I> implements GuiView {
     public abstract @NotNull String viewerName();
 
     public abstract @NotNull UUID viewerUuid();
+
+    public abstract void restorePlayerInventory();
 
     protected abstract void clearSlot(final int slot);
 
@@ -125,7 +131,6 @@ public abstract class AbstractGuiView<P, I> implements GuiView {
 
     protected void setup() {
         components.forEach(component -> {
-
             if (component instanceof StatefulGuiComponent<P, I> statefulComponent) {
                 // Add listener to used states
                 statefulComponent.states().forEach(state -> {
@@ -140,7 +145,7 @@ public abstract class AbstractGuiView<P, I> implements GuiView {
 
     public void completeRendered(final @NotNull RenderedComponent<P, I> renderedComponent) {
         var ownerComponent = renderedComponent.component();
-        // Check if component was already rendered before
+        // Check if the component was already rendered before
         var existing = renderedComponents.get(ownerComponent);
         if (existing != null) {
             // Clear its uses
@@ -164,6 +169,14 @@ public abstract class AbstractGuiView<P, I> implements GuiView {
 
     public @Nullable RenderedGuiElement<P, I> getElement(final int slot) {
         return allRenderedElements.get(slot);
+    }
+
+    public @Nullable I getRawItem(final int slot) {
+        final RenderedGuiElement<P, I> renderedGuiElement = getElement(slot);
+        if (renderedGuiElement == null) return null;
+        if (!(renderedGuiElement instanceof RenderedGuiItem<P, I> guiItem)) return null;
+
+        return guiItem.item();
     }
 
     public @NotNull ClickHandler<P> getDefaultClickHandler() {
@@ -191,5 +204,9 @@ public abstract class AbstractGuiView<P, I> implements GuiView {
 
     protected void setUpdating(final boolean newValue) {
         this.updating = newValue;
+    }
+
+    public boolean usePlayerInventory() {
+        return usePlayerInventory;
     }
 }

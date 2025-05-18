@@ -9,6 +9,7 @@ pluginManagement {
     repositories {
         gradlePluginPortal()
         maven("https://repo.triumphteam.dev/releases")
+        maven("https://repo.papermc.io/repository/maven-public/")
     }
 }
 
@@ -26,14 +27,22 @@ projects {
 
     // Platforms and their Kotlin versions
 
-    group("paper") {
+    group(namespace = "paper") {
         single(id = "paper")
         single(id = "kotlin", includeNamespace = true)
+
+        // Nms projects
+        group(namespace = "nms") {
+            single(id = "common", includeNamespace = true)
+
+            // NMS versions
+            single(id = "v1_21", includeNamespace = true)
+        }
     }
 
     // Examples
 
-    group("examples") {
+    group(namespace = "examples") {
         group("paper") {
             single(id = "java", includeNamespace = true)
             single(id = "kotlin", includeNamespace = true)

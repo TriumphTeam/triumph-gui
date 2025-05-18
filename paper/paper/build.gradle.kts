@@ -1,14 +1,14 @@
 plugins {
-    id("gui.base")
+    id("gui.paper")
     id("gui.library")
-}
-
-repositories {
-    maven("https://repo.papermc.io/repository/maven-public/")
 }
 
 dependencies {
     api(projects.triumphGuiCore)
-    compileOnly(libs.paper)
+    api(projects.triumphGuiPaperNmsCommon)
+
+    api(projects.triumphGuiPaperNmsV121)
+
     compileOnly(libs.mojang.auth)
 }
+

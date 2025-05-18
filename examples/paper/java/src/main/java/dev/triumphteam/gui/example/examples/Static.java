@@ -23,14 +23,9 @@
  */
 package dev.triumphteam.gui.example.examples;
 
-import dev.triumphteam.gui.click.MoveResult;
-import dev.triumphteam.gui.click.action.GuiClickAction;
-import dev.triumphteam.gui.layout.GuiLayout;
 import dev.triumphteam.gui.paper.Gui;
 import dev.triumphteam.gui.paper.builder.item.ItemBuilder;
-import dev.triumphteam.gui.slot.Slot;
 import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -45,19 +40,38 @@ public final class Static implements CommandExecutor {
         if (!(sender instanceof Player senderPlayer)) return false;
 
         final var gui = Gui
-                .of(6)
+                .anvil(input -> {
+                    sender.sendMessage("Input: " + input);
+                })
+                .usePlayerInventory()
                 .title(Component.text("Static Gui")) // Simple title for the GUI
                 .statelessComponent(container -> { // A stateless component, we don't care about the item updating, just want the click action
-                    container.setItem(1, 1, ItemBuilder.from(Material.PAPER)
+                    /*container.setItem(1, 1, ItemBuilder.from(Material.PAPER)
                             .name(Component.text("My Paper"))
                             .asGuiItem((player, context) -> {
                                 player.sendMessage("You have clicked on the paper item!");
                             })
-                    );
-
+                    );*/
                 })
                 .statelessComponent(container -> {
-                    GuiLayout.border(6).forEach(slot -> {
+
+                    // Player INV
+                    container.setItem(1, 1, ItemBuilder.from(Material.PAPER).asGuiItem());
+                    container.setItem(1, 9, ItemBuilder.from(Material.PAPER).asGuiItem());
+                    container.setItem(3, 1, ItemBuilder.from(Material.PAPER).asGuiItem());
+                    container.setItem(3, 9, ItemBuilder.from(Material.PAPER).asGuiItem());
+
+                    // Hot bar
+                    container.setItem(4, 1, ItemBuilder.from(Material.BARRIER).asGuiItem());
+                    container.setItem(4, 9, ItemBuilder.from(Material.BARRIER).asGuiItem());
+
+                    // Anvil
+                    container.setItem(5, 1, ItemBuilder.from(Material.DIAMOND).asGuiItem());
+
+                    // RESULT
+                    container.setItem(5, 3, ItemBuilder.from(Material.NAME_TAG).asGuiItem());
+
+                    /*GuiLayout.border(6).forEach(slot -> {
                         container.setAction(slot, GuiClickAction.movable((player, context) -> {
                             player.sendMessage(Component.text("You CANNOT place/pickup items here!").color(NamedTextColor.RED));
                             return MoveResult.DISALLOW;
@@ -66,22 +80,21 @@ public final class Static implements CommandExecutor {
 
                     GuiLayout.box(Slot.of(2, 2), Slot.of(5, 8)).forEach(slot -> {
                         container.setAction(slot, GuiClickAction.movable((player, context) -> {
-                            player.sendMessage(Component.text("You can place/pickup items here!").color(NamedTextColor.GREEN));
+                            player.sendMessage(Component.text("Clicked on GUI").color(NamedTextColor.GREEN));
                             return MoveResult.ALLOW;
                         }));
                     });
 
-                    GuiLayout.box(Slot.of(7, 1), Slot.of(10, 9)).forEach(slot -> {
-                        container.setAction(slot, GuiClickAction.movable((player, context) -> {
-                            player.sendMessage(Component.text("You can place/pickup items here!").color(NamedTextColor.GREEN));
+                    GuiLayout.box(Slot.of(7, 2), Slot.of(10, 8)).forEach(slot -> {
+                        container.setItem(slot, ItemBuilder.from(Material.PAPER).asGuiItem(GuiClickAction.movable((player, context) -> {
                             return MoveResult.ALLOW;
-                        }));
-                    });
+                        })));
+                    });*/
                 })
                 .build();
 
         gui.open(senderPlayer);
-
+        // Gui.openFor(senderPlayer);
         return true;
     }
 }
