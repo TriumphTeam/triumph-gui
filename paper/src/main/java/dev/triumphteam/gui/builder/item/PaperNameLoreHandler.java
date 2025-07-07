@@ -21,26 +21,40 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package dev.triumphteam.gui;
+package dev.triumphteam.gui.builder.item;
 
-import dev.triumphteam.gui.guis.BaseGui;
-import org.bukkit.plugin.Plugin;
-import org.bukkit.plugin.java.JavaPlugin;
+import net.kyori.adventure.text.Component;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
-public final class TriumphGui {
+import java.util.ArrayList;
+import java.util.List;
+import java.util.function.Consumer;
 
-    // The plugin instance for registering the event and for the close delay.
-    private static Plugin PLUGIN = null;
+public final class PaperNameLoreHandler implements NameLoreHandler {
 
-    private TriumphGui() {}
+    private static final PaperNameLoreHandler INSTANCE = new PaperNameLoreHandler();
 
-    public static void init(final @NotNull Plugin plugin) {
-        PLUGIN = plugin;
+    public static PaperNameLoreHandler getInstance() {
+        return INSTANCE;
     }
 
-    public static @NotNull Plugin getPlugin() {
-        if (PLUGIN == null) init(JavaPlugin.getProvidingPlugin(BaseGui.class));
-        return PLUGIN;
+    @Override
+    public void name(final @NotNull ItemMeta itemMeta, final @NotNull Component name) {
+        itemMeta.displayName(name);
+    }
+
+    @Override
+    public void lore(final @NotNull ItemMeta itemMeta, final @NotNull List<Component> lore) {
+        itemMeta.lore(lore);
+    }
+
+    @Override
+    public void lore(final @NotNull ItemMeta itemMeta, final @NotNull Consumer<List<@Nullable Component>> lore) {
+        final List<Component> existingLore = itemMeta.lore();
+        final List<Component> components = existingLore == null ? new ArrayList<>() : existingLore;
+        lore.accept(components);
+        lore(itemMeta, components);
     }
 }

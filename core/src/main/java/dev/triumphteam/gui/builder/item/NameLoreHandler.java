@@ -21,26 +21,21 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package dev.triumphteam.gui;
+package dev.triumphteam.gui.builder.item;
 
-import dev.triumphteam.gui.guis.BaseGui;
-import org.bukkit.plugin.Plugin;
-import org.bukkit.plugin.java.JavaPlugin;
+import net.kyori.adventure.text.Component;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
-public final class TriumphGui {
+import java.util.List;
+import java.util.function.Consumer;
 
-    // The plugin instance for registering the event and for the close delay.
-    private static Plugin PLUGIN = null;
+public interface NameLoreHandler {
 
-    private TriumphGui() {}
+    void name(final @NotNull ItemMeta itemMeta, final @NotNull Component name);
 
-    public static void init(final @NotNull Plugin plugin) {
-        PLUGIN = plugin;
-    }
+    void lore(final @NotNull ItemMeta itemMeta, final @NotNull  List<Component> lore);
 
-    public static @NotNull Plugin getPlugin() {
-        if (PLUGIN == null) init(JavaPlugin.getProvidingPlugin(BaseGui.class));
-        return PLUGIN;
-    }
+    void lore(final @NotNull ItemMeta itemMeta, final @NotNull Consumer<List<@Nullable Component>> lore);
 }

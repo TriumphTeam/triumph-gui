@@ -8,9 +8,7 @@ rootProject.name = "triumph-gui"
 include("core")
 findProject(":core")?.name = "triumph-gui"
 
-listOf("kotlin").forEach {
-    include(it)
-    findProject(":$it")?.name = "triumph-gui-$it"
-}
+include("paper")
+findProject(":paper")?.name = "triumph-gui-paper"
 
-include("test-plugin")
+// include("test-plugin")

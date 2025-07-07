@@ -43,12 +43,12 @@ public class MapBuilder extends BaseItemBuilder<MapBuilder> {
 
     private static final Material MAP = Material.MAP;
 
-    MapBuilder() {
-        super(new ItemStack(MAP));
+    MapBuilder(final @NotNull NameLoreHandler nameLoreHandler) {
+        super(new ItemStack(MAP), nameLoreHandler);
     }
 
-    MapBuilder(@NotNull ItemStack itemStack) {
-        super(itemStack);
+    MapBuilder(final @NotNull ItemStack itemStack, final @NotNull NameLoreHandler nameLoreHandler) {
+        super(itemStack, nameLoreHandler);
         if (itemStack.getType() != MAP) {
             throw new GuiException("MapBuilder requires the material to be a MAP!");
         }

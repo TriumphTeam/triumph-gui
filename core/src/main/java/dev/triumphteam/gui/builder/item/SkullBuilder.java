@@ -57,20 +57,19 @@ public final class SkullBuilder extends BaseItemBuilder<SkullBuilder> {
             final SkullMeta skullMeta = (SkullMeta) SkullUtil.skull().getItemMeta();
             field = skullMeta.getClass().getDeclaredField("profile");
             field.setAccessible(true);
-        } catch (NoSuchFieldException e) {
-            e.printStackTrace();
-            field = null;
+        } catch (NoSuchFieldException exception) {
+            throw new GuiException("Failed to find profile field in SkullMeta!", exception);
         }
 
         PROFILE_FIELD = field;
     }
 
-    SkullBuilder() {
-        super(SkullUtil.skull());
+    SkullBuilder(final @NotNull NameLoreHandler nameLoreHandler) {
+        super(SkullUtil.skull(), nameLoreHandler);
     }
 
-    SkullBuilder(final @NotNull ItemStack itemStack) {
-        super(itemStack);
+    SkullBuilder(final @NotNull ItemStack itemStack, final @NotNull NameLoreHandler nameLoreHandler) {
+        super(itemStack, nameLoreHandler);
         if (!SkullUtil.isPlayerSkull(itemStack)) {
             throw new GuiException("SkullBuilder requires the material to be a PLAYER_HEAD/SKULL_ITEM!");
         }
@@ -79,7 +78,7 @@ public final class SkullBuilder extends BaseItemBuilder<SkullBuilder> {
     /**
      * Sets the skull texture using a BASE64 string
      *
-     * @param texture The base64 texture
+     * @param texture   The base64 texture
      * @param profileId The unique id of the profile
      * @return {@link SkullBuilder}
      */
@@ -101,9 +100,8 @@ public final class SkullBuilder extends BaseItemBuilder<SkullBuilder> {
 
             try {
                 textures.setSkin(new URL(textureUrl));
-            } catch (MalformedURLException e) {
-                e.printStackTrace();
-                return this;
+            } catch (MalformedURLException exception) {
+                throw new GuiException("Failed to set texture url!", exception);
             }
 
             profile.setTextures(textures);
@@ -122,8 +120,8 @@ public final class SkullBuilder extends BaseItemBuilder<SkullBuilder> {
 
         try {
             PROFILE_FIELD.set(skullMeta, profile);
-        } catch (IllegalArgumentException | IllegalAccessException ex) {
-            ex.printStackTrace();
+        } catch (IllegalArgumentException | IllegalAccessException exception) {
+            throw new GuiException("Failed to set profile field!", exception);
         }
 
         setMeta(skullMeta);

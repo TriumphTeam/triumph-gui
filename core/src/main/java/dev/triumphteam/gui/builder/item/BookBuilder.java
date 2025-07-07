@@ -47,8 +47,8 @@ public class BookBuilder extends BaseItemBuilder<BookBuilder> {
 
     private static final EnumSet<Material> BOOKS = EnumSet.of(Material.WRITABLE_BOOK, Material.WRITTEN_BOOK);
 
-    BookBuilder(@NotNull ItemStack itemStack) {
-        super(itemStack);
+    BookBuilder(final @NotNull ItemStack itemStack, final @NotNull NameLoreHandler nameLoreHandler) {
+        super(itemStack, nameLoreHandler);
         if (!BOOKS.contains(itemStack.getType())) {
             throw new GuiException("BookBuilder requires the material to be a WRITABLE_BOOK/WRITTEN_BOOK!");
         }

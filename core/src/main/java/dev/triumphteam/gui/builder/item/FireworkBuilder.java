@@ -46,8 +46,8 @@ public class FireworkBuilder extends BaseItemBuilder<FireworkBuilder> {
     private static final Material STAR = Material.FIREWORK_STAR;
     private static final Material ROCKET = Material.FIREWORK_ROCKET;
 
-    FireworkBuilder(@NotNull final ItemStack itemStack) {
-        super(itemStack);
+    FireworkBuilder(final @NotNull ItemStack itemStack, final @NotNull NameLoreHandler nameLoreHandler) {
+        super(itemStack, nameLoreHandler);
         if (itemStack.getType() != STAR && itemStack.getType() != ROCKET) {
             throw new GuiException("FireworkBuilder requires the material to be a FIREWORK_STAR/FIREWORK_ROCKET!");
         }

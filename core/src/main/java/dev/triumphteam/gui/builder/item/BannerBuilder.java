@@ -61,12 +61,12 @@ public final class BannerBuilder extends BaseItemBuilder<BannerBuilder> {
         }
     }
 
-    BannerBuilder() {
-        super(new ItemStack(DEFAULT_BANNER));
+    BannerBuilder(final @NotNull NameLoreHandler nameLoreHandler) {
+        super(new ItemStack(DEFAULT_BANNER), nameLoreHandler);
     }
 
-    BannerBuilder(@NotNull ItemStack itemStack) {
-        super(itemStack);
+    BannerBuilder(final @NotNull ItemStack itemStack, final @NotNull NameLoreHandler nameLoreHandler) {
+        super(itemStack, nameLoreHandler);
         if (!BANNERS.contains(itemStack.getType())) {
             throw new GuiException("BannerBuilder requires the material to be a banner!");
         }
@@ -190,7 +190,4 @@ public final class BannerBuilder extends BaseItemBuilder<BannerBuilder> {
         setMeta(bannerMeta);
         return this;
     }
-
-    // TODO add shield()
-
 }

@@ -21,5 +21,5 @@ subprojects {
     }
 
     group = "dev.triumphteam"
-    version = "3.2.0-SNAPSHOT"
+    version = "3.1.13-SNAPSHOT"
 }
