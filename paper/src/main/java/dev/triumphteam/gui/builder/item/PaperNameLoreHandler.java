@@ -21,49 +21,40 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package dev.triumphteam.gui.builder.gui;
+package dev.triumphteam.gui.builder.item;
 
-import dev.triumphteam.gui.guis.PaginatedGui;
-import org.jetbrains.annotations.Contract;
+import net.kyori.adventure.text.Component;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.function.Consumer;
 
-/**
- * GUI builder for creating a {@link PaginatedGui}
- */
-public class PaginatedBuilder extends BaseChestGuiBuilder<PaginatedGui, PaginatedBuilder> {
+public final class PaperNameLoreHandler implements NameLoreHandler {
 
-    private int pageSize = 0;
+    private static final PaperNameLoreHandler INSTANCE = new PaperNameLoreHandler();
 
-    /**
-     * Sets the desirable page size, most of the time this isn't needed
-     *
-     * @param pageSize The amount of free slots that page items should occupy
-     * @return The current builder
-     */
-    @NotNull
-    @Contract("_ -> this")
-    public PaginatedBuilder pageSize(final int pageSize) {
-        this.pageSize = pageSize;
-        return this;
+    public static PaperNameLoreHandler getInstance() {
+        return INSTANCE;
     }
 
-    /**
-     * Creates a new {@link PaginatedGui}
-     *
-     * @return A new {@link PaginatedGui}
-     */
-    @NotNull
     @Override
-    @Contract(" -> new")
-    public PaginatedGui create() {
-        final PaginatedGui gui = new PaginatedGui(createContainer(), pageSize, getModifiers());
-
-        final Consumer<PaginatedGui> consumer = getConsumer();
-        if (consumer != null) consumer.accept(gui);
-
-        return gui;
+    public void name(final @NotNull ItemMeta itemMeta, final @NotNull Component name) {
+        itemMeta.displayName(name);
     }
 
+    @Override
+    public void lore(final @NotNull ItemMeta itemMeta, final @NotNull List<Component> lore) {
+        itemMeta.lore(lore);
+    }
+
+    @Override
+    public void lore(final @NotNull ItemMeta itemMeta, final @NotNull Consumer<List<@Nullable Component>> lore) {
+        final List<Component> existingLore = itemMeta.lore();
+        final List<Component> components = existingLore == null ? new ArrayList<>() : existingLore;
+        lore.accept(components);
+        lore(itemMeta, components);
+    }
 }

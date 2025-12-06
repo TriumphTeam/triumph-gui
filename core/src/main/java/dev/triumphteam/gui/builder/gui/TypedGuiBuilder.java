@@ -23,9 +23,12 @@
  */
 package dev.triumphteam.gui.builder.gui;
 
+import dev.triumphteam.gui.components.GuiContainer;
 import dev.triumphteam.gui.components.GuiType;
+import dev.triumphteam.gui.components.InventoryProvider;
 import dev.triumphteam.gui.components.util.Legacy;
 import dev.triumphteam.gui.guis.Gui;
+import org.bukkit.Bukkit;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
@@ -34,17 +37,24 @@ import java.util.function.Consumer;
 /**
  * The simple GUI builder is used for creating a {@link Gui}
  */
-public final class SimpleBuilder extends BaseGuiBuilder<Gui, SimpleBuilder> {
+public final class TypedGuiBuilder extends BaseGuiBuilder<Gui, TypedGuiBuilder> {
 
     private GuiType guiType;
+    private InventoryProvider.Typed inventoryProvider =
+        (title, owner, type) -> Bukkit.createInventory(owner, type, Legacy.SERIALIZER.serialize(title));
 
     /**
      * Main constructor
      *
      * @param guiType The {@link GuiType} to default to
      */
-    public SimpleBuilder(@NotNull final GuiType guiType) {
+    public TypedGuiBuilder(final @NotNull GuiType guiType) {
         this.guiType = guiType;
+    }
+
+    public TypedGuiBuilder(final @NotNull GuiType guiType, final @NotNull ChestGuiBuilder builder) {
+        this.guiType = guiType;
+        consumeBuilder(builder);
     }
 
     /**
@@ -56,8 +66,15 @@ public final class SimpleBuilder extends BaseGuiBuilder<Gui, SimpleBuilder> {
      */
     @NotNull
     @Contract("_ -> this")
-    public SimpleBuilder type(@NotNull final GuiType guiType) {
+    public TypedGuiBuilder type(final @NotNull GuiType guiType) {
         this.guiType = guiType;
+        return this;
+    }
+
+    @NotNull
+    @Contract("_ -> this")
+    public TypedGuiBuilder inventory(@NotNull final InventoryProvider.Typed inventoryProvider) {
+        this.inventoryProvider = inventoryProvider;
         return this;
     }
 
@@ -70,17 +87,9 @@ public final class SimpleBuilder extends BaseGuiBuilder<Gui, SimpleBuilder> {
     @Override
     @Contract(" -> new")
     public Gui create() {
-        final Gui gui;
-        final String title = Legacy.SERIALIZER.serialize(getTitle());
-        if (guiType == null || guiType == GuiType.CHEST) {
-            gui = new Gui(getRows(), title, getModifiers());
-        } else {
-            gui = new Gui(guiType, title, getModifiers());
-        }
-
+        final Gui gui = new Gui(new GuiContainer.Typed(getTitle(), inventoryProvider, guiType), getModifiers());
         final Consumer<Gui> consumer = getConsumer();
         if (consumer != null) consumer.accept(gui);
-
         return gui;
     }
 

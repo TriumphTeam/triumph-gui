@@ -21,49 +21,26 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package dev.triumphteam.gui.builder.gui;
+package dev.triumphteam.gui;
 
-import dev.triumphteam.gui.guis.PaginatedGui;
-import org.jetbrains.annotations.Contract;
+import dev.triumphteam.gui.guis.BaseGui;
+import org.bukkit.plugin.Plugin;
+import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.function.Consumer;
+public final class TriumphGui {
 
-/**
- * GUI builder for creating a {@link PaginatedGui}
- */
-public class PaginatedBuilder extends BaseChestGuiBuilder<PaginatedGui, PaginatedBuilder> {
+    // The plugin instance for registering the event and for the close delay.
+    private static Plugin PLUGIN = null;
 
-    private int pageSize = 0;
+    private TriumphGui() {}
 
-    /**
-     * Sets the desirable page size, most of the time this isn't needed
-     *
-     * @param pageSize The amount of free slots that page items should occupy
-     * @return The current builder
-     */
-    @NotNull
-    @Contract("_ -> this")
-    public PaginatedBuilder pageSize(final int pageSize) {
-        this.pageSize = pageSize;
-        return this;
+    public static void init(final @NotNull Plugin plugin) {
+        PLUGIN = plugin;
     }
 
-    /**
-     * Creates a new {@link PaginatedGui}
-     *
-     * @return A new {@link PaginatedGui}
-     */
-    @NotNull
-    @Override
-    @Contract(" -> new")
-    public PaginatedGui create() {
-        final PaginatedGui gui = new PaginatedGui(createContainer(), pageSize, getModifiers());
-
-        final Consumer<PaginatedGui> consumer = getConsumer();
-        if (consumer != null) consumer.accept(gui);
-
-        return gui;
+    public static @NotNull Plugin getPlugin() {
+        if (PLUGIN == null) init(JavaPlugin.getProvidingPlugin(BaseGui.class));
+        return PLUGIN;
     }
-
 }

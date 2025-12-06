@@ -173,5 +173,4 @@ public final class GuiListener implements Listener {
         if (nbt == null) return false;
         return nbt.equals(guiItem.getUuid().toString());
     }
-
 }

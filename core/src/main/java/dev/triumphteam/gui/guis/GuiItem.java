@@ -116,18 +116,9 @@ public class GuiItem {
     }
 
     /**
-     * Gets the random {@link UUID} that was generated when the GuiItem was made
-     */
-    @NotNull
-    UUID getUuid() {
-        return uuid;
-    }
-
-    /**
      * Gets the {@link GuiAction} to do when the player clicks on it
      */
-    @Nullable
-    GuiAction<InventoryClickEvent> getAction() {
+    public @Nullable GuiAction<InventoryClickEvent> getAction() {
         return action;
     }
 
@@ -138,5 +129,12 @@ public class GuiItem {
      */
     public void setAction(@Nullable final GuiAction<@NotNull InventoryClickEvent> action) {
         this.action = action;
+    }
+
+    /**
+     * Gets the random {@link UUID} that was generated when the GuiItem was made
+     */
+    @NotNull UUID getUuid() {
+        return uuid;
     }
 }

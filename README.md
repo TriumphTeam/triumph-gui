@@ -3,7 +3,7 @@
 <p>
   <img src="https://img.shields.io/github/license/TriumphTeam/triumph-gui?color=blue&style=flat-square"  alt="license"/>
   <a href="https://search.maven.org/artifact/dev.triumphteam/triumph-gui"><img src="https://img.shields.io/github/v/release/TriumphTeam/triumph-gui?color=green&style=flat-square" alt="release"></a>
-<a href="https://mattstudios.me/discord"><img src="https://img.shields.io/discord/493380790718038028?label=discord&style=flat-square"  alt="language"/></a>
+<a href="https://triumphteam.dev/discord"><img src="https://img.shields.io/discord/493380790718038028?label=discord&style=flat-square"  alt="language"/></a>
 </p>
 
 > This lib was made to simplify the creation of GUIs.
@@ -12,9 +12,8 @@
 
 👤 **TriumphTeam**
 
-* Documentation: https://triumphteam.dev/library/triumph-gui 🚧 **work in progress**
+* Documentation: https://triumphteam.dev/docs/triumph-gui 🚧
 * Maven Central: https://search.maven.org/artifact/dev.triumphteam/triumph-gui
-* Github: [@ipsk](https://github.com/ipsk)
 
 ## 🤝 Contributing
 
@@ -26,5 +25,5 @@ Give a ⭐️ if this project helped you!
 
 ## 📝 License
 
-Copyright © 2021 [TriumphTeam](https://github.com/ipsk).<br />
+Copyright © 2024 [TriumphTeam](https://github.com/ipsk).<br />
 This project is [MIT](https://github.com/TriumphTeam/triumph-gui/blob/master/LICENSE) licensed.

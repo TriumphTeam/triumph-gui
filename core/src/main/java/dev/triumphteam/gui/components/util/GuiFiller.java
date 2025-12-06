@@ -189,7 +189,7 @@ public final class GuiFiller {
         if (type == GuiType.CHEST) {
             fill = gui.getRows() * type.getLimit();
         } else {
-            fill = type.getLimit();
+            fill = type.getFillSize();
         }
 
         final List<GuiItem> items = repeatList(guiItems);
@@ -207,11 +207,13 @@ public final class GuiFiller {
         switch (side) {
             case LEFT:
                 this.fillBetweenPoints(1, 1, gui.getRows(), 1, guiItems);
+                break;
             case RIGHT:
                 this.fillBetweenPoints(1, 9, gui.getRows(), 9, guiItems);
+                break;
             case BOTH:
-                this.fillBetweenPoints(1, 1, gui.getRows(), 1, guiItems);
-                this.fillBetweenPoints(1, 9, gui.getRows(), 9, guiItems);
+                this.fillSide(Side.LEFT, guiItems);
+                this.fillSide(Side.RIGHT, guiItems);
         }
     }
 

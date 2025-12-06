@@ -66,65 +66,19 @@ import java.util.stream.Collectors;
 public abstract class BaseItemBuilder<B extends BaseItemBuilder<B>> {
 
     private static final EnumSet<Material> LEATHER_ARMOR = EnumSet.of(
-        Material.LEATHER_HELMET, Material.LEATHER_CHESTPLATE, Material.LEATHER_LEGGINGS, Material.LEATHER_BOOTS
+            Material.LEATHER_HELMET, Material.LEATHER_CHESTPLATE, Material.LEATHER_LEGGINGS, Material.LEATHER_BOOTS
     );
-
-    private static final Field DISPLAY_NAME_FIELD;
-    private static final Field LORE_FIELD;
-
-    static {
-        try {
-            final Class<?> metaClass = VersionHelper.craftClass("inventory.CraftMetaItem");
-
-            DISPLAY_NAME_FIELD = metaClass.getDeclaredField("displayName");
-            DISPLAY_NAME_FIELD.setAccessible(true);
-
-            LORE_FIELD = metaClass.getDeclaredField("lore");
-            LORE_FIELD.setAccessible(true);
-        } catch (NoSuchFieldException | ClassNotFoundException exception) {
-            exception.printStackTrace();
-            throw new GuiException("Could not retrieve displayName nor lore field for ItemBuilder.");
-        }
-    }
 
     private ItemStack itemStack;
     private ItemMeta meta;
+    private final NameLoreHandler nameLoreHandler;
 
-    protected BaseItemBuilder(@NotNull final ItemStack itemStack) {
+    protected BaseItemBuilder(final @NotNull ItemStack itemStack, final @NotNull NameLoreHandler nameLoreHandler) {
         Preconditions.checkNotNull(itemStack, "Item can't be null!");
 
         this.itemStack = itemStack;
+        this.nameLoreHandler = nameLoreHandler;
         meta = itemStack.hasItemMeta() ? itemStack.getItemMeta() : Bukkit.getItemFactory().getItemMeta(itemStack.getType());
-    }
-
-    /**
-     * Serializes the component with the right {@link net.kyori.adventure.text.serializer.ComponentSerializer} for the current MC version
-     *
-     * @param component component to serialize
-     * @return the serialized representation of the component
-     */
-    protected @NotNull Object serializeComponent(@NotNull final Component component) {
-        if (VersionHelper.IS_ITEM_NAME_COMPONENT) {
-            //noinspection UnstableApiUsage
-            return MinecraftComponentSerializer.get().serialize(component);
-        } else {
-            return GsonComponentSerializer.gson().serialize(component);
-        }
-    }
-
-    /**
-     * Deserializes the object with the right {@link net.kyori.adventure.text.serializer.ComponentSerializer} for the current MC version
-     *
-     * @param obj object to deserialize
-     * @return the component
-     */
-    protected @NotNull Component deserializeComponent(@NotNull final Object obj) {
-        if (VersionHelper.IS_ITEM_NAME_COMPONENT) {
-            //noinspection UnstableApiUsage
-            return MinecraftComponentSerializer.get().deserialize(obj);
-        } else {
-            return GsonComponentSerializer.gson().deserialize((String) obj);
-        }
     }
 
     /**
@@ -137,19 +91,7 @@ public abstract class BaseItemBuilder<B extends BaseItemBuilder<B>> {
     @NotNull
     @Contract("_ -> this")
     public B name(@NotNull final Component name) {
-        if (meta == null) return (B) this;
-
-        if (VersionHelper.IS_COMPONENT_LEGACY) {
-            meta.setDisplayName(Legacy.SERIALIZER.serialize(name));
-            return (B) this;
-        }
-
-        try {
-            DISPLAY_NAME_FIELD.set(meta, this.serializeComponent(name));
-        } catch (IllegalAccessException exception) {
-            exception.printStackTrace();
-        }
-
+        nameLoreHandler.name(meta, name);
         return (B) this;
     }
 
@@ -190,24 +132,7 @@ public abstract class BaseItemBuilder<B extends BaseItemBuilder<B>> {
     @NotNull
     @Contract("_ -> this")
     public B lore(@NotNull final List<@Nullable Component> lore) {
-        if (meta == null) return (B) this;
-
-        if (VersionHelper.IS_COMPONENT_LEGACY) {
-            meta.setLore(lore.stream().filter(Objects::nonNull).map(Legacy.SERIALIZER::serialize).collect(Collectors.toList()));
-            return (B) this;
-        }
-
-        final List<Object> jsonLore = lore.stream()
-            .filter(Objects::nonNull)
-            .map(this::serializeComponent)
-            .collect(Collectors.toList());
-
-        try {
-            LORE_FIELD.set(meta, jsonLore);
-        } catch (IllegalAccessException exception) {
-            exception.printStackTrace();
-        }
-
+        nameLoreHandler.lore(meta, lore);
         return (B) this;
     }
 
@@ -221,25 +146,8 @@ public abstract class BaseItemBuilder<B extends BaseItemBuilder<B>> {
     @NotNull
     @Contract("_ -> this")
     public B lore(@NotNull final Consumer<List<@Nullable Component>> lore) {
-        if (meta == null) return (B) this;
-
-        List<Component> components;
-        if (VersionHelper.IS_COMPONENT_LEGACY) {
-            final List<String> stringLore = meta.getLore();
-            components = (stringLore == null) ? new ArrayList<>() : stringLore.stream().map(Legacy.SERIALIZER::deserialize).collect(Collectors.toList());
-        } else {
-            try {
-                final List<Object> jsonLore = (List<Object>) LORE_FIELD.get(meta);
-                // The field is null by default ._.
-                components = (jsonLore == null) ? new ArrayList<>() : jsonLore.stream().map(this::deserializeComponent).collect(Collectors.toList());
-            } catch (IllegalAccessException exception) {
-                components = new ArrayList<>();
-                exception.printStackTrace();
-            }
-        }
-
-        lore.accept(components);
-        return lore(components);
+        nameLoreHandler.lore(meta, lore);
+        return (B) this;
     }
 
     /**

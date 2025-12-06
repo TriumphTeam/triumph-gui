@@ -21,49 +21,33 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package dev.triumphteam.gui.builder.gui;
+package dev.triumphteam.gui.components;
 
-import dev.triumphteam.gui.guis.PaginatedGui;
-import org.jetbrains.annotations.Contract;
+import net.kyori.adventure.text.Component;
+import org.bukkit.event.inventory.InventoryType;
+import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.InventoryHolder;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.function.Consumer;
+public final class InventoryProvider {
 
-/**
- * GUI builder for creating a {@link PaginatedGui}
- */
-public class PaginatedBuilder extends BaseChestGuiBuilder<PaginatedGui, PaginatedBuilder> {
+    @FunctionalInterface
+    public interface Chest {
 
-    private int pageSize = 0;
-
-    /**
-     * Sets the desirable page size, most of the time this isn't needed
-     *
-     * @param pageSize The amount of free slots that page items should occupy
-     * @return The current builder
-     */
-    @NotNull
-    @Contract("_ -> this")
-    public PaginatedBuilder pageSize(final int pageSize) {
-        this.pageSize = pageSize;
-        return this;
+        @NotNull Inventory getInventory(
+                final @NotNull Component title,
+                final @NotNull InventoryHolder owner,
+                final int rows
+        );
     }
 
-    /**
-     * Creates a new {@link PaginatedGui}
-     *
-     * @return A new {@link PaginatedGui}
-     */
-    @NotNull
-    @Override
-    @Contract(" -> new")
-    public PaginatedGui create() {
-        final PaginatedGui gui = new PaginatedGui(createContainer(), pageSize, getModifiers());
+    @FunctionalInterface
+    public interface Typed {
 
-        final Consumer<PaginatedGui> consumer = getConsumer();
-        if (consumer != null) consumer.accept(gui);
-
-        return gui;
+        @NotNull Inventory getInventory(
+                final @NotNull Component title,
+                final @NotNull InventoryHolder owner,
+                final @NotNull InventoryType inventoryType
+        );
     }
-
 }

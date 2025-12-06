@@ -23,8 +23,9 @@
  */
 package dev.triumphteam.gui.guis;
 
+import dev.triumphteam.gui.components.GuiContainer;
 import dev.triumphteam.gui.components.InteractionModifier;
-import org.bukkit.Bukkit;
+import net.kyori.adventure.text.Component;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
@@ -54,60 +55,11 @@ public class PaginatedGui extends BaseGui {
     private int pageSize;
     private int pageNum = 1;
 
-    /**
-     * Main constructor to provide a way to create PaginatedGui
-     *
-     * @param rows                 The amount of rows the GUI should have
-     * @param pageSize             The page size.
-     * @param title                The GUI's title using {@link String}
-     * @param interactionModifiers A set containing what {@link InteractionModifier} this GUI should have
-     * @author SecretX
-     * @since 3.0.3
-     */
-    public PaginatedGui(final int rows, final int pageSize, @NotNull final String title, @NotNull final Set<InteractionModifier> interactionModifiers) {
-        super(rows, title, interactionModifiers);
+
+    public PaginatedGui(final @NotNull GuiContainer guiContainer, final int pageSize, final @NotNull Set<InteractionModifier> interactionModifiers) {
+        super(guiContainer, interactionModifiers);
         this.pageSize = pageSize;
-        int inventorySize = rows * 9;
-        this.currentPage = new LinkedHashMap<>(inventorySize);
-    }
-
-    /**
-     * Old main constructor of the PaginatedGui
-     *
-     * @param rows     The rows the GUI should have
-     * @param pageSize The pageSize
-     * @param title    The GUI's title
-     * @deprecated In favor of {@link PaginatedGui#PaginatedGui(int, int, String, Set)}
-     */
-    @Deprecated
-    public PaginatedGui(final int rows, final int pageSize, @NotNull final String title) {
-        super(rows, title);
-        this.pageSize = pageSize;
-        int inventorySize = rows * 9;
-        this.currentPage = new LinkedHashMap<>(inventorySize);
-    }
-
-    /**
-     * Alternative constructor that doesn't require the {@link #pageSize} to be defined
-     *
-     * @param rows  The rows the GUI should have
-     * @param title The GUI's title
-     * @deprecated In favor of {@link PaginatedGui#PaginatedGui(int, int, String, Set)}
-     */
-    @Deprecated
-    public PaginatedGui(final int rows, @NotNull final String title) {
-        this(rows, 0, title);
-    }
-
-    /**
-     * Alternative constructor that only requires title
-     *
-     * @param title The GUI's title
-     * @deprecated In favor of {@link PaginatedGui#PaginatedGui(int, int, String, Set)}
-     */
-    @Deprecated
-    public PaginatedGui(@NotNull final String title) {
-        this(2, title);
+        this.currentPage = new LinkedHashMap<>(guiContainer.inventorySize());
     }
 
     /**
@@ -259,7 +211,7 @@ public class PaginatedGui extends BaseGui {
     }
 
     /**
-     * Overrides {@link BaseGui#updateTitle(String)} to use the paginated populator instead
+     * Overrides {@link BaseGui#updateTitle(Component)} to use the paginated populator instead
      * Updates the title of the GUI
      * <i>This method may cause LAG if used on a loop</i>
      *
@@ -267,20 +219,20 @@ public class PaginatedGui extends BaseGui {
      * @return The GUI for easier use when declaring, works like a builder
      */
     @Override
-    @NotNull
-    public BaseGui updateTitle(@NotNull final String title) {
+    public @NotNull BaseGui updateTitle(@NotNull final Component title) {
         setUpdating(true);
 
         final List<HumanEntity> viewers = new ArrayList<>(getInventory().getViewers());
+        final GuiContainer guiContainer = guiContainer();
 
-        setInventory(Bukkit.createInventory(this, getInventory().getSize(), title));
+        guiContainer.title(title);
+        setInventory(guiContainer.createInventory(this));
 
         for (final HumanEntity player : viewers) {
             open(player, getPageNum());
         }
 
         setUpdating(false);
-
         return this;
     }
 
@@ -397,6 +349,7 @@ public class PaginatedGui extends BaseGui {
      * @return The pages number
      */
     public int getPagesNum() {
+        if (pageSize == 0) pageSize = calculatePageSize();
         return (int) Math.ceil((double) pageItems.size() / pageSize);
     }
 
@@ -406,8 +359,13 @@ public class PaginatedGui extends BaseGui {
     private void populatePage() {
         // Adds the paginated items to the page
         int slot = 0;
+        final int inventorySize = getInventory().getSize();
         final Iterator<GuiItem> iterator = getPageNum(pageNum).iterator();
         while (iterator.hasNext()) {
+            if (slot >= inventorySize) {
+                break; // Exit the loop if slot exceeds inventory size
+            }
+
             if (getGuiItem(slot) != null || getInventory().getItem(slot) != null) {
                 slot++;
                 continue;
@@ -496,10 +454,10 @@ public class PaginatedGui extends BaseGui {
         int counter = 0;
 
         for (int slot = 0; slot < getRows() * 9; slot++) {
-            if (getInventory().getItem(slot) == null) counter++;
+            if (getGuiItem(slot) == null) counter++;
         }
 
+        if (counter == 0) return 1;
         return counter;
     }
-
 }
