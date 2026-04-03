@@ -82,8 +82,8 @@ public abstract class BaseGui implements InventoryHolder {
         } catch (NoSuchMethodException | ClassNotFoundException ignored) {
         }
 
-        Bukkit.getPluginManager().registerEvents(new GuiListener(), plugin);
         Bukkit.getPluginManager().registerEvents(new InteractionModifierListener(), plugin);
+        Bukkit.getPluginManager().registerEvents(new GuiListener(), plugin);
     }
 
     // Gui filler.
@@ -424,7 +424,7 @@ public abstract class BaseGui implements InventoryHolder {
         final List<HumanEntity> viewers = new ArrayList<>(inventory.getViewers());
 
         guiContainer.title(title); // Update the title.
-        inventory = guiContainer.createInventory(this);
+        updateInventory(guiContainer.createInventory(this));
 
         for (final HumanEntity player : viewers) {
             open(player);
@@ -432,6 +432,10 @@ public abstract class BaseGui implements InventoryHolder {
 
         updating = false;
         return this;
+    }
+
+    protected void updateInventory(final @NotNull Inventory inventory) {
+        this.inventory = inventory;
     }
 
     /**
