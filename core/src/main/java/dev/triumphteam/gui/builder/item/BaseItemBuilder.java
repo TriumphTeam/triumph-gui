@@ -354,7 +354,7 @@ public abstract class BaseItemBuilder<B extends BaseItemBuilder<B>> {
      *
      * @param modelKey The item model key from the resource pack
      * @return {@link ItemBuilder}
-     * @since 3.1.12
+     * @since 3.1.14
      */
     @NotNull
     @Contract("_ -> this")
