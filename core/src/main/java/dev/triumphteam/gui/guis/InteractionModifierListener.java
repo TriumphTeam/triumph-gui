@@ -26,6 +26,7 @@ package dev.triumphteam.gui.guis;
 import com.google.common.base.Preconditions;
 import org.bukkit.event.Event;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryAction;
 import org.bukkit.event.inventory.InventoryClickEvent;
@@ -52,13 +53,12 @@ public final class InteractionModifierListener implements Listener {
      * @author SecretX
      * @since 3.0.0
      */
-    @EventHandler
+    @EventHandler(priority = EventPriority.LOW)
     public void onGuiClick(final InventoryClickEvent event) {
         if (!(event.getInventory().getHolder() instanceof BaseGui)) return;
 
         // Gui
         final BaseGui gui = (BaseGui) event.getInventory().getHolder();
-
         if (gui.allInteractionsDisabled()) {
             event.setCancelled(true);
             event.setResult(Event.Result.DENY);
@@ -79,7 +79,7 @@ public final class InteractionModifierListener implements Listener {
      * @author SecretX
      * @since 3.0.0
      */
-    @EventHandler
+    @EventHandler(priority = EventPriority.LOW)
     public void onGuiDrag(final InventoryDragEvent event) {
         if (!(event.getInventory().getHolder() instanceof BaseGui)) return;
 

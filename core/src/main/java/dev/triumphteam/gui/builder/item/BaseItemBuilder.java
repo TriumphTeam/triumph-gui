@@ -360,7 +360,7 @@ public abstract class BaseItemBuilder<B extends BaseItemBuilder<B>> {
     @Contract("_ -> this")
     public B model(final NamespacedKey modelKey) {
         if (VersionHelper.IS_ITEM_MODEL) {
-            meta.setItemModel(modelKey);
+            // meta.setItemModel(modelKey);
         }
 
         return (B) this;
