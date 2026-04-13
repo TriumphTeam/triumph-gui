@@ -11,4 +11,4 @@ findProject(":core")?.name = "triumph-gui"
 include("paper")
 findProject(":paper")?.name = "triumph-gui-paper"
 
-// include("test-plugin")
+include("test-plugin")

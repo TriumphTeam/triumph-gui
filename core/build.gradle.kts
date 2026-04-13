@@ -36,9 +36,25 @@ java {
     targetCompatibility = JavaVersion.VERSION_1_8
 }
 
+publishing {
+    repositories {
+        maven {
+            name = "triumph"
+            credentials {
+                username = providers.gradleProperty("triumph.repo.user").get()
+                password = providers.gradleProperty("triumph.repo.token").get()
+            }
+
+            url = uri("https://repo.triumphteam.dev/snapshots/")
+        }
+
+        // more repositories can go here
+    }
+}
+
 mavenPublishing {
-    publishToMavenCentral()
-    signAllPublications()
+    // publishToMavenCentral()
+    // signAllPublications()
 
     pom {
         name.set("Triumph GUI")

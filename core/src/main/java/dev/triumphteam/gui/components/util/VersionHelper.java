@@ -57,7 +57,7 @@ public final class VersionHelper {
     // Item model
     private static final int V1_21_4 = 1214;
 
-    private static final int CURRENT_VERSION = getCurrentVersion();
+    public static final int CURRENT_VERSION = getCurrentVersion();
     /**
      * Checks if the version supports Components or not
      * Spigot always false
