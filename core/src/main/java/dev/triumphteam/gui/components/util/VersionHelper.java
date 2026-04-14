@@ -85,10 +85,6 @@ public final class VersionHelper {
      */
     public static final boolean IS_CUSTOM_MODEL_DATA = CURRENT_VERSION >= V1_14;
     /**
-     * Check if the version has {@link org.bukkit.inventory.meta.ItemMeta#setItemModel(NamespacedKey)}
-     */
-    public static final boolean IS_ITEM_MODEL = CURRENT_VERSION >= V1_21_4;
-    /**
      * Checks if the version has {@link org.bukkit.profile.PlayerProfile}
      */
     public static final boolean IS_PLAYER_PROFILE_API = CURRENT_VERSION >= V1_20_1;

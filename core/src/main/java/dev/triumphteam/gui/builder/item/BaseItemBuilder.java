@@ -49,6 +49,8 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.EnumSet;
@@ -73,6 +75,16 @@ public abstract class BaseItemBuilder<B extends BaseItemBuilder<B>> {
     private ItemStack itemStack;
     private ItemMeta meta;
     private final NameLoreHandler nameLoreHandler;
+    private static final Method SET_ITEM_MODEL;
+
+    static {
+        Method method = null;
+        try {
+            method = ItemMeta.class.getMethod("setItemModel", NamespacedKey.class);
+        } catch (NoSuchMethodException ignored) {
+        }
+        SET_ITEM_MODEL = method;
+    }
 
     protected BaseItemBuilder(final @NotNull ItemStack itemStack, final @NotNull NameLoreHandler nameLoreHandler) {
         Preconditions.checkNotNull(itemStack, "Item can't be null!");
@@ -359,8 +371,12 @@ public abstract class BaseItemBuilder<B extends BaseItemBuilder<B>> {
     @NotNull
     @Contract("_ -> this")
     public B model(final NamespacedKey modelKey) {
-        if (VersionHelper.IS_ITEM_MODEL) {
-            // meta.setItemModel(modelKey);
+        if (SET_ITEM_MODEL != null) {
+            try {
+                SET_ITEM_MODEL.invoke(meta, modelKey);
+            } catch (IllegalAccessException | InvocationTargetException e) {
+                throw new GuiException("Could not invoke setItemModel method.", e);
+            }
         }
 
         return (B) this;
